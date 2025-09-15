@@ -2,8 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Project } from '@/types/database.types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowRight, Trash2 } from 'lucide-react';
+import { ArrowRight, MoreVertical, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ProjectCardProps {
   project: Project;
@@ -14,7 +20,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) =
   const totalSteps = 9;
   const progressPercentage = (project.current_step / totalSteps) * 100;
 
-  const handleDeleteClick = (e: React.MouseEvent) => {
+  const handleDelete = (e: Event) => {
     e.stopPropagation();
     e.preventDefault();
     onDeleteRequest(project);
@@ -22,15 +28,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) =
 
   return (
     <div className="relative group h-full">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-4 right-4 z-10 h-8 w-8 text-gray-500 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={handleDeleteClick}
-        aria-label="Delete project"
-      >
-        <Trash2 className="w-4 h-4" />
-      </Button>
+      <div className="absolute top-2 right-2 z-10">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-50 group-hover:opacity-100">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background border-border">
+            <DropdownMenuItem onSelect={handleDelete} className="text-red-500 focus:bg-red-500/10 focus:text-red-500 cursor-pointer">
+              <Trash2 className="mr-2 h-4 w-4" />
+              <span>Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <Link to={`/project/${project.id}`} className="h-full block">
         <Card className="glass-effect border-white/10 text-white hover:border-cyan-400 transition-all h-full flex flex-col">
           <CardHeader>
