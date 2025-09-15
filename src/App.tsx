@@ -11,7 +11,9 @@ import ChatInterface from "./components/chat/ChatInterface";
 import { SessionContextProvider } from "./contexts/SessionContext";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import AdminProtectedRoute from "./components/layout/AdminProtectedRoute";
 import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard";
 import { ThemeProvider } from "./components/theme/theme-provider";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,11 @@ const App = () => (
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/project/:projectId" element={<ChatInterface />} />
                   <Route path="/profile" element={<Profile />} />
+
+                  {/* Admin Routes */}
+                  <Route element={<AdminProtectedRoute />}>
+                    <Route path="/admin" element={<AdminDashboard />} />
+                  </Route>
                 </Route>
               </Route>
 

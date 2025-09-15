@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { LayoutDashboard, User } from 'lucide-react';
+import { LayoutDashboard, User, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSession } from '@/contexts/SessionContext';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Profile', href: '/profile', icon: User },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, admin: false },
+  { name: 'Profile', href: '/profile', icon: User, admin: false },
+  { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
 
 interface MobileSidebarProps {
@@ -16,6 +18,9 @@ interface MobileSidebarProps {
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) => {
   const location = useLocation();
+  const { user } = useSession();
+
+  const availableNav = navigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -26,7 +31,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
           </Link>
         </div>
         <nav className="px-4 py-6 space-y-2">
-          {navigation.map((item) => (
+          {availableNav.map((item) => (
             <Link
               key={item.name}
               to={item.href}
