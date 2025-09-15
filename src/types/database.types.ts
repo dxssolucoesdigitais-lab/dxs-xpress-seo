@@ -9,6 +9,23 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      users: {
+        Row: {
+          id: string
+          email: string
+          full_name: string | null
+          plan_type: string | null
+          credits_remaining: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id: string
+          email: string
+          full_name?: string | null
+        }
+        Update: Partial<this['Insert']>
+      }
       projects: {
         Row: {
           id: string
@@ -66,6 +83,7 @@ export interface Database {
   }
 }
 
+export type User = Database['public']['Tables']['users']['Row'];
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
 export type StepResult = Database['public']['Tables']['step_results']['Row'];
