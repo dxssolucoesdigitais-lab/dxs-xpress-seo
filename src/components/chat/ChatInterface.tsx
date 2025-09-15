@@ -3,6 +3,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput from "@/components/chat/ChatInput";
 import MessageList from "@/components/chat/MessageList";
+import ErrorDisplay from "@/components/chat/ErrorDisplay";
 import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
 import { Skeleton } from '../ui/skeleton';
@@ -22,6 +23,10 @@ const ChatInterface: React.FC = () => {
     // AI is typing if the last message was from the user, indicating it's processing the next step
     return lastMessage.author === 'user';
   }, [messages, chatLoading, project, projectLoading]);
+
+  const isChatDisabled = useMemo(() => {
+    return project?.status === 'completed' || project?.status === 'error';
+  }, [project]);
 
   if (!session) {
     return <Navigate to="/login" replace />;
@@ -58,7 +63,8 @@ const ChatInterface: React.FC = () => {
       ) : (
         <MessageList messages={messages} isAiTyping={isAiTyping} />
       )}
-      <ChatInput messages={messages} />
+      {project.status === 'error' && <ErrorDisplay />}
+      <ChatInput messages={messages} isDisabled={isChatDisabled} />
     </div>
   );
 };
