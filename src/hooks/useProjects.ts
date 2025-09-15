@@ -80,7 +80,18 @@ export const useProjects = () => {
 
       if (data) {
         showSuccess('Project created successfully!');
-        // The real-time subscription will handle adding the project to the state
+        
+        // Trigger the first step of the workflow immediately
+        const { error: functionError } = await supabase.functions.invoke('trigger-step', {
+          body: { projectId: data.id },
+        });
+
+        if (functionError) {
+          // Log the error, but don't block the user. The workflow can be manually triggered later if needed.
+          console.error('Failed to trigger initial workflow step:', functionError.message);
+          showError('Could not start AI workflow automatically.');
+        }
+
         return data;
       }
       return null;
