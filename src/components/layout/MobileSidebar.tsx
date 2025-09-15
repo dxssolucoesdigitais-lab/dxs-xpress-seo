@@ -1,12 +1,16 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { MessageSquare, User, Shield } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import { useProjects } from '@/hooks/useProjects';
+import { ScrollArea } from '../ui/scroll-area';
+import { Skeleton } from '../ui/skeleton';
+import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 
-const navigation = [
-  { name: 'Assistant', href: '/chat', icon: MessageSquare, admin: false },
+const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
   { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
@@ -17,20 +21,59 @@ interface MobileSidebarProps {
 }
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) => {
+  const { t } = useTranslation();
   const location = useLocation();
+  const { projectId } = useParams<{ projectId: string }>();
   const { user } = useSession();
+  const { projects, loading } = useProjects();
 
-  const availableNav = navigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
+  const availableNav = mainNavigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-64 bg-background border-r border-border p-0">
-        <div className="flex items-center h-16 px-6 border-b border-border">
-          <Link to="/chat" className="text-xl font-bold">
+      <SheetContent side="left" className="w-64 bg-background border-r border-border p-0 flex flex-col">
+        <div className="flex items-center h-16 px-4 border-b border-border">
+          <Link to="/chat" onClick={() => onOpenChange(false)} className="text-xl font-bold">
             XpressSEO
           </Link>
         </div>
-        <nav className="px-4 py-6 space-y-2">
+        <div className="p-4">
+          <Button asChild variant="outline" className="w-full justify-start">
+            <Link to="/chat" onClick={() => onOpenChange(false)}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Nova Conversa
+            </Link>
+          </Button>
+        </div>
+        <ScrollArea className="flex-1 px-4">
+          <nav className="flex-1 space-y-1">
+            {loading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+              </div>
+            ) : (
+              projects.map((project) => (
+                <Link
+                  key={project.id}
+                  to={`/chat/${project.id}`}
+                  onClick={() => onOpenChange(false)}
+                  className={cn(
+                    'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors truncate',
+                    projectId === project.id
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
+                  <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
+                </Link>
+              ))
+            )}
+          </nav>
+        </ScrollArea>
+        <nav className="px-4 py-4 border-t border-border mt-auto">
           {availableNav.map((item) => (
             <Link
               key={item.name}

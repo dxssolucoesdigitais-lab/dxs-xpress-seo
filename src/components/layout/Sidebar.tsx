@@ -1,45 +1,89 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { MessageSquare, User, Shield } from 'lucide-react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { MessageSquare, User, Shield, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
+import { useProjects } from '@/hooks/useProjects';
+import { ScrollArea } from '../ui/scroll-area';
+import { Skeleton } from '../ui/skeleton';
+import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 
-const navigation = [
-  { name: 'Assistant', href: '/chat', icon: MessageSquare, admin: false },
+const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
   { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
 
 const Sidebar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
+  const { projectId } = useParams<{ projectId: string }>();
   const { user } = useSession();
+  const { projects, loading } = useProjects();
 
-  const availableNav = navigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
+  const availableNav = mainNavigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
 
   return (
     <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:w-64 bg-background border-r border-border z-50">
-      <div className="flex items-center h-16 px-6 border-b border-border">
+      <div className="flex items-center h-16 px-4 border-b border-border">
         <Link to="/chat" className="text-xl font-bold">
           XpressSEO
         </Link>
       </div>
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {availableNav.map((item) => (
-          <Link
-            key={item.name}
-            to={item.href}
-            className={cn(
-              'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
-              location.pathname.startsWith(item.href)
-                ? 'bg-accent text-accent-foreground'
-                : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+      <div className="flex flex-col flex-1 overflow-y-hidden">
+        <div className="p-4">
+          <Button asChild variant="outline" className="w-full justify-start">
+            <Link to="/chat">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Nova Conversa
+            </Link>
+          </Button>
+        </div>
+        <ScrollArea className="flex-1 px-4">
+          <nav className="flex-1 space-y-1">
+            {loading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+              </div>
+            ) : (
+              projects.map((project) => (
+                <Link
+                  key={project.id}
+                  to={`/chat/${project.id}`}
+                  className={cn(
+                    'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors truncate',
+                    projectId === project.id
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
+                  <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
+                </Link>
+              ))
             )}
-          >
-            <item.icon className="mr-3 h-5 w-5" />
-            {item.name}
-          </Link>
-        ))}
-      </nav>
+          </nav>
+        </ScrollArea>
+        <nav className="px-4 py-4 border-t border-border mt-auto">
+          {availableNav.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={cn(
+                'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                location.pathname.startsWith(item.href)
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+              )}
+            >
+              <item.icon className="mr-3 h-5 w-5" />
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </aside>
   );
 };

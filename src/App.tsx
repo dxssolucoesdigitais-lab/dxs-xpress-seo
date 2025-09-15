@@ -33,6 +33,7 @@ const App = () => (
                 <Route element={<Layout />}>
                   <Route path="/" element={<Index />} />
                   <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/chat/:projectId" element={<ChatPage />} />
                   <Route path="/profile" element={<Profile />} />
 
                   {/* Admin Routes */}
