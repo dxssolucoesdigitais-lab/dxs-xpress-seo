@@ -51,19 +51,28 @@ const ChatInterface: React.FC = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return (
-    <div className="flex flex-col h-screen bg-background text-foreground font-sans">
-      <ChatHeader project={project} />
-      {chatLoading ? (
+  const renderChatContent = () => {
+    if (chatLoading) {
+      return (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
           <Skeleton className="h-24 w-3/4" />
         </div>
-      ) : messages.length > 0 ? (
-        <MessageList messages={messages} isAiTyping={isAiTyping} />
-      ) : (
-        <EmptyChat />
-      )}
+      );
+    }
+    if (messages.length > 0) {
+      return <MessageList messages={messages} isAiTyping={isAiTyping} />;
+    }
+    return <EmptyChat />;
+  };
+
+  return (
+    <div className="flex flex-col h-screen bg-background text-foreground font-sans">
+      <ChatHeader project={project} />
+      {renderChatContent()}
       {project.status === 'error' && <ErrorDisplay />}
       <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
     </div>
   );
+};
+
+export default ChatInterface;
