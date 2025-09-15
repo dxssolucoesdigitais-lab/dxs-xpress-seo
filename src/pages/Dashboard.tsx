@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Project } from '@/types/database.types';
+import EmptyDashboard from '@/components/project/EmptyDashboard';
 
 const Dashboard = () => {
   const { projects, loading, deleteProject } = useProjects();
@@ -33,6 +34,44 @@ const Dashboard = () => {
   const filteredProjects = projects.filter(project =>
     project.project_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-56 w-full" />
+          <Skeleton className="h-56 w-full" />
+          <Skeleton className="h-56 w-full" />
+        </div>
+      );
+    }
+
+    if (projects.length === 0) {
+      return <EmptyDashboard />;
+    }
+
+    if (filteredProjects.length === 0) {
+      return (
+        <div className="text-center py-16 text-gray-500">
+          <h3 className="text-xl font-semibold">No projects found</h3>
+          <p className="mt-2">Your search for "{searchTerm}" did not match any projects.</p>
+          <Button variant="link" onClick={() => setSearchTerm('')} className="text-cyan-400 mt-2">Clear search</Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProjects.map(project => (
+          <ProjectCard 
+            key={project.id} 
+            project={project} 
+            onDeleteRequest={setProjectToDelete}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -59,41 +98,7 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Skeleton className="h-56 w-full" />
-            <Skeleton className="h-56 w-full" />
-            <Skeleton className="h-56 w-full" />
-          </div>
-        ) : (
-          <>
-            {filteredProjects.length > 0 || projects.length === 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProjects.map(project => (
-                  <ProjectCard 
-                    key={project.id} 
-                    project={project} 
-                    onDeleteRequest={setProjectToDelete}
-                  />
-                ))}
-                <Link to="/">
-                  <div className="flex items-center justify-center h-full min-h-[224px] border-2 border-dashed border-white/20 rounded-lg text-gray-400 hover:border-cyan-400 hover:text-cyan-400 transition-all cursor-pointer">
-                    <div className="text-center">
-                      <PlusCircle className="mx-auto h-12 w-12" />
-                      <h3 className="mt-2 text-sm font-semibold">Create New Project</h3>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ) : (
-              <div className="text-center py-16 text-gray-500">
-                <h3 className="text-xl font-semibold">No projects found</h3>
-                <p className="mt-2">Your search for "{searchTerm}" did not match any projects.</p>
-                <Button variant="link" onClick={() => setSearchTerm('')} className="text-cyan-400 mt-2">Clear search</Button>
-              </div>
-            )}
-          </>
-        )}
+        {renderContent()}
       </div>
 
       <AlertDialog open={!!projectToDelete} onOpenChange={(isOpen) => !isOpen && setProjectToDelete(null)}>
