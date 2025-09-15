@@ -12,7 +12,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
         <div className="flex-1 max-w-md p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white">
           <p>{message.content}</p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center flex-shrink-0"><User size={24} /></div>
+        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
       </div>
     );
   }
@@ -35,13 +35,13 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
   // Fallback to a generic AI message card
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10">
+      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+      <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="font-bold text-white">XpressSEO Assistant</span>
-          <span className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleTimeString()}</span>
+          <span className="font-bold text-foreground">XpressSEO Assistant</span>
+          <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className="prose prose-invert prose-sm max-w-none text-gray-300 space-y-4">
+        <div className="prose prose-invert prose-sm max-w-none text-muted-foreground space-y-4">
           {message.content ? <p>{message.content}</p> : <p>Analisando a próxima etapa...</p>}
         </div>
       </div>

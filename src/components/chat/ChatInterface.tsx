@@ -33,7 +33,7 @@ const ChatInterface: React.FC = () => {
 
   if (projectLoading) {
     return (
-      <div className="flex flex-col h-screen bg-[#0a0a0f]">
+      <div className="flex flex-col h-screen bg-background">
         <Skeleton className="h-16 w-full" />
         <div className="flex-1 p-4 md:p-6 space-y-8">
           <Skeleton className="h-24 w-3/4" />
@@ -50,7 +50,7 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#0a0a0f] text-gray-200 font-sans">
+    <div className="flex flex-col h-screen bg-background text-foreground font-sans">
       <ChatHeader project={project} />
       {chatLoading ? (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { ModeToggle } from '../theme/mode-toggle';
 
 const Layout = () => {
   const { session, user } = useSession();
@@ -32,8 +33,8 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0a0f] text-white">
-      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-lg">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="container flex h-16 items-center justify-between max-w-7xl mx-auto px-4">
           <Link to="/dashboard" className="text-xl font-bold">
             XpressSEO
@@ -43,10 +44,10 @@ const Layout = () => {
               <button
                 onClick={() => setIsBuyCreditsOpen(true)}
                 className={cn(
-                  "hidden sm:flex items-center gap-2 text-sm font-semibold bg-white/5 px-3 py-1.5 rounded-full border border-white/10 transition-colors",
+                  "hidden sm:flex items-center gap-2 text-sm font-semibold bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full border border-border transition-colors",
                   user.credits_remaining <= 0
-                    ? "text-red-400 border-red-500/50 hover:bg-red-500/10"
-                    : "hover:bg-white/10"
+                    ? "text-red-400 border-red-500/50 hover:bg-destructive/10"
+                    : "hover:bg-accent"
                 )}
               >
                 <CreditCard className={cn("h-4 w-4", user.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")} />
@@ -63,22 +64,24 @@ const Layout = () => {
               Buy Credits
             </Button>
             
+            <ModeToggle />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                  <Avatar className="h-10 w-10 border-2 border-white/10">
-                    <AvatarFallback className="bg-black/20">{getInitials(user?.full_name)}</AvatarFallback>
+                  <Avatar className="h-10 w-10 border-2 border-border">
+                    <AvatarFallback className="bg-secondary">{getInitials(user?.full_name)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-[#1a1a1f] border-white/20 text-white" align="end" forceMount>
+              <DropdownMenuContent className="w-56 bg-popover border-border text-popover-foreground" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{user?.full_name}</p>
-                    <p className="text-xs leading-none text-gray-400">{session?.user?.email}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{session?.user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem onSelect={() => navigate('/dashboard')} className="cursor-pointer">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   <span>Dashboard</span>
@@ -87,7 +90,7 @@ const Layout = () => {
                   <UserIcon className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
