@@ -34,6 +34,35 @@ export const useProjects = () => {
     fetchProjects();
   }, [fetchProjects]);
 
+  useEffect(() => {
+    if (!session?.user) return;
+
+    const channel = supabase
+      .channel('projects-changes')
+      .on<Project>(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects', filter: `user_id=eq.${session.user.id}` },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setProjects(currentProjects => [payload.new, ...currentProjects].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+          }
+          if (payload.eventType === 'UPDATE') {
+            setProjects(currentProjects =>
+              currentProjects.map(p => (p.id === payload.new.id ? payload.new : p))
+            );
+          }
+          if (payload.eventType === 'DELETE') {
+             setProjects(currentProjects => currentProjects.filter(p => p.id !== (payload.old as Project).id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
   const createProject = async (newProjectData: Omit<NewProject, 'user_id'>): Promise<Project | null> => {
     if (!session?.user) {
       showError('You must be logged in to create a project.');
@@ -51,7 +80,7 @@ export const useProjects = () => {
 
       if (data) {
         showSuccess('Project created successfully!');
-        setProjects(prev => [data, ...prev]);
+        // The real-time subscription will handle adding the project to the state
         return data;
       }
       return null;

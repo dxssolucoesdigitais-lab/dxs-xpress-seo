@@ -36,5 +36,24 @@ export const useProject = (projectId: string | undefined) => {
     fetchProject();
   }, [fetchProject]);
 
+  useEffect(() => {
+    if (!projectId) return;
+
+    const channel = supabase
+      .channel(`project-${projectId}`)
+      .on<Project>(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'projects', filter: `id=eq.${projectId}` },
+        (payload) => {
+          setProject(payload.new);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [projectId]);
+
   return { project, loading, refetchProject: fetchProject };
 };
