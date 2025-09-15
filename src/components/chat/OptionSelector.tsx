@@ -12,7 +12,7 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
   const options = (stepResult.llm_output as LlmOption[]) || [];
 
   const handleSelect = (option: LlmOption) => {
-    selectOption(stepResult.id, option);
+    selectOption(stepResult, option);
   };
 
   return (

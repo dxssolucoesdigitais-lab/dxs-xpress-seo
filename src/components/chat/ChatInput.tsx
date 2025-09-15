@@ -24,7 +24,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ messages }) => {
 
   const handleApprove = () => {
     if (latestUnapprovedStep) {
-      approveStep(latestUnapprovedStep.id);
+      approveStep(latestUnapprovedStep);
     }
   };
 
