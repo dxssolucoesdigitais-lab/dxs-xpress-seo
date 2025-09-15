@@ -1,16 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { StepResult } from '@/types/database.types';
-import { ChatMessage } from '@/types/chat.types';
+import { ChatMessage, LlmOption } from '@/types/chat.types';
 import { showError } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
 
-// This is a placeholder function to transform step results into displayable messages.
-// In a real app, this would be much more sophisticated.
 const transformStepToMessages = (step: StepResult): ChatMessage[] => {
   const messages: ChatMessage[] = [];
 
-  // Add the AI's message/output
+  // Always add the AI's message/output
   messages.push({
     id: step.id,
     author: 'ai',
@@ -18,19 +16,27 @@ const transformStepToMessages = (step: StepResult): ChatMessage[] => {
     stepResult: step,
   });
 
-  // If the user has made a selection or approved, add a user message
-  if (step.approved || step.user_selection) {
-    let userContent = 'Approved! Pode continuar 🚀';
-    if (step.user_selection) {
-      // This is a simplification. We'd need to format the selection nicely.
-      const selection = step.user_selection as { number?: number; content?: string };
-      userContent = `I choose option ${selection.number || ''}: "${selection.content || '...'}"`;
+  // If the user has made a selection, add a corresponding user message
+  if (step.user_selection) {
+    const selection = step.user_selection as LlmOption;
+    if (selection.content) {
+      messages.push({
+        id: `${step.id}-user`,
+        author: 'user',
+        createdAt: step.created_at, // Using step's timestamp as a proxy for user action time
+        content: selection.content,
+        stepResult: step,
+      });
     }
+  } 
+  // If the step was approved without a specific selection, add a generic user approval message
+  else if (step.approved) {
     messages.push({
       id: `${step.id}-user`,
       author: 'user',
-      createdAt: step.created_at, // We'd likely want a separate timestamp for user action
-      content: userContent,
+      createdAt: step.created_at,
+      content: 'Approved! Pode continuar 🚀',
+      stepResult: step,
     });
   }
 
@@ -82,15 +88,37 @@ export const useChat = (projectId: string | null) => {
 
     if (!projectId) return;
 
+    const handleInsert = (payload: { new: StepResult }) => {
+      const newMessages = transformStepToMessages(payload.new);
+      setMessages(currentMessages => [...currentMessages, ...newMessages]);
+    };
+
+    const handleUpdate = (payload: { new: StepResult }) => {
+      const updatedStep = payload.new;
+      const newMessagesForStep = transformStepToMessages(updatedStep);
+      
+      setMessages(currentMessages => {
+        // Filter out all old messages related to this step
+        const otherMessages = currentMessages.filter(m => m.stepResult?.id !== updatedStep.id);
+        
+        // Add the new messages and re-sort to maintain chronological order
+        const combined = [...otherMessages, ...newMessagesForStep];
+        combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        return combined;
+      });
+    };
+
     const channel = supabase
       .channel(`project_chat_${projectId}`)
       .on<StepResult>(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'step_results', filter: `project_id=eq.${projectId}` },
-        (payload) => {
-          const newMessages = transformStepToMessages(payload.new);
-          setMessages(currentMessages => [...currentMessages, ...newMessages]);
-        }
+        handleInsert
+      )
+      .on<StepResult>(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'step_results', filter: `project_id=eq.${projectId}` },
+        handleUpdate
       )
       .subscribe();
 
