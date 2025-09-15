@@ -15,7 +15,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ project }) => {
 
   return (
     <div className="flex flex-col h-screen bg-[#0a0a0f] text-gray-200 font-sans">
-      <ChatHeader />
+      <ChatHeader project={project} />
       {loading ? (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
           <Skeleton className="h-24 w-3/4" />

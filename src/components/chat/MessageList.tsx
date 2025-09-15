@@ -28,7 +28,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
   
   // Render ProgressFlow for specific step names
   if (stepResult && stepResult.step_name === 'Workflow Progress') {
-    return <ProgressFlow />;
+    return <ProgressFlow stepResult={stepResult} />;
   }
 
   // Fallback to a generic AI message card
