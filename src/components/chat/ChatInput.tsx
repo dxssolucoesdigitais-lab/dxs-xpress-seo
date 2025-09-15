@@ -5,6 +5,8 @@ import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
 import ProjectHistorySheet from './ProjectHistorySheet';
+import { useSession } from '@/contexts/SessionContext';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ChatInputProps {
   project: Project;
@@ -13,11 +15,14 @@ interface ChatInputProps {
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false }) => {
+  const { user } = useSession();
   const { approveStep, regenerateStep } = useChatActions();
   const { pauseProject, resumeProject } = useProjectActions();
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  const hasCredits = user && user.credits_remaining > 0;
 
   const latestUnapprovedStep = useMemo(() => {
     const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
@@ -56,6 +61,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
+  const ActionButton: React.FC<{ onClick: () => void; disabled: boolean; tooltip: string; children: React.ReactNode; showTooltip: boolean }> = ({ onClick, disabled, tooltip, children, showTooltip }) => (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="inline-block">
+          <button onClick={onClick} disabled={disabled} className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+            {children}
+          </button>
+        </div>
+      </TooltipTrigger>
+      {showTooltip && <TooltipContent><p>{tooltip}</p></TooltipContent>}
+    </Tooltip>
+  );
+
   return (
     <>
       <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
@@ -71,30 +89,18 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          <button 
-            onClick={handleApprove}
-            disabled={!isApprovable || isDisabled}
-            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <ActionButton onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} tooltip="You have no credits remaining." showTooltip={!hasCredits}>
             👍 Aprovar
-          </button>
-          <button 
-            onClick={handleRegenerate}
-            disabled={!latestUnapprovedStep || isDisabled || isRegenerating}
-            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-          >
+          </ActionButton>
+          <ActionButton onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} tooltip="You have no credits remaining." showTooltip={!hasCredits}>
             {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
             Regenerar
-          </button>
-          <button 
-            onClick={handlePauseToggle}
-            disabled={!canPauseOrResume || isPausing}
-            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-          >
+          </ActionButton>
+          <ActionButton onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} tooltip="You need credits to resume." showTooltip={project.status === 'paused' && !hasCredits}>
             {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
               project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
             {project.status === 'paused' ? 'Retomar' : 'Pausar'}
-          </button>
+          </ActionButton>
           <button 
             onClick={() => setIsHistoryOpen(true)}
             className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all flex items-center"

@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 const Layout = () => {
   const { session, user } = useSession();
@@ -39,10 +40,18 @@ const Layout = () => {
           </Link>
           <div className="flex items-center gap-2 sm:gap-4">
             {user && (
-              <div className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                <CreditCard className="h-4 w-4 text-cyan-400" />
+              <button
+                onClick={() => setIsBuyCreditsOpen(true)}
+                className={cn(
+                  "hidden sm:flex items-center gap-2 text-sm font-semibold bg-white/5 px-3 py-1.5 rounded-full border border-white/10 transition-colors",
+                  user.credits_remaining <= 0
+                    ? "text-red-400 border-red-500/50 hover:bg-red-500/10"
+                    : "hover:bg-white/10"
+                )}
+              >
+                <CreditCard className={cn("h-4 w-4", user.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")} />
                 <span>{user.credits_remaining} Credits</span>
-              </div>
+              </button>
             )}
             <Button 
               variant="secondary" 
