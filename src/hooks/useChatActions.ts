@@ -66,7 +66,9 @@ export const useChatActions = () => {
           throw error;
         }
       } else {
-        showSuccess('Previous step cleared. Ready to regenerate!');
+        showSuccess('Regenerating response...');
+        // After successfully deleting the step, automatically trigger the workflow again.
+        await triggerNextStep(stepResult.project_id);
       }
     } catch (error: any) {
       showError('Failed to regenerate the step.');
