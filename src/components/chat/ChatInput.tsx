@@ -1,16 +1,21 @@
 import React, { useState, useMemo } from 'react';
-import { Send, RefreshCw, Loader2 } from 'lucide-react';
+import { Send, RefreshCw, Loader2, Play, Pause } from 'lucide-react';
 import { useChatActions } from '@/hooks/useChatActions';
+import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
+import { Project } from '@/types/database.types';
 
 interface ChatInputProps {
+  project: Project;
   messages: ChatMessage[];
   isDisabled?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ messages, isDisabled = false }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false }) => {
   const { approveStep, regenerateStep } = useChatActions();
+  const { pauseProject, resumeProject } = useProjectActions();
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isPausing, setIsPausing] = useState(false);
 
   const latestUnapprovedStep = useMemo(() => {
     const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
@@ -36,6 +41,18 @@ const ChatInput: React.FC<ChatInputProps> = ({ messages, isDisabled = false }) =
       setIsRegenerating(false);
     }
   };
+
+  const handlePauseToggle = async () => {
+    setIsPausing(true);
+    if (project.status === 'in_progress') {
+      await pauseProject(project.id);
+    } else if (project.status === 'paused') {
+      await resumeProject(project.id);
+    }
+    setIsPausing(false);
+  };
+
+  const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
   return (
     <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
@@ -66,7 +83,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ messages, isDisabled = false }) =
           {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
           Regenerar
         </button>
-        <button className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>⏸️ Pausar</button>
+        <button 
+          onClick={handlePauseToggle}
+          disabled={!canPauseOrResume || isPausing}
+          className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+        >
+          {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
+            project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
+          {project.status === 'paused' ? 'Retomar' : 'Pausar'}
+        </button>
         <button className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>📋 Ver Histórico</button>
       </div>
     </div>

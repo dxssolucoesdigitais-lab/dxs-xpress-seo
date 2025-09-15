@@ -29,10 +29,10 @@ serve(async (req) => {
       });
     }
 
-    // Get user_id from the project
+    // Get user_id and status from the project
     const { data: project, error: projectError } = await supabaseAdmin
       .from('projects')
-      .select('user_id')
+      .select('user_id, status')
       .eq('id', projectId)
       .single();
 
@@ -40,6 +40,14 @@ serve(async (req) => {
     if (!project) {
       return new Response(JSON.stringify({ error: 'Project not found' }), {
         status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Prevent workflow trigger if project is not in progress
+    if (project.status !== 'in_progress') {
+      return new Response(JSON.stringify({ error: `Project is not in progress. Current status: ${project.status}` }), {
+        status: 409, // Conflict
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -61,19 +69,14 @@ serve(async (req) => {
 
     // Check if the user has enough credits to proceed
     if (user.credits_remaining <= 0) {
-      // 402 Payment Required: The user has insufficient credits
       return new Response(JSON.stringify({ error: 'Insufficient credits to start the next step.' }), {
-        status: 402,
+        status: 402, // Payment Required
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     console.log(`User ${project.user_id} has ${user.credits_remaining} credits. Triggering workflow for project: ${projectId}`);
     
-    // The n8n workflow is responsible for the core logic. This function
-    // simply acts as a secure trigger.
-    // In a real application, you would now trigger your n8n webhook or other backend service.
-
     return new Response(JSON.stringify({ message: `Workflow triggered for project ${projectId}` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

@@ -16,16 +16,15 @@ const ChatInterface: React.FC = () => {
   const { messages, loading: chatLoading } = useChat(project);
 
   const isAiTyping = useMemo(() => {
-    if (projectLoading || chatLoading || !project || messages.length === 0 || project.status === 'completed' || project.status === 'error') {
+    if (projectLoading || chatLoading || !project || messages.length === 0 || project.status !== 'in_progress') {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
-    // AI is typing if the last message was from the user, indicating it's processing the next step
     return lastMessage.author === 'user';
   }, [messages, chatLoading, project, projectLoading]);
 
   const isChatDisabled = useMemo(() => {
-    return project?.status === 'completed' || project?.status === 'error';
+    return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
   }, [project]);
 
   if (!session) {
@@ -47,7 +46,6 @@ const ChatInterface: React.FC = () => {
   }
 
   if (!project) {
-    // Could be an invalid projectId or user doesn't have access
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -64,7 +62,7 @@ const ChatInterface: React.FC = () => {
         <MessageList messages={messages} isAiTyping={isAiTyping} />
       )}
       {project.status === 'error' && <ErrorDisplay />}
-      <ChatInput messages={messages} isDisabled={isChatDisabled} />
+      <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
     </div>
   );
 };
