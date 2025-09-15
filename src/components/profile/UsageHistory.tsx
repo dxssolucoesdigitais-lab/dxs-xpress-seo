@@ -10,7 +10,7 @@ const UsageHistory = () => {
   const { history, loading } = useUsageHistory();
 
   return (
-    <Card className="glass-effect border-white/10 text-white md:col-span-2">
+    <Card className="glass-effect border-white/10 text-white">
       <CardHeader>
         <CardTitle>Credit Usage History</CardTitle>
         <CardDescription className="text-gray-400">A log of your recent credit transactions.</CardDescription>
