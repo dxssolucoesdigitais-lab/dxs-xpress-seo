@@ -45,7 +45,7 @@ const transformStepToMessages = (step: StepResult): ChatMessage[] => {
 
 
 export const useChat = (projectId: string | null) => {
-  const { session } = useSession();
+  const { user } = useSession();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +70,7 @@ export const useChat = (projectId: string | null) => {
           id: 'welcome-message',
           author: 'ai',
           createdAt: new Date().toISOString(),
-          content: `Olá ${session?.user?.email || ''}! 👋 Vou te ajudar a criar conteúdo SEO incrível para sua loja.`,
+          content: `Olá ${user?.full_name || user?.email || ''}! 👋 Vou te ajudar a criar conteúdo SEO incrível para sua loja.`,
         });
       }
 
@@ -81,7 +81,7 @@ export const useChat = (projectId: string | null) => {
     } finally {
       setLoading(false);
     }
-  }, [projectId, session]);
+  }, [projectId, user]);
 
   useEffect(() => {
     fetchChatHistory();

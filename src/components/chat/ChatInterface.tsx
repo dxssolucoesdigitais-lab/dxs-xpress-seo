@@ -15,13 +15,13 @@ const ChatInterface: React.FC = () => {
   const { messages, loading: chatLoading } = useChat(project?.id ?? null);
 
   const isAiTyping = useMemo(() => {
-    if (chatLoading || messages.length === 0) {
+    if (projectLoading || chatLoading || !project || messages.length === 0 || project.status === 'completed' || project.status === 'error') {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
     // AI is typing if the last message was from the user, indicating it's processing the next step
     return lastMessage.author === 'user';
-  }, [messages, chatLoading]);
+  }, [messages, chatLoading, project, projectLoading]);
 
   if (!session) {
     return <Navigate to="/login" replace />;
