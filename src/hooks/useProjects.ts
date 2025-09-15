@@ -81,13 +81,11 @@ export const useProjects = () => {
       if (data) {
         showSuccess('Project created successfully!');
         
-        // Trigger the first step of the workflow immediately
         const { error: functionError } = await supabase.functions.invoke('trigger-step', {
           body: { projectId: data.id },
         });
 
         if (functionError) {
-          // Log the error, but don't block the user. The workflow can be manually triggered later if needed.
           console.error('Failed to trigger initial workflow step:', functionError.message);
           showError('Could not start AI workflow automatically.');
         }
@@ -102,5 +100,20 @@ export const useProjects = () => {
     }
   };
 
-  return { projects, loading, createProject, refetchProjects: fetchProjects };
+  const deleteProject = async (projectId: string) => {
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', projectId);
+
+      if (error) throw error;
+      showSuccess('Project deleted successfully.');
+    } catch (error: any) {
+      showError('Failed to delete project.');
+      console.error('Error deleting project:', error.message);
+    }
+  };
+
+  return { projects, loading, createProject, deleteProject, refetchProjects: fetchProjects };
 };
