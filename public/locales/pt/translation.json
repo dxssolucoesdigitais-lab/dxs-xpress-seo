@@ -162,26 +162,6 @@
       "backToDashboard": "Voltar ao Painel do Administrador"
     }
   },
-  "newProjectPage": {
-    "title": "Criar um Novo Projeto",
-    "description": "Forneça os detalhes abaixo para que nossa IA possa começar a trabalhar.",
-    "projectName": {
-      "label": "Nome do Projeto",
-      "placeholder": "Ex: Campanha de Inverno para Sapatos"
-    },
-    "productLink": {
-      "label": "Link do Produto/Serviço"
-    },
-    "targetCountry": {
-      "label": "País de Destino",
-      "placeholder": "Ex: Brasil"
-    },
-    "targetAudience": {
-      "label": "Público-Alvo",
-      "placeholder": "Descreva seu cliente ideal. Ex: Jovens adultos interessados em moda sustentável."
-    },
-    "cta": "Iniciar Projeto com IA"
-  },
   "toasts": {
     "chat": {
       "responseSaved": "Sua resposta foi salva!",

@@ -35,7 +35,7 @@ const Sidebar = () => {
           <Button asChild variant="outline" className="w-full justify-start">
             <Link to="/chat">
               <PlusCircle className="mr-2 h-4 w-4" />
-              Nova Conversa
+              {t('newProject')}
             </Link>
           </Button>
         </div>

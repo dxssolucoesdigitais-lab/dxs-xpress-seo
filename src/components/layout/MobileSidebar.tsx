@@ -41,7 +41,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
           <Button asChild variant="outline" className="w-full justify-start">
             <Link to="/chat" onClick={() => onOpenChange(false)}>
               <PlusCircle className="mr-2 h-4 w-4" />
-              Nova Conversa
+              {t('newProject')}
             </Link>
           </Button>
         </div>
