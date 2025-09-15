@@ -25,7 +25,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ project }) => {
       ) : (
         <MessageList messages={messages} />
       )}
-      <ChatInput />
+      <ChatInput messages={messages} />
     </div>
   );
 };

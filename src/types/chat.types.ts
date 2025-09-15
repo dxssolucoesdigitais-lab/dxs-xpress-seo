@@ -8,3 +8,9 @@ export interface ChatMessage {
   content?: ReactNode;
   stepResult?: StepResult;
 }
+
+export interface LlmOption {
+  number: number;
+  content: string;
+  charCount?: number;
+}

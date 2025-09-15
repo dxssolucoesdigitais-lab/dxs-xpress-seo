@@ -1,8 +1,9 @@
 import React from 'react';
 import { ChatMessage } from '@/types/chat.types';
 import { User } from 'lucide-react';
+import OptionSelector from './OptionSelector';
+import ProgressFlow from './ProgressFlow';
 
-// A simple component to render different message types. This would be expanded.
 const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
   if (message.author === 'user') {
     return (
@@ -15,9 +16,22 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
     );
   }
 
-  // For now, we'll render a generic AI message card.
-  // We can add logic here to check message.stepResult and render different components
-  // like OptionSelector or ProgressFlow based on the step_name or llm_output structure.
+  const { stepResult } = message;
+
+  // Render OptionSelector if the step has options and isn't approved yet
+  if (stepResult && !stepResult.approved) {
+    const isOptionList = Array.isArray(stepResult.llm_output) && stepResult.llm_output.length > 0 && typeof stepResult.llm_output[0] === 'object' && 'content' in stepResult.llm_output[0];
+    if (isOptionList) {
+      return <OptionSelector stepResult={stepResult} />;
+    }
+  }
+  
+  // Render ProgressFlow for specific step names
+  if (stepResult && stepResult.step_name === 'Workflow Progress') {
+    return <ProgressFlow />;
+  }
+
+  // Fallback to a generic AI message card
   return (
     <div className="flex items-start gap-4">
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
@@ -27,13 +41,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
           <span className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
         <div className="prose prose-invert prose-sm max-w-none text-gray-300 space-y-4">
-          {message.content ? <p>{message.content}</p> : <p>Analyzing next step...</p>}
+          {message.content ? <p>{message.content}</p> : <p>Analisando a próxima etapa...</p>}
         </div>
       </div>
     </div>
   );
 };
-
 
 interface MessageListProps {
   messages: ChatMessage[];
