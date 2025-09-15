@@ -18,13 +18,16 @@ export interface Database {
           credits_remaining: number | null
           created_at: string | null
           updated_at: string | null
+          role: string | null
+          last_seen_ip: string | null
+          last_seen_at: string | null
         }
         Insert: {
           id: string
           email: string
           full_name?: string | null
         }
-        Update: Partial<this['Insert']>
+        Update: Partial<this['Insert'] & { role: string, credits_remaining: number }>
       }
       projects: {
         Row: {
@@ -68,7 +71,23 @@ export interface Database {
         }
         Update: Partial<this['Insert'] & { user_selection: Json, approved: boolean }>
       }
-      // Add other tables if needed
+      usage_history: {
+        Row: {
+            id: string;
+            user_id: string;
+            project_id: string | null;
+            action_type: string;
+            credits_used: number;
+            timestamp: string;
+        };
+        Insert: {
+            user_id: string;
+            project_id?: string | null;
+            action_type: string;
+            credits_used?: number;
+        };
+        Update: Partial<this['Insert']>;
+      }
     }
     Views: {
       [_ in never]: never

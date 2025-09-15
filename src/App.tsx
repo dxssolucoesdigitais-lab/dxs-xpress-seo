@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/layout/ProtectedRoute";
 import AdminProtectedRoute from "./components/layout/AdminProtectedRoute";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
                   {/* Admin Routes */}
                   <Route element={<AdminProtectedRoute />}>
                     <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/user/:userId" element={<AdminUserDetail />} />
                   </Route>
                 </Route>
               </Route>
