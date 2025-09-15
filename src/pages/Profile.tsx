@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError } from '@/utils/toast';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import UsageHistory from '@/components/profile/UsageHistory';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -117,6 +118,7 @@ const Profile = () => {
             </form>
           </CardContent>
         </Card>
+        <UsageHistory />
       </div>
     </div>
   );
