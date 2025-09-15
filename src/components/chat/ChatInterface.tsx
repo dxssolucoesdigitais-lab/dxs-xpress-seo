@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput from "@/components/chat/ChatInput";
@@ -13,6 +13,15 @@ const ChatInterface: React.FC = () => {
   const { session } = useSession();
   const { project, loading: projectLoading } = useProject(projectId);
   const { messages, loading: chatLoading } = useChat(project?.id ?? null);
+
+  const isAiTyping = useMemo(() => {
+    if (chatLoading || messages.length === 0) {
+      return false;
+    }
+    const lastMessage = messages[messages.length - 1];
+    // AI is typing if the last message was from the user, indicating it's processing the next step
+    return lastMessage.author === 'user';
+  }, [messages, chatLoading]);
 
   if (!session) {
     return <Navigate to="/login" replace />;
@@ -47,7 +56,7 @@ const ChatInterface: React.FC = () => {
           <Skeleton className="h-48 w-3/4" />
         </div>
       ) : (
-        <MessageList messages={messages} />
+        <MessageList messages={messages} isAiTyping={isAiTyping} />
       )}
       <ChatInput messages={messages} />
     </div>
