@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { useSession } from '@/contexts/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, CreditCard } from 'lucide-react';
+import { LogOut, LayoutDashboard, CreditCard, PlusCircle } from 'lucide-react';
+import BuyCreditsDialog from '../billing/BuyCreditsDialog';
 
 const Layout = () => {
   const { session, user } = useSession();
+  const [isBuyCreditsOpen, setIsBuyCreditsOpen] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -25,6 +28,15 @@ const Layout = () => {
                 <span>{user.credits_remaining} Credits</span>
               </div>
             )}
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
+              onClick={() => setIsBuyCreditsOpen(true)}
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Buy Credits
+            </Button>
             <Link to="/dashboard" aria-label="Go to dashboard">
               <Button variant="ghost" size="icon">
                 <LayoutDashboard className="h-5 w-5" />
@@ -41,6 +53,7 @@ const Layout = () => {
       <main className="flex-1">
         <Outlet />
       </main>
+      <BuyCreditsDialog isOpen={isBuyCreditsOpen} onOpenChange={setIsBuyCreditsOpen} />
     </div>
   );
 };
