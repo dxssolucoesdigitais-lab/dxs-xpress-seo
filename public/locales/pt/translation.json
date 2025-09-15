@@ -128,7 +128,8 @@
   "chat": {
     "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar no seu projeto \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
     "genericApproval": "Aprovado! Pode continuar 🚀",
-    "analyzingNextStep": "Analisando a próxima etapa..."
+    "analyzingNextStep": "Analisando a próxima etapa...",
+    "startPlaceholder": "Cole um link de produto ou descreva seu serviço para começar..."
   },
   "login": {
     "welcome": "Bem-vindo ao XpressSEO"
@@ -189,7 +190,8 @@
       "regenerateFailed": "Falha ao regerar a etapa.",
       "noCreditsToRegenerate": "Você não tem créditos suficientes para regerar.",
       "nextStepTriggerFailed": "Falha ao iniciar a próxima etapa.",
-      "outOfCredits": "Você ficou sem créditos! O fluxo está pausado."
+      "outOfCredits": "Você ficou sem créditos! O fluxo está pausado.",
+      "startWorkflowFailed": "Falha ao iniciar novo chat."
     },
     "projects": {
       "fetchFailed": "Falha ao buscar projetos.",

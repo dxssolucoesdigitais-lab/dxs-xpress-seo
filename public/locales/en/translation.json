@@ -128,7 +128,8 @@
   "chat": {
     "welcomeMessage": "Hello {{userName}}! 👋 I've started working on your project \"{{projectName}}\". I'll analyze your product and target audience, and I'll be back shortly with the first step.",
     "genericApproval": "Approved! Let's continue 🚀",
-    "analyzingNextStep": "Analyzing the next step..."
+    "analyzingNextStep": "Analyzing the next step...",
+    "startPlaceholder": "Paste a product link or describe your service to begin..."
   },
   "login": {
     "welcome": "Welcome to XpressSEO"
@@ -189,7 +190,8 @@
       "regenerateFailed": "Failed to regenerate the step.",
       "noCreditsToRegenerate": "You don't have enough credits to regenerate.",
       "nextStepTriggerFailed": "Failed to trigger the next step.",
-      "outOfCredits": "You've run out of credits! The workflow is paused."
+      "outOfCredits": "You've run out of credits! The workflow is paused.",
+      "startWorkflowFailed": "Failed to start new chat."
     },
     "projects": {
       "fetchFailed": "Failed to fetch projects.",
