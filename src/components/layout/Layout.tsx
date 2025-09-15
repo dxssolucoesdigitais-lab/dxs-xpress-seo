@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import BuyCreditsDialog from '../billing/BuyCreditsDialog';
+import PricingDialog from '../billing/PricingDialog';
 import Sidebar from './Sidebar';
 import MobileSidebar from './MobileSidebar';
 import Header from './Header';
 
 const Layout = () => {
-  const [isBuyCreditsOpen, setIsBuyCreditsOpen] = useState(false);
+  const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -17,16 +17,13 @@ const Layout = () => {
       <div className="flex flex-col flex-1 md:pl-64">
         <Header 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
-          onBuyCreditsClick={() => setIsBuyCreditsOpen(true)}
+          onBuyCreditsClick={() => setIsPricingDialogOpen(true)}
         />
         <main className="flex-1">
           <Outlet />
         </main>
       </div>
 
-      <BuyCreditsDialog isOpen={isBuyCreditsOpen} onOpenChange={setIsBuyCreditsOpen} />
+      <PricingDialog isOpen={isPricingDialogOpen} onOpenChange={setIsPricingDialogOpen} />
     </div>
   );
-};
-
-export default Layout;

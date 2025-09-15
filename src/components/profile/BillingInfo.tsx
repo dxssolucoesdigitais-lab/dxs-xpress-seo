@@ -3,12 +3,12 @@ import { useSession } from '@/contexts/SessionContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import BuyCreditsDialog from '@/components/billing/BuyCreditsDialog';
+import PricingDialog from '@/components/billing/PricingDialog';
 import { cn } from '@/lib/utils';
 
 const BillingInfo = () => {
   const { user } = useSession();
-  const [isBuyCreditsOpen, setIsBuyCreditsOpen] = useState(false);
+  const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
 
   return (
     <>
@@ -32,16 +32,13 @@ const BillingInfo = () => {
           </div>
           <Button 
             className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
-            onClick={() => setIsBuyCreditsOpen(true)}
+            onClick={() => setIsPricingDialogOpen(true)}
           >
             <PlusCircle className="mr-2 h-4 w-4" />
-            Buy More Credits
+            Mudar de Plano
           </Button>
         </CardContent>
       </Card>
-      <BuyCreditsDialog isOpen={isBuyCreditsOpen} onOpenChange={setIsBuyCreditsOpen} />
+      <PricingDialog isOpen={isPricingDialogOpen} onOpenChange={setIsPricingDialogOpen} />
     </>
   );
-};
-
-export default BillingInfo;
