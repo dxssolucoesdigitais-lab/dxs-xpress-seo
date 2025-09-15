@@ -1,5 +1,6 @@
 import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa, ptBR } from '@supabase/auth-ui-shared';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { ptBR } from '@supabase/auth-ui-shared/dist/esm/localization/messages';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/contexts/SessionContext';
 import { Navigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ const Login = () => {
           providers={[]}
           theme="dark"
           localization={{
-            variables: i18n.language === 'pt' ? ptBR.variables : {},
+            variables: i18n.language === 'pt' ? ptBR.ptBR : {},
           }}
         />
       </div>
