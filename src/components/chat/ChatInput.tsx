@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Send, RefreshCw, Loader2, Play, Pause } from 'lucide-react';
+import { Send, RefreshCw, Loader2, Play, Pause, BookText } from 'lucide-react';
 import { useChatActions } from '@/hooks/useChatActions';
 import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
+import ProjectHistorySheet from './ProjectHistorySheet';
 
 interface ChatInputProps {
   project: Project;
@@ -16,6 +17,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const { pauseProject, resumeProject } = useProjectActions();
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isPausing, setIsPausing] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const latestUnapprovedStep = useMemo(() => {
     const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
@@ -55,46 +57,60 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
   return (
-    <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
-      <div className="relative mb-4">
-        <textarea
-          className="w-full bg-transparent border border-white/20 rounded-2xl p-4 pr-14 text-white placeholder-gray-500 resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
-          placeholder={isDisabled ? "Chat is disabled for this project." : "Digite sua resposta ou comando..."}
-          rows={1}
-          disabled
-        ></textarea>
-        <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600" disabled>
-          <Send size={20} />
-        </button>
+    <>
+      <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
+        <div className="relative mb-4">
+          <textarea
+            className="w-full bg-transparent border border-white/20 rounded-2xl p-4 pr-14 text-white placeholder-gray-500 resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
+            placeholder={isDisabled ? "Chat is disabled for this project." : "Digite sua resposta ou comando..."}
+            rows={1}
+            disabled
+          ></textarea>
+          <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600" disabled>
+            <Send size={20} />
+          </button>
+        </div>
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          <button 
+            onClick={handleApprove}
+            disabled={!isApprovable || isDisabled}
+            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            👍 Aprovar
+          </button>
+          <button 
+            onClick={handleRegenerate}
+            disabled={!latestUnapprovedStep || isDisabled || isRegenerating}
+            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          >
+            {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+            Regenerar
+          </button>
+          <button 
+            onClick={handlePauseToggle}
+            disabled={!canPauseOrResume || isPausing}
+            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          >
+            {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
+              project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
+            {project.status === 'paused' ? 'Retomar' : 'Pausar'}
+          </button>
+          <button 
+            onClick={() => setIsHistoryOpen(true)}
+            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all flex items-center"
+          >
+            <BookText className="mr-2 h-4 w-4" />
+            Ver Histórico
+          </button>
+        </div>
       </div>
-      <div className="flex items-center justify-center gap-2 flex-wrap">
-        <button 
-          onClick={handleApprove}
-          disabled={!isApprovable || isDisabled}
-          className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          👍 Aprovar
-        </button>
-        <button 
-          onClick={handleRegenerate}
-          disabled={!latestUnapprovedStep || isDisabled || isRegenerating}
-          className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-        >
-          {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-          Regenerar
-        </button>
-        <button 
-          onClick={handlePauseToggle}
-          disabled={!canPauseOrResume || isPausing}
-          className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-        >
-          {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-            project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
-          {project.status === 'paused' ? 'Retomar' : 'Pausar'}
-        </button>
-        <button className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>📋 Ver Histórico</button>
-      </div>
-    </div>
+      <ProjectHistorySheet 
+        project={project}
+        messages={messages}
+        isOpen={isHistoryOpen}
+        onOpenChange={setIsHistoryOpen}
+      />
+    </>
   );
 };
 
