@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Project } from '@/types/database.types';
 import EmptyDashboard from '@/components/project/EmptyDashboard';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { projects, loading, deleteProject } = useProjects();
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,13 +79,13 @@ const Dashboard = () => {
     <>
       <div className="min-h-full bg-[#0a0a0f] text-white p-4 sm:p-6 lg:p-8 container max-w-7xl mx-auto">
         <header className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-          <h1 className="text-3xl font-bold self-start sm:self-center">Your Projects</h1>
+          <h1 className="text-3xl font-bold self-start sm:self-center">{t('dashboardTitle')}</h1>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search projects..."
+                placeholder={t('searchProjects')}
                 className="w-full bg-transparent border-white/20 pl-9"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -92,7 +94,7 @@ const Dashboard = () => {
             <Link to="/">
               <Button className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold flex-shrink-0">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                New Project
+                {t('newProject')}
               </Button>
             </Link>
           </div>

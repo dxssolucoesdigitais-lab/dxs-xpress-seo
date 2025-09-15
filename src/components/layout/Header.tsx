@@ -16,6 +16,7 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from '../theme/mode-toggle';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -69,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
         </Button>
         
         <ModeToggle />
+        <LanguageSwitcher />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
