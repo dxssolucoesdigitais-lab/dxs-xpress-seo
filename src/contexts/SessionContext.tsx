@@ -5,19 +5,22 @@ import { supabase } from '@/integrations/supabase/client';
 type SessionContextType = {
   session: Session | null;
   supabase: SupabaseClient;
+  isLoading: boolean;
 };
 
 const SessionContext = createContext<SessionContextType | null>(null);
 
 export const SessionContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setIsLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -27,7 +30,7 @@ export const SessionContextProvider = ({ children }: { children: React.ReactNode
   }, []);
 
   return (
-    <SessionContext.Provider value={{ session, supabase }}>
+    <SessionContext.Provider value={{ session, supabase, isLoading }}>
       {children}
     </SessionContext.Provider>
   );
