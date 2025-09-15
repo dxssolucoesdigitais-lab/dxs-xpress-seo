@@ -1,12 +1,12 @@
 import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { ThemeSupa, ptBR } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/contexts/SessionContext';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const Login = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { session } = useSession();
 
   if (session) {
@@ -22,6 +22,9 @@ const Login = () => {
           appearance={{ theme: ThemeSupa }}
           providers={[]}
           theme="dark"
+          localization={{
+            variables: i18n.language === 'pt' ? ptBR.variables : {},
+          }}
         />
       </div>
     </div>
