@@ -33,6 +33,7 @@ export interface Database {
           project_name: string
           product_link: string
           target_country: string
+          target_audience: string | null
           extracted_data: Json | null
           current_step: number
           status: 'in_progress' | 'completed' | 'paused' | 'error'
@@ -44,6 +45,7 @@ export interface Database {
           project_name: string
           product_link: string
           target_country: string
+          target_audience: string
         }
         Update: Partial<this['Insert'] & { status: 'in_progress' | 'completed' | 'paused' | 'error', current_step: number }>
       }

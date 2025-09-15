@@ -32,29 +32,32 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) =
         <Trash2 className="w-4 h-4" />
       </Button>
       <Link to={`/project/${project.id}`} className="h-full block">
-        <Card className="glass-effect border-white/10 text-white hover:border-cyan-400 transition-all h-full">
+        <Card className="glass-effect border-white/10 text-white hover:border-cyan-400 transition-all h-full flex flex-col">
           <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              {project.project_name}
-              <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transition-transform group-hover:translate-x-1" />
+            <CardTitle className="flex justify-between items-start">
+              <span className="pr-8">{project.project_name}</span>
+              <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transition-transform group-hover:translate-x-1 flex-shrink-0" />
             </CardTitle>
             <CardDescription className="text-gray-400 truncate">{project.product_link}</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="text-sm text-gray-300">
+          <CardContent className="flex-grow flex flex-col justify-between">
+            <div className="text-sm text-gray-300 space-y-2">
               <p>Status: <span className="font-semibold text-cyan-300">{project.status}</span></p>
               <p>Target: {project.target_country}</p>
-              <div className="mt-4">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs font-medium text-gray-400">Progress</span>
-                  <span className="text-xs font-medium text-gray-400">Step {project.current_step}/{totalSteps}</span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-purple-500 to-cyan-400 h-2 rounded-full" 
-                    style={{ width: `${progressPercentage}%` }}
-                  ></div>
-                </div>
+              {project.target_audience && (
+                <p className="line-clamp-2">Audience: {project.target_audience}</p>
+              )}
+            </div>
+            <div className="mt-4">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs font-medium text-gray-400">Progress</span>
+                <span className="text-xs font-medium text-gray-400">Step {project.current_step}/{totalSteps}</span>
+              </div>
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-purple-500 to-cyan-400 h-2 rounded-full" 
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
               </div>
             </div>
           </CardContent>

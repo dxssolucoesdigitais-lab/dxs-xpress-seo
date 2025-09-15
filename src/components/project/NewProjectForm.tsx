@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { NewProject } from '@/types/database.types';
 import { Loader2 } from 'lucide-react';
 
@@ -11,18 +13,34 @@ interface NewProjectFormProps {
   isSubmitting: boolean;
 }
 
+const countries = [
+  { value: "United States", label: "United States" },
+  { value: "Canada", label: "Canada" },
+  { value: "Brazil", label: "Brazil" },
+  { value: "United Kingdom", label: "United Kingdom" },
+  { value: "Australia", label: "Australia" },
+  { value: "Germany", label: "Germany" },
+  { value: "France", label: "France" },
+];
+
 const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSubmit, isSubmitting }) => {
   const [projectName, setProjectName] = useState('');
   const [productLink, setProductLink] = useState('');
   const [targetCountry, setTargetCountry] = useState('');
+  const [targetAudience, setTargetAudience] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!projectName || !productLink || !targetCountry) {
+    if (!projectName || !productLink || !targetCountry || !targetAudience) {
       // Basic validation
       return;
     }
-    onSubmit({ project_name: projectName, product_link: productLink, target_country: targetCountry });
+    onSubmit({ 
+      project_name: projectName, 
+      product_link: productLink, 
+      target_country: targetCountry,
+      target_audience: targetAudience
+    });
   };
 
   return (
@@ -61,11 +79,24 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({ onSubmit, isSubmitting 
             </div>
             <div className="space-y-2">
               <Label htmlFor="target-country">Target Country</Label>
-              <Input
-                id="target-country"
-                placeholder="e.g., 'Brazil'"
-                value={targetCountry}
-                onChange={(e) => setTargetCountry(e.target.value)}
+              <Select onValueChange={setTargetCountry} value={targetCountry}>
+                <SelectTrigger id="target-country" className="w-full bg-transparent border-white/20">
+                  <SelectValue placeholder="Select a country" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#1a1a1f] border-white/20 text-white">
+                  {countries.map(country => (
+                    <SelectItem key={country.value} value={country.value}>{country.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="target-audience">Target Audience</Label>
+              <Textarea
+                id="target-audience"
+                placeholder="e.g., 'Dog owners in urban areas, aged 30-50, who treat their pets like family and are willing to spend more for quality and comfort.'"
+                value={targetAudience}
+                onChange={(e) => setTargetAudience(e.target.value)}
                 className="bg-transparent border-white/20"
                 required
               />
