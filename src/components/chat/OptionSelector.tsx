@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StepResult } from '@/types/database.types';
 import { LlmOption } from '@/types/chat.types';
 import { useChatActions } from '@/hooks/useChatActions';
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface OptionSelectorProps {
   stepResult: StepResult;
@@ -9,10 +11,12 @@ interface OptionSelectorProps {
 
 const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
   const { selectOption } = useChatActions();
+  const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
   const options = (stepResult.llm_output as LlmOption[]) || [];
 
-  const handleSelect = (option: LlmOption) => {
-    selectOption(stepResult, option);
+  const handleSelect = async (option: LlmOption) => {
+    setIsSubmitting(option.number);
+    await selectOption(stepResult, option);
   };
 
   return (
@@ -26,11 +30,18 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
           {options.map((option) => (
             <div 
               key={option.number} 
-              onClick={() => handleSelect(option)}
-              className="flex items-center gap-3 p-3 rounded-lg border border-white/10 hover:bg-white/5 hover:border-cyan-400 transition-all cursor-pointer group"
+              onClick={!isSubmitting ? () => handleSelect(option) : undefined}
+              className={cn(
+                "flex items-center gap-3 p-3 rounded-lg border border-white/10 transition-all",
+                !isSubmitting && "hover:bg-white/5 hover:border-cyan-400 cursor-pointer group",
+                isSubmitting && "opacity-50 cursor-not-allowed"
+              )}
             >
-              <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 border border-white/10 group-hover:border-cyan-400 text-cyan-400 font-bold">
-                {option.number}
+              <div className={cn(
+                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 border border-white/10 text-cyan-400 font-bold",
+                !isSubmitting && "group-hover:border-cyan-400"
+              )}>
+                {isSubmitting === option.number ? <Loader2 className="h-4 w-4 animate-spin" /> : option.number}
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-white">{option.content}</p>
