@@ -4,6 +4,7 @@ import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput from "@/components/chat/ChatInput";
 import MessageList from "@/components/chat/MessageList";
 import ErrorDisplay from "@/components/chat/ErrorDisplay";
+import EmptyChat from "@/components/chat/EmptyChat";
 import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
 import { Skeleton } from '../ui/skeleton';
@@ -20,7 +21,8 @@ const ChatInterface: React.FC = () => {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
-    return lastMessage.author === 'user';
+    // The AI is "typing" if the last message was from the user, or if there's only a welcome message.
+    return lastMessage.author === 'user' || (messages.length === 1 && lastMessage.id === 'welcome-message');
   }, [messages, chatLoading, project, projectLoading]);
 
   const isChatDisabled = useMemo(() => {
@@ -55,16 +57,13 @@ const ChatInterface: React.FC = () => {
       {chatLoading ? (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
           <Skeleton className="h-24 w-3/4" />
-          <Skeleton className="h-12 w-1/2 ml-auto" />
-          <Skeleton className="h-48 w-3/4" />
         </div>
-      ) : (
+      ) : messages.length > 0 ? (
         <MessageList messages={messages} isAiTyping={isAiTyping} />
+      ) : (
+        <EmptyChat />
       )}
       {project.status === 'error' && <ErrorDisplay />}
       <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
     </div>
   );
-};
-
-export default ChatInterface;

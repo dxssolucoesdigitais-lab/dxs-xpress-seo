@@ -1,46 +1,48 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
-import { NewProject } from "@/types/database.types";
-import NewProjectForm from "@/components/project/NewProjectForm";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
   const { projects, loading, createProject } = useProjects();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    // If projects are loaded and exist, redirect to the dashboard.
+    // If projects are already loaded and exist, redirect to the dashboard.
     if (!loading && projects.length > 0) {
       navigate('/dashboard');
     }
-  }, [loading, projects, navigate]);
+    // If not loading and no projects exist, start creating one.
+    else if (!loading && projects.length === 0 && !isCreating) {
+      setIsCreating(true);
+      handleCreateProject();
+    }
+  }, [loading, projects, navigate, isCreating]);
 
-  const handleCreateProject = async (projectData: Omit<NewProject, 'user_id'>) => {
-    setIsSubmitting(true);
-    const newProject = await createProject(projectData);
+  const handleCreateProject = async () => {
+    const newProject = await createProject({
+      project_name: `Novo Projeto ${new Date().toLocaleString()}`,
+      product_link: "Não definido",
+      target_country: "Não definido",
+      target_audience: "Não definido",
+    });
     if (newProject) {
       navigate(`/project/${newProject.id}`);
+    } else {
+      // If creation fails, send user to dashboard to try again.
+      navigate('/dashboard');
     }
-    setIsSubmitting(false);
   };
 
-  if (loading || (!loading && projects.length > 0)) {
-    // Show a loading skeleton while checking for projects or redirecting.
-    return (
-      <div className="flex items-center justify-center h-full pt-10">
-        <div className="w-full max-w-md space-y-4">
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-12 w-full" />
-        </div>
-      </div>
-    );
-  }
-
-  // If not loading and no projects exist, show the form to create one.
-  return <NewProjectForm onSubmit={handleCreateProject} isSubmitting={isSubmitting} />;
+  // Show a loading spinner while creating the initial project.
+  return (
+    <div className="flex flex-col items-center justify-center h-full pt-10 text-center">
+      <Loader2 className="h-12 w-12 animate-spin text-cyan-400" />
+      <p className="mt-4 text-lg">Preparando seu novo projeto...</p>
+      <p className="text-sm text-gray-400">Você será redirecionado em breve.</p>
+    </div>
+  );
 };
 
 export default Index;

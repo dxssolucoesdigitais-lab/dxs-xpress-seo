@@ -79,7 +79,7 @@ export const useProjects = () => {
       if (error) throw error;
 
       if (data) {
-        showSuccess('Project created successfully!');
+        showSuccess('Novo projeto criado!');
         
         const { error: functionError } = await supabase.functions.invoke('trigger-step', {
           body: { projectId: data.id },
@@ -87,10 +87,10 @@ export const useProjects = () => {
 
         if (functionError) {
           if (functionError.context && functionError.context.response.status === 402) {
-            showError("Project created, but you have no credits to start the AI workflow.");
+            showError("Projeto criado, mas você não tem créditos para iniciar o fluxo de IA.");
           } else {
             console.error('Failed to trigger initial workflow step:', functionError.message);
-            showError('Could not start AI workflow automatically.');
+            showError('Não foi possível iniciar o fluxo de IA automaticamente.');
           }
         }
 
@@ -98,7 +98,7 @@ export const useProjects = () => {
       }
       return null;
     } catch (error: any) {
-      showError('Failed to create project.');
+      showError('Falha ao criar projeto.');
       console.error('Error creating project:', error.message);
       return null;
     }
@@ -112,9 +112,9 @@ export const useProjects = () => {
         .eq('id', projectId);
 
       if (error) throw error;
-      showSuccess('Project deleted successfully.');
+      showSuccess('Projeto deletado com sucesso.');
     } catch (error: any) {
-      showError('Failed to delete project.');
+      showError('Falha ao deletar projeto.');
       console.error('Error deleting project:', error.message);
     }
   };
