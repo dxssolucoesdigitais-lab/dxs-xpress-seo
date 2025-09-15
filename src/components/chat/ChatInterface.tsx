@@ -13,7 +13,7 @@ const ChatInterface: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const { session } = useSession();
   const { project, loading: projectLoading } = useProject(projectId);
-  const { messages, loading: chatLoading } = useChat(project?.id ?? null);
+  const { messages, loading: chatLoading } = useChat(project);
 
   const isAiTyping = useMemo(() => {
     if (projectLoading || chatLoading || !project || messages.length === 0 || project.status === 'completed' || project.status === 'error') {

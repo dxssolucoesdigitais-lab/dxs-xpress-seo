@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { StepResult } from '@/types/database.types';
+import { Project, StepResult } from '@/types/database.types';
 import { ChatMessage, LlmOption } from '@/types/chat.types';
 import { showError } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
@@ -44,20 +44,23 @@ const transformStepToMessages = (step: StepResult): ChatMessage[] => {
 };
 
 
-export const useChat = (projectId: string | null) => {
+export const useChat = (project: Project | null) => {
   const { user } = useSession();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchChatHistory = useCallback(async () => {
-    if (!projectId) return;
+    if (!project) {
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from('step_results')
         .select('*')
-        .eq('project_id', projectId)
+        .eq('project_id', project.id)
         .order('created_at', { ascending: true });
 
       if (error) throw error;
@@ -65,12 +68,12 @@ export const useChat = (projectId: string | null) => {
       const chatMessages = data.flatMap(transformStepToMessages);
       
       if (chatMessages.length === 0) {
-        // Add a welcome message if there's no history
+        // Add a dynamic welcome message
         chatMessages.push({
           id: 'welcome-message',
           author: 'ai',
           createdAt: new Date().toISOString(),
-          content: `Olá ${user?.full_name || user?.email || ''}! 👋 Vou te ajudar a criar conteúdo SEO incrível para sua loja.`,
+          content: `Olá ${user?.full_name || ''}! 👋 Comecei a trabalhar no seu projeto "${project.project_name}". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.`,
         });
       }
 
@@ -81,12 +84,14 @@ export const useChat = (projectId: string | null) => {
     } finally {
       setLoading(false);
     }
-  }, [projectId, user]);
+  }, [project, user]);
 
   useEffect(() => {
     fetchChatHistory();
 
-    if (!projectId) return;
+    if (!project) return;
+
+    const projectId = project.id;
 
     const handleInsert = (payload: { new: StepResult }) => {
       const newMessages = transformStepToMessages(payload.new);
@@ -125,7 +130,7 @@ export const useChat = (projectId: string | null) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [projectId, fetchChatHistory]);
+  }, [project, fetchChatHistory]);
 
   return { messages, loading };
 };
