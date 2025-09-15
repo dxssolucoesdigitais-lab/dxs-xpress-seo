@@ -1,22 +1,46 @@
 import React from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput from "@/components/chat/ChatInput";
 import MessageList from "@/components/chat/MessageList";
-import { Project } from '@/types/database.types';
+import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
 import { Skeleton } from '../ui/skeleton';
+import { useSession } from '@/contexts/SessionContext';
 
-interface ChatInterfaceProps {
-  project: Project;
-}
+const ChatInterface: React.FC = () => {
+  const { projectId } = useParams<{ projectId: string }>();
+  const { session } = useSession();
+  const { project, loading: projectLoading } = useProject(projectId);
+  const { messages, loading: chatLoading } = useChat(project?.id ?? null);
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ project }) => {
-  const { messages, loading } = useChat(project.id);
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (projectLoading) {
+    return (
+      <div className="flex flex-col h-screen bg-[#0a0a0f]">
+        <Skeleton className="h-16 w-full" />
+        <div className="flex-1 p-4 md:p-6 space-y-8">
+          <Skeleton className="h-24 w-3/4" />
+          <Skeleton className="h-12 w-1/2 ml-auto" />
+          <Skeleton className="h-48 w-3/4" />
+        </div>
+        <Skeleton className="h-28 w-full" />
+      </div>
+    );
+  }
+
+  if (!project) {
+    // Could be an invalid projectId or user doesn't have access
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-[#0a0a0f] text-gray-200 font-sans">
       <ChatHeader project={project} />
-      {loading ? (
+      {chatLoading ? (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
           <Skeleton className="h-24 w-3/4" />
           <Skeleton className="h-12 w-1/2 ml-auto" />

@@ -2,42 +2,36 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@/contexts/SessionContext";
 import { useProjects } from "@/hooks/useProjects";
-import { Project } from "@/types/database.types";
+import { NewProject } from "@/types/database.types";
 import NewProjectForm from "@/components/project/NewProjectForm";
-import ChatInterface from "@/components/chat/ChatInterface";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
   const { session } = useSession();
   const navigate = useNavigate();
   const { projects, loading, createProject } = useProjects();
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!session) {
       navigate('/login');
+    } else if (!loading && projects.length > 0) {
+      navigate('/dashboard');
     }
-  }, [session, navigate]);
+  }, [session, navigate, loading, projects]);
 
-  useEffect(() => {
-    if (!loading && projects.length > 0 && !activeProject) {
-      // For now, automatically select the most recent project
-      setActiveProject(projects[0]);
-    }
-  }, [projects, loading, activeProject]);
-
-  const handleCreateProject = async (projectData: Omit<Project, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'current_step' | 'status' | 'extracted_data'>) => {
+  const handleCreateProject = async (projectData: Omit<NewProject, 'user_id'>) => {
     setIsSubmitting(true);
     const newProject = await createProject(projectData);
     if (newProject) {
-      setActiveProject(newProject);
+      navigate(`/project/${newProject.id}`);
     }
     setIsSubmitting(false);
   };
 
-  if (!session) {
-    return null; // Redirecting
+  if (!session || (!loading && projects.length > 0)) {
+    // Render nothing while redirecting
+    return null;
   }
 
   if (loading) {
@@ -52,10 +46,7 @@ const Index = () => {
     );
   }
 
-  if (activeProject) {
-    return <ChatInterface project={activeProject} />;
-  }
-
+  // If session exists, not loading, and no projects, show the form
   return <NewProjectForm onSubmit={handleCreateProject} isSubmitting={isSubmitting} />;
 };
 
