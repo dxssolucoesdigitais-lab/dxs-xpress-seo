@@ -86,8 +86,12 @@ export const useProjects = () => {
         });
 
         if (functionError) {
-          console.error('Failed to trigger initial workflow step:', functionError.message);
-          showError('Could not start AI workflow automatically.');
+          if (functionError.context && functionError.context.response.status === 402) {
+            showError("Project created, but you have no credits to start the AI workflow.");
+          } else {
+            console.error('Failed to trigger initial workflow step:', functionError.message);
+            showError('Could not start AI workflow automatically.');
+          }
         }
 
         return data;

@@ -8,8 +8,17 @@ const triggerNextStep = async (projectId: string) => {
     const { error } = await supabase.functions.invoke('trigger-step', {
       body: { projectId },
     });
-    if (error) throw error;
-    console.log('Successfully triggered next step for project:', projectId);
+
+    if (error) {
+      // Check for a specific error status indicating insufficient credits
+      if (error.context && error.context.response.status === 402) {
+        showError("You've run out of credits! The workflow is paused.");
+      } else {
+        throw error; // Re-throw other types of errors
+      }
+    } else {
+      console.log('Successfully triggered next step for project:', projectId);
+    }
   } catch (error: any) {
     showError('Failed to trigger the next step.');
     console.error('Error invoking trigger-step function:', error.message);
