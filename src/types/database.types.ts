@@ -68,3 +68,4 @@ export interface Database {
 
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
+export type StepResult = Database['public']['Tables']['step_results']['Row'];
