@@ -11,6 +11,7 @@ import ChatInterface from "./components/chat/ChatInterface";
 import { SessionContextProvider } from "./contexts/SessionContext";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/project/:projectId" element={<ChatInterface />} />
+                <Route path="/profile" element={<Profile />} />
               </Route>
             </Route>
 
