@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from '../theme/mode-toggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -24,6 +25,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
+  const { t } = useTranslation();
   const { session, user } = useSession();
   const navigate = useNavigate();
 
@@ -56,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
             )}
           >
             <CreditCard className={cn("h-4 w-4", user.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")} />
-            <span>{user.credits_remaining} Credits</span>
+            <span>{user.credits_remaining} {t('header.credits')}</span>
           </button>
         )}
         <Button 
@@ -66,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
           onClick={onBuyCreditsClick}
         >
           <PlusCircle className="mr-2 h-4 w-4" />
-          Buy Credits
+          {t('header.buyCredits')}
         </Button>
         
         <ModeToggle />
@@ -90,16 +92,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
             <DropdownMenuSeparator className="bg-border" />
             <DropdownMenuItem onSelect={() => navigate('/dashboard')} className="cursor-pointer">
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
+              <span>{t('header.dashboard')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => navigate('/profile')} className="cursor-pointer">
               <UserIcon className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>{t('header.profile')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border" />
             <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>{t('header.logout')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

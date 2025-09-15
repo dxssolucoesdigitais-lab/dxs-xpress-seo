@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from 'react-i18next';
 
 interface ProjectCardProps {
   project: Project;
@@ -17,6 +18,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) => {
+  const { t } = useTranslation();
   const totalSteps = 9;
   const progressPercentage = (project.current_step / totalSteps) * 100;
 
@@ -38,7 +40,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) =
           <DropdownMenuContent align="end" className="bg-background border-border">
             <DropdownMenuItem onSelect={handleDelete} className="text-red-500 focus:bg-red-500/10 focus:text-red-500 cursor-pointer">
               <Trash2 className="mr-2 h-4 w-4" />
-              <span>Delete</span>
+              <span>{t('projectCard.delete')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -54,16 +56,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDeleteRequest }) =
           </CardHeader>
           <CardContent className="flex-grow flex flex-col justify-between">
             <div className="text-sm text-gray-300 space-y-2">
-              <p>Status: <span className="font-semibold text-cyan-300">{project.status}</span></p>
-              <p>Target: {project.target_country}</p>
+              <p>{t('projectCard.status')}: <span className="font-semibold text-cyan-300">{project.status}</span></p>
+              <p>{t('projectCard.target')}: {project.target_country}</p>
               {project.target_audience && (
-                <p className="line-clamp-2">Audience: {project.target_audience}</p>
+                <p className="line-clamp-2">{t('projectCard.audience')}: {project.target_audience}</p>
               )}
             </div>
             <div className="mt-4">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-medium text-gray-400">Progress</span>
-                <span className="text-xs font-medium text-gray-400">Step {project.current_step}/{totalSteps}</span>
+                <span className="text-xs font-medium text-gray-400">{t('projectCard.progress')}</span>
+                <span className="text-xs font-medium text-gray-400">{t('projectCard.step')} {project.current_step}/{totalSteps}</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
                 <div 

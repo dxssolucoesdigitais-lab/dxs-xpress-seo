@@ -4,5 +4,86 @@
   "newProject": "Novo Projeto",
   "changeLanguage": "Mudar idioma",
   "english": "Inglês",
-  "portuguese": "Português"
+  "portuguese": "Português",
+
+  "emptyDashboard": {
+    "title": "Pronto para Lançar Seu Próximo Projeto?",
+    "description": "Seu painel está vazio, mas cheio de potencial. Crie seu primeiro projeto para começar a gerar conteúdo de SEO poderoso com IA.",
+    "cta": "Criar Novo Projeto"
+  },
+
+  "projectCard": {
+    "status": "Status",
+    "target": "Alvo",
+    "audience": "Público",
+    "progress": "Progresso",
+    "step": "Etapa",
+    "delete": "Deletar"
+  },
+
+  "deleteDialog": {
+    "title": "Você tem certeza absoluta?",
+    "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o projeto \"{{projectName}}\" e todos os seus dados associados.",
+    "cancel": "Cancelar",
+    "confirm": "Sim, deletar projeto"
+  },
+
+  "header": {
+    "credits": "Créditos",
+    "buyCredits": "Comprar Créditos",
+    "dashboard": "Painel",
+    "profile": "Perfil",
+    "logout": "Sair"
+  },
+
+  "profilePage": {
+    "title": "Configurações da Conta",
+    "tabs": {
+      "profile": "Perfil",
+      "password": "Senha",
+      "billing": "Faturamento e Uso"
+    },
+    "profileDetails": {
+      "title": "Detalhes do Perfil",
+      "description": "Atualize suas informações pessoais.",
+      "email": "Email",
+      "fullName": "Nome Completo",
+      "save": "Salvar Alterações"
+    },
+    "changePassword": {
+      "title": "Mudar Senha",
+      "description": "Digite uma nova senha para sua conta.",
+      "newPassword": "Nova Senha",
+      "update": "Atualizar Senha"
+    }
+  },
+
+  "billingInfo": {
+    "title": "Informações de Faturamento",
+    "description": "Gerencie seu plano e saldo de créditos.",
+    "currentPlan": "Plano Atual",
+    "creditsRemaining": "Créditos Restantes",
+    "changePlan": "Mudar de Plano",
+    "freePlan": "Gratuito"
+  },
+
+  "usageHistory": {
+    "title": "Histórico de Uso de Créditos",
+    "description": "Um registro de suas transações de crédito recentes.",
+    "action": "Ação",
+    "creditsUsed": "Créditos Usados",
+    "date": "Data",
+    "noHistory": "Nenhum histórico de uso encontrado."
+  },
+
+  "pricingDialog": {
+    "title": "Nossos Planos",
+    "description": "Escolha o plano que melhor se adapta às suas necessidades. Cada passo da IA consome 1 crédito.",
+    "popular": "POPULAR",
+    "perMonth": "/ mês",
+    "credits": "créditos",
+    "currentPlan": "Plano Atual",
+    "selectPlan": "Selecionar Plano",
+    "paymentNotice": "O processamento de pagamento ainda não está implementado."
+  }
 }

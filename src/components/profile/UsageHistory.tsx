@@ -5,24 +5,26 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { useTranslation } from 'react-i18next';
 
 const UsageHistory = () => {
+  const { t } = useTranslation();
   const { history, loading } = useUsageHistory();
 
   return (
     <Card className="glass-effect border-white/10 text-white">
       <CardHeader>
-        <CardTitle>Credit Usage History</CardTitle>
-        <CardDescription className="text-gray-400">A log of your recent credit transactions.</CardDescription>
+        <CardTitle>{t('usageHistory.title')}</CardTitle>
+        <CardDescription className="text-gray-400">{t('usageHistory.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-72">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Action</TableHead>
-                <TableHead className="text-right">Credits Used</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>{t('usageHistory.action')}</TableHead>
+                <TableHead className="text-right">{t('usageHistory.creditsUsed')}</TableHead>
+                <TableHead>{t('usageHistory.date')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -47,7 +49,7 @@ const UsageHistory = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={3} className="text-center text-muted-foreground">
-                    No usage history found.
+                    {t('usageHistory.noHistory')}
                   </TableCell>
                 </TableRow>
               )}

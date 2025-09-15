@@ -4,5 +4,86 @@
   "newProject": "New Project",
   "changeLanguage": "Change language",
   "english": "English",
-  "portuguese": "Portuguese"
+  "portuguese": "Portuguese",
+
+  "emptyDashboard": {
+    "title": "Ready to Launch Your Next Project?",
+    "description": "Your dashboard is empty, but it's full of potential. Create your first project to start generating powerful SEO content with AI.",
+    "cta": "Create New Project"
+  },
+
+  "projectCard": {
+    "status": "Status",
+    "target": "Target",
+    "audience": "Audience",
+    "progress": "Progress",
+    "step": "Step",
+    "delete": "Delete"
+  },
+
+  "deleteDialog": {
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone. This will permanently delete the \"{{projectName}}\" project and all of its associated data.",
+    "cancel": "Cancel",
+    "confirm": "Yes, delete project"
+  },
+
+  "header": {
+    "credits": "Credits",
+    "buyCredits": "Buy Credits",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+
+  "profilePage": {
+    "title": "Account Settings",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password",
+      "billing": "Billing & Usage"
+    },
+    "profileDetails": {
+      "title": "Profile Details",
+      "description": "Update your personal information.",
+      "email": "Email",
+      "fullName": "Full Name",
+      "save": "Save Changes"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "description": "Enter a new password for your account.",
+      "newPassword": "New Password",
+      "update": "Update Password"
+    }
+  },
+
+  "billingInfo": {
+    "title": "Billing Information",
+    "description": "Manage your plan and credit balance.",
+    "currentPlan": "Current Plan",
+    "creditsRemaining": "Credits Remaining",
+    "changePlan": "Change Plan",
+    "freePlan": "Free"
+  },
+
+  "usageHistory": {
+    "title": "Credit Usage History",
+    "description": "A log of your recent credit transactions.",
+    "action": "Action",
+    "creditsUsed": "Credits Used",
+    "date": "Date",
+    "noHistory": "No usage history found."
+  },
+
+  "pricingDialog": {
+    "title": "Our Plans",
+    "description": "Choose the plan that best suits your needs. Each AI step consumes 1 credit.",
+    "popular": "POPULAR",
+    "perMonth": "/ month",
+    "credits": "credits",
+    "currentPlan": "Current Plan",
+    "selectPlan": "Select Plan",
+    "paymentNotice": "Payment processing is not yet implemented."
+  }
 }

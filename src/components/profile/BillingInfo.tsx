@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import PricingDialog from '@/components/billing/PricingDialog';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const BillingInfo = () => {
+  const { t } = useTranslation();
   const { user } = useSession();
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
 
@@ -14,17 +16,17 @@ const BillingInfo = () => {
     <>
       <Card className="glass-effect border-white/10 text-white">
         <CardHeader>
-          <CardTitle>Billing Information</CardTitle>
-          <CardDescription className="text-gray-400">Manage your plan and credit balance.</CardDescription>
+          <CardTitle>{t('billingInfo.title')}</CardTitle>
+          <CardDescription className="text-gray-400">{t('billingInfo.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between p-4 rounded-lg bg-black/20">
             <div>
-              <p className="text-sm text-gray-400">Current Plan</p>
-              <p className="text-lg font-semibold capitalize">{user?.plan_type || 'Free'}</p>
+              <p className="text-sm text-gray-400">{t('billingInfo.currentPlan')}</p>
+              <p className="text-lg font-semibold capitalize">{user?.plan_type || t('billingInfo.freePlan')}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Credits Remaining</p>
+              <p className="text-sm text-gray-400">{t('billingInfo.creditsRemaining')}</p>
               <p className={cn("text-lg font-semibold", user?.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")}>
                 {user?.credits_remaining}
               </p>
@@ -35,10 +37,13 @@ const BillingInfo = () => {
             onClick={() => setIsPricingDialogOpen(true)}
           >
             <PlusCircle className="mr-2 h-4 w-4" />
-            Mudar de Plano
+            {t('billingInfo.changePlan')}
           </Button>
         </CardContent>
       </Card>
       <PricingDialog isOpen={isPricingDialogOpen} onOpenChange={setIsPricingDialogOpen} />
     </>
   );
+};
+
+export default BillingInfo;
