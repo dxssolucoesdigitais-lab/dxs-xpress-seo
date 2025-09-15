@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { LayoutDashboard, User, Shield } from 'lucide-react';
+import { MessageSquare, User, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, admin: false },
+  { name: 'Assistant', href: '/chat', icon: MessageSquare, admin: false },
   { name: 'Profile', href: '/profile', icon: User, admin: false },
   { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
@@ -26,7 +26,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="w-64 bg-background border-r border-border p-0">
         <div className="flex items-center h-16 px-6 border-b border-border">
-          <Link to="/dashboard" className="text-xl font-bold">
+          <Link to="/chat" className="text-xl font-bold">
             XpressSEO
           </Link>
         </div>

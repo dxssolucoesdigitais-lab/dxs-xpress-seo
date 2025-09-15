@@ -6,8 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import ChatInterface from "./components/chat/ChatInterface";
+import ChatPage from "./pages/ChatPage";
 import { SessionContextProvider } from "./contexts/SessionContext";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
@@ -16,7 +15,6 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
-import NewProject from "./pages/NewProject";
 
 const queryClient = new QueryClient();
 
@@ -34,10 +32,8 @@ const App = () => (
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/" element={<Index />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/project/:projectId" element={<ChatInterface />} />
+                  <Route path="/chat" element={<ChatPage />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/new-project" element={<NewProject />} />
 
                   {/* Admin Routes */}
                   <Route element={<AdminProtectedRoute />}>

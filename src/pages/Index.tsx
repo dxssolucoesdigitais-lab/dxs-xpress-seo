@@ -1,21 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useProjects } from "@/hooks/useProjects";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { projects, loading } = useProjects();
 
   useEffect(() => {
-    if (!loading) {
-      if (projects.length > 0) {
-        navigate('/dashboard');
-      } else {
-        navigate('/new-project');
-      }
-    }
-  }, [loading, projects, navigate]);
+    navigate('/chat');
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-10 text-center">

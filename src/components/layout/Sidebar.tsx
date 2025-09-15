@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, User, Shield } from 'lucide-react';
+import { MessageSquare, User, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, admin: false },
+  { name: 'Assistant', href: '/chat', icon: MessageSquare, admin: false },
   { name: 'Profile', href: '/profile', icon: User, admin: false },
   { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
@@ -19,7 +19,7 @@ const Sidebar = () => {
   return (
     <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:w-64 bg-background border-r border-border z-50">
       <div className="flex items-center h-16 px-6 border-b border-border">
-        <Link to="/dashboard" className="text-xl font-bold">
+        <Link to="/chat" className="text-xl font-bold">
           XpressSEO
         </Link>
       </div>
