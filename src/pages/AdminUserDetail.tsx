@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { showError, showSuccess } from '@/utils/toast';
 import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type UsageHistory = {
   id: string;
@@ -19,6 +20,7 @@ type UsageHistory = {
 };
 
 const AdminUserDetail = () => {
+  const { t } = useTranslation();
   const { userId } = useParams<{ userId: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -47,7 +49,7 @@ const AdminUserDetail = () => {
       setNewCredits(userData?.credits_remaining || 0);
 
     } catch (error: any) {
-      showError('Failed to fetch user details.');
+      showError('toasts.admin.fetchUserDetailsFailed');
       console.error('Error fetching user details:', error.message);
     } finally {
       setLoading(false);
@@ -70,10 +72,10 @@ const AdminUserDetail = () => {
         .eq('id', userId);
 
       if (error) throw error;
-      showSuccess("User's credits updated successfully!");
+      showSuccess("toasts.admin.updateCreditsSuccess");
       await fetchData(); // Refresh data
     } catch (error: any) {
-      showError('Failed to update credits.');
+      showError('toasts.admin.updateCreditsFailed');
       console.error('Error updating credits:', error.message);
     } finally {
       setIsUpdating(false);
@@ -100,11 +102,11 @@ const AdminUserDetail = () => {
   if (!user) {
     return (
       <div className="container max-w-7xl mx-auto p-8 text-center">
-        <h2 className="text-2xl font-bold">User not found</h2>
+        <h2 className="text-2xl font-bold">{t('admin.userDetail.userNotFound')}</h2>
         <Link to="/admin">
           <Button variant="link" className="mt-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Admin Dashboard
+            {t('admin.userDetail.backToDashboard')}
           </Button>
         </Link>
       </div>
@@ -115,7 +117,7 @@ const AdminUserDetail = () => {
     <div className="container max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       <Link to="/admin" className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to All Users
+        {t('admin.userDetail.backToUsers')}
       </Link>
       <h1 className="text-3xl font-bold mb-2">{user.full_name}</h1>
       <p className="text-gray-400 mb-8">{user.email}</p>
@@ -124,12 +126,12 @@ const AdminUserDetail = () => {
         <div className="lg:col-span-1 space-y-8">
           <Card className="glass-effect border-white/10 text-white">
             <CardHeader>
-              <CardTitle>Manage Credits</CardTitle>
+              <CardTitle>{t('admin.userDetail.manageCredits')}</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleUpdateCredits} className="space-y-4">
                 <div>
-                  <Label htmlFor="credits">Credit Balance</Label>
+                  <Label htmlFor="credits">{t('admin.userDetail.creditBalance')}</Label>
                   <Input
                     id="credits"
                     type="number"
@@ -140,23 +142,23 @@ const AdminUserDetail = () => {
                 </div>
                 <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold" disabled={isUpdating}>
                   {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Update Credits
+                  {t('admin.userDetail.updateCredits')}
                 </Button>
               </form>
             </CardContent>
           </Card>
           <Card className="glass-effect border-white/10 text-white">
             <CardHeader>
-              <CardTitle>Usage History</CardTitle>
-              <CardDescription className="text-gray-400">Last 50 transactions</CardDescription>
+              <CardTitle>{t('admin.userDetail.usageHistory')}</CardTitle>
+              <CardDescription className="text-gray-400">{t('admin.userDetail.last50')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="max-h-96 overflow-y-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead className="text-right">Date</TableHead>
+                      <TableHead>{t('usageHistory.action')}</TableHead>
+                      <TableHead className="text-right">{t('usageHistory.date')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -175,15 +177,15 @@ const AdminUserDetail = () => {
         <div className="lg:col-span-2">
           <Card className="glass-effect border-white/10 text-white">
             <CardHeader>
-              <CardTitle>User's Projects</CardTitle>
+              <CardTitle>{t('admin.userDetail.userProjects')}</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Project Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Created At</TableHead>
+                    <TableHead>{t('admin.userDetail.projectName')}</TableHead>
+                    <TableHead>{t('admin.userDetail.status')}</TableHead>
+                    <TableHead>{t('admin.userDetail.createdAt')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

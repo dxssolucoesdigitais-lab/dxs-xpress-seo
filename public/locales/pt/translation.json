@@ -130,6 +130,37 @@
     "genericApproval": "Aprovado! Pode continuar 🚀",
     "analyzingNextStep": "Analisando a próxima etapa..."
   },
+  "login": {
+    "welcome": "Bem-vindo ao XpressSEO"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Painel do Administrador",
+      "search": "Buscar usuários...",
+      "allUsers": "Todos os Usuários",
+      "fullName": "Nome Completo",
+      "email": "Email",
+      "credits": "Créditos",
+      "lastSeen": "Visto por Último",
+      "notApplicable": "N/A",
+      "never": "Nunca",
+      "noUsersFound": "Nenhum usuário encontrado."
+    },
+    "userDetail": {
+      "backToUsers": "Voltar para Todos os Usuários",
+      "manageCredits": "Gerenciar Créditos",
+      "creditBalance": "Saldo de Créditos",
+      "updateCredits": "Atualizar Créditos",
+      "usageHistory": "Histórico de Uso",
+      "last50": "Últimas 50 transações",
+      "userProjects": "Projetos do Usuário",
+      "projectName": "Nome do Projeto",
+      "status": "Status",
+      "createdAt": "Criado em",
+      "userNotFound": "Usuário não encontrado",
+      "backToDashboard": "Voltar ao Painel do Administrador"
+    }
+  },
   "toasts": {
     "chat": {
       "responseSaved": "Sua resposta foi salva!",

@@ -8,10 +8,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { showError } from '@/utils/toast';
+import { useTranslation } from 'react-i18next';
 
 type AdminUserView = Pick<User, 'id' | 'full_name' | 'email' | 'credits_remaining' | 'last_seen_at'>;
 
 const AdminDashboard = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState<AdminUserView[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,7 +30,7 @@ const AdminDashboard = () => {
         if (error) throw error;
         setUsers(data || []);
       } catch (error: any) {
-        showError('Failed to fetch users.');
+        showError('toasts.admin.fetchUsersFailed');
         console.error('Error fetching users:', error.message);
       } finally {
         setLoading(false);
@@ -46,12 +48,12 @@ const AdminDashboard = () => {
   return (
     <div className="container max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       <header className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-        <h1 className="text-3xl font-bold self-start sm:self-center">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold self-start sm:self-center">{t('admin.dashboard.title')}</h1>
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Search users..."
+            placeholder={t('admin.dashboard.search')}
             className="w-full bg-transparent border-white/20 pl-9"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -61,16 +63,16 @@ const AdminDashboard = () => {
 
       <Card className="glass-effect border-white/10 text-white">
         <CardHeader>
-          <CardTitle>All Users</CardTitle>
+          <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Full Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead className="text-center">Credits</TableHead>
-                <TableHead>Last Seen</TableHead>
+                <TableHead>{t('admin.dashboard.fullName')}</TableHead>
+                <TableHead>{t('admin.dashboard.email')}</TableHead>
+                <TableHead className="text-center">{t('admin.dashboard.credits')}</TableHead>
+                <TableHead>{t('admin.dashboard.lastSeen')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -88,20 +90,20 @@ const AdminDashboard = () => {
                   <TableRow key={user.id} className="hover:bg-white/5">
                     <TableCell className="font-medium">
                       <Link to={`/admin/user/${user.id}`} className="hover:text-cyan-400">
-                        {user.full_name || 'N/A'}
+                        {user.full_name || t('admin.dashboard.notApplicable')}
                       </Link>
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell className="text-center">{user.credits_remaining}</TableCell>
                     <TableCell>
-                      {user.last_seen_at ? new Date(user.last_seen_at).toLocaleString() : 'Never'}
+                      {user.last_seen_at ? new Date(user.last_seen_at).toLocaleString() : t('admin.dashboard.never')}
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center text-muted-foreground">
-                    No users found.
+                    {t('admin.dashboard.noUsersFound')}
                   </TableCell>
                 </TableRow>
               )}

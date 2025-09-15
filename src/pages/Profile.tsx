@@ -52,9 +52,9 @@ const Profile = () => {
       .eq('id', user.id);
 
     if (error) {
-      showError('Failed to update profile.');
+      showError('toasts.profile.updateFailed');
     } else {
-      showSuccess('Profile updated successfully!');
+      showSuccess('toasts.profile.updateSuccess');
     }
     setIsSubmittingProfile(false);
   };
@@ -64,9 +64,9 @@ const Profile = () => {
     const { error } = await supabase.auth.updateUser({ password: values.password });
 
     if (error) {
-      showError('Failed to update password.');
+      showError('toasts.password.updateFailed');
     } else {
-      showSuccess('Password updated successfully!');
+      showSuccess('toasts.password.updateSuccess');
       passwordForm.reset();
     }
     setIsSubmittingPassword(false);
