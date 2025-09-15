@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Session, SupabaseClient } from '@supabase/supabase-js';
+import { Session, SupabaseClient, RealtimeChannel } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@/types/database.types';
 
@@ -17,6 +17,7 @@ export const SessionContextProvider = ({ children }: { children: React.ReactNode
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Effect for handling auth state changes
   useEffect(() => {
     const fetchUser = async (userId: string) => {
       const { data, error } = await supabase
@@ -57,6 +58,31 @@ export const SessionContextProvider = ({ children }: { children: React.ReactNode
       subscription.unsubscribe();
     };
   }, []);
+
+  // Effect for real-time user profile updates (e.g., credits)
+  useEffect(() => {
+    if (!session?.user) return;
+
+    const userChannel = supabase
+      .channel(`user-profile-${session.user.id}`)
+      .on<User>(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'users',
+          filter: `id=eq.${session.user.id}`,
+        },
+        (payload) => {
+          setUser(payload.new);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(userChannel);
+    };
+  }, [session]);
 
   return (
     <SessionContext.Provider value={{ session, user, supabase, isLoading }}>
