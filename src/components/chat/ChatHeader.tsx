@@ -1,12 +1,14 @@
 import React from 'react';
 import { Project } from '@/types/database.types';
+import { useTranslation } from 'react-i18next';
 
 interface ChatHeaderProps {
   project: Project;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
-  const totalSteps = 9; // Assuming a 9-step workflow
+  const { t } = useTranslation();
+  const totalSteps = 9;
   const progressPercentage = (project.current_step / totalSteps) * 100;
 
   return (
@@ -18,10 +20,10 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
           </div>
           <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
         </div>
-        <span className="text-lg font-bold text-foreground">XpressSEO Assistant</span>
+        <span className="text-lg font-bold text-foreground">{t('chatHeader.assistantName')}</span>
       </div>
       <div className="hidden md:flex items-center gap-3 text-sm">
-        <div className="text-muted-foreground">Etapa {project.current_step}/{totalSteps}</div>
+        <div className="text-muted-foreground">{t('chatHeader.step')} {project.current_step}/{totalSteps}</div>
         <div className="w-40 h-2 bg-secondary rounded-full overflow-hidden">
           <div 
             className="h-full bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full transition-all duration-500" 

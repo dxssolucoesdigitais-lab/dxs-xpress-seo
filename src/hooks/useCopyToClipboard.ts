@@ -6,19 +6,19 @@ export const useCopyToClipboard = () => {
 
   const copyToClipboard = async (text: string) => {
     if (!navigator.clipboard) {
-      showError('Clipboard API not available.');
+      showError('toasts.clipboard.notAvailable');
       return;
     }
 
     try {
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
-      showSuccess('Content copied to clipboard!');
+      showSuccess('toasts.clipboard.success');
       setTimeout(() => {
         setIsCopied(false);
-      }, 2000); // Reset after 2 seconds
+      }, 2000);
     } catch (err) {
-      showError('Failed to copy content.');
+      showError('toasts.clipboard.failed');
       console.error('Failed to copy: ', err);
     }
   };

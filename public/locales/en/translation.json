@@ -5,13 +5,11 @@
   "changeLanguage": "Change language",
   "english": "English",
   "portuguese": "Portuguese",
-
   "emptyDashboard": {
     "title": "Ready to Launch Your Next Project?",
     "description": "Your dashboard is empty, but it's full of potential. Create your first project to start generating powerful SEO content with AI.",
     "cta": "Create New Project"
   },
-
   "projectCard": {
     "status": "Status",
     "target": "Target",
@@ -20,14 +18,12 @@
     "step": "Step",
     "delete": "Delete"
   },
-
   "deleteDialog": {
     "title": "Are you absolutely sure?",
     "description": "This action cannot be undone. This will permanently delete the \"{{projectName}}\" project and all of its associated data.",
     "cancel": "Cancel",
     "confirm": "Yes, delete project"
   },
-
   "header": {
     "credits": "Credits",
     "buyCredits": "Buy Credits",
@@ -35,7 +31,6 @@
     "profile": "Profile",
     "logout": "Log out"
   },
-
   "profilePage": {
     "title": "Account Settings",
     "tabs": {
@@ -57,7 +52,6 @@
       "update": "Update Password"
     }
   },
-
   "billingInfo": {
     "title": "Billing Information",
     "description": "Manage your plan and credit balance.",
@@ -66,7 +60,6 @@
     "changePlan": "Change Plan",
     "freePlan": "Free"
   },
-
   "usageHistory": {
     "title": "Credit Usage History",
     "description": "A log of your recent credit transactions.",
@@ -75,7 +68,6 @@
     "date": "Date",
     "noHistory": "No usage history found."
   },
-
   "pricingDialog": {
     "title": "Our Plans",
     "description": "Choose the plan that best suits your needs. Each AI step consumes 1 credit.",
@@ -85,5 +77,106 @@
     "currentPlan": "Current Plan",
     "selectPlan": "Select Plan",
     "paymentNotice": "Payment processing is not yet implemented."
+  },
+  "chatHeader": {
+    "step": "Step",
+    "assistantName": "XpressSEO Assistant"
+  },
+  "chatInput": {
+    "placeholder": "Type your response or command...",
+    "disabledPlaceholder": "Chat is disabled for this project.",
+    "approve": "Approve",
+    "regenerate": "Regenerate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "viewHistory": "View History",
+    "noCreditsTooltip": "You have no credits remaining.",
+    "noCreditsToResumeTooltip": "You need credits to resume."
+  },
+  "optionSelector": {
+    "prompt": "Choose one of the options below to proceed:",
+    "helperText": "💬 Click on an option to select it",
+    "noCreditsWarning": "⚠️ You have no credits to continue.",
+    "noCreditsTooltip": "You have no credits to select an option."
+  },
+  "progressFlow": {
+    "title": "Workflow Progress:",
+    "inProgress": "(in progress...)",
+    "nextSteps": "Next steps:"
+  },
+  "emptyChat": {
+    "title": "XpressSEO",
+    "subtitle": "Your AI content assistant is ready.",
+    "description": "The automation workflow has started. Please wait for the assistant's first message."
+  },
+  "errorDisplay": {
+    "title": "Workflow Error!",
+    "message": "The AI assistant encountered an unexpected problem and the workflow has been paused. Please contact support if the issue persists."
+  },
+  "historySheet": {
+    "title": "Project History",
+    "description": "Review of all approved steps for \"{{projectName}}\".",
+    "stepLabel": "Step",
+    "workflowProgressContent": "Workflow progress analysis.",
+    "genericApprovedContent": "Generated content was approved.",
+    "noStepsTitle": "No steps have been approved yet.",
+    "noStepsDescription": "Continue the workflow to build the history.",
+    "copyAll": "Copy All",
+    "copied": "Copied!",
+    "close": "Close"
+  },
+  "chat": {
+    "welcomeMessage": "Hello {{userName}}! 👋 I've started working on your project \"{{projectName}}\". I'll analyze your product and target audience, and I'll be back shortly with the first step.",
+    "genericApproval": "Approved! Let's continue 🚀",
+    "analyzingNextStep": "Analyzing the next step..."
+  },
+  "toasts": {
+    "chat": {
+      "responseSaved": "Your response has been saved!",
+      "responseSaveFailed": "Failed to save your response.",
+      "regenerating": "Regenerating response...",
+      "regenerateFailed": "Failed to regenerate the step.",
+      "noCreditsToRegenerate": "You don't have enough credits to regenerate.",
+      "nextStepTriggerFailed": "Failed to trigger the next step.",
+      "outOfCredits": "You've run out of credits! The workflow is paused."
+    },
+    "projects": {
+      "fetchFailed": "Failed to fetch projects.",
+      "createSuccess": "New project created!",
+      "createFailed": "Failed to create project.",
+      "deleteSuccess": "Project deleted successfully.",
+      "deleteFailed": "Failed to delete project.",
+      "noCreditsToStart": "Project created, but you have no credits to start the AI workflow.",
+      "triggerFailed": "Could not start the AI workflow automatically.",
+      "statusUpdateFailed": "Failed to update project status.",
+      "paused": "Project has been paused.",
+      "resumed": "Project has been resumed.",
+      "resumeNoCredits": "Project resumed, but you have no credits to continue the AI workflow.",
+      "resumeWorkflowFailed": "Failed to restart the workflow."
+    },
+    "clipboard": {
+      "success": "Content copied to clipboard!",
+      "failed": "Failed to copy content.",
+      "notAvailable": "Clipboard API not available."
+    },
+    "profile": {
+      "updateSuccess": "Profile updated successfully!",
+      "updateFailed": "Failed to update profile."
+    },
+    "password": {
+      "updateSuccess": "Password updated successfully!",
+      "updateFailed": "Failed to update password."
+    },
+    "plans": {
+      "updateSuccess": "Plan {{planId}} activated successfully!",
+      "updateFailed": "Failed to update plan.",
+      "loginRequired": "You must be logged in to select a plan."
+    },
+    "admin": {
+      "fetchUsersFailed": "Failed to fetch users.",
+      "fetchUserDetailsFailed": "Failed to fetch user details.",
+      "updateCreditsSuccess": "User's credits updated successfully!",
+      "updateCreditsFailed": "Failed to update credits."
+    }
   }
 }

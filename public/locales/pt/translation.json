@@ -5,13 +5,11 @@
   "changeLanguage": "Mudar idioma",
   "english": "Inglês",
   "portuguese": "Português",
-
   "emptyDashboard": {
     "title": "Pronto para Lançar Seu Próximo Projeto?",
     "description": "Seu painel está vazio, mas cheio de potencial. Crie seu primeiro projeto para começar a gerar conteúdo de SEO poderoso com IA.",
     "cta": "Criar Novo Projeto"
   },
-
   "projectCard": {
     "status": "Status",
     "target": "Alvo",
@@ -20,14 +18,12 @@
     "step": "Etapa",
     "delete": "Deletar"
   },
-
   "deleteDialog": {
     "title": "Você tem certeza absoluta?",
     "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o projeto \"{{projectName}}\" e todos os seus dados associados.",
     "cancel": "Cancelar",
     "confirm": "Sim, deletar projeto"
   },
-
   "header": {
     "credits": "Créditos",
     "buyCredits": "Comprar Créditos",
@@ -35,7 +31,6 @@
     "profile": "Perfil",
     "logout": "Sair"
   },
-
   "profilePage": {
     "title": "Configurações da Conta",
     "tabs": {
@@ -57,7 +52,6 @@
       "update": "Atualizar Senha"
     }
   },
-
   "billingInfo": {
     "title": "Informações de Faturamento",
     "description": "Gerencie seu plano e saldo de créditos.",
@@ -66,7 +60,6 @@
     "changePlan": "Mudar de Plano",
     "freePlan": "Gratuito"
   },
-
   "usageHistory": {
     "title": "Histórico de Uso de Créditos",
     "description": "Um registro de suas transações de crédito recentes.",
@@ -75,7 +68,6 @@
     "date": "Data",
     "noHistory": "Nenhum histórico de uso encontrado."
   },
-
   "pricingDialog": {
     "title": "Nossos Planos",
     "description": "Escolha o plano que melhor se adapta às suas necessidades. Cada passo da IA consome 1 crédito.",
@@ -85,5 +77,106 @@
     "currentPlan": "Plano Atual",
     "selectPlan": "Selecionar Plano",
     "paymentNotice": "O processamento de pagamento ainda não está implementado."
+  },
+  "chatHeader": {
+    "step": "Etapa",
+    "assistantName": "XpressSEO Assistant"
+  },
+  "chatInput": {
+    "placeholder": "Digite sua resposta ou comando...",
+    "disabledPlaceholder": "O chat está desativado para este projeto.",
+    "approve": "Aprovar",
+    "regenerate": "Regenerar",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "viewHistory": "Ver Histórico",
+    "noCreditsTooltip": "Você não tem créditos restantes.",
+    "noCreditsToResumeTooltip": "Você precisa de créditos para retomar."
+  },
+  "optionSelector": {
+    "prompt": "Escolha uma das opções abaixo para prosseguirmos:",
+    "helperText": "💬 Clique em uma das opções para selecionar",
+    "noCreditsWarning": "⚠️ Você não tem créditos para continuar.",
+    "noCreditsTooltip": "Você não tem créditos para selecionar uma opção."
+  },
+  "progressFlow": {
+    "title": "Progresso do Workflow:",
+    "inProgress": "(em andamento...)",
+    "nextSteps": "Próximas etapas:"
+  },
+  "emptyChat": {
+    "title": "XpressSEO",
+    "subtitle": "Seu assistente de IA para conteúdo está pronto.",
+    "description": "O fluxo de automação foi iniciado. Aguarde a primeira mensagem do assistente."
+  },
+  "errorDisplay": {
+    "title": "Erro no Workflow!",
+    "message": "O assistente de IA encontrou um problema inesperado e o fluxo foi pausado. Por favor, entre em contato com o suporte se o problema persistir."
+  },
+  "historySheet": {
+    "title": "Histórico do Projeto",
+    "description": "Revisão de todas as etapas aprovadas para \"{{projectName}}\".",
+    "stepLabel": "Etapa",
+    "workflowProgressContent": "Análise de progresso do workflow.",
+    "genericApprovedContent": "Conteúdo gerado foi aprovado.",
+    "noStepsTitle": "Nenhuma etapa foi aprovada ainda.",
+    "noStepsDescription": "Continue o fluxo para construir o histórico.",
+    "copyAll": "Copiar Tudo",
+    "copied": "Copiado!",
+    "close": "Fechar"
+  },
+  "chat": {
+    "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar no seu projeto \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
+    "genericApproval": "Aprovado! Pode continuar 🚀",
+    "analyzingNextStep": "Analisando a próxima etapa..."
+  },
+  "toasts": {
+    "chat": {
+      "responseSaved": "Sua resposta foi salva!",
+      "responseSaveFailed": "Falha ao salvar sua resposta.",
+      "regenerating": "Regerando resposta...",
+      "regenerateFailed": "Falha ao regerar a etapa.",
+      "noCreditsToRegenerate": "Você não tem créditos suficientes para regerar.",
+      "nextStepTriggerFailed": "Falha ao iniciar a próxima etapa.",
+      "outOfCredits": "Você ficou sem créditos! O fluxo está pausado."
+    },
+    "projects": {
+      "fetchFailed": "Falha ao buscar projetos.",
+      "createSuccess": "Novo projeto criado!",
+      "createFailed": "Falha ao criar projeto.",
+      "deleteSuccess": "Projeto deletado com sucesso.",
+      "deleteFailed": "Falha ao deletar projeto.",
+      "noCreditsToStart": "Projeto criado, mas você não tem créditos para iniciar o fluxo de IA.",
+      "triggerFailed": "Não foi possível iniciar o fluxo de IA automaticamente.",
+      "statusUpdateFailed": "Falha ao atualizar o status do projeto.",
+      "paused": "O projeto foi pausado.",
+      "resumed": "O projeto foi retomado.",
+      "resumeNoCredits": "Projeto retomado, mas você não tem créditos para continuar o fluxo de IA.",
+      "resumeWorkflowFailed": "Falha ao reiniciar o fluxo."
+    },
+    "clipboard": {
+      "success": "Conteúdo copiado para a área de transferência!",
+      "failed": "Falha ao copiar conteúdo.",
+      "notAvailable": "API de área de transferência não disponível."
+    },
+    "profile": {
+      "updateSuccess": "Perfil atualizado com sucesso!",
+      "updateFailed": "Falha ao atualizar o perfil."
+    },
+    "password": {
+      "updateSuccess": "Senha atualizada com sucesso!",
+      "updateFailed": "Falha ao atualizar a senha."
+    },
+    "plans": {
+      "updateSuccess": "Plano {{planId}} ativado com sucesso!",
+      "updateFailed": "Falha ao atualizar o plano.",
+      "loginRequired": "Você deve estar logado para selecionar um plano."
+    },
+    "admin": {
+      "fetchUsersFailed": "Falha ao buscar usuários.",
+      "fetchUserDetailsFailed": "Falha ao buscar detalhes do usuário.",
+      "updateCreditsSuccess": "Créditos do usuário atualizados com sucesso!",
+      "updateCreditsFailed": "Falha ao atualizar os créditos."
+    }
   }
 }

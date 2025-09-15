@@ -4,11 +4,11 @@ import { Project, StepResult } from '@/types/database.types';
 import { ChatMessage, LlmOption } from '@/types/chat.types';
 import { showError } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
+import { useTranslation } from 'react-i18next';
 
-const transformStepToMessages = (step: StepResult): ChatMessage[] => {
+const transformStepToMessages = (step: StepResult, t: (key: string) => string): ChatMessage[] => {
   const messages: ChatMessage[] = [];
 
-  // Always add the AI's message/output
   messages.push({
     id: step.id,
     author: 'ai',
@@ -16,26 +16,24 @@ const transformStepToMessages = (step: StepResult): ChatMessage[] => {
     stepResult: step,
   });
 
-  // If the user has made a selection, add a corresponding user message
   if (step.user_selection) {
     const selection = step.user_selection as LlmOption;
     if (selection.content) {
       messages.push({
         id: `${step.id}-user`,
         author: 'user',
-        createdAt: step.created_at, // Using step's timestamp as a proxy for user action time
+        createdAt: step.created_at,
         content: selection.content,
         stepResult: step,
       });
     }
   } 
-  // If the step was approved without a specific selection, add a generic user approval message
   else if (step.approved) {
     messages.push({
       id: `${step.id}-user`,
       author: 'user',
       createdAt: step.created_at,
-      content: 'Approved! Pode continuar 🚀',
+      content: t('chat.genericApproval'),
       stepResult: step,
     });
   }
@@ -45,6 +43,7 @@ const transformStepToMessages = (step: StepResult): ChatMessage[] => {
 
 
 export const useChat = (project: Project | null) => {
+  const { t } = useTranslation();
   const { user } = useSession();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,26 +64,25 @@ export const useChat = (project: Project | null) => {
 
       if (error) throw error;
 
-      const chatMessages = data.flatMap(transformStepToMessages);
+      const chatMessages = data.flatMap(step => transformStepToMessages(step, t));
       
       if (chatMessages.length === 0) {
-        // Add a dynamic welcome message
         chatMessages.push({
           id: 'welcome-message',
           author: 'ai',
           createdAt: new Date().toISOString(),
-          content: `Olá ${user?.full_name || ''}! 👋 Comecei a trabalhar no seu projeto "${project.project_name}". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.`,
+          content: t('chat.welcomeMessage', { userName: user?.full_name || '', projectName: project.project_name }),
         });
       }
 
       setMessages(chatMessages);
     } catch (error: any) {
-      showError('Failed to fetch chat history.');
+      showError('toasts.projects.fetchFailed');
       console.error('Error fetching chat history:', error.message);
     } finally {
       setLoading(false);
     }
-  }, [project, user]);
+  }, [project, user, t]);
 
   useEffect(() => {
     fetchChatHistory();
@@ -94,13 +92,13 @@ export const useChat = (project: Project | null) => {
     const projectId = project.id;
 
     const handleInsert = (payload: { new: StepResult }) => {
-      const newMessages = transformStepToMessages(payload.new);
+      const newMessages = transformStepToMessages(payload.new, t);
       setMessages(currentMessages => [...currentMessages, ...newMessages]);
     };
 
     const handleUpdate = (payload: { new: StepResult }) => {
       const updatedStep = payload.new;
-      const newMessagesForStep = transformStepToMessages(updatedStep);
+      const newMessagesForStep = transformStepToMessages(updatedStep, t);
       
       setMessages(currentMessages => {
         const otherMessages = currentMessages.filter(m => m.stepResult?.id !== updatedStep.id);
@@ -139,7 +137,7 @@ export const useChat = (project: Project | null) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [project, fetchChatHistory]);
+  }, [project, fetchChatHistory, t]);
 
   return { messages, loading };
 };

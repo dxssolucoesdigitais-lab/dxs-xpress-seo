@@ -15,6 +15,7 @@ import { Project } from '@/types/database.types';
 import { ChatMessage, LlmOption } from '@/types/chat.types';
 import { BookText, ClipboardCopy, Check } from 'lucide-react';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectHistorySheetProps {
   project: Project;
@@ -24,6 +25,7 @@ interface ProjectHistorySheetProps {
 }
 
 const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, messages, isOpen, onOpenChange }) => {
+  const { t } = useTranslation();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const approvedSteps = messages.filter(
@@ -58,7 +60,7 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
       .map(item => {
         const text = getStepTextContent(item);
         if (text) {
-          return `## Step ${item.stepResult?.step_number}: ${item.stepResult?.step_name}\n\n${text}`;
+          return `## ${t('historySheet.stepLabel')} ${item.stepResult?.step_number}: ${item.stepResult?.step_name}\n\n${text}`;
         }
         return null;
       })
@@ -76,9 +78,9 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
       return <p className="text-gray-300 whitespace-pre-wrap">{textContent}</p>;
     }
     if (message.stepResult?.step_name === 'Workflow Progress') {
-      return <p className="text-gray-500 text-sm italic">Workflow progress analysis.</p>;
+      return <p className="text-gray-500 text-sm italic">{t('historySheet.workflowProgressContent')}</p>;
     }
-    return <p className="text-gray-500 text-sm italic">Generated content was approved.</p>;
+    return <p className="text-gray-500 text-sm italic">{t('historySheet.genericApprovedContent')}</p>;
   };
 
   return (
@@ -87,10 +89,10 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
         <SheetHeader>
           <SheetTitle className="text-2xl flex items-center gap-2">
             <BookText className="w-6 h-6 text-cyan-400" />
-            Project History
+            {t('historySheet.title')}
           </SheetTitle>
           <SheetDescription className="text-gray-400">
-            Review of all approved steps for "{project.project_name}".
+            {t('historySheet.description', { projectName: project.project_name })}
           </SheetDescription>
         </SheetHeader>
         <Separator className="my-4 bg-white/10" />
@@ -100,7 +102,7 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
               historyItems.map((item) => (
                 <div key={item.id}>
                   <h3 className="font-semibold text-cyan-400 mb-2">
-                    Step {item.stepResult?.step_number}: {item.stepResult?.step_name}
+                    {t('historySheet.stepLabel')} {item.stepResult?.step_number}: {item.stepResult?.step_name}
                   </h3>
                   <div className="p-4 rounded-lg bg-black/20 border border-white/10 text-sm">
                     {renderStepContent(item)}
@@ -109,8 +111,8 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
               ))
             ) : (
               <div className="text-center text-gray-500 py-10">
-                <p>No steps have been approved yet.</p>
-                <p className="text-sm">Continue the workflow to build the history.</p>
+                <p>{t('historySheet.noStepsTitle')}</p>
+                <p className="text-sm">{t('historySheet.noStepsDescription')}</p>
               </div>
             )}
           </div>
@@ -127,10 +129,10 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
             ) : (
               <ClipboardCopy className="mr-2 h-4 w-4" />
             )}
-            {isCopied ? 'Copied!' : 'Copy All'}
+            {isCopied ? t('historySheet.copied') : t('historySheet.copyAll')}
           </Button>
           <SheetClose asChild>
-            <Button variant="outline" className="w-full bg-transparent border-white/20 hover:bg-white/10">Close</Button>
+            <Button variant="outline" className="w-full bg-transparent border-white/20 hover:bg-white/10">{t('historySheet.close')}</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

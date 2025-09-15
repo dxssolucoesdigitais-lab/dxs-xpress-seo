@@ -26,7 +26,7 @@ export const useUsageHistory = () => {
       if (error) throw error;
       setHistory(data || []);
     } catch (error: any) {
-      showError('Failed to fetch usage history.');
+      showError('toasts.usageHistory.fetchFailed');
       console.error('Error fetching usage history:', error.message);
     } finally {
       setLoading(false);

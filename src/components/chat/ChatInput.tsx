@@ -7,6 +7,7 @@ import { Project } from '@/types/database.types';
 import ProjectHistorySheet from './ProjectHistorySheet';
 import { useSession } from '@/contexts/SessionContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
   project: Project;
@@ -15,6 +16,7 @@ interface ChatInputProps {
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false }) => {
+  const { t } = useTranslation();
   const { user } = useSession();
   const { approveStep, regenerateStep } = useChatActions();
   const { pauseProject, resumeProject } = useProjectActions();
@@ -80,7 +82,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
         <div className="relative mb-4">
           <textarea
             className="w-full bg-transparent border border-white/20 rounded-2xl p-4 pr-14 text-white placeholder-gray-500 resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
-            placeholder={isDisabled ? "Chat is disabled for this project." : "Digite sua resposta ou comando..."}
+            placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
             rows={1}
             disabled
           ></textarea>
@@ -89,24 +91,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          <ActionButton onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} tooltip="You have no credits remaining." showTooltip={!hasCredits}>
-            👍 Aprovar
+          <ActionButton onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} tooltip={t('chatInput.noCreditsTooltip')} showTooltip={!hasCredits}>
+            👍 {t('chatInput.approve')}
           </ActionButton>
-          <ActionButton onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} tooltip="You have no credits remaining." showTooltip={!hasCredits}>
+          <ActionButton onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} tooltip={t('chatInput.noCreditsTooltip')} showTooltip={!hasCredits}>
             {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-            Regenerar
+            {t('chatInput.regenerate')}
           </ActionButton>
-          <ActionButton onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} tooltip="You need credits to resume." showTooltip={project.status === 'paused' && !hasCredits}>
+          <ActionButton onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} tooltip={t('chatInput.noCreditsToResumeTooltip')} showTooltip={project.status === 'paused' && !hasCredits}>
             {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
               project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
-            {project.status === 'paused' ? 'Retomar' : 'Pausar'}
+            {project.status === 'paused' ? t('chatInput.resume') : t('chatInput.pause')}
           </ActionButton>
           <button 
             onClick={() => setIsHistoryOpen(true)}
             className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all flex items-center"
           >
             <BookText className="mr-2 h-4 w-4" />
-            Ver Histórico
+            {t('chatInput.viewHistory')}
           </button>
         </div>
       </div>

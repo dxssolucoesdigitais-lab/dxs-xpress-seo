@@ -6,12 +6,14 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface OptionSelectorProps {
   stepResult: StepResult;
 }
 
 const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
+  const { t } = useTranslation();
   const { user } = useSession();
   const { selectOption } = useChatActions();
   const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
@@ -29,7 +31,7 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10">
         <div className="prose prose-invert prose-sm max-w-none text-gray-300 mb-4">
-          <p>Escolha uma das opções abaixo para prosseguirmos:</p>
+          <p>{t('optionSelector.prompt')}</p>
         </div>
         <div className="space-y-3">
           {options.map((option) => (
@@ -57,14 +59,14 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
               </TooltipTrigger>
               {!hasCredits && (
                 <TooltipContent>
-                  <p>You have no credits to select an option.</p>
+                  <p>{t('optionSelector.noCreditsTooltip')}</p>
                 </TooltipContent>
               )}
             </Tooltip>
           ))}
         </div>
         <div className="mt-4 text-center text-xs text-gray-500">
-          {hasCredits ? '💬 Clique em uma das opções para selecionar' : '⚠️ Você não tem créditos para continuar.'}
+          {hasCredits ? t('optionSelector.helperText') : t('optionSelector.noCreditsWarning')}
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ export const useProjects = () => {
       if (error) throw error;
       setProjects(data || []);
     } catch (error: any) {
-      showError('Failed to fetch projects.');
+      showError('toasts.projects.fetchFailed');
       console.error('Error fetching projects:', error.message);
     } finally {
       setLoading(false);
@@ -65,7 +65,7 @@ export const useProjects = () => {
 
   const createProject = async (newProjectData: Omit<NewProject, 'user_id'>): Promise<Project | null> => {
     if (!session?.user) {
-      showError('You must be logged in to create a project.');
+      showError('toasts.plans.loginRequired');
       return null;
     }
 
@@ -79,7 +79,7 @@ export const useProjects = () => {
       if (error) throw error;
 
       if (data) {
-        showSuccess('Novo projeto criado!');
+        showSuccess('toasts.projects.createSuccess');
         
         const { error: functionError } = await supabase.functions.invoke('trigger-step', {
           body: { projectId: data.id },
@@ -87,10 +87,10 @@ export const useProjects = () => {
 
         if (functionError) {
           if (functionError.context && functionError.context.response.status === 402) {
-            showError("Projeto criado, mas você não tem créditos para iniciar o fluxo de IA.");
+            showError("toasts.projects.noCreditsToStart");
           } else {
             console.error('Failed to trigger initial workflow step:', functionError.message);
-            showError('Não foi possível iniciar o fluxo de IA automaticamente.');
+            showError('toasts.projects.triggerFailed');
           }
         }
 
@@ -98,7 +98,7 @@ export const useProjects = () => {
       }
       return null;
     } catch (error: any) {
-      showError('Falha ao criar projeto.');
+      showError('toasts.projects.createFailed');
       console.error('Error creating project:', error.message);
       return null;
     }
@@ -112,9 +112,9 @@ export const useProjects = () => {
         .eq('id', projectId);
 
       if (error) throw error;
-      showSuccess('Projeto deletado com sucesso.');
+      showSuccess('toasts.projects.deleteSuccess');
     } catch (error: any) {
-      showError('Falha ao deletar projeto.');
+      showError('toasts.projects.deleteFailed');
       console.error('Error deleting project:', error.message);
     }
   };

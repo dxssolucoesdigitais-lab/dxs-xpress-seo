@@ -1,17 +1,22 @@
 import { toast } from "sonner";
+import i18n from "@/lib/i18n";
 
-export const showSuccess = (message: string) => {
-  toast.success(message);
+type ToastOptions = {
+  [key: string]: any;
 };
 
-export const showError = (message: string) => {
-  toast.error(message);
+export const showSuccess = (key: string, options?: ToastOptions) => {
+  toast.success(i18n.t(key, options));
 };
 
-export const showLoading = (message: string) => {
-  return toast.loading(message);
+export const showError = (key: string, options?: ToastOptions) => {
+  toast.error(i18n.t(key, options));
 };
 
-export const dismissToast = (toastId: string) => {
+export const showLoading = (key: string, options?: ToastOptions) => {
+  return toast.loading(i18n.t(key, options));
+};
+
+export const dismissToast = (toastId: string | number) => {
   toast.dismiss(toastId);
 };

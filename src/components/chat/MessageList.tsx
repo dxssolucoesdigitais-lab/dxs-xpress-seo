@@ -4,8 +4,11 @@ import { User } from 'lucide-react';
 import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
+import { useTranslation } from 'react-i18next';
 
 const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
+  const { t } = useTranslation();
+
   if (message.author === 'user') {
     return (
       <div className="flex items-start justify-end gap-4">
@@ -19,7 +22,6 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
 
   const { stepResult } = message;
 
-  // Render OptionSelector if the step has options and isn't approved yet
   if (stepResult && !stepResult.approved) {
     const isOptionList = Array.isArray(stepResult.llm_output) && stepResult.llm_output.length > 0 && typeof stepResult.llm_output[0] === 'object' && 'content' in stepResult.llm_output[0];
     if (isOptionList) {
@@ -27,22 +29,20 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
     }
   }
   
-  // Render ProgressFlow for specific step names
   if (stepResult && stepResult.step_name === 'Workflow Progress') {
     return <ProgressFlow stepResult={stepResult} />;
   }
 
-  // Fallback to a generic AI message card
   return (
     <div className="flex items-start gap-4">
       <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="font-bold text-foreground">XpressSEO Assistant</span>
+          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
         <div className="prose prose-invert prose-sm max-w-none text-muted-foreground space-y-4">
-          {message.content ? <p>{message.content}</p> : <p>Analisando a próxima etapa...</p>}
+          {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
     </div>

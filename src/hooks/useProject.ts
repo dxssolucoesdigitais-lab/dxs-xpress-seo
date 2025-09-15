@@ -24,7 +24,7 @@ export const useProject = (projectId: string | undefined) => {
       if (error) throw error;
       setProject(data);
     } catch (error: any) {
-      showError('Failed to fetch project details.');
+      showError('toasts.projects.fetchFailed');
       console.error('Error fetching project:', error.message);
       setProject(null);
     } finally {

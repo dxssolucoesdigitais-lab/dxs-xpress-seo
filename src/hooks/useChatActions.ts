@@ -10,17 +10,16 @@ const triggerNextStep = async (projectId: string) => {
     });
 
     if (error) {
-      // Check for a specific error status indicating insufficient credits
       if (error.context && error.context.response.status === 402) {
-        showError("You've run out of credits! The workflow is paused.");
+        showError("toasts.chat.outOfCredits");
       } else {
-        throw error; // Re-throw other types of errors
+        throw error;
       }
     } else {
       console.log('Successfully triggered next step for project:', projectId);
     }
   } catch (error: any) {
-    showError('Failed to trigger the next step.');
+    showError('toasts.chat.nextStepTriggerFailed');
     console.error('Error invoking trigger-step function:', error.message);
   }
 };
@@ -34,13 +33,12 @@ export const useChatActions = () => {
         .eq('id', stepResult.id);
 
       if (error) throw error;
-      showSuccess('Your response has been saved!');
+      showSuccess('toasts.chat.responseSaved');
 
-      // After successfully updating, trigger the next step in the workflow
       await triggerNextStep(stepResult.project_id);
 
     } catch (error: any) {
-      showError('Failed to save your response.');
+      showError('toasts.chat.responseSaveFailed');
       console.error('Error updating step result:', error.message);
     }
   };
@@ -61,17 +59,16 @@ export const useChatActions = () => {
 
       if (error) {
         if (error.context && error.context.response.status === 402) {
-          showError("You don't have enough credits to regenerate.");
+          showError("toasts.chat.noCreditsToRegenerate");
         } else {
           throw error;
         }
       } else {
-        showSuccess('Regenerating response...');
-        // After successfully deleting the step, automatically trigger the workflow again.
+        showSuccess('toasts.chat.regenerating');
         await triggerNextStep(stepResult.project_id);
       }
     } catch (error: any) {
-      showError('Failed to regenerate the step.');
+      showError('toasts.chat.regenerateFailed');
       console.error('Error invoking regenerate-step function:', error.message);
     }
   };
