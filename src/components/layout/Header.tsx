@@ -90,10 +90,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
-            <DropdownMenuItem onSelect={() => navigate('/dashboard')} className="cursor-pointer">
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>{t('header.dashboard')}</span>
-            </DropdownMenuItem>
+            {user?.role === 'admin' && (
+              <DropdownMenuItem onSelect={() => navigate('/admin')} className="cursor-pointer">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>{t('header.dashboard')}</span>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onSelect={() => navigate('/profile')} className="cursor-pointer">
               <UserIcon className="mr-2 h-4 w-4" />
               <span>{t('header.profile')}</span>
