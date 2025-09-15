@@ -103,14 +103,18 @@ export const useChat = (project: Project | null) => {
       const newMessagesForStep = transformStepToMessages(updatedStep);
       
       setMessages(currentMessages => {
-        // Filter out all old messages related to this step
         const otherMessages = currentMessages.filter(m => m.stepResult?.id !== updatedStep.id);
-        
-        // Add the new messages and re-sort to maintain chronological order
         const combined = [...otherMessages, ...newMessagesForStep];
         combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         return combined;
       });
+    };
+
+    const handleDelete = (payload: { old: { id: string } }) => {
+      const deletedStepId = payload.old.id;
+      setMessages(currentMessages => 
+        currentMessages.filter(m => !m.id.startsWith(deletedStepId))
+      );
     };
 
     const channel = supabase
@@ -124,6 +128,11 @@ export const useChat = (project: Project | null) => {
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'step_results', filter: `project_id=eq.${projectId}` },
         handleUpdate
+      )
+      .on<{ id: string }>(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'step_results', filter: `project_id=eq.${projectId}` },
+        handleDelete
       )
       .subscribe();
 

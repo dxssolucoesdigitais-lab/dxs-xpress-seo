@@ -53,5 +53,26 @@ export const useChatActions = () => {
     await updateStepResult(stepResult, { approved: true });
   };
 
-  return { selectOption, approveStep };
+  const regenerateStep = async (stepResult: StepResult) => {
+    try {
+      const { error } = await supabase.functions.invoke('regenerate-step', {
+        body: { stepResultId: stepResult.id },
+      });
+
+      if (error) {
+        if (error.context && error.context.response.status === 402) {
+          showError("You don't have enough credits to regenerate.");
+        } else {
+          throw error;
+        }
+      } else {
+        showSuccess('Previous step cleared. Ready to regenerate!');
+      }
+    } catch (error: any) {
+      showError('Failed to regenerate the step.');
+      console.error('Error invoking regenerate-step function:', error.message);
+    }
+  };
+
+  return { selectOption, approveStep, regenerateStep };
 };
