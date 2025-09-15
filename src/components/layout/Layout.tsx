@@ -27,3 +27,6 @@ const Layout = () => {
       <PricingDialog isOpen={isPricingDialogOpen} onOpenChange={setIsPricingDialogOpen} />
     </div>
   );
+};
+
+export default Layout;
