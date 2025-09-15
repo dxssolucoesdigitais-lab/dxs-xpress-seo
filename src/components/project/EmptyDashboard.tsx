@@ -18,7 +18,7 @@ const EmptyDashboard = () => {
           {t('emptyDashboard.description')}
         </p>
         <div className="mt-8">
-          <Link to="/">
+          <Link to="/new-project">
             <Button className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-lg shadow-cyan-500/20">
               <PlusCircle className="-ml-0.5 mr-2 h-4 w-4" />
               {t('emptyDashboard.cta')}

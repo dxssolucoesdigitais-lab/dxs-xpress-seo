@@ -91,7 +91,7 @@ const Dashboard = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Link to="/">
+            <Link to="/new-project">
               <Button className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold flex-shrink-0">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 {t('newProject')}

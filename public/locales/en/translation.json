@@ -161,6 +161,26 @@
       "backToDashboard": "Back to Admin Dashboard"
     }
   },
+  "newProjectPage": {
+    "title": "Create a New Project",
+    "description": "Provide the details below so our AI can get to work.",
+    "projectName": {
+      "label": "Project Name",
+      "placeholder": "e.g., Winter Campaign for Shoes"
+    },
+    "productLink": {
+      "label": "Product/Service Link"
+    },
+    "targetCountry": {
+      "label": "Target Country",
+      "placeholder": "e.g., United States"
+    },
+    "targetAudience": {
+      "label": "Target Audience",
+      "placeholder": "Describe your ideal customer. e.g., Young adults interested in sustainable fashion."
+    },
+    "cta": "Start Project with AI"
+  },
   "toasts": {
     "chat": {
       "responseSaved": "Your response has been saved!",

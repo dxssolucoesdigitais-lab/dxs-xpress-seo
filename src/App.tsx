@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
+import NewProject from "./pages/NewProject";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/project/:projectId" element={<ChatInterface />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/new-project" element={<NewProject />} />
 
                   {/* Admin Routes */}
                   <Route element={<AdminProtectedRoute />}>
