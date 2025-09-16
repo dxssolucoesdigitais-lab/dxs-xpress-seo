@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa, V2_LOCALIZED_STRINGS } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,6 +14,15 @@ const Login = () => {
     return <Navigate to="/" replace />;
   }
 
+  // Mapeia o idioma do i18n para a chave de localização esperada pelo Supabase Auth UI
+  const authLocalizationVariables = useMemo(() => {
+    if (i18n.language === 'pt') {
+      return V2_LOCALIZED_STRINGS.ptBR;
+    }
+    // Retorna o inglês como padrão ou um objeto vazio se não houver tradução específica
+    return V2_LOCALIZED_STRINGS.en || {};
+  }, [i18n.language]);
+
   return (
     <div className="flex justify-center items-center h-screen bg-[#0a0a0f]">
       <div className="w-full max-w-md p-8 space-y-8 bg-[#1a1a1f] rounded-lg shadow-lg">
@@ -23,7 +33,7 @@ const Login = () => {
           providers={[]}
           theme="dark"
           localization={{
-            variables: i18n.language === 'pt' ? V2_LOCALIZED_STRINGS.pt : {},
+            variables: authLocalizationVariables,
           }}
         />
       </div>
