@@ -12,13 +12,13 @@ export interface Database {
       announcements: {
         Row: {
           id: string
-          content: string
+          content: Json
           is_active: boolean
           created_at: string
           updated_at: string
         }
         Insert: {
-          content: string
+          content: Json
           is_active?: boolean
         }
         Update: Partial<this['Insert']>

@@ -52,13 +52,28 @@ const AnnouncementsManager = () => {
     if (!newContent.trim()) return;
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('announcements').insert({ content: newContent });
-      if (error) throw error;
+      // 1. Traduzir o conteúdo
+      const { data: translationData, error: translateError } = await supabase.functions.invoke('translate-announcement', {
+        body: { text: newContent },
+      });
+
+      if (translateError) throw translateError;
+
+      const translatedContent = {
+        pt: newContent,
+        en: translationData.translation,
+      };
+
+      // 2. Salvar o anúncio com ambas as traduções
+      const { error: insertError } = await supabase.from('announcements').insert({ content: translatedContent });
+      if (insertError) throw insertError;
+
       showSuccess('toasts.admin.announcements.createSuccess');
       setNewContent('');
       await fetchAnnouncements();
     } catch (error) {
       showError('toasts.admin.announcements.createError');
+      console.error("Erro ao criar anúncio:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -115,7 +130,7 @@ const AnnouncementsManager = () => {
           ) : announcements.length > 0 ? (
             announcements.map((item) => (
               <div key={item.id} className="flex items-center justify-between p-4 rounded-lg bg-secondary border border-border">
-                <p className="flex-1 text-sm">{item.content}</p>
+                <p className="flex-1 text-sm">{(item.content as any)?.pt || item.content}</p>
                 <div className="flex items-center gap-4 ml-4">
                   <div className="flex items-center gap-2">
                     <Switch

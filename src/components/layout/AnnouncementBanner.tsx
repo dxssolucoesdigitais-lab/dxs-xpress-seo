@@ -3,8 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { Announcement } from '@/types/database.types';
 import { Megaphone, X } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 
 const AnnouncementBanner = () => {
+  const { i18n } = useTranslation();
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -48,12 +50,16 @@ const AnnouncementBanner = () => {
     return null;
   }
 
+  const content = announcement.content as { [key: string]: string };
+  const currentLang = i18n.language.split('-')[0]; // Pega 'en' de 'en-US'
+  const displayText = content[currentLang] || content.pt; // Mostra no idioma do usuário ou fallback para português
+
   return (
     <div className="relative bg-cyan-500 text-black">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 text-sm text-center font-medium">
         <div className="flex items-center justify-center">
           <Megaphone className="h-4 w-4 mr-2 flex-shrink-0" />
-          <span>{announcement.content}</span>
+          <span>{displayText}</span>
           <Button variant="ghost" size="icon" onClick={handleDismiss} className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 hover:bg-cyan-600/50">
             <X className="h-4 w-4" />
           </Button>
