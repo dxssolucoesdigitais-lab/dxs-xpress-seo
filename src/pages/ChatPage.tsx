@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
@@ -15,11 +15,13 @@ import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
+import { useSession } from '@/contexts/SessionContext';
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
+  const { user: sessionUser } = useSession();
 
   const { project, loading: projectLoading } = useProject(projectId);
   const { messages, loading: chatLoading } = useChat(project);
@@ -87,13 +89,13 @@ const ChatPage: React.FC = () => {
     return (
       <div className="flex flex-col h-full">
         <div className="flex-1">
-          <EmptyChat />
+          <EmptyChat userName={sessionUser?.full_name} />
         </div>
         <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
           <form onSubmit={handleSendMessage} className="relative">
             <Input
               className="w-full bg-transparent border border-white/20 rounded-2xl p-4 pr-14 text-white placeholder-gray-500 resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect"
-              placeholder={t('chat.startPlaceholder')}
+              placeholder={t('chat.startPrompt')}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               disabled={isSending}

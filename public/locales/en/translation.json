@@ -105,9 +105,11 @@
     "nextSteps": "Next steps:"
   },
   "emptyChat": {
+    "greeting": "Hello, {{userName}}",
+    "guest": "there",
     "title": "XpressSEO",
     "subtitle": "Your AI content assistant is ready.",
-    "description": "The automation workflow has started. Please wait for the assistant's first message."
+    "description": "Start a new conversation by pasting a product link or describing your service below."
   },
   "errorDisplay": {
     "title": "Workflow Error!",
@@ -129,7 +131,8 @@
     "welcomeMessage": "Hello {{userName}}! 👋 I've started working on your project \"{{projectName}}\". I'll analyze your product and target audience, and I'll be back shortly with the first step.",
     "genericApproval": "Approved! Let's continue 🚀",
     "analyzingNextStep": "Analyzing the next step...",
-    "startPlaceholder": "Paste a product link or describe your service to begin..."
+    "startPlaceholder": "Paste a product link or describe your service to begin...",
+    "startPrompt": "Let's get started! I'm here to help you make money!"
   },
   "login": {
     "welcome": "Welcome to XpressSEO"

@@ -105,9 +105,11 @@
     "nextSteps": "Próximas etapas:"
   },
   "emptyChat": {
+    "greeting": "Olá, {{userName}}",
+    "guest": "visitante",
     "title": "XpressSEO",
     "subtitle": "Seu assistente de IA para sua loja de dropshipping está pronto.",
-    "description": "O fluxo de automação foi iniciado. Aguarde a primeira mensagem do assistente."
+    "description": "Inicie uma nova conversa colando um link de produto ou descrevendo seu serviço abaixo."
   },
   "errorDisplay": {
     "title": "Erro no Workflow!",
@@ -129,7 +131,8 @@
     "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar no seu projeto \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
     "genericApproval": "Aprovado! Pode continuar 🚀",
     "analyzingNextStep": "Analisando a próxima etapa...",
-    "startPlaceholder": "Cole um link de produto ou descreva seu serviço para começar..."
+    "startPlaceholder": "Cole um link de produto ou descreva seu serviço para começar...",
+    "startPrompt": "vamos começar! estou aqui para você ganhar dinheiro!"
   },
   "login": {
     "welcome": "Bem-vindo ao XpressSEO"
