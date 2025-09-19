@@ -22,27 +22,41 @@ interface PricingDialogProps {
 
 const pricingTiers = [
   {
-    planId: "bronze",
-    name: "Bronze",
+    planId: "basic",
+    name: "Basic",
     price: "R$ 79",
     credits: 50,
-    features: ["Criação de categoria e produtos"],
+    features: [
+      "Análise da palavra-chave (SERP) no país destino de venda",
+      "Criação de categoria e produtos aplicando SEO",
+      "Geração de arquivo HTML leve e responsivo",
+      "Tradução do projeto e arquivo HTML traduzido para o idioma de destino"
+    ],
     popular: false,
   },
   {
-    planId: "prata",
-    name: "Prata",
+    planId: "standard",
+    name: "Standard",
     price: "R$ 149",
     credits: 100,
-    features: ["Tudo do Bronze", "+ Conteúdo para Blog"],
+    features: [
+      "Tudo do plano Basic",
+      "+ Conteúdo para Blog com SEO",
+      "+ Otimização do Blog para resultado de buscas da Inteligência Artificial"
+    ],
     popular: true,
   },
   {
-    planId: "ouro",
-    name: "Ouro",
+    planId: "premium",
+    name: "Premium",
     price: "R$ 197",
     credits: 250,
-    features: ["Tudo do Prata", "+ Legendas para redes sociais", "+ Análise de texto e SEO"],
+    features: [
+      "Tudo do plano Standard",
+      "+ Legendas para redes sociais com SEO e otimizado para IA",
+      "+ Devolutiva do conteúdo gerado",
+      "+ Análise de relatórios do Google Search Console"
+    ],
     popular: false,
   },
 ];
@@ -111,8 +125,8 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
               <p className="text-sm text-cyan-400 font-semibold mt-1">{tier.credits} {t('pricingDialog.credits')}</p>
               <ul className="mt-6 space-y-2 text-sm text-muted-foreground flex-grow">
                 {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <li key={feature} className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}

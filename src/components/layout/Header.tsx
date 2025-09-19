@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
           onClick={onBuyCreditsClick}
         >
           <PlusCircle className="mr-2 h-4 w-4" />
-          {t('header.buyCredits')}
+          {t('header.upgradePlan')}
         </Button>
         
         <ModeToggle />

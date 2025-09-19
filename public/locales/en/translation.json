@@ -26,7 +26,7 @@
   },
   "header": {
     "credits": "Credits",
-    "buyCredits": "Buy Credits",
+    "upgradePlan": "Upgrade",
     "dashboard": "Dashboard",
     "profile": "Profile",
     "logout": "Log out"
