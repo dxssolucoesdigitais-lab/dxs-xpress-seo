@@ -92,7 +92,11 @@
     "resume": "Resume",
     "viewHistory": "View History",
     "noCreditsTooltip": "You have no credits remaining.",
-    "noCreditsToResumeTooltip": "You need credits to resume."
+    "noCreditsToResumeTooltip": "You need credits to resume.",
+    "analyze": "Analyze Document",
+    "goldFeatureTooltip": "This is a Gold Plan feature. Upgrade to unlock.",
+    "uploadFile": "Upload File",
+    "analyzeLink": "Analyze Link"
   },
   "optionSelector": {
     "prompt": "Choose one of the options below to proceed:",

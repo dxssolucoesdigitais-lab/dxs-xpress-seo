@@ -92,7 +92,11 @@
     "resume": "Retomar",
     "viewHistory": "Ver Histórico",
     "noCreditsTooltip": "Você não tem créditos restantes.",
-    "noCreditsToResumeTooltip": "Você precisa de créditos para retomar."
+    "noCreditsToResumeTooltip": "Você precisa de créditos para retomar.",
+    "analyze": "Analisar Documento",
+    "goldFeatureTooltip": "Funcionalidade do Plano Ouro. Faça upgrade para desbloquear.",
+    "uploadFile": "Enviar Arquivo",
+    "analyzeLink": "Analisar Link"
   },
   "optionSelector": {
     "prompt": "Escolha uma das opções abaixo para prosseguirmos:",

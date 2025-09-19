@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Send, RefreshCw, Loader2, Play, Pause, BookText } from 'lucide-react';
+import { Send, RefreshCw, Loader2, Play, Pause, BookText, Paperclip } from 'lucide-react';
 import { useChatActions } from '@/hooks/useChatActions';
 import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
@@ -8,6 +8,12 @@ import ProjectHistorySheet from './ProjectHistorySheet';
 import { useSession } from '@/contexts/SessionContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ChatInputProps {
   project: Project;
@@ -25,6 +31,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const hasCredits = user && user.credits_remaining > 0;
+  const isGoldPlan = user?.plan_type === 'ouro';
 
   const latestUnapprovedStep = useMemo(() => {
     const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
@@ -98,6 +105,38 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
             {t('chatInput.regenerate')}
           </ActionButton>
+          
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenuTrigger asChild>
+                  <div className="inline-block">
+                    <button
+                      disabled={!isGoldPlan || isDisabled || !hasCredits}
+                      className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    >
+                      <Paperclip className="mr-2 h-4 w-4" />
+                      {t('chatInput.analyze')}
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              {!isGoldPlan ? (
+                <TooltipContent><p>{t('chatInput.goldFeatureTooltip')}</p></TooltipContent>
+              ) : !hasCredits ? (
+                <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>
+              ) : null}
+            </Tooltip>
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => alert('Funcionalidade de upload em breve!')} className="cursor-pointer">
+                {t('chatInput.uploadFile')}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => alert('Funcionalidade de análise de link em breve!')} className="cursor-pointer">
+                {t('chatInput.analyzeLink')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <ActionButton onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} tooltip={t('chatInput.noCreditsToResumeTooltip')} showTooltip={project.status === 'paused' && !hasCredits}>
             {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
               project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
