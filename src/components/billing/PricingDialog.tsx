@@ -25,12 +25,13 @@ const pricingTiers = [
     planId: "basic",
     name: "Basic",
     price: "R$ 79",
-    credits: 50,
+    credits: 50, // This value is used by the backend logic
     features: [
-      "Análise da palavra-chave (SERP) no país destino de venda",
-      "Criação de categoria e produtos aplicando SEO",
-      "Geração de arquivo HTML leve e responsivo",
-      "Tradução do projeto e arquivo HTML traduzido para o idioma de destino"
+      "Consulta de palavras-chave (Ex.: Semrush, Ubersuggest etc.) no país de destino",
+      "Criação de categorias e produtos já otimizados para SEO",
+      "Geração de páginas HTML leves e responsivas",
+      "Tradução do projeto e páginas para o idioma desejado",
+      "👉 Para quem está iniciando e precisa de uma base sólida de SEO."
     ],
     popular: false,
   },
@@ -38,11 +39,12 @@ const pricingTiers = [
     planId: "standard",
     name: "Standard",
     price: "R$ 149",
-    credits: 100,
+    credits: 100, // This value is used by the backend logic
     features: [
       "Tudo do plano Basic",
-      "+ Conteúdo para Blog com SEO",
-      "+ Otimização do Blog para resultado de buscas da Inteligência Artificial"
+      "+ Criação de conteúdo otimizado para blog",
+      "+ Otimização avançada do blog para ser encontrado também por buscas feitas via Inteligência Artificial",
+      "👉 Para quem já tem tráfego e quer aumentar visibilidade e autoridade."
     ],
     popular: true,
   },
@@ -50,12 +52,13 @@ const pricingTiers = [
     planId: "premium",
     name: "Premium",
     price: "R$ 197",
-    credits: 250,
+    credits: 250, // This value is used by the backend logic
     features: [
       "Tudo do plano Standard",
-      "+ Legendas para redes sociais com SEO e otimizado para IA",
-      "+ Devolutiva do conteúdo gerado",
-      "+ Análise de relatórios do Google Search Console"
+      "+ Legendas para redes sociais com SEO, otimizadas por IA",
+      "+ Feedback estratégico sobre o conteúdo gerado",
+      "+ Análise de relatórios detalhados com dados do Google Search Console",
+      "👉 Para quem busca presença digital completa, unindo SEO + Conteúdo + Dados."
     ],
     popular: false,
   },
@@ -77,7 +80,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
         .from('users')
         .update({
           plan_type: planId,
-          credits_remaining: credits,
+          credits_remaining: (user.credits_remaining || 0) + credits,
         })
         .eq('id', user.id);
 
@@ -95,7 +98,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-popover border-border text-popover-foreground max-w-3xl">
+      <DialogContent className="bg-popover border-border text-popover-foreground max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">{t('pricingDialog.title')}</DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
@@ -122,18 +125,17 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
                 {tier.price}
                 <span className="text-base font-medium text-muted-foreground"> {t('pricingDialog.perMonth')}</span>
               </p>
-              <p className="text-sm text-cyan-400 font-semibold mt-1">{tier.credits} {t('pricingDialog.credits')}</p>
-              <ul className="mt-6 space-y-2 text-sm text-muted-foreground flex-grow">
+              <ul className="mt-6 space-y-3 text-sm text-muted-foreground flex-grow">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                    <span className="mt-1">{feature.startsWith('👉') ? '' : '✔'}</span>
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
               <Button 
                 className="mt-8 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
-                disabled={isSubmitting !== null || user?.plan_type === tier.planId}
+                disabled={isSubmitting !== null}
                 onClick={() => handleSelectPlan(tier.planId, tier.credits)}
               >
                 {isSubmitting === tier.planId ? <Loader2 className="h-4 w-4 animate-spin" /> : (user?.plan_type === tier.planId ? t('pricingDialog.currentPlan') : t('pricingDialog.selectPlan'))}
@@ -142,9 +144,10 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
           ))}
         </div>
         <DialogFooter>
-            <p className="text-xs text-muted-foreground text-center w-full">
-                {t('pricingDialog.paymentNotice')}
-            </p>
+            <div className="text-xs text-muted-foreground text-center w-full space-y-1">
+              <p>💡 **Nota rápida:** 1 crédito = 1 entrega de conteúdo.</p>
+              <p>Não compartilhe seu acesso, isso pode prejudicar o desenvolvimento do seu perfil.</p>
+            </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
