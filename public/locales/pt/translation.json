@@ -109,8 +109,7 @@
     "greeting": "Olá, {{userName}}",
     "guest": "visitante",
     "title": "XpressSEO",
-    "subtitle": "Seu assistente de IA para sua loja de dropshipping está pronto.",
-    "description": "Inicie uma nova conversa colando um link de produto ou descrevendo seu serviço abaixo."
+    "subtitle": "Seu assistente de IA para sua loja de dropshipping está pronto."
   },
   "errorDisplay": {
     "title": "Erro no Workflow!",

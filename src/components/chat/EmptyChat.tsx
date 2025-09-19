@@ -15,7 +15,6 @@ const EmptyChat: React.FC<EmptyChatProps> = ({ userName }) => {
       </div>
       <h1 className="text-4xl font-bold text-foreground">{t('emptyChat.greeting', { userName: userName || t('emptyChat.guest') })}</h1>
       <p className="mt-2 text-lg text-muted-foreground">{t('emptyChat.subtitle')}</p>
-      <p className="text-sm text-muted-foreground mt-1">{t('emptyChat.description')}</p>
     </div>
   );
 };

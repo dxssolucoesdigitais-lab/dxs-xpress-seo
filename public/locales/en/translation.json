@@ -109,8 +109,7 @@
     "greeting": "Hello, {{userName}}",
     "guest": "there",
     "title": "XpressSEO",
-    "subtitle": "Your AI content assistant is ready.",
-    "description": "Start a new conversation by pasting a product link or describing your service below."
+    "subtitle": "Your AI content assistant is ready."
   },
   "errorDisplay": {
     "title": "Workflow Error!",
