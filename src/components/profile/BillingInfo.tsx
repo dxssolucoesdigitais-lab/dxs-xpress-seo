@@ -14,19 +14,19 @@ const BillingInfo = () => {
 
   return (
     <>
-      <Card className="glass-effect border-white/10 text-white">
+      <Card className="glass-effect border-border text-card-foreground">
         <CardHeader>
           <CardTitle>{t('billingInfo.title')}</CardTitle>
-          <CardDescription className="text-gray-400">{t('billingInfo.description')}</CardDescription>
+          <CardDescription className="text-muted-foreground">{t('billingInfo.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between p-4 rounded-lg bg-black/20">
+          <div className="flex items-center justify-between p-4 rounded-lg bg-secondary">
             <div>
-              <p className="text-sm text-gray-400">{t('billingInfo.currentPlan')}</p>
+              <p className="text-sm text-muted-foreground">{t('billingInfo.currentPlan')}</p>
               <p className="text-lg font-semibold capitalize">{user?.plan_type || t('billingInfo.freePlan')}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-400">{t('billingInfo.creditsRemaining')}</p>
+              <p className="text-sm text-muted-foreground">{t('billingInfo.creditsRemaining')}</p>
               <p className={cn("text-lg font-semibold", user?.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")}>
                 {user?.credits_remaining}
               </p>

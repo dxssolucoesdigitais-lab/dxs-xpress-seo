@@ -50,18 +50,18 @@ const AdminDashboard = () => {
       <header className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold self-start sm:self-center">{t('admin.dashboard.title')}</h1>
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder={t('admin.dashboard.search')}
-            className="w-full bg-transparent border-white/20 pl-9"
+            className="w-full bg-transparent border-border pl-9"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </header>
 
-      <Card className="glass-effect border-white/10 text-white">
+      <Card className="glass-effect border-border text-card-foreground">
         <CardHeader>
           <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
         </CardHeader>
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
                 ))
               ) : filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-white/5">
+                  <TableRow key={user.id} className="hover:bg-accent">
                     <TableCell className="font-medium">
                       <Link to={`/admin/user/${user.id}`} className="hover:text-cyan-400">
                         {user.full_name || t('admin.dashboard.notApplicable')}

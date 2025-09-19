@@ -75,27 +75,27 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
   const renderStepContent = (message: ChatMessage) => {
     const textContent = getStepTextContent(message);
     if (textContent) {
-      return <p className="text-gray-300 whitespace-pre-wrap">{textContent}</p>;
+      return <p className="text-muted-foreground whitespace-pre-wrap">{textContent}</p>;
     }
     if (message.stepResult?.step_name === 'Workflow Progress') {
-      return <p className="text-gray-500 text-sm italic">{t('historySheet.workflowProgressContent')}</p>;
+      return <p className="text-muted-foreground text-sm italic">{t('historySheet.workflowProgressContent')}</p>;
     }
-    return <p className="text-gray-500 text-sm italic">{t('historySheet.genericApprovedContent')}</p>;
+    return <p className="text-muted-foreground text-sm italic">{t('historySheet.genericApprovedContent')}</p>;
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full md:w-[500px] sm:max-w-none bg-[#1a1a1f] border-l border-white/10 text-white flex flex-col">
+      <SheetContent className="w-full md:w-[500px] sm:max-w-none bg-popover border-l border-border text-popover-foreground flex flex-col">
         <SheetHeader>
           <SheetTitle className="text-2xl flex items-center gap-2">
             <BookText className="w-6 h-6 text-cyan-400" />
             {t('historySheet.title')}
           </SheetTitle>
-          <SheetDescription className="text-gray-400">
+          <SheetDescription className="text-muted-foreground">
             {t('historySheet.description', { projectName: project.project_name })}
           </SheetDescription>
         </SheetHeader>
-        <Separator className="my-4 bg-white/10" />
+        <Separator className="my-4 bg-border" />
         <ScrollArea className="flex-1 pr-4">
           <div className="space-y-6">
             {historyItems.length > 0 ? (
@@ -104,13 +104,13 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
                   <h3 className="font-semibold text-cyan-400 mb-2">
                     {t('historySheet.stepLabel')} {item.stepResult?.step_number}: {item.stepResult?.step_name}
                   </h3>
-                  <div className="p-4 rounded-lg bg-black/20 border border-white/10 text-sm">
+                  <div className="p-4 rounded-lg bg-secondary border border-border text-sm">
                     {renderStepContent(item)}
                   </div>
                 </div>
               ))
             ) : (
-              <div className="text-center text-gray-500 py-10">
+              <div className="text-center text-muted-foreground py-10">
                 <p>{t('historySheet.noStepsTitle')}</p>
                 <p className="text-sm">{t('historySheet.noStepsDescription')}</p>
               </div>
@@ -120,7 +120,7 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
         <SheetFooter className="mt-4 grid grid-cols-2 gap-2">
           <Button 
             variant="secondary" 
-            className="w-full bg-white/5 border-white/10 hover:bg-white/10"
+            className="w-full bg-secondary border-border hover:bg-accent"
             onClick={handleCopyAll}
             disabled={historyItems.length === 0}
           >
@@ -132,7 +132,7 @@ const ProjectHistorySheet: React.FC<ProjectHistorySheetProps> = ({ project, mess
             {isCopied ? t('historySheet.copied') : t('historySheet.copyAll')}
           </Button>
           <SheetClose asChild>
-            <Button variant="outline" className="w-full bg-transparent border-white/20 hover:bg-white/10">{t('historySheet.close')}</Button>
+            <Button variant="outline" className="w-full bg-transparent border-border hover:bg-accent">{t('historySheet.close')}</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

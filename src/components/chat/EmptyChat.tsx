@@ -13,9 +13,9 @@ const EmptyChat: React.FC<EmptyChatProps> = ({ userName }) => {
       <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-cyan-400 flex items-center justify-center mb-6">
         <Sparkles className="w-10 h-10 text-white" />
       </div>
-      <h1 className="text-4xl font-bold text-white">{t('emptyChat.greeting', { userName: userName || t('emptyChat.guest') })}</h1>
-      <p className="mt-2 text-lg text-gray-400">{t('emptyChat.subtitle')}</p>
-      <p className="text-sm text-gray-500 mt-1">{t('emptyChat.description')}</p>
+      <h1 className="text-4xl font-bold text-foreground">{t('emptyChat.greeting', { userName: userName || t('emptyChat.guest') })}</h1>
+      <p className="mt-2 text-lg text-muted-foreground">{t('emptyChat.subtitle')}</p>
+      <p className="text-sm text-muted-foreground mt-1">{t('emptyChat.description')}</p>
     </div>
   );
 };

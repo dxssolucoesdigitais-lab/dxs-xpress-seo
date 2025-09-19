@@ -76,27 +76,27 @@ const Profile = () => {
     <div className="container max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       <h1 className="text-3xl font-bold mb-8">{t('profilePage.title')}</h1>
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-transparent border border-white/10 p-1 h-auto mb-6">
+        <TabsList className="grid w-full grid-cols-3 bg-transparent border border-border p-1 h-auto mb-6">
           <TabsTrigger value="profile">{t('profilePage.tabs.profile')}</TabsTrigger>
           <TabsTrigger value="password">{t('profilePage.tabs.password')}</TabsTrigger>
           <TabsTrigger value="billing">{t('profilePage.tabs.billing')}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile">
-          <Card className="glass-effect border-white/10 text-white">
+          <Card className="glass-effect border-border text-card-foreground">
             <CardHeader>
               <CardTitle>{t('profilePage.profileDetails.title')}</CardTitle>
-              <CardDescription className="text-gray-400">{t('profilePage.profileDetails.description')}</CardDescription>
+              <CardDescription className="text-muted-foreground">{t('profilePage.profileDetails.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <Label>{t('profilePage.profileDetails.email')}</Label>
-                  <Input value={session?.user?.email || ''} disabled className="bg-black/20" />
+                  <Input value={session?.user?.email || ''} disabled className="bg-secondary" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="fullName">{t('profilePage.profileDetails.fullName')}</Label>
-                  <Input id="fullName" {...profileForm.register('fullName')} className="bg-transparent border-white/20" />
+                  <Input id="fullName" {...profileForm.register('fullName')} className="bg-transparent border-border" />
                   {profileForm.formState.errors.fullName && (
                     <p className="text-sm text-red-400">{profileForm.formState.errors.fullName.message}</p>
                   )}
@@ -111,16 +111,16 @@ const Profile = () => {
         </TabsContent>
 
         <TabsContent value="password">
-          <Card className="glass-effect border-white/10 text-white">
+          <Card className="glass-effect border-border text-card-foreground">
             <CardHeader>
               <CardTitle>{t('profilePage.changePassword.title')}</CardTitle>
-              <CardDescription className="text-gray-400">{t('profilePage.changePassword.description')}</CardDescription>
+              <CardDescription className="text-muted-foreground">{t('profilePage.changePassword.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="password">{t('profilePage.changePassword.newPassword')}</Label>
-                  <Input id="password" type="password" {...passwordForm.register('password')} className="bg-transparent border-white/20" />
+                  <Input id="password" type="password" {...passwordForm.register('password')} className="bg-transparent border-border" />
                   {passwordForm.formState.errors.password && (
                     <p className="text-sm text-red-400">{passwordForm.formState.errors.password.message}</p>
                   )}

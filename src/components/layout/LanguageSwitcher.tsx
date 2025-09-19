@@ -24,7 +24,7 @@ export function LanguageSwitcher() {
           <span className="sr-only">{t('changeLanguage')}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-[#1a1a1f] border-white/20 text-white">
+      <DropdownMenuContent align="end" className="bg-popover border-border text-popover-foreground">
         <DropdownMenuItem onClick={() => changeLanguage('pt')} className="cursor-pointer">
           {t('portuguese')}
         </DropdownMenuItem>

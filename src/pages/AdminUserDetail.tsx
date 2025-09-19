@@ -115,16 +115,16 @@ const AdminUserDetail = () => {
 
   return (
     <div className="container max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-      <Link to="/admin" className="inline-flex items-center text-sm text-gray-400 hover:text-white mb-6">
+      <Link to="/admin" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
         {t('admin.userDetail.backToUsers')}
       </Link>
       <h1 className="text-3xl font-bold mb-2">{user.full_name}</h1>
-      <p className="text-gray-400 mb-8">{user.email}</p>
+      <p className="text-muted-foreground mb-8">{user.email}</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-8">
-          <Card className="glass-effect border-white/10 text-white">
+          <Card className="glass-effect border-border text-card-foreground">
             <CardHeader>
               <CardTitle>{t('admin.userDetail.manageCredits')}</CardTitle>
             </CardHeader>
@@ -137,7 +137,7 @@ const AdminUserDetail = () => {
                     type="number"
                     value={newCredits}
                     onChange={(e) => setNewCredits(e.target.value)}
-                    className="bg-transparent border-white/20"
+                    className="bg-transparent border-border"
                   />
                 </div>
                 <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold" disabled={isUpdating}>
@@ -147,10 +147,10 @@ const AdminUserDetail = () => {
               </form>
             </CardContent>
           </Card>
-          <Card className="glass-effect border-white/10 text-white">
+          <Card className="glass-effect border-border text-card-foreground">
             <CardHeader>
               <CardTitle>{t('admin.userDetail.usageHistory')}</CardTitle>
-              <CardDescription className="text-gray-400">{t('admin.userDetail.last50')}</CardDescription>
+              <CardDescription className="text-muted-foreground">{t('admin.userDetail.last50')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="max-h-96 overflow-y-auto">
@@ -175,7 +175,7 @@ const AdminUserDetail = () => {
           </Card>
         </div>
         <div className="lg:col-span-2">
-          <Card className="glass-effect border-white/10 text-white">
+          <Card className="glass-effect border-border text-card-foreground">
             <CardHeader>
               <CardTitle>{t('admin.userDetail.userProjects')}</CardTitle>
             </CardHeader>

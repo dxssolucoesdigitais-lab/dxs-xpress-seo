@@ -67,7 +67,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     <Tooltip>
       <TooltipTrigger asChild>
         <div className="inline-block">
-          <button onClick={onClick} disabled={disabled} className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+          <button onClick={onClick} disabled={disabled} className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
             {children}
           </button>
         </div>
@@ -81,7 +81,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
       <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
         <div className="relative mb-4">
           <textarea
-            className="w-full bg-transparent border border-white/20 rounded-2xl p-4 pr-14 text-white placeholder-gray-500 resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
+            className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
             rows={1}
             disabled
@@ -105,7 +105,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
           </ActionButton>
           <button 
             onClick={() => setIsHistoryOpen(true)}
-            className="px-3 py-1.5 text-sm text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all flex items-center"
+            className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all flex items-center"
           >
             <BookText className="mr-2 h-4 w-4" />
             {t('chatInput.viewHistory')}

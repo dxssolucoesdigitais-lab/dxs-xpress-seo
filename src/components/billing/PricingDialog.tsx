@@ -81,10 +81,10 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1a1f] border-white/20 text-white max-w-3xl">
+      <DialogContent className="bg-popover border-border text-popover-foreground max-w-3xl">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">{t('pricingDialog.title')}</DialogTitle>
-          <DialogDescription className="text-center text-gray-400">
+          <DialogDescription className="text-center text-muted-foreground">
             {t('pricingDialog.description')}
           </DialogDescription>
         </DialogHeader>
@@ -93,8 +93,8 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
             <div
               key={tier.name}
               className={cn(
-                "p-6 rounded-lg border bg-black/20 flex flex-col relative",
-                tier.popular ? "border-cyan-400" : "border-white/20",
+                "p-6 rounded-lg border bg-secondary flex flex-col relative",
+                tier.popular ? "border-cyan-400" : "border-border",
                 user?.plan_type === tier.planId && "ring-2 ring-cyan-400"
               )}
             >
@@ -106,10 +106,10 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
               <h3 className="text-xl font-bold">{tier.name}</h3>
               <p className="mt-2 text-3xl font-extrabold">
                 {tier.price}
-                <span className="text-base font-medium text-gray-400"> {t('pricingDialog.perMonth')}</span>
+                <span className="text-base font-medium text-muted-foreground"> {t('pricingDialog.perMonth')}</span>
               </p>
               <p className="text-sm text-cyan-400 font-semibold mt-1">{tier.credits} {t('pricingDialog.credits')}</p>
-              <ul className="mt-6 space-y-2 text-sm text-gray-300 flex-grow">
+              <ul className="mt-6 space-y-2 text-sm text-muted-foreground flex-grow">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
@@ -128,7 +128,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
           ))}
         </div>
         <DialogFooter>
-            <p className="text-xs text-gray-500 text-center w-full">
+            <p className="text-xs text-muted-foreground text-center w-full">
                 {t('pricingDialog.paymentNotice')}
             </p>
         </DialogFooter>

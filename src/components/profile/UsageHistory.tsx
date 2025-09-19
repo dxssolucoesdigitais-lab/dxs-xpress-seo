@@ -12,10 +12,10 @@ const UsageHistory = () => {
   const { history, loading } = useUsageHistory();
 
   return (
-    <Card className="glass-effect border-white/10 text-white">
+    <Card className="glass-effect border-border text-card-foreground">
       <CardHeader>
         <CardTitle>{t('usageHistory.title')}</CardTitle>
-        <CardDescription className="text-gray-400">{t('usageHistory.description')}</CardDescription>
+        <CardDescription className="text-muted-foreground">{t('usageHistory.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-72">
