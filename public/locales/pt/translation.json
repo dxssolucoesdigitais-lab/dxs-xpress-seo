@@ -78,6 +78,8 @@
     "currentPlan": "Plano Atual",
     "selectPlan": "Selecionar Plano",
     "paymentNotice": "O processamento de pagamento ainda não está implementado.",
+    "footerNote1": "💡 **Nota rápida:** 1 crédito = 1 entrega de conteúdo.",
+    "footerNote2": "Não compartilhe seu acesso, isso pode prejudicar o desenvolvimento do seu perfil.",
     "tiers": [
       {
         "planId": "basic",

@@ -112,8 +112,8 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
         </div>
         <DialogFooter>
             <div className="text-xs text-muted-foreground text-center w-full space-y-1">
-              <p>💡 **Nota rápida:** 1 crédito = 1 entrega de conteúdo.</p>
-              <p>Não compartilhe seu acesso, isso pode prejudicar o desenvolvimento do seu perfil.</p>
+              <p>{t('pricingDialog.footerNote1')}</p>
+              <p>{t('pricingDialog.footerNote2')}</p>
             </div>
         </DialogFooter>
       </DialogContent>
