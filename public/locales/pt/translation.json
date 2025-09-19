@@ -77,7 +77,50 @@
     "credits": "créditos",
     "currentPlan": "Plano Atual",
     "selectPlan": "Selecionar Plano",
-    "paymentNotice": "O processamento de pagamento ainda não está implementado."
+    "paymentNotice": "O processamento de pagamento ainda não está implementado.",
+    "tiers": [
+      {
+        "planId": "basic",
+        "name": "Basic",
+        "price": "R$ 79",
+        "credits": 50,
+        "features": [
+          "Consulta de palavras-chave (Ex.: Semrush, Ubersuggest etc.) no país de destino",
+          "Criação de categorias e produtos já otimizados para SEO",
+          "Geração de páginas HTML leves e responsivas",
+          "Tradução do projeto e páginas para o idioma desejado",
+          "👉 Para quem está iniciando e precisa de uma base sólida de SEO."
+        ],
+        "popular": false
+      },
+      {
+        "planId": "standard",
+        "name": "Standard",
+        "price": "R$ 149",
+        "credits": 100,
+        "features": [
+          "Tudo do plano Basic",
+          "+ Criação de conteúdo otimizado para blog",
+          "+ Otimização avançada do blog para ser encontrado também por buscas feitas via Inteligência Artificial",
+          "👉 Para quem busca ganhar destaque e aumentar o tráfego."
+        ],
+        "popular": true
+      },
+      {
+        "planId": "premium",
+        "name": "Premium",
+        "price": "R$ 197",
+        "credits": 250,
+        "features": [
+          "Tudo do plano Standard",
+          "+ Legendas para redes sociais com SEO, otimizadas por IA",
+          "+ Feedback estratégico sobre o conteúdo gerado",
+          "+ Análise de relatórios detalhados com dados do Google Search Console",
+          "👉 Para quem busca presença digital completa, unindo SEO + Conteúdo + Dados."
+        ],
+        "popular": false
+      }
+    ]
   },
   "chatHeader": {
     "step": "Etapa",

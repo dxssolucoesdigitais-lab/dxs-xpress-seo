@@ -20,54 +20,21 @@ interface PricingDialogProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
-const pricingTiers = [
-  {
-    planId: "basic",
-    name: "Basic",
-    price: "R$ 79",
-    credits: 50, // This value is used by the backend logic
-    features: [
-      "Consulta de palavras-chave (Ex.: Semrush, Ubersuggest etc.) no país de destino",
-      "Criação de categorias e produtos já otimizados para SEO",
-      "Geração de páginas HTML leves e responsivas",
-      "Tradução do projeto e páginas para o idioma desejado",
-      "👉 Para quem está iniciando e precisa de uma base sólida de SEO."
-    ],
-    popular: false,
-  },
-  {
-    planId: "standard",
-    name: "Standard",
-    price: "R$ 149",
-    credits: 100, // This value is used by the backend logic
-    features: [
-      "Tudo do plano Basic",
-      "+ Criação de conteúdo otimizado para blog",
-      "+ Otimização avançada do blog para ser encontrado também por buscas feitas via Inteligência Artificial",
-      "👉 Para quem busca ganhar destaque e aumentar o tráfego."
-    ],
-    popular: true,
-  },
-  {
-    planId: "premium",
-    name: "Premium",
-    price: "R$ 197",
-    credits: 250, // This value is used by the backend logic
-    features: [
-      "Tudo do plano Standard",
-      "+ Legendas para redes sociais com SEO, otimizadas por IA",
-      "+ Feedback estratégico sobre o conteúdo gerado",
-      "+ Análise de relatórios detalhados com dados do Google Search Console",
-      "👉 Para quem busca presença digital completa, unindo SEO + Conteúdo + Dados."
-    ],
-    popular: false,
-  },
-];
+interface PricingTier {
+  planId: string;
+  name: string;
+  price: string;
+  credits: number;
+  features: string[];
+  popular: boolean;
+}
 
 const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) => {
   const { t } = useTranslation();
   const { user } = useSession();
   const [isSubmitting, setIsSubmitting] = useState<string | null>(null);
+
+  const pricingTiers: PricingTier[] = t('pricingDialog.tiers', { returnObjects: true });
 
   const handleSelectPlan = async (planId: string, credits: number) => {
     if (!user) {
@@ -86,10 +53,10 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
 
       if (error) throw error;
 
-      showSuccess(`Plano ${planId} ativado com sucesso!`);
+      showSuccess(t('toasts.plans.updateSuccess', { planId }));
       onOpenChange(false);
     } catch (error: any) {
-      showError("Falha ao atualizar o plano.");
+      showError(t('toasts.plans.updateFailed'));
       console.error("Error updating plan:", error.message);
     } finally {
       setIsSubmitting(null);

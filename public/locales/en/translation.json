@@ -77,7 +77,50 @@
     "credits": "credits",
     "currentPlan": "Current Plan",
     "selectPlan": "Select Plan",
-    "paymentNotice": "Payment processing is not yet implemented."
+    "paymentNotice": "Payment processing is not yet implemented.",
+    "tiers": [
+      {
+        "planId": "basic",
+        "name": "Basic",
+        "price": "US$ 14",
+        "credits": 50,
+        "features": [
+          "Keyword research (e.g., Semrush, Ubersuggest) in the target country",
+          "Creation of SEO-optimized categories and products",
+          "Generation of lightweight and responsive HTML pages",
+          "Translation of the project and pages to the desired language",
+          "👉 For those starting out and needing a solid SEO foundation."
+        ],
+        "popular": false
+      },
+      {
+        "planId": "standard",
+        "name": "Standard",
+        "price": "US$ 27",
+        "credits": 100,
+        "features": [
+          "Everything from the Basic plan",
+          "+ Optimized blog content creation",
+          "+ Advanced blog optimization to be found by AI-powered searches",
+          "👉 For those looking to gain visibility and increase traffic."
+        ],
+        "popular": true
+      },
+      {
+        "planId": "premium",
+        "name": "Premium",
+        "price": "US$ 34",
+        "credits": 250,
+        "features": [
+          "Everything from the Standard plan",
+          "+ SEO-optimized social media captions, enhanced by AI",
+          "+ Strategic feedback on the generated content",
+          "+ Analysis of detailed reports with data from Google Search Console",
+          "👉 For those seeking a complete digital presence, combining SEO + Content + Data."
+        ],
+        "popular": false
+      }
+    ]
   },
   "chatHeader": {
     "step": "Step",
