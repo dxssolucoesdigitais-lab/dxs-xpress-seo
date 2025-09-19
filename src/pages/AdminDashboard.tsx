@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { showError } from '@/utils/toast';
 import { useTranslation } from 'react-i18next';
+import AnnouncementsManager from '@/components/admin/AnnouncementsManager';
 
 type AdminUserView = Pick<User, 'id' | 'full_name' | 'email' | 'credits_remaining' | 'last_seen_at'>;
 
@@ -46,8 +47,8 @@ const AdminDashboard = () => {
   );
 
   return (
-    <div className="container max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-      <header className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+    <div className="container max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+      <header className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <h1 className="text-3xl font-bold self-start sm:self-center">{t('admin.dashboard.title')}</h1>
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -60,6 +61,8 @@ const AdminDashboard = () => {
           />
         </div>
       </header>
+
+      <AnnouncementsManager />
 
       <Card className="glass-effect border-border text-card-foreground">
         <CardHeader>

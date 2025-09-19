@@ -163,6 +163,27 @@
       "createdAt": "Created At",
       "userNotFound": "User not found",
       "backToDashboard": "Back to Admin Dashboard"
+    },
+    "announcements": {
+      "title": "Manage Announcements",
+      "description": "Create and manage site-wide announcements. Only one announcement can be active at a time.",
+      "newPlaceholder": "Type your new announcement here...",
+      "create": "Create Announcement",
+      "update": "Update",
+      "delete": "Delete",
+      "active": "Active",
+      "noAnnouncements": "No announcements created yet.",
+      "deleteConfirmTitle": "Delete Announcement?",
+      "deleteConfirmDescription": "This will permanently delete this announcement. Are you sure?",
+      "activateSuccess": "Announcement activated!",
+      "updateSuccess": "Announcement updated!",
+      "createSuccess": "Announcement created!",
+      "deleteSuccess": "Announcement deleted!",
+      "activateError": "Failed to activate announcement.",
+      "updateError": "Failed to update announcement.",
+      "createError": "Failed to create announcement.",
+      "deleteError": "Failed to delete announcement.",
+      "fetchError": "Failed to fetch announcements."
     }
   },
   "toasts": {

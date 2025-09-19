@@ -4,6 +4,7 @@ import PricingDialog from '../billing/PricingDialog';
 import Sidebar from './Sidebar';
 import MobileSidebar from './MobileSidebar';
 import Header from './Header';
+import AnnouncementBanner from './AnnouncementBanner';
 
 const Layout = () => {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
@@ -15,6 +16,7 @@ const Layout = () => {
       <MobileSidebar isOpen={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />
       
       <div className="flex flex-col flex-1 md:pl-64">
+        <AnnouncementBanner />
         <Header 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           onBuyCreditsClick={() => setIsPricingDialogOpen(true)}

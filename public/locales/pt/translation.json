@@ -163,6 +163,27 @@
       "createdAt": "Criado em",
       "userNotFound": "Usuário não encontrado",
       "backToDashboard": "Voltar ao Painel do Administrador"
+    },
+    "announcements": {
+      "title": "Gerenciar Anúncios",
+      "description": "Crie e gerencie anúncios para todo o site. Apenas um anúncio pode estar ativo por vez.",
+      "newPlaceholder": "Digite seu novo anúncio aqui...",
+      "create": "Criar Anúncio",
+      "update": "Atualizar",
+      "delete": "Deletar",
+      "active": "Ativo",
+      "noAnnouncements": "Nenhum anúncio criado ainda.",
+      "deleteConfirmTitle": "Deletar Anúncio?",
+      "deleteConfirmDescription": "Isso excluirá permanentemente este anúncio. Você tem certeza?",
+      "activateSuccess": "Anúncio ativado!",
+      "updateSuccess": "Anúncio atualizado!",
+      "createSuccess": "Anúncio criado!",
+      "deleteSuccess": "Anúncio deletado!",
+      "activateError": "Falha ao ativar anúncio.",
+      "updateError": "Falha ao atualizar anúncio.",
+      "createError": "Falha ao criar anúncio.",
+      "deleteError": "Falha ao deletar anúncio.",
+      "fetchError": "Falha ao buscar anúncios."
     }
   },
   "toasts": {
