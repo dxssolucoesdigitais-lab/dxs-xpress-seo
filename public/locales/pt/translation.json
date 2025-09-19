@@ -36,7 +36,8 @@
     "tabs": {
       "profile": "Perfil",
       "password": "Senha",
-      "billing": "Faturamento e Uso"
+      "billing": "Faturamento e Uso",
+      "feedbacks": "Meus Feedbacks"
     },
     "profileDetails": {
       "title": "Detalhes do Perfil",
@@ -205,7 +206,30 @@
     "user": "Usuário",
     "feedback": "Feedback",
     "date": "Data",
-    "noFeedback": "Nenhum feedback enviado ainda."
+    "noFeedback": "Nenhum feedback enviado ainda.",
+    "status": "Status",
+    "actions": "Ações",
+    "statuses": {
+      "unread": "Não lido",
+      "read": "Lido",
+      "replied": "Respondido"
+    }
+  },
+  "feedbackReplyDialog": {
+    "title": "Responder ao Feedback",
+    "description": "Elabore uma resposta para o feedback do usuário.",
+    "userFeedback": "Feedback do Usuário",
+    "yourReply": "Sua Resposta",
+    "generate": "Gerar com IA",
+    "submit": "Enviar Resposta"
+  },
+  "feedbackHistory": {
+    "title": "Meu Histórico de Feedback",
+    "description": "Veja seus feedbacks enviados e nossas respostas.",
+    "noHistory": "Você ainda não enviou nenhum feedback.",
+    "replied": "Respondido",
+    "yourMessage": "Sua Mensagem",
+    "adminResponse": "Nossa Resposta"
   },
   "toasts": {
     "chat": {
@@ -259,7 +283,11 @@
     "feedback": {
       "success": "Feedback enviado com sucesso. Obrigado!",
       "error": "Falha ao enviar feedback. Por favor, tente novamente.",
-      "fetchError": "Falha ao buscar feedbacks."
+      "fetchError": "Falha ao buscar feedbacks.",
+      "updateStatusError": "Falha ao atualizar o status do feedback.",
+      "replySuccess": "Resposta enviada com sucesso!",
+      "replyError": "Falha ao enviar resposta.",
+      "generateReplyError": "Falha ao gerar resposta com IA."
     }
   }
 }

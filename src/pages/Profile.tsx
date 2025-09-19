@@ -14,6 +14,7 @@ import UsageHistory from '@/components/profile/UsageHistory';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BillingInfo from '@/components/profile/BillingInfo';
 import { useTranslation } from 'react-i18next';
+import FeedbackHistory from '@/components/profile/FeedbackHistory';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -76,10 +77,11 @@ const Profile = () => {
     <div className="container max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       <h1 className="text-3xl font-bold mb-8">{t('profilePage.title')}</h1>
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-transparent border border-border p-1 h-auto mb-6">
+        <TabsList className="grid w-full grid-cols-4 bg-transparent border border-border p-1 h-auto mb-6">
           <TabsTrigger value="profile">{t('profilePage.tabs.profile')}</TabsTrigger>
           <TabsTrigger value="password">{t('profilePage.tabs.password')}</TabsTrigger>
           <TabsTrigger value="billing">{t('profilePage.tabs.billing')}</TabsTrigger>
+          <TabsTrigger value="feedbacks">{t('profilePage.tabs.feedbacks')}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile">
@@ -139,6 +141,10 @@ const Profile = () => {
             <BillingInfo />
             <UsageHistory />
           </div>
+        </TabsContent>
+
+        <TabsContent value="feedbacks">
+          <FeedbackHistory />
         </TabsContent>
       </Tabs>
     </div>

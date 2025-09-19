@@ -36,7 +36,8 @@
     "tabs": {
       "profile": "Profile",
       "password": "Password",
-      "billing": "Billing & Usage"
+      "billing": "Billing & Usage",
+      "feedbacks": "My Feedbacks"
     },
     "profileDetails": {
       "title": "Profile Details",
@@ -205,7 +206,30 @@
     "user": "User",
     "feedback": "Feedback",
     "date": "Date",
-    "noFeedback": "No feedbacks submitted yet."
+    "noFeedback": "No feedbacks submitted yet.",
+    "status": "Status",
+    "actions": "Actions",
+    "statuses": {
+      "unread": "Unread",
+      "read": "Read",
+      "replied": "Replied"
+    }
+  },
+  "feedbackReplyDialog": {
+    "title": "Reply to Feedback",
+    "description": "Craft a response to the user's feedback.",
+    "userFeedback": "User's Feedback",
+    "yourReply": "Your Reply",
+    "generate": "Generate with AI",
+    "submit": "Send Reply"
+  },
+  "feedbackHistory": {
+    "title": "My Feedback History",
+    "description": "View your submitted feedback and our responses.",
+    "noHistory": "You haven't submitted any feedback yet.",
+    "replied": "Replied",
+    "yourMessage": "Your Message",
+    "adminResponse": "Our Response"
   },
   "toasts": {
     "chat": {
@@ -259,7 +283,11 @@
     "feedback": {
       "success": "Feedback sent successfully. Thank you!",
       "error": "Failed to send feedback. Please try again.",
-      "fetchError": "Failed to fetch feedbacks."
+      "fetchError": "Failed to fetch feedbacks.",
+      "updateStatusError": "Failed to update feedback status.",
+      "replySuccess": "Reply sent successfully!",
+      "replyError": "Failed to send reply.",
+      "generateReplyError": "Failed to generate AI reply."
     }
   }
 }

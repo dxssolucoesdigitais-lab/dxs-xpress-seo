@@ -23,6 +23,22 @@ export interface Database {
         }
         Update: Partial<this['Insert']>
       }
+      feedbacks: {
+        Row: {
+          id: string
+          user_id: string
+          content: string
+          created_at: string
+          status: 'unread' | 'read' | 'replied'
+          admin_response: string | null
+          responded_at: string | null
+        }
+        Insert: {
+          user_id: string
+          content: string
+        }
+        Update: Partial<this['Row']>
+      }
       users: {
         Row: {
           id: string
@@ -123,3 +139,4 @@ export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
 export type StepResult = Database['public']['Tables']['step_results']['Row'];
 export type Announcement = Database['public']['Tables']['announcements']['Row'];
+export type Feedback = Database['public']['Tables']['feedbacks']['Row'];
