@@ -44,7 +44,7 @@ const pricingTiers = [
       "Tudo do plano Basic",
       "+ Criação de conteúdo otimizado para blog",
       "+ Otimização avançada do blog para ser encontrado também por buscas feitas via Inteligência Artificial",
-      "👉 Para quem já tem tráfego e quer aumentar visibilidade e autoridade."
+      "👉 Para quem busca ganhar destaque e aumentar o tráfego."
     ],
     popular: true,
   },
