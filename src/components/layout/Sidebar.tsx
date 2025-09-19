@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { MessageSquare, User, Shield, PlusCircle } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { useProjects } from '@/hooks/useProjects';
@@ -14,7 +14,11 @@ const mainNavigation = [
   { name: 'Admin Panel', href: '/admin', icon: Shield, admin: true },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  onFeedbackClick: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { projectId } = useParams<{ projectId: string }>();
@@ -66,7 +70,7 @@ const Sidebar = () => {
             )}
           </nav>
         </ScrollArea>
-        <nav className="px-4 py-4 border-t border-border mt-auto">
+        <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
           {availableNav.map((item) => (
             <Link
               key={item.name}
@@ -82,6 +86,14 @@ const Sidebar = () => {
               {item.name}
             </Link>
           ))}
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3"
+            onClick={onFeedbackClick}
+          >
+            <MessageCircleQuestion className="mr-3 h-5 w-5" />
+            {t('feedbackDialog.button')}
+          </Button>
         </nav>
       </div>
     </aside>

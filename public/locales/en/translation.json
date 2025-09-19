@@ -150,6 +150,11 @@
       "never": "Never",
       "noUsersFound": "No users found."
     },
+    "tabs": {
+      "users": "Users",
+      "announcements": "Announcements",
+      "feedbacks": "Feedbacks"
+    },
     "userDetail": {
       "backToUsers": "Back to All Users",
       "manageCredits": "Manage Credits",
@@ -185,6 +190,22 @@
       "deleteError": "Failed to delete announcement.",
       "fetchError": "Failed to fetch announcements."
     }
+  },
+  "feedbackDialog": {
+    "button": "Send Feedback",
+    "title": "Send us your feedback",
+    "description": "We'd love to hear your thoughts on how we can improve.",
+    "label": "Your feedback",
+    "placeholder": "Tell us what you think...",
+    "submit": "Submit Feedback"
+  },
+  "feedbackViewer": {
+    "title": "User Feedbacks",
+    "description": "Here you can see all feedbacks submitted by users.",
+    "user": "User",
+    "feedback": "Feedback",
+    "date": "Date",
+    "noFeedback": "No feedbacks submitted yet."
   },
   "toasts": {
     "chat": {
@@ -234,6 +255,11 @@
       "fetchUserDetailsFailed": "Failed to fetch user details.",
       "updateCreditsSuccess": "User's credits updated successfully!",
       "updateCreditsFailed": "Failed to update credits."
+    },
+    "feedback": {
+      "success": "Feedback sent successfully. Thank you!",
+      "error": "Failed to send feedback. Please try again.",
+      "fetchError": "Failed to fetch feedbacks."
     }
   }
 }

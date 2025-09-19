@@ -150,6 +150,11 @@
       "never": "Nunca",
       "noUsersFound": "Nenhum usuário encontrado."
     },
+    "tabs": {
+      "users": "Usuários",
+      "announcements": "Anúncios",
+      "feedbacks": "Feedbacks"
+    },
     "userDetail": {
       "backToUsers": "Voltar para Todos os Usuários",
       "manageCredits": "Gerenciar Créditos",
@@ -185,6 +190,22 @@
       "deleteError": "Falha ao deletar anúncio.",
       "fetchError": "Falha ao buscar anúncios."
     }
+  },
+  "feedbackDialog": {
+    "button": "Enviar Feedback",
+    "title": "Envie-nos seu feedback",
+    "description": "Adoraríamos ouvir suas ideias sobre como podemos melhorar.",
+    "label": "Seu feedback",
+    "placeholder": "Diga-nos o que você pensa...",
+    "submit": "Enviar Feedback"
+  },
+  "feedbackViewer": {
+    "title": "Feedbacks dos Usuários",
+    "description": "Aqui você pode ver todos os feedbacks enviados pelos usuários.",
+    "user": "Usuário",
+    "feedback": "Feedback",
+    "date": "Data",
+    "noFeedback": "Nenhum feedback enviado ainda."
   },
   "toasts": {
     "chat": {
@@ -234,6 +255,11 @@
       "fetchUserDetailsFailed": "Falha ao buscar detalhes do usuário.",
       "updateCreditsSuccess": "Créditos do usuário atualizados com sucesso!",
       "updateCreditsFailed": "Falha ao atualizar os créditos."
+    },
+    "feedback": {
+      "success": "Feedback enviado com sucesso. Obrigado!",
+      "error": "Falha ao enviar feedback. Por favor, tente novamente.",
+      "fetchError": "Falha ao buscar feedbacks."
     }
   }
 }

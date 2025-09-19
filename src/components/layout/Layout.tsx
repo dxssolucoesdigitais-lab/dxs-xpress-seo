@@ -5,15 +5,21 @@ import Sidebar from './Sidebar';
 import MobileSidebar from './MobileSidebar';
 import Header from './Header';
 import AnnouncementBanner from './AnnouncementBanner';
+import FeedbackDialog from './FeedbackDialog';
 
 const Layout = () => {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex bg-background text-foreground">
-      <Sidebar />
-      <MobileSidebar isOpen={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />
+      <Sidebar onFeedbackClick={() => setIsFeedbackDialogOpen(true)} />
+      <MobileSidebar 
+        isOpen={isMobileMenuOpen} 
+        onOpenChange={setIsMobileMenuOpen}
+        onFeedbackClick={() => setIsFeedbackDialogOpen(true)}
+      />
       
       <div className="flex flex-col flex-1 md:pl-64">
         <AnnouncementBanner />
@@ -27,6 +33,7 @@ const Layout = () => {
       </div>
 
       <PricingDialog isOpen={isPricingDialogOpen} onOpenChange={setIsPricingDialogOpen} />
+      <FeedbackDialog isOpen={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { MessageSquare, User, Shield, PlusCircle } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { useProjects } from '@/hooks/useProjects';
@@ -18,9 +18,10 @@ const mainNavigation = [
 interface MobileSidebarProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  onFeedbackClick: () => void;
 }
 
-const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) => {
+const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onFeedbackClick }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { projectId } = useParams<{ projectId: string }>();
@@ -28,6 +29,11 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
   const { projects, loading } = useProjects();
 
   const availableNav = mainNavigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
+
+  const handleFeedbackClick = () => {
+    onFeedbackClick();
+    onOpenChange(false);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -73,7 +79,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
             )}
           </nav>
         </ScrollArea>
-        <nav className="px-4 py-4 border-t border-border mt-auto">
+        <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
           {availableNav.map((item) => (
             <Link
               key={item.name}
@@ -90,6 +96,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange }) =
               {item.name}
             </Link>
           ))}
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3"
+            onClick={handleFeedbackClick}
+          >
+            <MessageCircleQuestion className="mr-3 h-5 w-5" />
+            {t('feedbackDialog.button')}
+          </Button>
         </nav>
       </SheetContent>
     </Sheet>
