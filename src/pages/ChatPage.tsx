@@ -100,7 +100,7 @@ const ChatPage: React.FC = () => {
               onChange={(e) => setPrompt(e.target.value)}
               disabled={isSending}
             />
-            <Button type="submit" size="icon" className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all btn-glow" disabled={isSending || !prompt.trim()}>
+            <Button type="submit" size="icon" className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isSending || !prompt.trim()}>
               {isSending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
             </Button>
           </form>

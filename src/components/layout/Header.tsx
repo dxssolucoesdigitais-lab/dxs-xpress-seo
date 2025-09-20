@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
         <Button 
           variant="secondary" 
           size="sm" 
-          className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold btn-glow"
+          className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
           onClick={onBuyCreditsClick}
         >
           <PlusCircle className="mr-2 h-4 w-4" />

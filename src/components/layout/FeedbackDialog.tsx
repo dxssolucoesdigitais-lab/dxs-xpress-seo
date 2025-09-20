@@ -73,7 +73,7 @@ const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ isOpen, onOpenChange })
             />
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold btn-glow" disabled={isSubmitting || !content.trim()}>
+            <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isSubmitting || !content.trim()}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {t('feedbackDialog.submit')}
             </Button>

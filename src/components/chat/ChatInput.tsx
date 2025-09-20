@@ -93,7 +93,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             rows={1}
             disabled
           ></textarea>
-          <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 btn-glow" disabled>
+          <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled>
             <Send size={20} />
           </button>
         </div>
