@@ -79,11 +79,8 @@
   }
 
   .dark body {
-    background-color: #252324;
-    background-image: radial-gradient(at 20% 20%, #448ac1 0px, transparent 50%),
-                      radial-gradient(at 80% 20%, #ffffff 0px, transparent 50%),
-                      radial-gradient(at 20% 80%, #345774 0px, transparent 50%),
-                      radial-gradient(at 80% 80%, #252324 0px, transparent 50%);
+    background-color: #1d1b88;
+    background-image: linear-gradient(180deg, #1d1b88 0%, #907bb8 50%, #bdb8c6 100%);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     position: relative;
