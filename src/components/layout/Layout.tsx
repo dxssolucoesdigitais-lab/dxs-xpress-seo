@@ -13,7 +13,7 @@ const Layout = () => {
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
+    <div className="min-h-screen flex bg-transparent text-foreground">
       <Sidebar onFeedbackClick={() => setIsFeedbackDialogOpen(true)} />
       <MobileSidebar 
         isOpen={isMobileMenuOpen} 

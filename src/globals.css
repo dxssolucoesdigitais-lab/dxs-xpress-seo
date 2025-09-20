@@ -77,6 +77,26 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .dark body {
+    background-color: #252324;
+    background-image: radial-gradient(at 20% 20%, #448ac1 0px, transparent 50%),
+                      radial-gradient(at 80% 20%, #ffffff 0px, transparent 50%),
+                      radial-gradient(at 20% 80%, #345774 0px, transparent 50%),
+                      radial-gradient(at 80% 80%, #252324 0px, transparent 50%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  .dark body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 }
 
 @layer utilities {
