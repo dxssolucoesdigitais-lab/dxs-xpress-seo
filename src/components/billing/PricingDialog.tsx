@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { useSession } from '@/contexts/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
-import { showError, showSuccess } from '@/utils/toast';
+import { showError } from '@/utils/toast';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
@@ -36,28 +36,30 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
 
   const pricingTiers: PricingTier[] = t('pricingDialog.tiers', { returnObjects: true });
 
-  const handleSelectPlan = async (planId: string, credits: number) => {
+  const handleSelectPlan = async (planId: string) => {
     if (!user) {
-      showError("You must be logged in to select a plan.");
+      showError("toasts.plans.loginRequired");
       return;
     }
     setIsSubmitting(planId);
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          plan_type: planId,
-          credits_remaining: (user.credits_remaining || 0) + credits,
-        })
-        .eq('id', user.id);
+      // Invoca a edge function para criar uma sessão de checkout
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: { planId },
+      });
 
       if (error) throw error;
 
-      showSuccess(t('toasts.plans.updateSuccess', { planId }));
-      onOpenChange(false);
+      // Redireciona o usuário para a URL do gateway de pagamento
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        throw new Error("Checkout URL not received.");
+      }
+
     } catch (error: any) {
-      showError(t('toasts.plans.updateFailed'));
-      console.error("Error updating plan:", error.message);
+      showError('toasts.plans.checkoutFailed');
+      console.error("Error creating checkout session:", error.message);
     } finally {
       setIsSubmitting(null);
     }
@@ -102,8 +104,8 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
               </ul>
               <Button 
                 className="mt-8 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
-                disabled={isSubmitting !== null}
-                onClick={() => handleSelectPlan(tier.planId, tier.credits)}
+                disabled={isSubmitting !== null || user?.plan_type === tier.planId}
+                onClick={() => handleSelectPlan(tier.planId)}
               >
                 {isSubmitting === tier.planId ? <Loader2 className="h-4 w-4 animate-spin" /> : (user?.plan_type === tier.planId ? t('pricingDialog.currentPlan') : t('pricingDialog.selectPlan'))}
               </Button>

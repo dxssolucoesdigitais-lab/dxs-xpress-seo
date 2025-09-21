@@ -321,7 +321,8 @@
       "updateSuccess": "Plan {{planId}} activated successfully!",
       "updateFailed": "Failed to update plan.",
       "loginRequired": "You must be logged in to select a plan.",
-      "premiumFeatureRequired": "This feature requires the Premium Plan. Upgrade to unlock."
+      "premiumFeatureRequired": "This feature requires the Premium Plan. Upgrade to unlock.",
+      "checkoutFailed": "Failed to create checkout session. Please try again."
     },
     "admin": {
       "fetchUsersFailed": "Failed to fetch users.",

@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
+import PaymentSimulationPage from "./pages/PaymentSimulationPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>

@@ -321,7 +321,8 @@
       "updateSuccess": "Plano {{planId}} ativado com sucesso!",
       "updateFailed": "Falha ao atualizar o plano.",
       "loginRequired": "Você deve estar logado para selecionar um plano.",
-      "premiumFeatureRequired": "Esta funcionalidade requer o Plano Premium. Faça upgrade para desbloquear."
+      "premiumFeatureRequired": "Esta funcionalidade requer o Plano Premium. Faça upgrade para desbloquear.",
+      "checkoutFailed": "Falha ao criar a sessão de pagamento. Tente novamente."
     },
     "admin": {
       "fetchUsersFailed": "Falha ao buscar usuários.",
