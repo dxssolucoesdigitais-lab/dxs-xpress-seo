@@ -320,7 +320,8 @@
     "plans": {
       "updateSuccess": "Plan {{planId}} activated successfully!",
       "updateFailed": "Failed to update plan.",
-      "loginRequired": "You must be logged in to select a plan."
+      "loginRequired": "You must be logged in to select a plan.",
+      "goldFeatureRequired": "This feature requires the Gold Plan. Upgrade to unlock."
     },
     "admin": {
       "fetchUsersFailed": "Failed to fetch users.",

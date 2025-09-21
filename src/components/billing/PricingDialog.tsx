@@ -101,7 +101,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
                 ))}
               </ul>
               <Button 
-                className="mt-8 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
+                className="mt-8 w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
                 disabled={isSubmitting !== null}
                 onClick={() => handleSelectPlan(tier.planId, tier.credits)}
               >

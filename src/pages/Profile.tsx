@@ -103,7 +103,7 @@ const Profile = () => {
                     <p className="text-sm text-red-400">{profileForm.formState.errors.fullName.message}</p>
                   )}
                 </div>
-                <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold" disabled={isSubmittingProfile}>
+                <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isSubmittingProfile}>
                   {isSubmittingProfile && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {t('profilePage.profileDetails.save')}
                 </Button>
@@ -127,7 +127,7 @@ const Profile = () => {
                     <p className="text-sm text-red-400">{passwordForm.formState.errors.password.message}</p>
                   )}
                 </div>
-                <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold" disabled={isSubmittingPassword}>
+                <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isSubmittingPassword}>
                   {isSubmittingPassword && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {t('profilePage.changePassword.update')}
                 </Button>

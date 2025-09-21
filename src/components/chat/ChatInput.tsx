@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { showError } from '@/utils/toast';
 
 interface ChatInputProps {
   project: Project;
@@ -68,6 +69,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     setIsPausing(false);
   };
 
+  const handleAnalyzeClick = (type: 'upload' | 'link') => {
+    if (!isGoldPlan) {
+      showError('toasts.plans.goldFeatureRequired');
+      return;
+    }
+    // Placeholder for actual functionality
+    if (type === 'upload') {
+      alert(t('chatInput.uploadFile') + ' - Funcionalidade em breve!');
+    } else {
+      alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
+    }
+  };
+
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
   const ActionButton: React.FC<{ onClick: () => void; disabled: boolean; tooltip: string; children: React.ReactNode; showTooltip: boolean }> = ({ onClick, disabled, tooltip, children, showTooltip }) => (
@@ -112,7 +126,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
                 <DropdownMenuTrigger asChild>
                   <div className="inline-block">
                     <button
-                      disabled={!isGoldPlan || isDisabled || !hasCredits}
+                      disabled={isDisabled || !hasCredits}
                       className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                     >
                       <Paperclip className="mr-2 h-4 w-4" />
@@ -121,17 +135,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
                   </div>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
-              {!isGoldPlan ? (
-                <TooltipContent><p>{t('chatInput.goldFeatureTooltip')}</p></TooltipContent>
-              ) : !hasCredits ? (
+              {!hasCredits ? (
                 <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>
               ) : null}
             </Tooltip>
             <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => alert('Funcionalidade de upload em breve!')} className="cursor-pointer">
+              <DropdownMenuItem onSelect={() => handleAnalyzeClick('upload')} className="cursor-pointer">
                 {t('chatInput.uploadFile')}
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => alert('Funcionalidade de análise de link em breve!')} className="cursor-pointer">
+              <DropdownMenuItem onSelect={() => handleAnalyzeClick('link')} className="cursor-pointer">
                 {t('chatInput.analyzeLink')}
               </DropdownMenuItem>
             </DropdownMenuContent>

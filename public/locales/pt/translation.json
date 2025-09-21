@@ -320,7 +320,8 @@
     "plans": {
       "updateSuccess": "Plano {{planId}} ativado com sucesso!",
       "updateFailed": "Falha ao atualizar o plano.",
-      "loginRequired": "Você deve estar logado para selecionar um plano."
+      "loginRequired": "Você deve estar logado para selecionar um plano.",
+      "goldFeatureRequired": "Esta funcionalidade requer o Plano Ouro. Faça upgrade para desbloquear."
     },
     "admin": {
       "fetchUsersFailed": "Falha ao buscar usuários.",
