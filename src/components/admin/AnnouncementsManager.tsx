@@ -119,7 +119,11 @@ const AnnouncementsManager = () => {
             className="bg-transparent border-border"
             disabled={isSubmitting}
           />
-          <Button onClick={handleCreate} disabled={isSubmitting || !newContent.trim()}>
+          <Button 
+            onClick={handleCreate} 
+            disabled={isSubmitting || !newContent.trim()}
+            className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
+          >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t('admin.announcements.create')}
           </Button>

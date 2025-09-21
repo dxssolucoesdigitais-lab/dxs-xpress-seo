@@ -9,13 +9,19 @@ import MessageList from "@/components/chat/MessageList";
 import ErrorDisplay from "@/components/chat/ErrorDisplay";
 import EmptyChat from "@/components/chat/EmptyChat";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Paperclip } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
 import { useSession } from '@/contexts/SessionContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -28,6 +34,21 @@ const ChatPage: React.FC = () => {
   
   const [prompt, setPrompt] = useState('');
   const [isSending, setIsSending] = useState(false);
+
+  const isGoldPlan = sessionUser?.plan_type === 'ouro';
+
+  const handleAnalyzeClick = (type: 'upload' | 'link') => {
+    if (!isGoldPlan) {
+      showError('toasts.plans.goldFeatureRequired');
+      return;
+    }
+    // Placeholder for actual functionality
+    if (type === 'upload') {
+      alert(t('chatInput.uploadFile') + ' - Funcionalidade em breve!');
+    } else {
+      alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
+    }
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,12 +115,27 @@ const ChatPage: React.FC = () => {
         <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
           <form onSubmit={handleSendMessage} className="relative">
             <Input
-              className="w-full bg-transparent border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect"
+              className="w-full bg-transparent border-border rounded-2xl p-4 pl-12 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect"
               placeholder={t('chat.startPrompt')}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               disabled={isSending}
             />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button type="button" variant="ghost" size="icon" className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground">
+                  <Paperclip size={16} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onSelect={() => handleAnalyzeClick('upload')} className="cursor-pointer">
+                  {t('chatInput.uploadFile')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleAnalyzeClick('link')} className="cursor-pointer">
+                  {t('chatInput.analyzeLink')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button type="submit" size="icon" className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isSending || !prompt.trim()}>
               {isSending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
             </Button>
