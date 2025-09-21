@@ -7,7 +7,7 @@ const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 // Webhook URLs from environment variables (secrets)
 const N8N_BRONZE_WEBHOOK_URL = Deno.env.get('N8N_BRONZE_WEBHOOK_URL')
 const N8N_PRATA_WEBHOOK_URL = Deno.env.get('N8N_PRATA_WEBHOOK_URL')
-const N8N_OURO_WEBHOOK_URL = Deno.env.get('N8N_OURO_WEBHOOK_URL')
+const N8N_PREMIUM_WEBHOOK_URL = Deno.env.get('N8N_PREMIUM_WEBHOOK_URL')
 const N8N_DEFAULT_WEBHOOK_URL = Deno.env.get('N8N_DEFAULT_WEBHOOK_URL') // For free/default plan
 
 const corsHeaders = {
@@ -90,8 +90,8 @@ serve(async (req) => {
       case 'prata':
         webhookUrl = N8N_PRATA_WEBHOOK_URL;
         break;
-      case 'ouro':
-        webhookUrl = N8N_OURO_WEBHOOK_URL;
+      case 'premium':
+        webhookUrl = N8N_PREMIUM_WEBHOOK_URL;
         break;
       default:
         webhookUrl = N8N_DEFAULT_WEBHOOK_URL; // Fallback for 'free' or null plans

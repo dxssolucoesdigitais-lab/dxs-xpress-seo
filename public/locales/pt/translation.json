@@ -139,7 +139,7 @@
     "noCreditsTooltip": "Você não tem créditos restantes.",
     "noCreditsToResumeTooltip": "Você precisa de créditos para retomar.",
     "analyze": "Analisar Documento",
-    "goldFeatureTooltip": "Funcionalidade do Plano Ouro. Faça upgrade para desbloquear.",
+    "premiumFeatureTooltip": "Funcionalidade do Plano Premium. Faça upgrade para desbloquear.",
     "uploadFile": "Enviar Arquivo",
     "analyzeLink": "Analisar Link"
   },
@@ -321,7 +321,7 @@
       "updateSuccess": "Plano {{planId}} ativado com sucesso!",
       "updateFailed": "Falha ao atualizar o plano.",
       "loginRequired": "Você deve estar logado para selecionar um plano.",
-      "goldFeatureRequired": "Esta funcionalidade requer o Plano Ouro. Faça upgrade para desbloquear."
+      "premiumFeatureRequired": "Esta funcionalidade requer o Plano Premium. Faça upgrade para desbloquear."
     },
     "admin": {
       "fetchUsersFailed": "Falha ao buscar usuários.",

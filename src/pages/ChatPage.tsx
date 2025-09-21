@@ -35,17 +35,21 @@ const ChatPage: React.FC = () => {
   const [prompt, setPrompt] = useState('');
   const [isSending, setIsSending] = useState(false);
 
-  const isGoldPlan = sessionUser?.plan_type === 'ouro';
+  const userPlan = sessionUser?.plan_type || 'free';
+  const isFreeTrial = userPlan === 'free';
+  const canUploadFile = userPlan === 'premium' || isFreeTrial;
+  // Análise de link é liberada para todos os planos autenticados
+  const canAnalyzeLink = true;
 
   const handleAnalyzeClick = (type: 'upload' | 'link') => {
-    if (!isGoldPlan) {
-      showError('toasts.plans.goldFeatureRequired');
-      return;
-    }
-    // Placeholder for actual functionality
     if (type === 'upload') {
+      if (!canUploadFile) {
+        showError('toasts.plans.premiumFeatureRequired');
+        return;
+      }
       alert(t('chatInput.uploadFile') + ' - Funcionalidade em breve!');
-    } else {
+    } else if (type === 'link') {
+      if (!canAnalyzeLink) return; // Verificação de segurança, embora todos devam ter acesso
       alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
     }
   };

@@ -139,7 +139,7 @@
     "noCreditsTooltip": "You have no credits remaining.",
     "noCreditsToResumeTooltip": "You need credits to resume.",
     "analyze": "Analyze Document",
-    "goldFeatureTooltip": "This is a Gold Plan feature. Upgrade to unlock.",
+    "premiumFeatureTooltip": "This is a Premium Plan feature. Upgrade to unlock.",
     "uploadFile": "Upload File",
     "analyzeLink": "Analyze Link"
   },
@@ -321,7 +321,7 @@
       "updateSuccess": "Plan {{planId}} activated successfully!",
       "updateFailed": "Failed to update plan.",
       "loginRequired": "You must be logged in to select a plan.",
-      "goldFeatureRequired": "This feature requires the Gold Plan. Upgrade to unlock."
+      "premiumFeatureRequired": "This feature requires the Premium Plan. Upgrade to unlock."
     },
     "admin": {
       "fetchUsersFailed": "Failed to fetch users.",

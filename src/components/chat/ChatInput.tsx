@@ -32,7 +32,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const hasCredits = user && user.credits_remaining > 0;
-  const isGoldPlan = user?.plan_type === 'ouro';
+  
+  const userPlan = user?.plan_type || 'free';
+  const isFreeTrial = userPlan === 'free';
+  const canUploadFile = userPlan === 'premium' || isFreeTrial;
+  const canAnalyzeLink = true; // Liberado para todos
 
   const latestUnapprovedStep = useMemo(() => {
     const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
@@ -70,14 +74,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   };
 
   const handleAnalyzeClick = (type: 'upload' | 'link') => {
-    if (!isGoldPlan) {
-      showError('toasts.plans.goldFeatureRequired');
-      return;
-    }
-    // Placeholder for actual functionality
     if (type === 'upload') {
+      if (!canUploadFile) {
+        showError('toasts.plans.premiumFeatureRequired');
+        return;
+      }
       alert(t('chatInput.uploadFile') + ' - Funcionalidade em breve!');
-    } else {
+    } else if (type === 'link') {
+      if (!canAnalyzeLink) return;
       alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
     }
   };
