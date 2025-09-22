@@ -1,0 +1,600 @@
+{
+  "name": "SaaS SEO Workflow - Full",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Webhook Start",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "saas-seo-start",
+        "responseMode": "onReceived"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Set Variables",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "user_id",
+              "value": "={{$json.user_id}}"
+            },
+            {
+              "name": "session_id",
+              "value": "={{$json.session_id}}"
+            },
+            {
+              "name": "user_plan",
+              "value": "={{$json.user_plan}}"
+            },
+            {
+              "name": "product_link",
+              "value": "={{$json.product_link}}"
+            },
+            {
+              "name": "target_country",
+              "value": "={{$json.target_country}}"
+            },
+            {
+              "name": "callback_url",
+              "value": "={{$json.callback_url}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3",
+      "name": "Scrape Product Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        640,
+        300
+      ],
+      "parameters": {
+        "url": "={{$json.product_link}}",
+        "responseFormat": "string"
+      }
+    },
+    {
+      "id": "4",
+      "name": "Process Scraped Content",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        840,
+        300
+      ],
+      "parameters": {
+        "language": "javascript",
+        "functionCode": "return [{ json: { cleaned_content: $json[\"body\"] } }];"
+      }
+    },
+    {
+      "id": "5",
+      "name": "Extract Product Data (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1040,
+        300
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3-70b-8192",
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é especialista em extrair dados de produtos para SEO."
+            },
+            {
+              "role": "user",
+              "content": "={{$json.cleaned_content}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5a",
+      "name": "Log Usage (Supabase) - Extract Product",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        1240,
+        300
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "Groq",
+          "llama-3-70b-8192",
+          "={{$json.usage.prompt_tokens}}",
+          "={{$json.usage.completion_tokens}}",
+          "={{$json.usage.total_tokens}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "6",
+      "name": "SEO Research (DataForSEO)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1440,
+        200
+      ],
+      "parameters": {
+        "url": "https://api.dataforseo.com/v3/keywords",
+        "method": "POST",
+        "responseFormat": "json"
+      }
+    },
+    {
+      "id": "6a",
+      "name": "Log Usage (Supabase) - DataForSEO",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        1640,
+        200
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "DataForSEO",
+          "keywords",
+          "={{$json.cost}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "7",
+      "name": "Generate SEO Content (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1440,
+        400
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3-70b-8192",
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é um redator especialista em SEO."
+            },
+            {
+              "role": "user",
+              "content": "Gerar descrições otimizadas a partir dos dados extraídos."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7a",
+      "name": "Log Usage (Supabase) - SEO Content",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        1640,
+        400
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "Groq",
+          "llama-3-70b-8192",
+          "={{$json.usage.prompt_tokens}}",
+          "={{$json.usage.completion_tokens}}",
+          "={{$json.usage.total_tokens}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "8",
+      "name": "Technical Validation (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1840,
+        300
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3-70b-8192",
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é especialista em análise técnica de SEO."
+            },
+            {
+              "role": "user",
+              "content": "Validar tecnicamente os conteúdos gerados."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8a",
+      "name": "Log Usage (Supabase) - Technical Validation",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        2040,
+        300
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "Groq",
+          "llama-3-70b-8192",
+          "={{$json.usage.prompt_tokens}}",
+          "={{$json.usage.completion_tokens}}",
+          "={{$json.usage.total_tokens}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "9",
+      "name": "Switch Plan",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        2240,
+        300
+      ],
+      "parameters": {
+        "property": "={{$json.user_plan}}",
+        "rules": [
+          {
+            "operation": "equal",
+            "value": "Free"
+          },
+          {
+            "operation": "equal",
+            "value": "Basic"
+          },
+          {
+            "operation": "equal",
+            "value": "Standard"
+          },
+          {
+            "operation": "equal",
+            "value": "Premium"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "name": "GSC Analysis (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2440,
+        500
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3-70b-8192",
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é especialista em Google Search Console."
+            },
+            {
+              "role": "user",
+              "content": "Analise este relatório GSC e dê insights."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "10a",
+      "name": "Log Usage (Supabase) - GSC",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        2640,
+        500
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "Groq",
+          "llama-3-70b-8192",
+          "={{$json.usage.prompt_tokens}}",
+          "={{$json.usage.completion_tokens}}",
+          "={{$json.usage.total_tokens}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "11",
+      "name": "Orchestrator (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2440,
+        300
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3-70b-8192",
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é o orquestrador de agentes de IA. Consolide os resultados dos agentes em JSON final, aplicando regras de plano."
+            },
+            {
+              "role": "user",
+              "content": "={{$json}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "11a",
+      "name": "Log Usage (Supabase) - Orchestrator",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        2640,
+        300
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "api_usage_logs",
+        "columns": [
+          "user_id",
+          "project_id",
+          "api_provider",
+          "model",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens"
+        ],
+        "values": [
+          "={{$json.user_id}}",
+          "={{$json.session_id}}",
+          "Groq",
+          "llama-3-70b-8192",
+          "={{$json.usage.prompt_tokens}}",
+          "={{$json.usage.completion_tokens}}",
+          "={{$json.usage.total_tokens}}"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "99",
+      "name": "Finalize Response",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2840,
+        300
+      ],
+      "parameters": {
+        "language": "javascript",
+        "functionCode": "return [{ json: { message: \"Fluxo concluído. Resultado consolidado entregue.\" } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Start": {
+      "main": [
+        [
+          "2"
+        ]
+      ]
+    },
+    "Set Variables": {
+      "main": [
+        [
+          "3"
+        ]
+      ]
+    },
+    "Scrape Product Page": {
+      "main": [
+        [
+          "4"
+        ]
+      ]
+    },
+    "Process Scraped Content": {
+      "main": [
+        [
+          "5"
+        ]
+      ]
+    },
+    "Extract Product Data (Groq)": {
+      "main": [
+        [
+          "5a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - Extract Product": {
+      "main": [
+        [
+          "6",
+          "7"
+        ]
+      ]
+    },
+    "SEO Research (DataForSEO)": {
+      "main": [
+        [
+          "6a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - DataForSEO": {
+      "main": [
+        [
+          "11"
+        ]
+      ]
+    },
+    "Generate SEO Content (Groq)": {
+      "main": [
+        [
+          "7a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - SEO Content": {
+      "main": [
+        [
+          "8"
+        ]
+      ]
+    },
+    "Technical Validation (Groq)": {
+      "main": [
+        [
+          "8a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - Technical Validation": {
+      "main": [
+        [
+          "9"
+        ]
+      ]
+    },
+    "Switch Plan": {
+      "main": [
+        [
+          "11"
+        ],
+        [
+          "11"
+        ],
+        [
+          "11"
+        ],
+        [
+          "10"
+        ]
+      ]
+    },
+    "GSC Analysis (Groq)": {
+      "main": [
+        [
+          "10a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - GSC": {
+      "main": [
+        [
+          "11"
+        ]
+      ]
+    },
+    "Orchestrator (Groq)": {
+      "main": [
+        [
+          "11a"
+        ]
+      ]
+    },
+    "Log Usage (Supabase) - Orchestrator": {
+      "main": [
+        [
+          "99"
+        ]
+      ]
+    }
+  }
+}
