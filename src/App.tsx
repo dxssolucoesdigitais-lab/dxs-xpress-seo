@@ -3,7 +3,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import ChatPage from "./pages/ChatPage";
@@ -16,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import PaymentSimulationPage from "./pages/PaymentSimulationPage";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -28,12 +28,12 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
-                  <Route path="/" element={<Index />} />
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/:projectId" element={<ChatPage />} />
                   <Route path="/profile" element={<Profile />} />
