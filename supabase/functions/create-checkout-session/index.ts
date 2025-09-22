@@ -20,6 +20,10 @@ const PLANS_USD: { [key: string]: { title: string; price: number; credits: numbe
   premium: { title: "Premium Plan", price: 34, credits: 250 },
 };
 
+const SOUTH_AMERICAN_COUNTRIES = [
+  'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE'
+];
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -42,8 +46,8 @@ serve(async (req) => {
     const country = req.headers.get('x-vercel-ip-country') || 'BR'; // Vercel provides this header
     const { planId } = await req.json();
 
-    // --- Brazil Payment Logic (Mercado Pago) ---
-    if (country === 'BR') {
+    // --- South America Payment Logic (Mercado Pago) ---
+    if (SOUTH_AMERICAN_COUNTRIES.includes(country)) {
       const mpAccessToken = Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN');
       if (!mpAccessToken) throw new Error("Mercado Pago Access Token not configured.");
 
@@ -67,7 +71,7 @@ serve(async (req) => {
 
       return new Response(JSON.stringify({ checkoutUrl: preferenceData.init_point }), { status: 200, headers: corsHeaders });
     } 
-    // --- International Payment Logic (Stripe - Placeholder) ---
+    // --- Rest of the World Payment Logic (Stripe - Placeholder) ---
     else {
       // TODO: Implement Stripe checkout session creation here
       // const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
