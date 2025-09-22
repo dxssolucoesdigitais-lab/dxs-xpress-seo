@@ -322,7 +322,8 @@
       "updateFailed": "Failed to update plan.",
       "loginRequired": "You must be logged in to select a plan.",
       "premiumFeatureRequired": "This feature requires the Premium Plan. Upgrade to unlock.",
-      "checkoutFailed": "Failed to create checkout session. Please try again."
+      "checkoutFailed": "Failed to create checkout session. Please try again.",
+      "internationalPaymentsNotSupported": "We're sorry, international payments are not yet available. We are working on it!"
     },
     "admin": {
       "fetchUsersFailed": "Failed to fetch users.",

@@ -1,10 +1,24 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { MercadoPagoConfig, Preference } from 'https://esm.sh/mercadopago@2.0.9';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+const PLANS_BRL: { [key: string]: { title: string; price: number; credits: number } } = {
+  basic: { title: "Plano Basic", price: 79, credits: 50 },
+  standard: { title: "Plano Standard", price: 149, credits: 100 },
+  premium: { title: "Plano Premium", price: 197, credits: 250 },
+};
+
+// Placeholder for international prices
+const PLANS_USD: { [key: string]: { title: string; price: number; credits: number } } = {
+  basic: { title: "Basic Plan", price: 14, credits: 50 },
+  standard: { title: "Standard Plan", price: 27, credits: 100 },
+  premium: { title: "Premium Plan", price: 34, credits: 250 },
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,63 +26,61 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error("Missing Supabase environment variables.");
-    }
+    // --- Environment Variables ---
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const siteUrl = Deno.env.get('SITE_URL') || 'http://localhost:8080'
     
+    // --- User and Country Detection ---
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-
-    // 1. Obter usuário a partir do cabeçalho de autorização
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Missing Authorization header' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-    const jwt = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(jwt)
-    
-    if (userError || !user) {
-        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
-            status: 401,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+    const authHeader = req.headers.get('Authorization')!
+    const { data: { user } } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
     }
 
-    // 2. Obter planId do corpo da requisição
+    const country = req.headers.get('x-vercel-ip-country') || 'BR'; // Vercel provides this header
     const { planId } = await req.json();
-    if (!planId) {
-      return new Response(JSON.stringify({ error: 'planId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+
+    // --- Brazil Payment Logic (Mercado Pago) ---
+    if (country === 'BR') {
+      const mpAccessToken = Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN');
+      if (!mpAccessToken) throw new Error("Mercado Pago Access Token not configured.");
+
+      const plan = PLANS_BRL[planId];
+      if (!plan) return new Response(JSON.stringify({ error: 'Invalid plan' }), { status: 400, headers: corsHeaders });
+
+      const client = new MercadoPagoConfig({ accessToken: mpAccessToken });
+      const preference = new Preference(client);
+      const notificationUrl = `${supabaseUrl}/functions/v1/mercadopago-webhook`;
+
+      const preferenceData = await preference.create({
+        body: {
+          items: [{ id: planId, title: plan.title, quantity: 1, unit_price: plan.price, currency_id: 'BRL' }],
+          payer: { email: user.email },
+          back_urls: { success: `${siteUrl}/profile`, failure: `${siteUrl}/profile`, pending: `${siteUrl}/profile` },
+          auto_return: 'approved',
+          notification_url: notificationUrl,
+          external_reference: JSON.stringify({ user_id: user.id, plan_id: planId }),
+        },
       });
+
+      return new Response(JSON.stringify({ checkoutUrl: preferenceData.init_point }), { status: 200, headers: corsHeaders });
+    } 
+    // --- International Payment Logic (Stripe - Placeholder) ---
+    else {
+      // TODO: Implement Stripe checkout session creation here
+      // const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+      // if (!stripeSecretKey) throw new Error("Stripe Secret Key not configured.");
+      // const plan = PLANS_USD[planId];
+      // ... Stripe logic ...
+      
+      console.warn(`International payment attempt from ${country}. Stripe integration is pending.`);
+      return new Response(JSON.stringify({ error: 'International payments not yet supported.' }), { status: 501, headers: corsHeaders });
     }
-
-    // 3. SIMULAR a criação de uma sessão de checkout com um provedor de pagamento
-    // Em um cenário real, você usaria o SDK do Stripe/MercadoPago aqui para criar uma sessão,
-    // passando o userId e planId como metadados.
-    console.log(`Simulating checkout session creation for user ${user.id} and plan ${planId}`);
-
-    // Para esta simulação, criamos uma URL de placeholder.
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://pppnieeztijtvwencdng.supabase.co';
-    const checkoutUrl = `${siteUrl}/payment-simulation?status=success&userId=${user.id}&planId=${planId}`;
-    
-    console.log(`Generated simulated checkout URL: ${checkoutUrl}`);
-
-    // 4. Retornar a URL de checkout para o cliente
-    return new Response(JSON.stringify({ checkoutUrl }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
 
   } catch (error) {
-    console.error('Error in create-checkout-session:', error.message);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    console.error('Error creating checkout session:', error);
+    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: corsHeaders });
   }
 })
