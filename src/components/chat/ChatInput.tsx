@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { showError } from '@/utils/toast';
+import { Button } from '@/components/ui/button';
 
 interface ChatInputProps {
   project: Project;
@@ -45,7 +46,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
   const isApprovable = useMemo(() => {
     if (!latestUnapprovedStep) return false;
-    const isOptionList = Array.isArray(latestUnapprovedStep.llm_output) && latestUnapprovedStep.llm_output.length > 0;
+    const isOptionList = Array.isArray(latestUnapprovedStep.llm_output) && latestUnapprovedStep.llm_output.length > 0 && typeof latestUnapprovedStep.llm_output[0] === 'object' && 'content' in latestUnapprovedStep.llm_output[0];
     return !isOptionList;
   }, [latestUnapprovedStep]);
 
@@ -88,22 +89,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
-  const ActionButton: React.FC<{ onClick: () => void; disabled: boolean; tooltip: string; children: React.ReactNode; showTooltip: boolean }> = ({ onClick, disabled, tooltip, children, showTooltip }) => (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="inline-block">
-          <button onClick={onClick} disabled={disabled} className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-            {children}
-          </button>
-        </div>
-      </TooltipTrigger>
-      {showTooltip && <TooltipContent><p>{tooltip}</p></TooltipContent>}
-    </Tooltip>
-  );
-
   return (
     <>
-      <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
+      <div className="p-4 bg-background border-t border-border">
         <div className="relative mb-4">
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
@@ -116,32 +104,36 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          <ActionButton onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} tooltip={t('chatInput.noCreditsTooltip')} showTooltip={!hasCredits}>
-            👍 {t('chatInput.approve')}
-          </ActionButton>
-          <ActionButton onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} tooltip={t('chatInput.noCreditsTooltip')} showTooltip={!hasCredits}>
-            {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-            {t('chatInput.regenerate')}
-          </ActionButton>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} variant="outline" size="sm" className="rounded-full">
+                👍 {t('chatInput.approve')}
+              </Button>
+            </TooltipTrigger>
+            {!hasCredits && <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>}
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} variant="outline" size="sm" className="rounded-full">
+                {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+                {t('chatInput.regenerate')}
+              </Button>
+            </TooltipTrigger>
+            {!hasCredits && <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>}
+          </Tooltip>
           
           <DropdownMenu>
             <Tooltip>
               <TooltipTrigger asChild>
                 <DropdownMenuTrigger asChild>
-                  <div className="inline-block">
-                    <button
-                      disabled={isDisabled || !hasCredits}
-                      className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-                    >
-                      <Paperclip className="mr-2 h-4 w-4" />
-                      {t('chatInput.analyze')}
-                    </button>
-                  </div>
+                  <Button disabled={isDisabled || !hasCredits} variant="outline" size="sm" className="rounded-full">
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    {t('chatInput.analyze')}
+                  </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
-              {!hasCredits ? (
-                <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>
-              ) : null}
+              {!hasCredits && <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>}
             </Tooltip>
             <DropdownMenuContent>
               <DropdownMenuItem onSelect={() => handleAnalyzeClick('upload')} className="cursor-pointer">
@@ -153,18 +145,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <ActionButton onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} tooltip={t('chatInput.noCreditsToResumeTooltip')} showTooltip={project.status === 'paused' && !hasCredits}>
-            {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-              project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
-            {project.status === 'paused' ? t('chatInput.resume') : t('chatInput.pause')}
-          </ActionButton>
-          <button 
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} variant="outline" size="sm" className="rounded-full">
+                {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
+                  project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
+                {project.status === 'paused' ? t('chatInput.resume') : t('chatInput.pause')}
+              </Button>
+            </TooltipTrigger>
+            {project.status === 'paused' && !hasCredits && <TooltipContent><p>{t('chatInput.noCreditsToResumeTooltip')}</p></TooltipContent>}
+          </Tooltip>
+
+          <Button 
             onClick={() => setIsHistoryOpen(true)}
-            className="px-3 py-1.5 text-sm text-muted-foreground bg-secondary border border-border rounded-full hover:bg-accent transition-all flex items-center"
+            variant="outline" size="sm" className="rounded-full"
           >
             <BookText className="mr-2 h-4 w-4" />
             {t('chatInput.viewHistory')}
-          </button>
+          </Button>
         </div>
       </div>
       <ProjectHistorySheet 
