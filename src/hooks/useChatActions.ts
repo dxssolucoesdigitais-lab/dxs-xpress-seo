@@ -27,14 +27,23 @@ const triggerNextStep = async (projectId: string) => {
 export const useChatActions = () => {
   const updateStepResult = async (stepResult: StepResult, updateData: { user_selection?: LlmOption, approved: boolean }) => {
     try {
-      const { error } = await supabase
+      // 1. Update the current step result (mark as approved/save selection)
+      const { error: updateStepError } = await supabase
         .from('step_results')
         .update(updateData)
         .eq('id', stepResult.id);
 
-      if (error) throw error;
+      if (updateStepError) throw updateStepError;
       showSuccess('toasts.chat.responseSaved');
 
+      // 2. Increment the project's current step using the RPC function
+      const { error: rpcError } = await supabase.rpc('increment_project_step', {
+        project_id_param: stepResult.project_id
+      });
+
+      if (rpcError) throw rpcError;
+
+      // 3. Trigger the generation of the new current step
       await triggerNextStep(stepResult.project_id);
 
     } catch (error: any) {
@@ -65,6 +74,7 @@ export const useChatActions = () => {
         }
       } else {
         showSuccess('toasts.chat.regenerating');
+        // After deleting the old step, trigger the generation again for the same step number.
         await triggerNextStep(stepResult.project_id);
       }
     } catch (error: any) {
