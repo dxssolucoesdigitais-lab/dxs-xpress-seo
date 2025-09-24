@@ -15,9 +15,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
     <div className="flex items-center justify-between p-4 border-b border-border glass-effect z-10">
       <div className="flex items-center gap-3">
         <div className="relative w-10 h-10">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-cyan-400 animate-pulse-glow flex items-center justify-center text-xl">
-            🎯
-          </div>
+          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain" />
           <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
         </div>
         <span className="text-lg font-bold text-foreground">{t('chatHeader.assistantName')}</span>
