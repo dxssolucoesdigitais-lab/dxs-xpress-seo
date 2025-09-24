@@ -7,7 +7,8 @@ import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const N8nTestPage = () => {
-  const [webhookUrl, setWebhookUrl] = useState('https://192.168.0.216:5678/webhook/c3a08b91-3233-4030-804a-122211803033');
+  // Cole sua nova URL do n8n Cloud aqui!
+  const [webhookUrl, setWebhookUrl] = useState('COLE_AQUI_SUA_NOVA_URL_DO_N8N_CLOUD');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +28,6 @@ const N8nTestPage = () => {
         body: JSON.stringify(testPayload),
       });
 
-      // A resposta do webhook inicial do n8n
       const responseData = await res.json();
       let responseText = "Resposta recebida do webhook inicial do n8n:\n";
       responseText += JSON.stringify(responseData, null, 2);
@@ -35,9 +35,9 @@ const N8nTestPage = () => {
       setResponse(responseText);
 
     } catch (error: any) {
-      let errorMessage = `Request failed. This is expected if your n8n instance is using a self-signed certificate (HTTPS on a local IP) or if CORS is not configured.\n\n`;
-      errorMessage += `Please check your browser's developer console (F12) for the specific error message (e.g., CORS policy, NET::ERR_CERT_AUTHORITY_INVALID).\n\n`;
-      errorMessage += `Error caught: ${error.message}`;
+      let errorMessage = `A requisição falhou. Verifique se a URL está correta e se o fluxo no n8n está ativo.\n\n`;
+      errorMessage += `Erro: ${error.message}\n\n`;
+      errorMessage += `Verifique o console do desenvolvedor (F12) para mais detalhes.`;
       setResponse(errorMessage);
     } finally {
       setIsLoading(false);
