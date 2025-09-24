@@ -127,7 +127,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             <Tooltip>
               <TooltipTrigger asChild>
                 <DropdownMenuTrigger asChild>
-                  <Button disabled={isDisabled || !hasCredits} variant="outline" size="sm" className="rounded-full">
+                  <Button disabled={isDisabled || !hasCredits} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
                     <Paperclip className="mr-2 h-4 w-4" />
                     {t('chatInput.analyze')}
                   </Button>
@@ -147,7 +147,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} variant="outline" size="sm" className="rounded-full">
+              <Button onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
                 {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
                   project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
                 {project.status === 'paused' ? t('chatInput.resume') : t('chatInput.pause')}
@@ -158,7 +158,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
           <Button 
             onClick={() => setIsHistoryOpen(true)}
-            variant="outline" size="sm" className="rounded-full"
+            size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
           >
             <BookText className="mr-2 h-4 w-4" />
             {t('chatInput.viewHistory')}
