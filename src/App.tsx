@@ -16,6 +16,7 @@ import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import PaymentSimulationPage from "./pages/PaymentSimulationPage";
 import LandingPage from "./pages/LandingPage";
+import N8nTestPage from "./pages/N8nTestPage";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
+              <Route path="/n8n-test" element={<N8nTestPage />} />
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
