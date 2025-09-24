@@ -6,53 +6,19 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// MOCK AI RESPONSES - Simula as chamadas de LLM para teste
-const generateMockContent = (stepNumber: number, project: any) => {
-  const { project_name, extracted_data } = project;
-  const collectionName = extracted_data?.collection_name || "Sua Coleção";
-  const productName = extracted_data?.product_name || "Seu Produto";
-
-  switch (stepNumber) {
-    case 1:
-      return `<h2>${collectionName}: Performance e Estilo para Sua Rotina</h2><p>Descubra nossa coleção exclusiva, desenvolvida para quem busca máximo desempenho e conforto. Combine tecnologia avançada com design moderno.</p>`;
-    case 2:
-      return [
-        { number: 1, content: `${collectionName} Incrível e Educativa | ${project_name}` },
-        { number: 2, content: `Jogos Educativos para Crianças - ${collectionName}` },
-        { number: 3, content: `${collectionName}: Jogos Educativos e Interativos` },
-        { number: 4, content: `Jogos Divertidos e Educativos para a Família | ${collectionName}` },
-        { number: 5, content: `Melhores Brinquedos Educativos para Crianças e Família` },
-      ];
-    case 3:
-      return `Descubra a coleção ${collectionName}! Jogos educativos e divertidos para crianças e toda a família. Estimule o aprendizado e a criatividade com nossos brinquedos interativos. Compre agora!`;
-    // Adicionar mais casos para as outras etapas conforme necessário
-    default:
-      return { message: `Conteúdo simulado para a etapa ${stepNumber}` };
-  }
-};
-
-const STEP_CONFIG: { [key: number]: { name: string; plan: string[] } } = {
-  1: { name: "Título H2 da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
-  2: { name: "Meta Title da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
-  3: { name: "Meta Description da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
-  4: { name: "Descrição do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
-  5: { name: "Meta Title do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
-  6: { name: "Meta Description do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
-  7: { name: "Artigo de Blog Complementar", plan: ['free', 'standard', 'premium'] },
-  8: { name: "Legendas para Redes Sociais/Ads", plan: ['free', 'premium'] },
-  9: { name: "Validação Técnica Especializada", plan: ['free', 'standard', 'premium'] },
-};
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
+    // --- Environment & Client Setup ---
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error("Missing Supabase environment variables.");
+    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL') // <-- Novo segredo!
+
+    if (!supabaseUrl || !serviceRoleKey || !n8nWebhookUrl) {
+      throw new Error("Missing environment variables (Supabase or n8n Webhook).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -64,7 +30,7 @@ serve(async (req) => {
       });
     }
 
-    // 1. Fetch Project and User data
+    // --- Fetch Project & User Data ---
     const { data: project, error: projectError } = await supabaseAdmin
       .from('projects')
       .select('*')
@@ -91,7 +57,7 @@ serve(async (req) => {
       });
     }
 
-    // 2. Validate conditions
+    // --- Validation ---
     if (project.status !== 'in_progress') {
       return new Response(JSON.stringify({ message: `Project status is '${project.status}'. No action taken.` }), {
         status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -105,38 +71,23 @@ serve(async (req) => {
       });
     }
 
-    // 3. Execute the correct step
-    const currentStepNumber = project.current_step;
-    const stepInfo = STEP_CONFIG[currentStepNumber];
+    // --- Trigger n8n Workflow ---
+    // We don't wait for the response (`await`) because n8n can take time.
+    // This is a "fire and forget" approach. n8n will post the result back to our DB.
+    fetch(n8nWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        projectId: project.id,
+        userId: user.id,
+        planType: user.plan_type,
+        currentStep: project.current_step,
+        projectData: project, // Send all project data for context
+      }),
+    }).catch(err => console.error("Error triggering n8n webhook:", err));
 
-    if (!stepInfo) {
-      // No more steps, complete the project
-      await supabaseAdmin.from('projects').update({ status: 'completed' }).eq('id', projectId);
-      return new Response(JSON.stringify({ message: 'Project completed successfully.' }), {
-        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-    
-    // TODO: Implement plan-based logic here. For now, we assume premium.
-
-    // Simulate LLM call
-    const llmOutput = generateMockContent(currentStepNumber, project);
-
-    // 4. Save the result
-    const { error: insertError } = await supabaseAdmin
-      .from('step_results')
-      .insert({
-        project_id: projectId,
-        step_number: currentStepNumber,
-        step_name: stepInfo.name,
-        llm_output: llmOutput,
-      });
-
-    if (insertError) throw insertError;
-
-    // Note: Credit deduction is handled by a database trigger on `step_results` insert.
-
-    return new Response(JSON.stringify({ message: `Step ${currentStepNumber} executed successfully.` }), {
+    // --- Respond Immediately to the Client ---
+    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully.` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
