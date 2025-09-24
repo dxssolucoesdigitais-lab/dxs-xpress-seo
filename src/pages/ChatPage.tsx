@@ -134,7 +134,7 @@ const ChatPage: React.FC = () => {
           <form onSubmit={handleSendMessage} className="relative">
             <Input
               className="w-full bg-transparent border-border rounded-2xl p-4 pl-12 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect"
-              placeholder={t('chat.startPrompt')}
+              placeholder={t('chat.startPlaceholder')}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               disabled={isSending}
