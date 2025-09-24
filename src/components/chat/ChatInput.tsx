@@ -106,7 +106,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
         <div className="flex items-center justify-center gap-2 flex-wrap">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} variant="outline" size="sm" className="rounded-full">
+              <Button onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
                 👍 {t('chatInput.approve')}
               </Button>
             </TooltipTrigger>
@@ -115,7 +115,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} variant="outline" size="sm" className="rounded-full">
+              <Button onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
                 {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
                 {t('chatInput.regenerate')}
               </Button>

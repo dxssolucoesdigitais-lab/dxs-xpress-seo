@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { useProjects } from '@/hooks/useProjects';
@@ -9,6 +9,17 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Skeleton } from '../ui/skeleton';
 import { Button } from '../ui/button';
 import { useTranslation } from 'react-i18next';
+import { Project } from '@/types/database.types';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
@@ -26,7 +37,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
   const location = useLocation();
   const { projectId } = useParams<{ projectId: string }>();
   const { user } = useSession();
-  const { projects, loading } = useProjects();
+  const { projects, loading, deleteProject } = useProjects();
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   const availableNav = mainNavigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
 
@@ -35,78 +47,117 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
     onOpenChange(false);
   };
 
+  const handleDeleteClick = (e: React.MouseEvent, project: Project) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setProjectToDelete(project);
+  };
+
+  const confirmDelete = () => {
+    if (projectToDelete) {
+      deleteProject(projectToDelete.id);
+      setProjectToDelete(null);
+    }
+  };
+
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-64 bg-background border-r border-border p-0 flex flex-col">
-        <div className="flex items-center h-16 px-4 border-b border-border">
-          <Link to="/chat" onClick={() => onOpenChange(false)} className="text-xl font-bold">
-            XpressSEO
-          </Link>
-        </div>
-        <div className="p-4">
-          <Button asChild variant="outline" className="w-full justify-start">
-            <Link to="/chat" onClick={() => onOpenChange(false)}>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              {t('newProject')}
+    <>
+      <Sheet open={isOpen} onOpenChange={onOpenChange}>
+        <SheetContent side="left" className="w-64 bg-background border-r border-border p-0 flex flex-col">
+          <div className="flex items-center h-16 px-4 border-b border-border">
+            <Link to="/chat" onClick={() => onOpenChange(false)} className="text-xl font-bold">
+              XpressSEO
             </Link>
-          </Button>
-        </div>
-        <ScrollArea className="flex-1 px-4">
-          <nav className="flex-1 space-y-1">
-            {loading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            ) : (
-              projects.map((project) => (
-                <Link
-                  key={project.id}
-                  to={`/chat/${project.id}`}
-                  onClick={() => onOpenChange(false)}
-                  className={cn(
-                    'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors truncate',
-                    projectId === project.id
-                      ? 'bg-accent text-accent-foreground'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                  )}
-                >
-                  <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
-                  <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
-                </Link>
-              ))
-            )}
-          </nav>
-        </ScrollArea>
-        <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
-          {availableNav.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              onClick={() => onOpenChange(false)}
-              className={cn(
-                'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                location.pathname.startsWith(item.href)
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+          </div>
+          <div className="p-4">
+            <Button asChild variant="outline" className="w-full justify-start">
+              <Link to="/chat" onClick={() => onOpenChange(false)}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                {t('newProject')}
+              </Link>
+            </Button>
+          </div>
+          <ScrollArea className="flex-1 px-4">
+            <nav className="flex-1 space-y-1">
+              {loading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              ) : (
+                projects.map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/chat/${project.id}`}
+                    onClick={() => onOpenChange(false)}
+                    className={cn(
+                      'group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      projectId === project.id
+                        ? 'bg-accent text-accent-foreground'
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    )}
+                  >
+                    <div className="flex items-center truncate">
+                      <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
+                      <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
+                    </div>
+                     <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => handleDeleteClick(e, project)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                ))
               )}
+            </nav>
+          </ScrollArea>
+          <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
+            {availableNav.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                onClick={() => onOpenChange(false)}
+                className={cn(
+                  'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                  location.pathname.startsWith(item.href)
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                )}
+              >
+                <item.icon className="mr-3 h-5 w-5" />
+                {item.name}
+              </Link>
+            ))}
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3"
+              onClick={handleFeedbackClick}
             >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.name}
-            </Link>
-          ))}
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3"
-            onClick={handleFeedbackClick}
-          >
-            <MessageCircleQuestion className="mr-3 h-5 w-5" />
-            {t('feedbackDialog.button')}
-          </Button>
-        </nav>
-      </SheetContent>
-    </Sheet>
+              <MessageCircleQuestion className="mr-3 h-5 w-5" />
+              {t('feedbackDialog.button')}
+            </Button>
+          </nav>
+        </SheetContent>
+      </Sheet>
+      <AlertDialog open={!!projectToDelete} onOpenChange={(isOpen) => !isOpen && setProjectToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('deleteDialog.description', { projectName: projectToDelete?.project_name })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setProjectToDelete(null)}>{t('deleteDialog.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>{t('deleteDialog.confirm')}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
