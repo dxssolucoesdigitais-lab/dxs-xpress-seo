@@ -64,15 +64,6 @@ export const useChat = (project: Project | null) => {
 
     const chatMessages = data.flatMap(step => transformStepToMessages(step, t));
     
-    if (chatMessages.length === 0 && project) {
-      chatMessages.push({
-        id: 'welcome-message',
-        author: 'ai',
-        createdAt: new Date().toISOString(),
-        content: t('chat.welcomeMessage', { userName: user?.full_name || '', projectName: project.project_name }),
-      });
-    }
-    
     return chatMessages;
   };
 

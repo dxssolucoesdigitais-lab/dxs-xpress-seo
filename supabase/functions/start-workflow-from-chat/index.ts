@@ -53,8 +53,8 @@ serve(async (req) => {
       });
     }
 
-    // Create a new project
-    const projectName = `Chat Session - ${new Date().toLocaleString()}`;
+    // Create a new project with a simpler name
+    const projectName = `Análise de ${prompt.substring(0, 40)}...`;
     const { data: newProject, error: createError } = await supabaseAdmin
       .from('projects')
       .insert({
