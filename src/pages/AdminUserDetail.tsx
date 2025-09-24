@@ -192,7 +192,7 @@ const AdminUserDetail = () => {
                   {projects.map(project => (
                     <TableRow key={project.id}>
                       <TableCell>
-                        <Link to={`/project/${project.id}`} className="hover:text-cyan-400 font-medium">
+                        <Link to={`/chat/${project.id}`} className="hover:text-cyan-400 font-medium">
                           {project.project_name}
                         </Link>
                       </TableCell>

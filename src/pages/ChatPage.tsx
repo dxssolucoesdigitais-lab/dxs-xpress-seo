@@ -9,7 +9,7 @@ import MessageList from "@/components/chat/MessageList";
 import ErrorDisplay from "@/components/chat/ErrorDisplay";
 import EmptyChat from "@/components/chat/EmptyChat";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Send, Loader2, Paperclip, Award } from 'lucide-react';
+import { Send, Loader2, Paperclip } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +53,6 @@ const ChatPage: React.FC = () => {
   const userPlan = sessionUser?.plan_type || 'free';
   const isFreeTrial = userPlan === 'free';
   const canUploadFile = userPlan === 'premium' || isFreeTrial;
-  // Análise de link é liberada para todos os planos autenticados
   const canAnalyzeLink = true;
 
   const handleAnalyzeClick = (type: 'upload' | 'link') => {
@@ -64,7 +63,7 @@ const ChatPage: React.FC = () => {
       }
       alert(t('chatInput.uploadFile') + ' - Funcionalidade em breve!');
     } else if (type === 'link') {
-      if (!canAnalyzeLink) return; // Verificação de segurança, embora todos devam ter acesso
+      if (!canAnalyzeLink) return;
       alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
     }
   };
@@ -97,7 +96,7 @@ const ChatPage: React.FC = () => {
     }
   };
 
-  const isLoading = projectLoading || (!!project && chatLoading);
+  const isLoading = projectLoading || (projectId && chatLoading);
 
   const isAiTyping = useMemo(() => {
     if (isLoading || !project || messages.length === 0 || project.status !== 'in_progress') {
