@@ -1,19 +1,45 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 
-const supabaseUrl = Deno.env.get('SUPABASE_URL')
-const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-
-// Webhook URLs from environment variables (secrets)
-const N8N_BRONZE_WEBHOOK_URL = Deno.env.get('N8N_BRONZE_WEBHOOK_URL')
-const N8N_PRATA_WEBHOOK_URL = Deno.env.get('N8N_PRATA_WEBHOOK_URL')
-const N8N_PREMIUM_WEBHOOK_URL = Deno.env.get('N8N_PREMIUM_WEBHOOK_URL')
-const N8N_DEFAULT_WEBHOOK_URL = Deno.env.get('N8N_DEFAULT_WEBHOOK_URL') // For free/default plan
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+// MOCK AI RESPONSES - Simula as chamadas de LLM para teste
+const generateMockContent = (stepNumber: number, project: any) => {
+  const { project_name, extracted_data } = project;
+  const collectionName = extracted_data?.collection_name || "Sua Coleção";
+  const productName = extracted_data?.product_name || "Seu Produto";
+
+  switch (stepNumber) {
+    case 1:
+      return `<h2>${collectionName}: Performance e Estilo para Sua Rotina</h2><p>Descubra nossa coleção exclusiva, desenvolvida para quem busca máximo desempenho e conforto. Combine tecnologia avançada com design moderno.</p>`;
+    case 2:
+      return [
+        { number: 1, content: `${collectionName} Incrível e Educativa | ${project_name}` },
+        { number: 2, content: `Jogos Educativos para Crianças - ${collectionName}` },
+        { number: 3, content: `${collectionName}: Jogos Educativos e Interativos` },
+        { number: 4, content: `Jogos Divertidos e Educativos para a Família | ${collectionName}` },
+        { number: 5, content: `Melhores Brinquedos Educativos para Crianças e Família` },
+      ];
+    // Adicionar mais casos para as outras etapas conforme necessário
+    default:
+      return { message: `Conteúdo simulado para a etapa ${stepNumber}` };
+  }
+};
+
+const STEP_CONFIG: { [key: number]: { name: string; plan: string[] } } = {
+  1: { name: "Título H2 da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
+  2: { name: "Meta Title da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
+  3: { name: "Meta Description da Coleção", plan: ['free', 'basic', 'standard', 'premium'] },
+  4: { name: "Descrição do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
+  5: { name: "Meta Title do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
+  6: { name: "Meta Description do Produto", plan: ['free', 'basic', 'standard', 'premium'] },
+  7: { name: "Artigo de Blog Complementar", plan: ['free', 'standard', 'premium'] },
+  8: { name: "Legendas para Redes Sociais/Ads", plan: ['free', 'premium'] },
+  9: { name: "Validação Técnica Especializada", plan: ['free', 'standard', 'premium'] },
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -21,6 +47,8 @@ serve(async (req) => {
   }
 
   try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error("Missing Supabase environment variables.");
     }
@@ -30,35 +58,24 @@ serve(async (req) => {
 
     if (!projectId) {
       return new Response(JSON.stringify({ error: 'projectId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Get project details
+    // 1. Fetch Project and User data
     const { data: project, error: projectError } = await supabaseAdmin
       .from('projects')
-      .select('user_id, status')
+      .select('*')
       .eq('id', projectId)
       .single();
 
     if (projectError) throw projectError;
     if (!project) {
       return new Response(JSON.stringify({ error: 'Project not found' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Prevent workflow trigger if project is not in progress
-    if (project.status !== 'in_progress') {
-      return new Response(JSON.stringify({ error: `Project is not in progress. Current status: ${project.status}` }), {
-        status: 409, // Conflict
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Get user's credits and plan type
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
       .select('credits_remaining, plan_type')
@@ -68,56 +85,56 @@ serve(async (req) => {
     if (userError) throw userError;
     if (!user) {
       return new Response(JSON.stringify({ error: 'User not found' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Check if the user has enough credits
+    // 2. Validate conditions
+    if (project.status !== 'in_progress') {
+      return new Response(JSON.stringify({ message: `Project status is '${project.status}'. No action taken.` }), {
+        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     if (user.credits_remaining <= 0) {
-      return new Response(JSON.stringify({ error: 'Insufficient credits to start the next step.' }), {
-        status: 402, // Payment Required
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      await supabaseAdmin.from('projects').update({ status: 'paused' }).eq('id', projectId);
+      return new Response(JSON.stringify({ error: 'Insufficient credits.' }), {
+        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Determine which webhook to call based on the user's plan
-    let webhookUrl;
-    switch (user.plan_type) {
-      case 'bronze':
-        webhookUrl = N8N_BRONZE_WEBHOOK_URL;
-        break;
-      case 'prata':
-        webhookUrl = N8N_PRATA_WEBHOOK_URL;
-        break;
-      case 'premium':
-        webhookUrl = N8N_PREMIUM_WEBHOOK_URL;
-        break;
-      default:
-        webhookUrl = N8N_DEFAULT_WEBHOOK_URL; // Fallback for 'free' or null plans
+    // 3. Execute the correct step
+    const currentStepNumber = project.current_step;
+    const stepInfo = STEP_CONFIG[currentStepNumber];
+
+    if (!stepInfo) {
+      // No more steps, complete the project
+      await supabaseAdmin.from('projects').update({ status: 'completed' }).eq('id', projectId);
+      return new Response(JSON.stringify({ message: 'Project completed successfully.' }), {
+        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
-
-    if (!webhookUrl) {
-      console.error(`No webhook URL configured for plan: ${user.plan_type || 'default'}`);
-      throw new Error(`Workflow for plan '${user.plan_type || 'default'}' is not configured.`);
-    }
-
-    // Trigger the n8n workflow
-    const webhookResponse = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ projectId }),
-    });
-
-    if (!webhookResponse.ok) {
-      const errorBody = await webhookResponse.text();
-      console.error(`Webhook for plan ${user.plan_type} failed for project ${projectId}. Status: ${webhookResponse.status}. Body: ${errorBody}`);
-      throw new Error(`Failed to trigger workflow. n8n webhook returned status ${webhookResponse.status}.`);
-    }
-
-    console.log(`User ${project.user_id} (Plan: ${user.plan_type}) has ${user.credits_remaining} credits. Successfully triggered workflow for project: ${projectId}`);
     
-    return new Response(JSON.stringify({ message: `Workflow triggered for project ${projectId} using ${user.plan_type} plan.` }), {
+    // TODO: Implement plan-based logic here. For now, we assume premium.
+
+    // Simulate LLM call
+    const llmOutput = generateMockContent(currentStepNumber, project);
+
+    // 4. Save the result
+    const { error: insertError } = await supabaseAdmin
+      .from('step_results')
+      .insert({
+        project_id: projectId,
+        step_number: currentStepNumber,
+        step_name: stepInfo.name,
+        llm_output: llmOutput,
+      });
+
+    if (insertError) throw insertError;
+
+    // Note: Credit deduction is handled by a database trigger on `step_results` insert.
+
+    return new Response(JSON.stringify({ message: `Step ${currentStepNumber} executed successfully.` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
