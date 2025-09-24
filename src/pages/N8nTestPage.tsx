@@ -1,37 +1,18 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 const N8nTestPage = () => {
-  const [webhookUrl, setWebhookUrl] = useState('https://192.168.0.216:5678/webhook-test/saas-seo-start');
-  const [projectId, setProjectId] = useState('test-project-123');
-  const [userId, setUserId] = useState('test-user-456');
-  const [planType, setPlanType] = useState('premium');
-  const [currentStep, setCurrentStep] = useState(1);
-  const [productLink, setProductLink] = useState('https://www.examplestore.com/product/widget');
-  
+  const [webhookUrl, setWebhookUrl] = useState('https://192.168.0.216:5678/webhook/c3a08b91-3233-4030-804a-122211803033');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const testPayload = {
-    projectId,
-    userId,
-    planType,
-    currentStep,
-    projectData: {
-      id: projectId,
-      user_id: userId,
-      project_name: "Test Project from UI",
-      product_link: productLink,
-      target_country: "BR",
-      target_audience: "Tech enthusiasts",
-      current_step: currentStep,
-      status: 'in_progress',
-    }
+    message: "Oi"
   };
 
   const handleTest = async () => {
@@ -46,8 +27,12 @@ const N8nTestPage = () => {
         body: JSON.stringify(testPayload),
       });
 
+      // A resposta do webhook inicial do n8n
       const responseData = await res.json();
-      setResponse(JSON.stringify(responseData, null, 2));
+      let responseText = "Resposta recebida do webhook inicial do n8n:\n";
+      responseText += JSON.stringify(responseData, null, 2);
+      responseText += "\n\nAgora, verifique a aba do seu navegador com o webhook.site para ver a 'resposta da AI' que o n8n enviou.";
+      setResponse(responseText);
 
     } catch (error: any) {
       let errorMessage = `Request failed. This is expected if your n8n instance is using a self-signed certificate (HTTPS on a local IP) or if CORS is not configured.\n\n`;
@@ -61,60 +46,51 @@ const N8nTestPage = () => {
 
   return (
     <div className="container max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-      <h1 className="text-3xl font-bold mb-8">n8n Workflow Test Page</h1>
+      <h1 className="text-3xl font-bold mb-8">n8n Ping-Pong Test Page</h1>
       <p className="text-muted-foreground mb-6">
-        Use this page to send a test request directly from your browser to your local n8n webhook. This bypasses Supabase and helps confirm your n8n workflow is receiving data correctly.
+        Use esta página para enviar uma mensagem "Oi" para o seu webhook n8n e verificar se ele envia uma "resposta da AI" para o webhook.site.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card className="glass-effect border-border text-card-foreground">
           <CardHeader>
-            <CardTitle>1. Configuration</CardTitle>
-            <CardDescription>Set the webhook URL and payload data.</CardDescription>
+            <CardTitle>1. Configuração</CardTitle>
+            <CardDescription>Verifique a URL do webhook do seu novo fluxo "Ping Pong".</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="webhookUrl">n8n Webhook URL</Label>
+              <Label htmlFor="webhookUrl">URL do Webhook n8n (Input)</Label>
               <Input id="webhookUrl" value={webhookUrl} onChange={(e) => setWebhookUrl(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="projectId">Project ID</Label>
-              <Input id="projectId" value={projectId} onChange={(e) => setProjectId(e.target.value)} />
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="userId">User ID</Label>
-              <Input id="userId" value={userId} onChange={(e) => setUserId(e.target.value)} />
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="productLink">Product Link</Label>
-              <Input id="productLink" value={productLink} onChange={(e) => setProductLink(e.target.value)} />
+              <p className="text-xs text-muted-foreground">
+                Copie a URL do webhook do seu nó "When webhook is called" no n8n e cole aqui.
+              </p>
             </div>
             <Button onClick={handleTest} className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Send Test Request
+              Enviar "Oi"
             </Button>
           </CardContent>
         </Card>
 
         <Card className="glass-effect border-border text-card-foreground">
           <CardHeader>
-            <CardTitle>2. Request & Response</CardTitle>
-            <CardDescription>Review the data sent and the response received.</CardDescription>
+            <CardTitle>2. Resultados</CardTitle>
+            <CardDescription>Veja a resposta do n8n e verifique o webhook.site.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label>Request Body (Payload)</Label>
+              <Label>Request Body (Payload Enviado)</Label>
               <Textarea
                 readOnly
                 value={JSON.stringify(testPayload, null, 2)}
-                className="font-mono text-xs h-48 mt-2"
+                className="font-mono text-xs h-24 mt-2"
               />
             </div>
             <div>
-              <Label>Response from n8n</Label>
+              <Label>Resposta Imediata do n8n</Label>
               <Textarea
                 readOnly
-                value={response || 'Click "Send Test Request" to see the response here.'}
+                value={response || 'Clique em "Enviar Oi" para ver a resposta aqui.'}
                 className="font-mono text-xs h-48 mt-2"
               />
             </div>
