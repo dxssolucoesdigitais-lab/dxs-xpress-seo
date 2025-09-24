@@ -23,6 +23,8 @@ const generateMockContent = (stepNumber: number, project: any) => {
         { number: 4, content: `Jogos Divertidos e Educativos para a Família | ${collectionName}` },
         { number: 5, content: `Melhores Brinquedos Educativos para Crianças e Família` },
       ];
+    case 3:
+      return `Descubra a coleção ${collectionName}! Jogos educativos e divertidos para crianças e toda a família. Estimule o aprendizado e a criatividade com nossos brinquedos interativos. Compre agora!`;
     // Adicionar mais casos para as outras etapas conforme necessário
     default:
       return { message: `Conteúdo simulado para a etapa ${stepNumber}` };
