@@ -52,9 +52,10 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
 interface MessageListProps {
   messages: ChatMessage[];
   isAiTyping: boolean;
+  currentStep?: number;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep }) => {
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -70,7 +71,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping }) => {
       {messages.map((message) => (
         <MessageRenderer key={message.id} message={message} />
       ))}
-      {isAiTyping && <TypingIndicator />}
+      {isAiTyping && <TypingIndicator currentStep={currentStep} />}
       <div ref={messagesEndRef} />
     </div>
   );

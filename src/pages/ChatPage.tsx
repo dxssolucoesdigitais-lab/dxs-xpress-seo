@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
@@ -9,11 +9,11 @@ import MessageList from "@/components/chat/MessageList";
 import ErrorDisplay from "@/components/chat/ErrorDisplay";
 import EmptyChat from "@/components/chat/EmptyChat";
 import { Skeleton } from '@/components/ui/skeleton';
-import { Send, Loader2, Paperclip } from 'lucide-react';
+import { Send, Loader2, Paperclip, Award } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import { showError } from '@/utils/toast';
+import { showError, showSuccess } from '@/utils/toast';
 import { Project } from '@/types/database.types';
 import { useSession } from '@/contexts/SessionContext';
 import {
@@ -22,6 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Confetti from 'react-confetti';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -34,6 +36,19 @@ const ChatPage: React.FC = () => {
   
   const [prompt, setPrompt] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const { width, height } = useWindowSize();
+  const previousStatus = useRef<string | undefined>();
+
+  useEffect(() => {
+    if (project?.status === 'completed' && previousStatus.current !== 'completed') {
+      setShowConfetti(true);
+      showSuccess("Projeto concluído com sucesso! 🎉");
+      setTimeout(() => setShowConfetti(false), 8000); // Confetti por 8 segundos
+    }
+    previousStatus.current = project?.status;
+  }, [project?.status]);
+
 
   const userPlan = sessionUser?.plan_type || 'free';
   const isFreeTrial = userPlan === 'free';
@@ -151,8 +166,9 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-background text-foreground">
+      {showConfetti && <Confetti width={width} height={height} />}
       <ChatHeader project={project} />
-      <MessageList messages={messages} isAiTyping={isAiTyping} />
+      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project.current_step} />
       {project.status === 'error' && <ErrorDisplay />}
       <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
     </div>

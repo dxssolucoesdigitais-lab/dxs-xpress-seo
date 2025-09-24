@@ -106,6 +106,21 @@
   }
 }
 
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(-15px) rotate(5deg); opacity: 0.8; }
+  100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+}
+
+.ai-thinking::before {
+  content: "✨";
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  font-size: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
 @keyframes typing-dots {
   0%, 60%, 100% { transform: translateY(0); }
   30% { transform: translateY(-5px); }
