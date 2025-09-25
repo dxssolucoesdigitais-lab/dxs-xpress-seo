@@ -7,7 +7,7 @@ const HeroSection = () => {
     <section className="relative text-center py-20 md:py-32 lg:py-40 overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/[0.05] [mask-image:linear-gradient(to_bottom,white_5%,transparent_100%)]"></div>
       <div className="container mx-auto px-4 relative z-10">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400 leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400 leading-snug">
           Transforme de Forma Inteligente Sua Loja de Dropshipping com XpressSEO
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
