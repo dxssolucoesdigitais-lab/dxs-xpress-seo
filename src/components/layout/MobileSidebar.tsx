@@ -101,15 +101,19 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6 flex-shrink-0"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); alert('Função de renomear em breve!'); }}>
+                        <DropdownMenuItem onSelect={() => alert('Função de renomear em breve!')}>
                           Renomear
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setProjectToDelete(project); }} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
+                        <DropdownMenuItem onSelect={() => setProjectToDelete(project)} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
                           Excluir
                         </DropdownMenuItem>
                       </DropdownMenuContent>
