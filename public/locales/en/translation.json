@@ -282,6 +282,13 @@
     "yourMessage": "Your Message",
     "adminResponse": "Our Response"
   },
+  "subscriptionAlert": {
+    "title": "Subscription Notice",
+    "expiresInDays": "Your subscription expires in {{count}} days.",
+    "expiresInOneDay": "Your subscription expires tomorrow!",
+    "expired": "Your subscription has expired.",
+    "renew": "Renew Now"
+  },
   "toasts": {
     "chat": {
       "responseSaved": "Your response has been saved!",

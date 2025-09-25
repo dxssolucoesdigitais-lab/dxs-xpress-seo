@@ -282,6 +282,13 @@
     "yourMessage": "Sua Mensagem",
     "adminResponse": "Nossa Resposta"
   },
+  "subscriptionAlert": {
+    "title": "Aviso de Assinatura",
+    "expiresInDays": "Sua assinatura expira em {{count}} dias.",
+    "expiresInOneDay": "Sua assinatura expira amanhã!",
+    "expired": "Sua assinatura expirou.",
+    "renew": "Renovar Agora"
+  },
   "toasts": {
     "chat": {
       "responseSaved": "Sua resposta foi salva!",

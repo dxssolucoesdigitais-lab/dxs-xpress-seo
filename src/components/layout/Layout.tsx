@@ -6,6 +6,7 @@ import MobileSidebar from './MobileSidebar';
 import Header from './Header';
 import AnnouncementBanner from './AnnouncementBanner';
 import FeedbackDialog from './FeedbackDialog';
+import SubscriptionAlert from './SubscriptionAlert';
 
 const Layout = () => {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
@@ -27,6 +28,7 @@ const Layout = () => {
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           onBuyCreditsClick={() => setIsPricingDialogOpen(true)}
         />
+        <SubscriptionAlert onRenewClick={() => setIsPricingDialogOpen(true)} />
         <main className="flex-1">
           <Outlet />
         </main>

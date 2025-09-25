@@ -51,13 +51,14 @@ export interface Database {
           role: string | null
           last_seen_ip: string | null
           last_seen_at: string | null
+          subscription_expires_at: string | null
         }
         Insert: {
           id: string
           email: string
           full_name?: string | null
         }
-        Update: Partial<this['Insert'] & { role: string, credits_remaining: number }>
+        Update: Partial<this['Insert'] & { role: string, credits_remaining: number, subscription_expires_at: string | null }>
       }
       projects: {
         Row: {
