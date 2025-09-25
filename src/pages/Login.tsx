@@ -69,16 +69,16 @@ const Login = () => {
   const { t, i18n } = useTranslation();
   const { session } = useSession();
 
-  if (session) {
-    return <Navigate to="/" replace />;
-  }
-
   const authLocalizationVariables = useMemo(() => {
     if (i18n.language === 'pt') {
       return ptBR;
     }
     return {}; // Default to English built-in
   }, [i18n.language]);
+
+  if (session) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#0a0a0f]">
