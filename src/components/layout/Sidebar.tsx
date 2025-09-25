@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                     )}
                   >
-                    <div className="flex items-center min-w-0">
+                    <div className="flex items-center flex-1 min-w-0">
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
                       <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
                     </div>
