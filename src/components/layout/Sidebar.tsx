@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, MoreHorizontal } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, Trash2, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { useProjects } from '@/hooks/useProjects';
@@ -19,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
@@ -74,9 +74,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
                 </div>
               ) : (
                 projects.map((project) => (
-                  <Link
+                  <div
                     key={project.id}
-                    to={`/chat/${project.id}`}
                     className={cn(
                       'group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors',
                       projectId === project.id
@@ -84,31 +83,29 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                     )}
                   >
-                    <div className="flex items-center flex-1 min-w-0">
+                    <Link to={`/chat/${project.id}`} className="flex items-center flex-1 min-w-0">
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
                       <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
+                    </Link>
+                    <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => alert('Função de renomear em breve!')}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Renomear</p></TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-red-500 hover:text-red-500" onClick={() => setProjectToDelete(project)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Excluir</p></TooltipContent>
+                      </Tooltip>
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => alert('Função de renomear em breve!')}>
-                          Renomear
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => setProjectToDelete(project)} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
-                          Excluir
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </Link>
+                  </div>
                 ))
               )}
             </nav>
