@@ -82,10 +82,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                 </div>
               ) : (
                 projects.map((project) => (
-                  <Link
+                  <div
                     key={project.id}
-                    to={`/chat/${project.id}`}
-                    onClick={() => onOpenChange(false)}
                     className={cn(
                       'group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors',
                       projectId === project.id
@@ -93,17 +91,16 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                     )}
                   >
-                    <div className="flex items-center flex-1 min-w-0">
+                    <Link to={`/chat/${project.id}`} onClick={() => onOpenChange(false)} className="flex items-center flex-1 min-w-0">
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
                       <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
-                    </div>
+                    </Link>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                          onClick={(e) => e.preventDefault()}
+                          className="h-6 w-6 flex-shrink-0"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -117,7 +114,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </Link>
+                  </div>
                 ))
               )}
             </nav>
