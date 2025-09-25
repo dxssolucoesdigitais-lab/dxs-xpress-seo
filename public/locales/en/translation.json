@@ -1,14 +1,14 @@
 {
-  "dashboardTitle": "Your Projects",
-  "searchProjects": "Search projects...",
-  "newProject": "New Project",
+  "dashboardTitle": "Your Conversations",
+  "searchProjects": "Search conversations...",
+  "newProject": "New Conversation",
   "changeLanguage": "Change language",
   "english": "English",
   "portuguese": "Portuguese",
   "emptyDashboard": {
-    "title": "Ready to Launch Your Next Project?",
-    "description": "Your dashboard is empty, but it's full of potential. Create your first project to start generating powerful SEO content with AI.",
-    "cta": "Create New Project"
+    "title": "Ready to Start Your Next Conversation?",
+    "description": "Your dashboard is empty, but it's full of potential. Create your first conversation to start generating powerful SEO content with AI.",
+    "cta": "Create New Conversation"
   },
   "projectCard": {
     "status": "Status",
@@ -20,9 +20,9 @@
   },
   "deleteDialog": {
     "title": "Are you absolutely sure?",
-    "description": "This action cannot be undone. This will permanently delete the \"{{projectName}}\" project and all of its associated data.",
+    "description": "This action cannot be undone. This will permanently delete the \"{{projectName}}\" conversation and all of its associated data.",
     "cancel": "Cancel",
-    "confirm": "Yes, delete project"
+    "confirm": "Yes, delete conversation"
   },
   "header": {
     "credits": "Credits",
@@ -165,8 +165,8 @@
     "message": "The AI assistant encountered an unexpected problem and the workflow has been paused. Please contact support if the issue persists."
   },
   "historySheet": {
-    "title": "Project History",
-    "description": "Review of all approved steps for \"{{projectName}}\".",
+    "title": "Conversation History",
+    "description": "Review of all approved steps for the conversation \"{{projectName}}\".",
     "stepLabel": "Step",
     "workflowProgressContent": "Workflow progress analysis.",
     "genericApprovedContent": "Generated content was approved.",
@@ -177,7 +177,7 @@
     "close": "Close"
   },
   "chat": {
-    "welcomeMessage": "Hello {{userName}}! 👋 I've started working on your project \"{{projectName}}\". I'll analyze your product and target audience, and I'll be back shortly with the first step.",
+    "welcomeMessage": "Hello {{userName}}! 👋 I've started working on your conversation \"{{projectName}}\". I'll analyze your product and target audience, and I'll be back shortly with the first step.",
     "genericApproval": "Approved! Let's continue 🚀",
     "analyzingNextStep": "Analyzing the next step...",
     "startPlaceholder": "Paste a product link or describe your service to begin...",
@@ -211,8 +211,8 @@
       "updateCredits": "Update Credits",
       "usageHistory": "Usage History",
       "last50": "Last 50 transactions",
-      "userProjects": "User's Projects",
-      "projectName": "Project Name",
+      "userProjects": "User's Conversations",
+      "projectName": "Conversation Name",
       "status": "Status",
       "createdAt": "Created At",
       "userNotFound": "User not found",
@@ -291,17 +291,17 @@
       "startWorkflowFailed": "Failed to start new chat."
     },
     "projects": {
-      "fetchFailed": "Failed to fetch projects.",
-      "createSuccess": "New project created!",
-      "createFailed": "Failed to create project.",
-      "deleteSuccess": "Project deleted successfully.",
-      "deleteFailed": "Failed to delete project.",
-      "noCreditsToStart": "Project created, but you have no credits to start the AI workflow.",
+      "fetchFailed": "Failed to fetch conversations.",
+      "createSuccess": "New conversation created!",
+      "createFailed": "Failed to create conversation.",
+      "deleteSuccess": "Conversation deleted successfully.",
+      "deleteFailed": "Failed to delete conversation.",
+      "noCreditsToStart": "Conversation created, but you have no credits to start the AI workflow.",
       "triggerFailed": "Could not start the AI workflow automatically.",
-      "statusUpdateFailed": "Failed to update project status.",
-      "paused": "Project has been paused.",
-      "resumed": "Project has been resumed.",
-      "resumeNoCredits": "Project resumed, but you have no credits to continue the AI workflow.",
+      "statusUpdateFailed": "Failed to update conversation status.",
+      "paused": "Conversation has been paused.",
+      "resumed": "Conversation has been resumed.",
+      "resumeNoCredits": "Conversation resumed, but you have no credits to continue the AI workflow.",
       "resumeWorkflowFailed": "Failed to restart the workflow."
     },
     "clipboard": {

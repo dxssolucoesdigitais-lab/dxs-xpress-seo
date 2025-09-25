@@ -1,14 +1,14 @@
 {
-  "dashboardTitle": "Seus Projetos",
-  "searchProjects": "Buscar projetos...",
-  "newProject": "Novo Projeto",
+  "dashboardTitle": "Suas Conversas",
+  "searchProjects": "Buscar conversas...",
+  "newProject": "Nova Conversa",
   "changeLanguage": "Mudar idioma",
   "english": "Inglês",
   "portuguese": "Português",
   "emptyDashboard": {
-    "title": "Pronto para Lançar Seu Próximo Projeto?",
-    "description": "Seu painel está vazio, mas cheio de potencial. Crie seu primeiro projeto para começar a gerar conteúdo de SEO poderoso com IA.",
-    "cta": "Criar Novo Projeto"
+    "title": "Pronto para Iniciar Sua Próxima Conversa?",
+    "description": "Seu painel está vazio, mas cheio de potencial. Crie sua primeira conversa para começar a gerar conteúdo de SEO poderoso com IA.",
+    "cta": "Criar Nova Conversa"
   },
   "projectCard": {
     "status": "Status",
@@ -20,9 +20,9 @@
   },
   "deleteDialog": {
     "title": "Você tem certeza absoluta?",
-    "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o projeto \"{{projectName}}\" e todos os seus dados associados.",
+    "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a conversa \"{{projectName}}\" e todos os seus dados associados.",
     "cancel": "Cancelar",
-    "confirm": "Sim, deletar projeto"
+    "confirm": "Sim, deletar conversa"
   },
   "header": {
     "credits": "Créditos",
@@ -165,8 +165,8 @@
     "message": "O assistente de IA encontrou um problema inesperado e o fluxo foi pausado. Por favor, entre em contato com o suporte se o problema persistir."
   },
   "historySheet": {
-    "title": "Histórico do Projeto",
-    "description": "Revisão de todas as etapas aprovadas para \"{{projectName}}\".",
+    "title": "Histórico da Conversa",
+    "description": "Revisão de todas as etapas aprovadas para a conversa \"{{projectName}}\".",
     "stepLabel": "Etapa",
     "workflowProgressContent": "Análise de progresso do workflow.",
     "genericApprovedContent": "Conteúdo gerado foi aprovado.",
@@ -177,7 +177,7 @@
     "close": "Fechar"
   },
   "chat": {
-    "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar no seu projeto \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
+    "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar na sua conversa \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
     "genericApproval": "Aprovado! Pode continuar 🚀",
     "analyzingNextStep": "Analisando a próxima etapa...",
     "startPlaceholder": "Cole um link de produto ou descreva seu serviço para começar...",
@@ -211,8 +211,8 @@
       "updateCredits": "Atualizar Créditos",
       "usageHistory": "Histórico de Uso",
       "last50": "Últimas 50 transações",
-      "userProjects": "Projetos do Usuário",
-      "projectName": "Nome do Projeto",
+      "userProjects": "Conversas do Usuário",
+      "projectName": "Nome da Conversa",
       "status": "Status",
       "createdAt": "Criado em",
       "userNotFound": "Usuário não encontrado",
@@ -291,17 +291,17 @@
       "startWorkflowFailed": "Falha ao iniciar novo chat."
     },
     "projects": {
-      "fetchFailed": "Falha ao buscar projetos.",
-      "createSuccess": "Novo projeto criado!",
-      "createFailed": "Falha ao criar projeto.",
-      "deleteSuccess": "Projeto deletado com sucesso.",
-      "deleteFailed": "Falha ao deletar projeto.",
-      "noCreditsToStart": "Projeto criado, mas você não tem créditos para iniciar o fluxo de IA.",
+      "fetchFailed": "Falha ao buscar conversas.",
+      "createSuccess": "Nova conversa criada!",
+      "createFailed": "Falha ao criar conversa.",
+      "deleteSuccess": "Conversa deletada com sucesso.",
+      "deleteFailed": "Falha ao deletar conversa.",
+      "noCreditsToStart": "Conversa criada, mas você não tem créditos para iniciar o fluxo de IA.",
       "triggerFailed": "Não foi possível iniciar o fluxo de IA automaticamente.",
-      "statusUpdateFailed": "Falha ao atualizar o status do projeto.",
-      "paused": "O projeto foi pausado.",
-      "resumed": "O projeto foi retomado.",
-      "resumeNoCredits": "Projeto retomado, mas você não tem créditos para continuar o fluxo de IA.",
+      "statusUpdateFailed": "Falha ao atualizar o status da conversa.",
+      "paused": "A conversa foi pausada.",
+      "resumed": "A conversa foi retomada.",
+      "resumeNoCredits": "Conversa retomada, mas você não tem créditos para continuar o fluxo de IA.",
       "resumeWorkflowFailed": "Falha ao reiniciar o fluxo."
     },
     "clipboard": {
