@@ -9,7 +9,13 @@
         try {
           const theme = localStorage.getItem('vite-ui-theme') || 'dark';
           const d = document.documentElement;
-          d.classList.add(theme);
+          d.classList.remove('light', 'dark'); // Remove classes antigas para evitar conflitos
+          if (theme === 'system') {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            d.classList.add(systemTheme);
+          } else {
+            d.classList.add(theme);
+          }
         } catch (e) {
           console.error("Failed to set initial theme:", e);
         }
