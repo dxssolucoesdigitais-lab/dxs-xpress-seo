@@ -89,14 +89,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                     )}
                   >
-                    <div className="flex items-center truncate">
+                    <div className="flex items-center min-w-0">
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
                       <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                       onClick={(e) => handleDeleteClick(e, project)}
                     >
                       <X className="h-4 w-4" />
