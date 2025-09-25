@@ -9,14 +9,30 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { showError } from '@/utils/toast';
 import { useTranslation } from 'react-i18next';
+import { Badge } from '../ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
-type AdminUserView = Pick<User, 'id' | 'full_name' | 'email' | 'credits_remaining' | 'last_seen_at'>;
+type AdminUserView = Pick<User, 'id' | 'full_name' | 'email' | 'credits_remaining' | 'plan_type'>;
+
+const planVariants: { [key: string]: "default" | "secondary" | "outline" | "destructive" } = {
+  free: 'secondary',
+  basic: 'default',
+  standard: 'default',
+  premium: 'default',
+};
+
+const planStyles: { [key: string]: string } = {
+    basic: 'bg-green-500/20 border-green-500 text-green-300',
+    standard: 'bg-blue-500/20 border-blue-500 text-blue-300',
+    premium: 'bg-purple-500/20 border-purple-500 text-purple-300',
+}
 
 const UsersTable = () => {
   const { t } = useTranslation();
   const [users, setUsers] = useState<AdminUserView[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [planFilter, setPlanFilter] = useState('all');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,7 +40,7 @@ const UsersTable = () => {
       try {
         const { data, error } = await supabase
           .from('users')
-          .select('id, full_name, email, credits_remaining, last_seen_at')
+          .select('id, full_name, email, credits_remaining, plan_type')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -40,26 +56,40 @@ const UsersTable = () => {
     fetchUsers();
   }, []);
 
-  const filteredUsers = users.filter(user =>
-    user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPlan = planFilter === 'all' || user.plan_type === planFilter;
+    return matchesSearch && matchesPlan;
+  });
 
   return (
     <Card className="glass-effect border-border text-card-foreground">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
-        </div>
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder={t('admin.dashboard.search')}
-            className="w-full bg-transparent border-border pl-9"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Select value={planFilter} onValueChange={setPlanFilter}>
+            <SelectTrigger className="w-full sm:w-[180px] bg-transparent border-border">
+              <SelectValue placeholder={t('admin.dashboard.filterByPlan')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t('admin.dashboard.allPlans')}</SelectItem>
+              <SelectItem value="free">Free</SelectItem>
+              <SelectItem value="basic">Basic</SelectItem>
+              <SelectItem value="standard">Standard</SelectItem>
+              <SelectItem value="premium">Premium</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder={t('admin.dashboard.search')}
+              className="w-full bg-transparent border-border pl-9"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -68,8 +98,8 @@ const UsersTable = () => {
             <TableRow>
               <TableHead>{t('admin.dashboard.fullName')}</TableHead>
               <TableHead>{t('admin.dashboard.email')}</TableHead>
+              <TableHead className="text-center">{t('admin.dashboard.plan')}</TableHead>
               <TableHead className="text-center">{t('admin.dashboard.credits')}</TableHead>
-              <TableHead>{t('admin.dashboard.lastSeen')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -78,8 +108,8 @@ const UsersTable = () => {
                 <TableRow key={index}>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-48" /></TableCell>
+                  <TableCell><Skeleton className="h-6 w-20 mx-auto" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-16 mx-auto" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-40" /></TableCell>
                 </TableRow>
               ))
             ) : filteredUsers.length > 0 ? (
@@ -91,10 +121,15 @@ const UsersTable = () => {
                     </Link>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell className="text-center">{user.credits_remaining}</TableCell>
-                  <TableCell>
-                    {user.last_seen_at ? new Date(user.last_seen_at).toLocaleString() : t('admin.dashboard.never')}
+                  <TableCell className="text-center">
+                    <Badge 
+                      variant={planVariants[user.plan_type || 'free']}
+                      className={planStyles[user.plan_type || '']}
+                    >
+                      {user.plan_type || 'free'}
+                    </Badge>
                   </TableCell>
+                  <TableCell className="text-center">{user.credits_remaining}</TableCell>
                 </TableRow>
               ))
             ) : (

@@ -195,6 +195,9 @@
       "email": "Email",
       "credits": "Credits",
       "lastSeen": "Last Seen",
+      "plan": "Plan",
+      "filterByPlan": "Filter by plan",
+      "allPlans": "All Plans",
       "notApplicable": "N/A",
       "never": "Never",
       "noUsersFound": "No users found."
