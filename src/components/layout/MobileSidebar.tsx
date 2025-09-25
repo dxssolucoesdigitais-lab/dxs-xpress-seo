@@ -85,7 +85,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                   <div
                     key={project.id}
                     className={cn(
-                      'group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md',
                       projectId === project.id
                         ? 'bg-accent text-accent-foreground'
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
@@ -106,10 +106,10 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onSelect={() => alert('Função de renomear em breve!')}>
+                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); alert('Função de renomear em breve!'); }}>
                           Renomear
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => setProjectToDelete(project)} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
+                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setProjectToDelete(project); }} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
                           Excluir
                         </DropdownMenuItem>
                       </DropdownMenuContent>
