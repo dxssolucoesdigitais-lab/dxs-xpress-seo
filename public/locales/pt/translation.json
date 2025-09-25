@@ -180,7 +180,7 @@
     "welcomeMessage": "Olá {{userName}}! 👋 Comecei a trabalhar na sua conversa \"{{projectName}}\". Vou analisar seu produto e público-alvo, e volto em breve com o primeiro passo.",
     "genericApproval": "Aprovado! Pode continuar 🚀",
     "analyzingNextStep": "Analisando a próxima etapa...",
-    "startPlaceholder": "Cole um link de produto ou descreva seu serviço para começar...",
+    "startPlaceholder": "Digite algo...",
     "startPrompt": "vamos começar! estou aqui para você ganhar dinheiro!"
   },
   "login": {
