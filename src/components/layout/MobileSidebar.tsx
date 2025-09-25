@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -36,6 +36,7 @@ interface MobileSidebarProps {
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onFeedbackClick }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
   const { user } = useSession();
   const { projects, loading, deleteProject } = useProjects();
@@ -45,6 +46,11 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
 
   const handleFeedbackClick = () => {
     onFeedbackClick();
+    onOpenChange(false);
+  };
+
+  const handleNewConversationClick = () => {
+    navigate('/chat');
     onOpenChange(false);
   };
 
@@ -65,11 +71,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
             </Link>
           </div>
           <div className="p-4">
-            <Button asChild variant="outline" className="w-full justify-start">
-              <Link to="/chat" onClick={() => onOpenChange(false)}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                {t('newProject')}
-              </Link>
+            <Button variant="outline" className="w-full justify-start" onClick={handleNewConversationClick}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              {t('newProject')}
             </Button>
           </div>
           <ScrollArea className="flex-1 px-4">

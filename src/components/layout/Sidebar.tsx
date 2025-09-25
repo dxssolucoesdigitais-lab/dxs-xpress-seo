@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
@@ -33,6 +33,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
   const { user } = useSession();
   const { projects, loading, deleteProject } = useProjects();
@@ -57,11 +58,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick }) => {
         </div>
         <div className="flex flex-col flex-1 overflow-y-hidden">
           <div className="p-4">
-            <Button asChild variant="outline" className="w-full justify-start">
-              <Link to="/chat">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                {t('newProject')}
-              </Link>
+            <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/chat')}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              {t('newProject')}
             </Button>
           </div>
           <ScrollArea className="flex-1 px-4">
