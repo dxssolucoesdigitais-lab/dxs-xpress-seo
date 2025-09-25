@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, X } from 'lucide-react';
+import { MessageSquare, User, Shield, PlusCircle, MessageCircleQuestion, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSession } from '@/contexts/SessionContext';
 import { useProjects } from '@/hooks/useProjects';
@@ -20,6 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
@@ -45,12 +46,6 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
   const handleFeedbackClick = () => {
     onFeedbackClick();
     onOpenChange(false);
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent, project: Project) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setProjectToDelete(project);
   };
 
   const confirmDelete = () => {
@@ -102,14 +97,26 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
                       <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
                     </div>
-                     <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                      onClick={(e) => handleDeleteClick(e, project)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onSelect={() => alert('Função de renomear em breve!')}>
+                          Renomear
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setProjectToDelete(project)} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
+                          Excluir
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </Link>
                 ))
               )}

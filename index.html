@@ -5,21 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dyad-generated-app</title>
     <script>
-      (function() {
-        try {
-          const theme = localStorage.getItem('vite-ui-theme') || 'dark';
-          const d = document.documentElement;
-          d.classList.remove('light', 'dark'); // Remove classes antigas para evitar conflitos
-          if (theme === 'system') {
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            d.classList.add(systemTheme);
-          } else {
-            d.classList.add(theme);
-          }
-        } catch (e) {
-          console.error("Failed to set initial theme:", e);
-        }
-      })();
+      // Force dark theme on initial load to prevent any light theme flash.
+      document.documentElement.classList.add('dark');
     </script>
   </head>
 
