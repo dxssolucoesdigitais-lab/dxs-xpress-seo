@@ -15,10 +15,15 @@ serve(async (req) => {
     // --- Environment & Client Setup ---
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL') // <-- Novo segredo!
+    
+    // Get webhook URLs for each plan from environment variables
+    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
+    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
+    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
+    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
 
-    if (!supabaseUrl || !serviceRoleKey || !n8nWebhookUrl) {
-      throw new Error("Missing environment variables (Supabase or n8n Webhook).");
+    if (!supabaseUrl || !serviceRoleKey) {
+      throw new Error("Missing Supabase environment variables.");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -46,7 +51,7 @@ serve(async (req) => {
 
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
-      .select('credits_remaining, plan_type')
+      .select('id, credits_remaining, plan_type')
       .eq('id', project.user_id)
       .single();
 
@@ -71,23 +76,46 @@ serve(async (req) => {
       });
     }
 
+    // --- Select Webhook based on User Plan ---
+    let targetWebhookUrl;
+    const userPlan = user.plan_type || 'free';
+
+    switch (userPlan) {
+      case 'free':
+        targetWebhookUrl = n8nWebhookFree;
+        break;
+      case 'basic':
+        targetWebhookUrl = n8nWebhookBasic;
+        break;
+      case 'standard':
+        targetWebhookUrl = n8nWebhookStandard;
+        break;
+      case 'premium':
+        targetWebhookUrl = n8nWebhookPremium;
+        break;
+      default:
+        targetWebhookUrl = n8nWebhookFree; // Fallback to free plan
+    }
+
+    if (!targetWebhookUrl) {
+      throw new Error(`n8n webhook URL for plan '${userPlan}' is not configured.`);
+    }
+
     // --- Trigger n8n Workflow ---
-    // We don't wait for the response (`await`) because n8n can take time.
-    // This is a "fire and forget" approach. n8n will post the result back to our DB.
-    fetch(n8nWebhookUrl, {
+    fetch(targetWebhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         projectId: project.id,
         userId: user.id,
-        planType: user.plan_type,
+        planType: userPlan,
         currentStep: project.current_step,
-        projectData: project, // Send all project data for context
+        projectData: project,
       }),
     }).catch(err => console.error("Error triggering n8n webhook:", err));
 
     // --- Respond Immediately to the Client ---
-    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully.` }), {
+    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully for plan '${userPlan}'.` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
