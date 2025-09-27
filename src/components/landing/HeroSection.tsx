@@ -11,7 +11,7 @@ const HeroSection = () => {
           Transforme de Forma Inteligente Sua Loja de Dropshipping com XpressSEO
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Nos bastidores vários especialistas de IA trabalhando em conjunto para entregar seu contéudo otimizado para você dominar os resultados de busca.
+          Nos bastidores vários especialistas de IA trabalhando em conjunto para entregar conteúdo otimizado para você dominar os resultados de busca.
         </p>
         <div className="mt-8 flex justify-center gap-4">
           <Button asChild size="lg" className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_20px_rgba(56,189,248,0.7)] hover:-translate-y-1">
