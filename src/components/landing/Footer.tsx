@@ -6,12 +6,12 @@ const Footer = () => {
     <footer className="border-t border-border/50 py-8">
       <div className="container mx-auto px-4 text-center text-muted-foreground">
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4">
-          <Link to="/blog" className="text-sm hover:text-foreground transition-colors">
+          <a href="#" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-foreground transition-colors">
             Blog
-          </Link>
-          <Link to="/contact" className="text-sm hover:text-foreground transition-colors">
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-foreground transition-colors">
             Contato
-          </Link>
+          </a>
           <Link to="/faq" className="text-sm hover:text-foreground transition-colors">
             FAQ
           </Link>

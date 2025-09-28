@@ -17,6 +17,9 @@ import { ThemeProvider } from "./components/theme/theme-provider";
 import PaymentSimulationPage from "./pages/PaymentSimulationPage";
 import LandingPage from "./pages/LandingPage";
 import N8nTestPage from "./pages/N8nTestPage";
+import FaqPage from "./pages/FaqPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 const queryClient = new QueryClient();
 
@@ -33,12 +36,15 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
               <Route path="/n8n-test" element={<N8nTestPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/:projectId" element={<ChatPage />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/faq" element={<FaqPage />} />
 
                   {/* Admin Routes */}
                   <Route element={<AdminProtectedRoute />}>
