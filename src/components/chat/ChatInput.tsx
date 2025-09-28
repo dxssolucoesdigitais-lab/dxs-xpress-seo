@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Send, RefreshCw, Loader2, Play, Pause, BookText, Paperclip } from 'lucide-react';
-import { useChatActions } from '@/hooks/useChatActions';
+import React, { useState } from 'react';
+import { Send, Loader2, Play, Pause, BookText, Paperclip } from 'lucide-react';
 import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
@@ -26,9 +25,7 @@ interface ChatInputProps {
 const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false }) => {
   const { t } = useTranslation();
   const { user } = useSession();
-  const { approveStep, regenerateStep } = useChatActions();
   const { pauseProject, resumeProject } = useProjectActions();
-  const [isRegenerating, setIsRegenerating] = useState(false);
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
@@ -38,31 +35,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const isFreeTrial = userPlan === 'free';
   const canUploadFile = userPlan === 'premium' || isFreeTrial;
   const canAnalyzeLink = true; // Liberado para todos
-
-  const latestUnapprovedStep = useMemo(() => {
-    const latestAiMessage = [...messages].reverse().find(m => m.author === 'ai' && m.stepResult);
-    return latestAiMessage?.stepResult && !latestAiMessage.stepResult.approved ? latestAiMessage.stepResult : null;
-  }, [messages]);
-
-  const isApprovable = useMemo(() => {
-    if (!latestUnapprovedStep) return false;
-    const isOptionList = Array.isArray(latestUnapprovedStep.llm_output) && latestUnapprovedStep.llm_output.length > 0 && typeof latestUnapprovedStep.llm_output[0] === 'object' && 'content' in latestUnapprovedStep.llm_output[0];
-    return !isOptionList;
-  }, [latestUnapprovedStep]);
-
-  const handleApprove = () => {
-    if (latestUnapprovedStep) {
-      approveStep(latestUnapprovedStep);
-    }
-  };
-
-  const handleRegenerate = async () => {
-    if (latestUnapprovedStep) {
-      setIsRegenerating(true);
-      await regenerateStep(latestUnapprovedStep);
-      setIsRegenerating(false);
-    }
-  };
 
   const handlePauseToggle = async () => {
     setIsPausing(true);
@@ -104,25 +76,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleApprove} disabled={!isApprovable || isDisabled || !hasCredits} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
-                👍 {t('chatInput.approve')}
-              </Button>
-            </TooltipTrigger>
-            {!hasCredits && <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>}
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleRegenerate} disabled={!latestUnapprovedStep || isDisabled || isRegenerating || !hasCredits} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
-                {isRegenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-                {t('chatInput.regenerate')}
-              </Button>
-            </TooltipTrigger>
-            {!hasCredits && <TooltipContent><p>{t('chatInput.noCreditsTooltip')}</p></TooltipContent>}
-          </Tooltip>
-          
           <DropdownMenu>
             <Tooltip>
               <TooltipTrigger asChild>

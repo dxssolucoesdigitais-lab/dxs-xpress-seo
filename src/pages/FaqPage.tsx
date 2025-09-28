@@ -1,7 +1,6 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 const faqData = [
@@ -14,7 +13,7 @@ const faqData = [
       },
       {
         q: 'Como o XpressSEO funciona?',
-        a: 'Você inicia uma nova "conversa" fornecendo o link de um produto. Nossa IA então inicia um fluxo de trabalho passo a passo, gerando títulos, descrições, artigos de blog e mais. A cada passo, você aprova ou pede para regenerar o conteúdo, garantindo controle total sobre o resultado final.',
+        a: 'Você inicia uma nova "conversa" fornecendo o link de um produto. Nossa IA então inicia um fluxo de trabalho passo a passo, gerando títulos, descrições, artigos de blog e mais. A cada passo, você aprova o conteúdo para garantir controle total sobre o resultado final e avançar no processo.',
       },
     ],
   },
@@ -23,11 +22,11 @@ const faqData = [
     questions: [
       {
         q: 'O que é um "crédito"?',
-        a: 'Um crédito é consumido a cada vez que a IA executa uma tarefa para gerar um novo conteúdo para você. Isso inclui a geração de opções de títulos, descrições, ou a regeneração de uma etapa. A análise inicial do produto não consome crédito.',
+        a: 'Um crédito é consumido a cada vez que a IA executa uma tarefa para gerar um novo conteúdo para você, como a geração de opções de títulos e descrições. A análise inicial do produto não consome crédito.',
       },
       {
         q: 'O que acontece quando meus créditos acabam?',
-        a: 'Quando seus créditos chegam a zero, o fluxo de trabalho de IA é pausado. Você não poderá aprovar ou regenerar etapas até adquirir mais créditos. Para isso, basta clicar em "Fazer Upgrade" e escolher um de nossos planos.',
+        a: 'Quando seus créditos chegam a zero, o fluxo de trabalho de IA é pausado. Você não poderá aprovar etapas até adquirir mais créditos. Para isso, basta clicar em "Fazer Upgrade" e escolher um de nossos planos.',
       },
       {
         q: 'Os créditos expiram?',
@@ -45,10 +44,6 @@ const faqData = [
       {
         q: 'O XpressSEO funciona para outros idiomas?',
         a: 'Sim. Nossa IA é capaz de gerar e otimizar conteúdo para diferentes países e idiomas. A funcionalidade de tradução está disponível em nossos planos para ajudar na expansão internacional da sua loja.',
-      },
-      {
-        q: 'O que significa "regenerar" uma etapa?',
-        a: 'Se você não gostar das opções de conteúdo que a IA gerou, você pode clicar em "Regenerar". Isso consumirá um crédito e a IA irá criar um novo conjunto de opções para a mesma etapa, com base nas informações do projeto.',
       },
     ],
   },
