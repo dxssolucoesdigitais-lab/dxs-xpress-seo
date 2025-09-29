@@ -30,7 +30,16 @@
         "activateSuccess": "Status do anúncio atualizado com sucesso!",
         "activateError": "Erro ao ativar/desativar anúncio.",
         "deleteSuccess": "Anúncio excluído com sucesso!",
-        "deleteError": "Erro ao excluir anúncio."
+        "deleteError": "Erro ao excluir anúncio.",
+        "target": "Alvo",
+        "targetPlans": {
+          "select": "Selecionar Plano",
+          "all": "Todos os Planos",
+          "free": "Plano Grátis",
+          "basic": "Plano Básico",
+          "standard": "Plano Padrão",
+          "premium": "Plano Premium"
+        }
       },
       "fetchUsersFailed": "Erro ao buscar usuários.",
       "fetchUserDetailsFailed": "Erro ao buscar detalhes do usuário.",
@@ -131,6 +140,7 @@
           "1 geração completa das etapas de descrição de coleção e produto com SEO",
           "1 Blog otimizado para SEO e IA",
           "2 legendas para redes sociais otimizadas para SEO e IA",
+          "1 relatório de validação",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
         ],
@@ -321,16 +331,6 @@
       "projectName": "Nome do Projeto",
       "status": "Status",
       "createdAt": "Criado Em"
-    },
-    "announcements": {
-      "title": "Gerenciar Anúncios",
-      "description": "Crie e gerencie anúncios que aparecerão para todos os usuários.",
-      "newPlaceholder": "Digite o conteúdo do novo anúncio aqui...",
-      "create": "Criar Anúncio",
-      "active": "Ativo",
-      "deleteConfirmTitle": "Confirmar Exclusão",
-      "deleteConfirmDescription": "Tem certeza de que deseja excluir este anúncio? Esta ação não pode ser desfeita.",
-      "noAnnouncements": "Nenhum anúncio encontrado."
     }
   },
   "feedbackViewer": {

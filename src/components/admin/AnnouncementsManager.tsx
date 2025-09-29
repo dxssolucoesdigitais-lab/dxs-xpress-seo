@@ -18,14 +18,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
+const planOptions = [
+  { value: 'all', labelKey: 'admin.announcements.targetPlans.all' },
+  { value: 'free', labelKey: 'admin.announcements.targetPlans.free' },
+  { value: 'basic', labelKey: 'admin.announcements.targetPlans.basic' },
+  { value: 'standard', labelKey: 'admin.announcements.targetPlans.standard' },
+  { value: 'premium', labelKey: 'admin.announcements.targetPlans.premium' },
+];
 
 const AnnouncementsManager = () => {
   const { t } = useTranslation();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [newContent, setNewContent] = useState('');
+  const [newTargetPlan, setNewTargetPlan] = useState<string>('all');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchAnnouncements = useCallback(async () => {
@@ -64,12 +73,16 @@ const AnnouncementsManager = () => {
         en: translationData.translation,
       };
 
-      // 2. Salvar o anúncio com ambas as traduções
-      const { error: insertError } = await supabase.from('announcements').insert({ content: translatedContent });
+      // 2. Salvar o anúncio com ambas as traduções e o plano-alvo
+      const { error: insertError } = await supabase.from('announcements').insert({ 
+        content: translatedContent,
+        target_plan_types: newTargetPlan === 'all' ? ['all'] : [newTargetPlan],
+      });
       if (insertError) throw insertError;
 
       showSuccess('toasts.admin.announcements.createSuccess');
       setNewContent('');
+      setNewTargetPlan('all'); // Reset target plan
       await fetchAnnouncements();
     } catch (error) {
       showError('toasts.admin.announcements.createError');
@@ -104,6 +117,13 @@ const AnnouncementsManager = () => {
     }
   };
 
+  const getTargetPlanLabel = (targetPlans: string[] | null) => {
+    if (!targetPlans || targetPlans.includes('all')) {
+      return t('admin.announcements.targetPlans.all');
+    }
+    return targetPlans.map(plan => t(`admin.announcements.targetPlans.${plan}`)).join(', ');
+  };
+
   return (
     <Card className="glass-effect border-border text-card-foreground">
       <CardHeader>
@@ -119,14 +139,28 @@ const AnnouncementsManager = () => {
             className="bg-transparent border-border"
             disabled={isSubmitting}
           />
-          <Button 
-            onClick={handleCreate} 
-            disabled={isSubmitting || !newContent.trim()}
-            className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
-          >
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {t('admin.announcements.create')}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Select value={newTargetPlan} onValueChange={setNewTargetPlan} disabled={isSubmitting}>
+              <SelectTrigger className="w-[180px] bg-transparent border-border">
+                <SelectValue placeholder={t('admin.announcements.targetPlans.select')} />
+              </SelectTrigger>
+              <SelectContent>
+                {planOptions.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {t(option.labelKey)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button 
+              onClick={handleCreate} 
+              disabled={isSubmitting || !newContent.trim()}
+              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
+            >
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {t('admin.announcements.create')}
+            </Button>
+          </div>
         </div>
         <div className="space-y-4">
           {loading ? (
@@ -134,7 +168,12 @@ const AnnouncementsManager = () => {
           ) : announcements.length > 0 ? (
             announcements.map((item) => (
               <div key={item.id} className="flex items-center justify-between p-4 rounded-lg bg-secondary border border-border">
-                <p className="flex-1 text-sm">{(item.content as any)?.pt || item.content}</p>
+                <div className="flex-1 mr-4">
+                  <p className="text-sm">{(item.content as any)?.pt || item.content}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t('admin.announcements.target')}: {getTargetPlanLabel(item.target_plan_types)}
+                  </p>
+                </div>
                 <div className="flex items-center gap-4 ml-4">
                   <div className="flex items-center gap-2">
                     <Switch

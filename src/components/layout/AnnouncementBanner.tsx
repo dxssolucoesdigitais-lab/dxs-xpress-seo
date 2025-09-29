@@ -4,21 +4,28 @@ import { Announcement } from '@/types/database.types';
 import { Megaphone, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useTranslation } from 'react-i18next';
+import { useSession } from '@/contexts/SessionContext';
 
 const AnnouncementBanner = () => {
   const { i18n } = useTranslation();
+  const { user } = useSession();
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from('announcements')
           .select('*')
           .eq('is_active', true)
-          .limit(1)
-          .single();
+          .limit(1);
+
+        // Filter by user plan if available, otherwise default to 'all'
+        const userPlanType = user?.plan_type || 'free'; // Default to 'free' if no plan
+        query = query.or(`target_plan_types.cs.{${userPlanType}},target_plan_types.cs.{all}`);
+
+        const { data, error } = await query.single();
 
         if (error && error.code !== 'PGRST116') { // Ignore 'exact one row' error
           throw error;
@@ -37,7 +44,7 @@ const AnnouncementBanner = () => {
     };
 
     fetchAnnouncement();
-  }, []);
+  }, [user, i18n.language]); // Re-fetch when user or language changes
 
   const handleDismiss = () => {
     if (announcement) {

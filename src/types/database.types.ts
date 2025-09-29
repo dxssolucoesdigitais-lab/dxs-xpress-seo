@@ -16,10 +16,12 @@ export interface Database {
           is_active: boolean
           created_at: string
           updated_at: string
+          target_plan_types: string[] | null // Adicionado
         }
         Insert: {
           content: Json
           is_active?: boolean
+          target_plan_types?: string[] | null // Adicionado
         }
         Update: Partial<this['Insert']>
       }
