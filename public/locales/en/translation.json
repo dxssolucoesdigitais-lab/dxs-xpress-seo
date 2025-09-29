@@ -1,5 +1,4 @@
 {
-  // ... (existing translations) ...
   "currencyDialog": {
     "title": "Select Payment Currency",
     "description": "Choose how you prefer to pay for your {{plan}} plan",
@@ -9,8 +8,337 @@
   },
   "toasts": {
     "plans": {
-      // ... (other messages) ...
-      "bankInstructionsSent": "Bank transfer instructions sent to your email!"
+      "bankInstructionsSent": "Bank transfer instructions sent to your email!",
+      "loginRequired": "Please log in to select a plan.",
+      "checkoutFailed": "Failed to initiate checkout. Please try again.",
+      "internationalPaymentsNotSupported": "International payments are not yet supported for this method."
+    },
+    "feedback": {
+      "success": "Feedback submitted successfully! Thank you for your contribution.",
+      "error": "Error submitting feedback. Please try again.",
+      "generateReplyError": "Error generating automatic reply.",
+      "replySuccess": "Reply sent and feedback updated!",
+      "replyError": "Error sending reply. Please try again.",
+      "fetchError": "Error fetching feedbacks.",
+      "updateStatusError": "Error updating feedback status."
+    },
+    "admin": {
+      "announcements": {
+        "fetchError": "Error fetching announcements.",
+        "createSuccess": "Announcement created and translated successfully!",
+        "createError": "Error creating announcement.",
+        "activateSuccess": "Announcement status updated successfully!",
+        "activateError": "Error activating/deactivating announcement.",
+        "deleteSuccess": "Announcement deleted successfully!",
+        "deleteError": "Error deleting announcement."
+      },
+      "fetchUsersFailed": "Error fetching users.",
+      "fetchUserDetailsFailed": "Error fetching user details.",
+      "updateCreditsSuccess": "User credits updated successfully!",
+      "updateCreditsFailed": "Error updating user credits."
+    },
+    "projects": {
+      "fetchFailed": "Error fetching projects.",
+      "createSuccess": "Project created successfully!",
+      "createFailed": "Error creating project.",
+      "deleteSuccess": "Project deleted successfully!",
+      "deleteFailed": "Error deleting project.",
+      "paused": "Project paused successfully.",
+      "resumed": "Project resumed successfully.",
+      "statusUpdateFailed": "Error updating project status.",
+      "triggerFailed": "Error triggering project workflow.",
+      "resumeNoCredits": "Insufficient credits to resume project. Please upgrade your plan.",
+      "noCreditsToStart": "Insufficient credits to start project. Please upgrade your plan."
+    },
+    "chat": {
+      "responseSaved": "Your selection has been saved!",
+      "responseSaveFailed": "Error saving your selection. Please try again.",
+      "outOfCredits": "You do not have enough credits for this action. Please upgrade your plan.",
+      "nextStepTriggerFailed": "Error triggering the next workflow step.",
+      "noCreditsToRegenerate": "You do not have enough credits to regenerate this step. Please upgrade your plan.",
+      "regenerating": "Regenerating step...",
+      "regenerateFailed": "Error regenerating step.",
+      "startWorkflowFailed": "Error starting workflow."
+    },
+    "clipboard": {
+      "notAvailable": "Your browser does not support the clipboard API.",
+      "success": "Copied to clipboard!",
+      "failed": "Failed to copy to clipboard."
+    },
+    "profile": {
+      "updateSuccess": "Profile updated successfully!",
+      "updateFailed": "Error updating profile."
+    },
+    "password": {
+      "updateSuccess": "Password updated successfully!",
+      "updateFailed": "Error updating password."
+    },
+    "genericError": "An unexpected error occurred. Please try again."
+  },
+  "pricingDialog": {
+    "title": "Choose the Perfect Plan for You",
+    "description": "Start with 3 free credits and upgrade to scale your business.",
+    "popular": "Popular",
+    "perMonth": "/month",
+    "currentPlan": "Current Plan",
+    "selectPlan": "Select Plan",
+    "footerNote1": "All plans are billed monthly. Cancel anytime.",
+    "footerNote2": "Unused credits do not roll over to the next month.",
+    "tiers": [
+      {
+        "planId": "free",
+        "name": "Free",
+        "price": "$0",
+        "credits": 3,
+        "features": [
+          "✔ 3 Initial Credits",
+          "✔ Title Generation",
+          "✔ Description Generation",
+          "👉 No translation support",
+          "👉 No blog articles",
+          "👉 No GSC analysis"
+        ],
+        "popular": false
+      },
+      {
+        "planId": "basic",
+        "name": "Basic",
+        "price": "$14",
+        "credits": 50,
+        "features": [
+          "✔ 50 Credits/month",
+          "✔ Title Generation",
+          "✔ Description Generation",
+          "✔ Meta Tag Generation",
+          "👉 No translation support",
+          "👉 No blog articles",
+          "👉 No GSC analysis"
+        ],
+        "popular": false
+      },
+      {
+        "planId": "standard",
+        "name": "Standard",
+        "price": "$27",
+        "credits": 100,
+        "features": [
+          "✔ 100 Credits/month",
+          "✔ Everything in Basic Plan",
+          "✔ Translation Support",
+          "✔ Blog Article Generation",
+          "👉 No GSC analysis"
+        ],
+        "popular": true
+      },
+      {
+        "planId": "premium",
+        "name": "Premium",
+        "price": "$34",
+        "credits": 250,
+        "features": [
+          "✔ 250 Credits/month",
+          "✔ Everything in Standard Plan",
+          "✔ Google Search Console Analysis",
+          "✔ Priority Support"
+        ],
+        "popular": false
+      }
+    ]
+  },
+  "header": {
+    "credits": "credits",
+    "upgradePlan": "Upgrade Plan",
+    "dashboard": "Admin Dashboard",
+    "profile": "My Profile",
+    "logout": "Logout"
+  },
+  "newProject": "New Conversation",
+  "feedbackDialog": {
+    "button": "Send Feedback",
+    "title": "Send Your Feedback",
+    "description": "Your opinion is very important to us! Help us improve XpressSEO.",
+    "label": "Your message",
+    "placeholder": "Type your feedback here...",
+    "submit": "Send Feedback"
+  },
+  "deleteDialog": {
+    "title": "Confirm Deletion",
+    "description": "Are you sure you want to delete project \"{{projectName}}\"? This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "chatHeader": {
+    "assistantName": "XpressSEO Assistant",
+    "step": "Step"
+  },
+  "chatInput": {
+    "placeholder": "Chat is disabled. Please use the buttons below to interact.",
+    "disabledPlaceholder": "Chat is disabled. Please use the buttons below to interact.",
+    "analyze": "Analyze",
+    "uploadFile": "Upload File (Premium)",
+    "analyzeLink": "Analyze Link",
+    "pause": "Pause",
+    "resume": "Resume",
+    "viewHistory": "View History",
+    "noCreditsTooltip": "You do not have enough credits for this action. Please upgrade your plan.",
+    "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan."
+  },
+  "chat": {
+    "genericApproval": "Approved",
+    "analyzingNextStep": "Analyzing next step..."
+  },
+  "emptyChat": {
+    "greeting": "Hello, {{userName}}!",
+    "guest": "Guest",
+    "subtitle": "Ready to optimize your SEO? Start a new conversation!"
+  },
+  "optionSelector": {
+    "prompt": "Please select one of the options below to continue:",
+    "helperText": "Click an option to select it and proceed.",
+    "noCreditsTooltip": "You do not have enough credits to select an option. Please upgrade your plan.",
+    "noCreditsWarning": "You do not have enough credits to select an option. Please upgrade your plan."
+  },
+  "progressFlow": {
+    "title": "Workflow Progress:",
+    "inProgress": "in progress...",
+    "nextSteps": "Next steps:"
+  },
+  "errorDisplay": {
+    "title": "Workflow Error",
+    "message": "An unexpected error occurred in the AI workflow. Please try regenerating the step or contact support if the issue persists."
+  },
+  "historySheet": {
+    "title": "Project History",
+    "description": "Approved content for project: {{projectName}}",
+    "stepLabel": "Step",
+    "workflowProgressContent": "This step represents the workflow progress.",
+    "genericApprovedContent": "User-approved content.",
+    "noStepsTitle": "No approved steps yet.",
+    "noStepsDescription": "As you approve steps, the content will appear here.",
+    "copyAll": "Copy All",
+    "copied": "Copied!",
+    "close": "Close"
+  },
+  "profilePage": {
+    "title": "Profile Settings",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password",
+      "billing": "Billing",
+      "feedbacks": "My Feedbacks"
+    },
+    "profileDetails": {
+      "title": "Profile Details",
+      "description": "Manage your profile information.",
+      "email": "Email",
+      "fullName": "Full Name",
+      "save": "Save Changes"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "description": "Update your password.",
+      "newPassword": "New Password",
+      "update": "Update Password"
     }
-  }
+  },
+  "billingInfo": {
+    "title": "Billing Information",
+    "description": "Manage your plan and credits.",
+    "currentPlan": "Current Plan",
+    "freePlan": "Free",
+    "creditsRemaining": "Credits Remaining",
+    "changePlan": "Change Plan"
+  },
+  "usageHistory": {
+    "title": "Usage History",
+    "description": "Your latest credit-consuming activities.",
+    "action": "Action",
+    "creditsUsed": "Credits Used",
+    "date": "Date",
+    "noHistory": "No usage history found."
+  },
+  "feedbackHistory": {
+    "title": "My Feedbacks",
+    "description": "View the status and replies to your feedbacks.",
+    "replied": "Replied",
+    "yourMessage": "Your Message",
+    "adminResponse": "Admin Response",
+    "noHistory": "You haven't submitted any feedback yet."
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "allUsers": "All Users",
+      "filterByPlan": "Filter by Plan",
+      "allPlans": "All Plans",
+      "search": "Search users...",
+      "fullName": "Full Name",
+      "email": "Email",
+      "plan": "Plan",
+      "credits": "Credits",
+      "notApplicable": "N/A",
+      "noUsersFound": "No users found."
+    },
+    "tabs": {
+      "users": "Users",
+      "announcements": "Announcements",
+      "feedbacks": "Feedbacks"
+    },
+    "userDetail": {
+      "userNotFound": "User not found.",
+      "backToDashboard": "Back to Dashboard",
+      "backToUsers": "Back to Users",
+      "manageCredits": "Manage Credits",
+      "creditBalance": "Credit Balance",
+      "updateCredits": "Update Credits",
+      "usageHistory": "Usage History",
+      "last50": "Last 50 activities",
+      "userProjects": "User Projects",
+      "projectName": "Project Name",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "announcements": {
+      "title": "Manage Announcements",
+      "description": "Create and manage announcements that will appear for all users.",
+      "newPlaceholder": "Enter new announcement content here...",
+      "create": "Create Announcement",
+      "active": "Active",
+      "deleteConfirmTitle": "Confirm Deletion",
+      "deleteConfirmDescription": "Are you sure you want to delete this announcement? This action cannot be undone.",
+      "noAnnouncements": "No announcements found."
+    }
+  },
+  "feedbackViewer": {
+    "title": "Feedback Viewer",
+    "description": "Manage and reply to user feedbacks.",
+    "user": "User",
+    "feedback": "Feedback",
+    "status": "Status",
+    "actions": "Actions",
+    "statuses": {
+      "unread": "Unread",
+      "read": "Read",
+      "replied": "Replied"
+    },
+    "noFeedback": "No feedback found."
+  },
+  "feedbackReplyDialog": {
+    "title": "Reply Feedback",
+    "description": "Send a reply to the user's feedback.",
+    "userFeedback": "User Feedback",
+    "yourReply": "Your Reply",
+    "generate": "Generate Reply (AI)",
+    "submit": "Send Reply"
+  },
+  "subscriptionAlert": {
+    "title": "Your Subscription Is Expiring!",
+    "expiresInDays": "Your subscription expires in {{count}} days.",
+    "expiresInOneDay": "Your subscription expires in 1 day.",
+    "expired": "Your subscription has expired!",
+    "renew": "Renew Now"
+  },
+  "changeLanguage": "Change Language",
+  "portuguese": "Portuguese",
+  "english": "English"
 }
