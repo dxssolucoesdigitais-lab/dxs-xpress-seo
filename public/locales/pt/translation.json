@@ -58,7 +58,11 @@
       "noCreditsToRegenerate": "Você não tem créditos suficientes para regenerar esta etapa. Por favor, faça upgrade do seu plano.",
       "regenerating": "Regenerando a etapa...",
       "regenerateFailed": "Erro ao regenerar a etapa.",
-      "startWorkflowFailed": "Erro ao iniciar o fluxo de trabalho."
+      "startWorkflowFailed": "Erro ao iniciar o fluxo de trabalho.",
+      "noProjectForGSC": "Por favor, selecione um projeto para iniciar a análise GSC.",
+      "noGSCAnalysisPurchase": "Você não tem uma análise GSC paga e não utilizada. Por favor, compre uma.",
+      "gscAnalysisTriggered": "Análise GSC acionada com sucesso! Os resultados aparecerão em breve.",
+      "gscAnalysisTriggerFailed": "Erro ao acionar a análise GSC. Tente novamente."
     },
     "clipboard": {
       "notAvailable": "Seu navegador não suporta a API de área de transferência.",
@@ -95,8 +99,7 @@
           "✔ Geração de Títulos",
           "✔ Geração de Descrições",
           "👉 Sem suporte para tradução",
-          "👉 Sem artigos de blog",
-          "👉 Sem análise de GSC"
+          "👉 Sem artigos de blog"
         ],
         "popular": false
       },
@@ -111,8 +114,7 @@
           "✔ Geração de Descrições",
           "✔ Geração de Meta Tags",
           "👉 Sem suporte para tradução",
-          "👉 Sem artigos de blog",
-          "👉 Sem análise de GSC"
+          "👉 Sem artigos de blog"
         ],
         "popular": false
       },
@@ -125,8 +127,7 @@
           "✔ 100 Créditos/mês",
           "✔ Tudo do Plano Básico",
           "✔ Suporte para Tradução",
-          "✔ Geração de Artigos de Blog",
-          "👉 Sem análise de GSC"
+          "✔ Geração de Artigos de Blog"
         ],
         "popular": true
       },
@@ -138,12 +139,24 @@
         "features": [
           "✔ 250 Créditos/mês",
           "✔ Tudo do Plano Padrão",
-          "✔ Análise de Google Search Console",
           "✔ Suporte Prioritário"
         ],
         "popular": false
       }
-    ]
+    ],
+    "gscService": {
+      "serviceId": "gsc_analysis",
+      "title": "Análise GSC Avulsa",
+      "description": "Obtenha uma análise detalhada do Google Search Console para um projeto específico.",
+      "price": "R$49,00",
+      "perAnalysis": "/análise",
+      "features": [
+        "✔ Análise aprofundada do GSC",
+        "✔ Recomendações de otimização",
+        "✔ Compra avulsa, sem restrições de tempo"
+      ],
+      "buyNow": "Comprar Análise GSC"
+    }
   },
   "header": {
     "credits": "créditos",
@@ -180,8 +193,10 @@
     "pause": "Pausar",
     "resume": "Retomar",
     "viewHistory": "Ver Histórico",
+    "gscAnalysis": "Análise GSC",
     "noCreditsTooltip": "Você não tem créditos suficientes para esta ação. Faça upgrade do seu plano.",
-    "noCreditsToResumeTooltip": "Você não tem créditos para retomar o projeto. Faça upgrade do seu plano."
+    "noCreditsToResumeTooltip": "Você não tem créditos para retomar o projeto. Faça upgrade do seu plano.",
+    "gscNoProjectTooltip": "Selecione um projeto para iniciar a análise GSC."
   },
   "chat": {
     "genericApproval": "Aprovado",

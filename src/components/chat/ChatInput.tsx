@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Loader2, Play, Pause, BookText, Paperclip } from 'lucide-react';
+import { Send, Loader2, Play, Pause, BookText, Paperclip, BarChart3 } from 'lucide-react';
 import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
@@ -13,8 +13,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { showError } from '@/utils/toast';
+import { showError, showSuccess } from '@/utils/toast';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ChatInputProps {
   project: Project;
@@ -28,6 +29,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const { pauseProject, resumeProject } = useProjectActions();
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isTriggeringGSC, setIsTriggeringGSC] = useState(false);
 
   const hasCredits = user && user.credits_remaining > 0;
   
@@ -56,6 +58,34 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     } else if (type === 'link') {
       if (!canAnalyzeLink) return;
       alert(t('chatInput.analyzeLink') + ' - Funcionalidade em breve!');
+    }
+  };
+
+  const handleTriggerGSCAnalysis = async () => {
+    if (!project?.id) {
+      showError('toasts.chat.noProjectForGSC');
+      return;
+    }
+    setIsTriggeringGSC(true);
+    try {
+      const { error } = await supabase.functions.invoke('trigger-gsc-analysis', {
+        body: { projectId: project.id },
+      });
+
+      if (error) {
+        if (error.context && error.context.response.status === 402) {
+          showError("toasts.chat.noGSCAnalysisPurchase");
+        } else {
+          throw error;
+        }
+      } else {
+        showSuccess('toasts.chat.gscAnalysisTriggered');
+      }
+    } catch (error: any) {
+      showError('toasts.chat.gscAnalysisTriggerFailed');
+      console.error('Error triggering GSC analysis:', error.message);
+    } finally {
+      setIsTriggeringGSC(false);
     }
   };
 
@@ -107,6 +137,21 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
               </Button>
             </TooltipTrigger>
             {project.status === 'paused' && !hasCredits && <TooltipContent><p>{t('chatInput.noCreditsToResumeTooltip')}</p></TooltipContent>}
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                onClick={handleTriggerGSCAnalysis}
+                disabled={isDisabled || isTriggeringGSC || !project?.id}
+                size="sm" 
+                className="rounded-full bg-amber-500 hover:bg-amber-400 text-black font-bold"
+              >
+                {isTriggeringGSC ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <BarChart3 className="mr-2 h-4 w-4" />}
+                {t('chatInput.gscAnalysis')}
+              </Button>
+            </TooltipTrigger>
+            {!project?.id && <TooltipContent><p>{t('chatInput.gscNoProjectTooltip')}</p></TooltipContent>}
           </Tooltip>
 
           <Button 

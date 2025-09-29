@@ -12,10 +12,18 @@ const PLANS_BRL = {
   premium: { title: "Plano Premium", price: 197, credits: 250 },
 };
 
+const SERVICES_BRL = {
+  gsc_analysis: { title: "Análise GSC Avulsa", price: 49, type: 'gsc_analysis' },
+};
+
 const PLANS_USD = {
   basic: { title: "Basic Plan", price: 14, credits: 50 },
   standard: { title: "Standard Plan", price: 27, credits: 100 },
   premium: { title: "Premium Plan", price: 34, credits: 250 },
+};
+
+const SERVICES_USD = {
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 49, type: 'gsc_analysis' },
 };
 
 serve(async (req) => {
@@ -36,17 +44,27 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
     }
 
-    const { planId, currency = 'BRL' } = await req.json();
+    const { serviceType = 'plan', serviceId, currency = 'BRL' } = await req.json();
     
     if (!['BRL', 'USD'].includes(currency)) {
       return new Response(JSON.stringify({ error: 'Moeda inválida' }), { status: 400, headers: corsHeaders });
     }
 
-    const plans = currency === 'BRL' ? PLANS_BRL : PLANS_USD;
-    const plan = plans[planId];
-    
-    if (!plan) {
-      return new Response(JSON.stringify({ error: 'Plano inválido' }), { status: 400, headers: corsHeaders });
+    let itemToPurchase;
+    let itemPrice;
+
+    if (serviceType === 'plan') {
+      const plans = currency === 'BRL' ? PLANS_BRL : PLANS_USD;
+      itemToPurchase = plans[serviceId];
+      itemPrice = itemToPurchase?.price;
+    } else if (serviceType === 'gsc_analysis') {
+      const services = currency === 'BRL' ? SERVICES_BRL : SERVICES_USD;
+      itemToPurchase = services[serviceId];
+      itemPrice = itemToPurchase?.price;
+    }
+
+    if (!itemToPurchase || !itemPrice) {
+      return new Response(JSON.stringify({ error: 'Item ou serviço inválido' }), { status: 400, headers: corsHeaders });
     }
 
     // Registrar intenção de pagamento
@@ -54,9 +72,11 @@ serve(async (req) => {
       .from('payment_intents')
       .insert({
         user_id: user.id,
-        plan_id: planId,
+        plan_id: serviceType === 'plan' ? serviceId : null, // Define plan_id apenas se for um plano
+        service_id: serviceType === 'gsc_analysis' ? serviceId : null, // Define service_id se for um serviço
+        service_type: serviceType, // Nova coluna para diferenciar
         selected_currency: currency,
-        amount: plan.price,
+        amount: itemPrice,
         status: 'pending'
       })
       .select()
@@ -71,8 +91,44 @@ serve(async (req) => {
         throw new Error("Mercado Pago Access Token não configurado.");
       }
 
-      // ... código existente do Mercado Pago ...
-      // (manter a lógica atual de criação de preferência)
+      const preference = {
+        items: [
+          {
+            title: itemToPurchase.title,
+            unit_price: itemPrice,
+            quantity: 1,
+          },
+        ],
+        external_reference: JSON.stringify({
+          user_id: user.id,
+          service_type: serviceType,
+          service_id: serviceId,
+          payment_intent_id: paymentIntent.id,
+        }),
+        back_urls: {
+          success: `${siteUrl}/payment-simulation?status=success&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
+          failure: `${siteUrl}/payment-simulation?status=failure&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
+          pending: `${siteUrl}/payment-simulation?status=pending&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
+        },
+        auto_return: "approved",
+        notification_url: `${supabaseUrl}/functions/v1/mercadopago-webhook`,
+      };
+
+      const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${mpAccessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(preference),
+      });
+
+      if (!mpResponse.ok) {
+        const errorBody = await mpResponse.text();
+        throw new Error(`Erro ao criar preferência no Mercado Pago: ${mpResponse.status} - ${errorBody}`);
+      }
+
+      const preferenceData = await mpResponse.json();
 
       return new Response(JSON.stringify({ 
         checkoutUrl: preferenceData.init_point,

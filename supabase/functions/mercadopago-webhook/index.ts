@@ -32,35 +32,54 @@ serve(async (req) => {
       const paymentDetails = await paymentResponse.json();
 
       if (paymentDetails.status === 'approved' && paymentDetails.external_reference) {
-        const { user_id, plan_id } = JSON.parse(paymentDetails.external_reference);
-        const plan = PLANS[plan_id];
+        const { user_id, service_type, service_id, plan_id, payment_intent_id } = JSON.parse(paymentDetails.external_reference);
 
-        if (user_id && plan) {
-          const { data: currentUser, error: userError } = await supabaseAdmin
-            .from('users')
-            .select('credits_remaining')
-            .eq('id', user_id)
-            .single();
+        // Atualizar o status do payment_intent para 'completed'
+        const { error: updateIntentError } = await supabaseAdmin
+          .from('payment_intents')
+          .update({ status: 'completed' })
+          .eq('id', payment_intent_id);
 
-          if (userError) throw userError;
+        if (updateIntentError) {
+          console.error('Error updating payment intent status:', updateIntentError);
+          throw updateIntentError;
+        }
 
-          const newCredits = (currentUser?.credits_remaining || 0) + plan.credits;
-          const newExpirationDate = new Date();
-          newExpirationDate.setDate(newExpirationDate.getDate() + 30);
+        if (service_type === 'plan' && plan_id) {
+          const plan = PLANS[plan_id];
 
-          const { error: updateError } = await supabaseAdmin
-            .from('users')
-            .update({
-              plan_type: plan_id,
-              credits_remaining: newCredits,
-              subscription_expires_at: newExpirationDate.toISOString(),
-            })
-            .eq('id', user_id);
+          if (user_id && plan) {
+            const { data: currentUser, error: userError } = await supabaseAdmin
+              .from('users')
+              .select('credits_remaining')
+              .eq('id', user_id)
+              .single();
 
-          if (updateError) {
-            console.error('Error updating user subscription:', updateError);
-            throw updateError;
+            if (userError) throw userError;
+
+            const newCredits = (currentUser?.credits_remaining || 0) + plan.credits;
+            const newExpirationDate = new Date();
+            newExpirationDate.setDate(newExpirationDate.getDate() + 30);
+
+            const { error: updateError } = await supabaseAdmin
+              .from('users')
+              .update({
+                plan_type: plan_id,
+                credits_remaining: newCredits,
+                subscription_expires_at: newExpirationDate.toISOString(),
+              })
+              .eq('id', user_id);
+
+            if (updateError) {
+              console.error('Error updating user subscription:', updateError);
+              throw updateError;
+            }
           }
+        } else if (service_type === 'gsc_analysis' && service_id === 'gsc_analysis') {
+          // Para análise GSC, o payment_intent já foi marcado como 'completed'.
+          // A lógica de acionamento da análise será feita pela função trigger-gsc-analysis
+          // que verificará payment_intents com status 'completed' e service_id 'gsc_analysis'.
+          console.log(`GSC Analysis purchase completed for user ${user_id}. Payment Intent ID: ${payment_intent_id}`);
         }
       }
     }

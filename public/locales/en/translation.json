@@ -58,7 +58,11 @@
       "noCreditsToRegenerate": "You do not have enough credits to regenerate this step. Please upgrade your plan.",
       "regenerating": "Regenerating step...",
       "regenerateFailed": "Error regenerating step.",
-      "startWorkflowFailed": "Error starting workflow."
+      "startWorkflowFailed": "Error starting workflow.",
+      "noProjectForGSC": "Please select a project to start GSC analysis.",
+      "noGSCAnalysisPurchase": "You do not have a paid and unused GSC analysis. Please purchase one.",
+      "gscAnalysisTriggered": "GSC analysis triggered successfully! Results will appear shortly.",
+      "gscAnalysisTriggerFailed": "Error triggering GSC analysis. Please try again."
     },
     "clipboard": {
       "notAvailable": "Your browser does not support the clipboard API.",
@@ -95,8 +99,7 @@
           "✔ Title Generation",
           "✔ Description Generation",
           "👉 No translation support",
-          "👉 No blog articles",
-          "👉 No GSC analysis"
+          "👉 No blog articles"
         ],
         "popular": false
       },
@@ -111,8 +114,7 @@
           "✔ Description Generation",
           "✔ Meta Tag Generation",
           "👉 No translation support",
-          "👉 No blog articles",
-          "👉 No GSC analysis"
+          "👉 No blog articles"
         ],
         "popular": false
       },
@@ -125,8 +127,7 @@
           "✔ 100 Credits/month",
           "✔ Everything in Basic Plan",
           "✔ Translation Support",
-          "✔ Blog Article Generation",
-          "👉 No GSC analysis"
+          "✔ Blog Article Generation"
         ],
         "popular": true
       },
@@ -138,12 +139,24 @@
         "features": [
           "✔ 250 Credits/month",
           "✔ Everything in Standard Plan",
-          "✔ Google Search Console Analysis",
           "✔ Priority Support"
         ],
         "popular": false
       }
-    ]
+    ],
+    "gscService": {
+      "serviceId": "gsc_analysis",
+      "title": "Standalone GSC Analysis",
+      "description": "Get a detailed Google Search Console analysis for a specific project.",
+      "price": "$49.00",
+      "perAnalysis": "/analysis",
+      "features": [
+        "✔ In-depth GSC analysis",
+        "✔ Optimization recommendations",
+        "✔ One-time purchase, no time restrictions"
+      ],
+      "buyNow": "Buy GSC Analysis"
+    }
   },
   "header": {
     "credits": "credits",
@@ -180,8 +193,10 @@
     "pause": "Pause",
     "resume": "Resume",
     "viewHistory": "View History",
+    "gscAnalysis": "GSC Analysis",
     "noCreditsTooltip": "You do not have enough credits for this action. Please upgrade your plan.",
-    "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan."
+    "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan.",
+    "gscNoProjectTooltip": "Select a project to start GSC analysis."
   },
   "chat": {
     "genericApproval": "Approved",
