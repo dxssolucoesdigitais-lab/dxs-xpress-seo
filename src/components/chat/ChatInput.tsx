@@ -97,7 +97,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
         <div className="relative mb-4">
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
-            placeholder="" {/* Removed placeholder from disabled textarea */}
+            placeholder=""
             rows={1}
             disabled
           ></textarea>
