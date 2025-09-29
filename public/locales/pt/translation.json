@@ -97,7 +97,7 @@
         "features": [
           "3 Créditos Iniciais",
           "Para cada crédito:",
-          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 geração completa das etapas de descrição de coleção e produto com SEO",
           "1 Blog otimizado",
           "1 legenda otimizada para Rede Sociais",
           "1 relatório de validação",
@@ -114,7 +114,7 @@
         "features": [
           "20 Créditos/mês",
           "Para cada crédito:",
-          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 geração completa das etapas de descrição de coleção e produto com SEO",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
         ],
@@ -127,9 +127,9 @@
         "credits": 60,
         "features": [
           "60 Créditos/mês",
-          "Para cada crédito:",
-          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "Tudo do Plano Básico",
           "1 Blog otimizado",
+          "2 legendas para redes sociais",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
         ],
@@ -142,10 +142,8 @@
         "credits": 120,
         "features": [
           "120 Créditos/mês",
-          "Para cada crédito:",
-          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
-          "1 Blog otimizado",
-          "1 legenda otimizada para Rede Sociais",
+          "Tudo do Plano Padrão",
+          "5 legendas para redes sociais",
           "1 relatório de validação",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
@@ -156,13 +154,14 @@
     "gscService": {
       "serviceId": "gsc_analysis",
       "title": "Análise GSC Avulsa",
-      "description": "Obtenha uma análise detalhada do Google Search Console para um projeto específico.",
+      "description": "Obtenha uma análise detalhada do Google Search Console para o seu site!",
       "price": "R$49,00",
       "perAnalysis": "/análise",
       "features": [
+        "2 Créditos",
+        "Para cada crédito:",
         "Análise aprofundada do GSC",
-        "Recomendações de otimização",
-        "Compra avulsa, sem restrições de tempo"
+        "Recomendações de otimização"
       ],
       "buyNow": "Comprar Análise GSC"
     }
@@ -194,8 +193,8 @@
     "step": "Etapa"
   },
   "chatInput": {
-    "placeholder": "O chat está desativado. Por favor, use os botões abaixo para interagir.",
-    "disabledPlaceholder": "O chat está desativado. Por favor, use os botões abaixo para interagir.",
+    "placeholder": "Digite algo!!",
+    "disabledPlaceholder": "Digite algo!!",
     "analyze": "Analisar",
     "uploadFile": "Upload de Arquivo (Premium)",
     "analyzeLink": "Analisar Link",
@@ -300,7 +299,7 @@
       "email": "Email",
       "plan": "Plano",
       "credits": "Créditos",
-      "notApplicable": "N/A",
+      "notApplicável": "N/A",
       "noUsersFound": "Nenhum usuário encontrado."
     },
     "tabs": {
