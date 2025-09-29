@@ -2,7 +2,6 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from 'react-i18next';
 import UsersTable from '@/components/admin/UsersTable';
-import AnnouncementsManager from '@/components/admin/AnnouncementsManager';
 import FeedbackViewer from '@/components/admin/FeedbackViewer';
 
 const AdminDashboard = () => {
@@ -13,16 +12,12 @@ const AdminDashboard = () => {
       <h1 className="text-3xl font-bold">{t('admin.dashboard.title')}</h1>
       
       <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2"> {/* Alterado para 2 colunas */}
           <TabsTrigger value="users">{t('admin.tabs.users')}</TabsTrigger>
-          <TabsTrigger value="announcements">{t('admin.tabs.announcements')}</TabsTrigger>
           <TabsTrigger value="feedbacks">{t('admin.tabs.feedbacks')}</TabsTrigger>
         </TabsList>
         <TabsContent value="users" className="mt-6">
           <UsersTable />
-        </TabsContent>
-        <TabsContent value="announcements" className="mt-6">
-          <AnnouncementsManager />
         </TabsContent>
         <TabsContent value="feedbacks" className="mt-6">
           <FeedbackViewer />

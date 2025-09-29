@@ -9,22 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      announcements: {
-        Row: {
-          id: string
-          content: Json // Alterado para Json para suportar JSONB
-          is_active: boolean
-          created_at: string
-          updated_at: string
-          target_plan_types: string[] | null
-        }
-        Insert: {
-          content: Json
-          is_active?: boolean
-          target_plan_types?: string[] | null
-        }
-        Update: Partial<this['Insert']>
-      }
       feedbacks: {
         Row: {
           id: string
@@ -141,5 +125,4 @@ export type User = Database['public']['Tables']['users']['Row'];
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
 export type StepResult = Database['public']['Tables']['step_results']['Row'];
-export type Announcement = Database['public']['Tables']['announcements']['Row'];
 export type Feedback = Database['public']['Tables']['feedbacks']['Row'];

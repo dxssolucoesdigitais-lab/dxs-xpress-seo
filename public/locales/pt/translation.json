@@ -23,32 +23,6 @@
       "updateStatusError": "Erro ao atualizar status do feedback."
     },
     "admin": {
-      "announcements": {
-        "fetchError": "Erro ao buscar anúncios.",
-        "createSuccess": "Anúncio criado e traduzido com sucesso!",
-        "createError": "Erro ao criar anúncio.",
-        "activateSuccess": "Status do anúncio atualizado com sucesso!",
-        "activateError": "Erro ao ativar/desativar anúncio.",
-        "deleteSuccess": "Anúncio excluído com sucesso!",
-        "deleteError": "Erro ao excluir anúncio.",
-        "target": "Alvo",
-        "targetPlans": {
-          "select": "Selecionar Plano",
-          "all": "Todos os Planos",
-          "free": "Plano Grátis",
-          "basic": "Plano Básico",
-          "standard": "Plano Padrão",
-          "premium": "Plano Premium"
-        },
-        "title": "Gerenciador de Anúncios",
-        "description": "Crie, ative/desative e exclua anúncios para exibir aos usuários. Apenas um anúncio pode estar ativo por vez.",
-        "newPlaceholder": "Digite o conteúdo do novo anúncio aqui...",
-        "create": "Criar Anúncio",
-        "active": "Ativo",
-        "deleteConfirmTitle": "Confirmar Exclusão de Anúncio",
-        "deleteConfirmDescription": "Tem certeza de que deseja excluir este anúncio? Esta ação não pode ser desfeita.",
-        "noAnnouncements": "Nenhum anúncio encontrado."
-      },
       "fetchUsersFailed": "Erro ao buscar usuários.",
       "fetchUserDetailsFailed": "Erro ao buscar detalhes do usuário.",
       "updateCreditsSuccess": "Créditos do usuário atualizados com sucesso!",
@@ -323,7 +297,6 @@
     },
     "tabs": {
       "users": "Usuários",
-      "announcements": "Anúncios",
       "feedbacks": "Feedbacks"
     },
     "userDetail": {
