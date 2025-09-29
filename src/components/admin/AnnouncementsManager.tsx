@@ -31,21 +31,12 @@ const planOptions = [
 ];
 
 const AnnouncementsManager = () => {
-  const { t, i18n } = useTranslation(); // Added i18n for debugging
+  const { t } = useTranslation();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [newContent, setNewContent] = useState('');
   const [newTargetPlan, setNewTargetPlan] = useState<string>('all');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Debugging: Log translation status
-  useEffect(() => {
-    console.log('i18n initialized:', i18n.isInitialized);
-    console.log('Current language:', i18n.language);
-    console.log('Translated title:', t('admin.announcements.title'));
-    console.log('Translated create button:', t('admin.announcements.create'));
-  }, [i18n, t]);
-
 
   const fetchAnnouncements = useCallback(async () => {
     setLoading(true);
@@ -145,38 +136,35 @@ const AnnouncementsManager = () => {
         <CardDescription>{t('admin.announcements.description')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-4"> {/* Changed to space-y-4 for better spacing */}
-          <div className="flex flex-col gap-2"> {/* Added flex-col and gap for textarea and select/button */}
-            <Textarea
-              key="new-announcement-content" // Added key
-              placeholder={t('admin.announcements.newPlaceholder')}
-              value={newContent}
-              onChange={(e) => setNewContent(e.target.value)}
-              className="bg-transparent border-border h-24 min-h-[6rem]" // Ensure min-height
-              disabled={isSubmitting}
-            />
-            <div className="flex items-center gap-2">
-              <Select value={newTargetPlan} onValueChange={setNewTargetPlan} disabled={isSubmitting}>
-                <SelectTrigger className="w-[180px] bg-transparent border-border">
-                  <SelectValue placeholder={t('admin.announcements.targetPlans.select')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {planOptions.map(option => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {t(option.labelKey)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button 
-                onClick={handleCreate} 
-                disabled={isSubmitting || !newContent.trim()}
-                className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
-              >
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t('admin.announcements.create')}
-              </Button>
-            </div>
+        <div className="space-y-2">
+          <Textarea
+            placeholder={t('admin.announcements.newPlaceholder')}
+            value={newContent}
+            onChange={(e) => setNewContent(e.target.value)}
+            className="bg-transparent border-border h-24" // Adicionado h-24 para garantir altura
+            disabled={isSubmitting}
+          />
+          <div className="flex items-center gap-2">
+            <Select value={newTargetPlan} onValueChange={setNewTargetPlan} disabled={isSubmitting}>
+              <SelectTrigger className="w-[180px] bg-transparent border-border">
+                <SelectValue placeholder={t('admin.announcements.targetPlans.select')} />
+              </SelectTrigger>
+              <SelectContent>
+                {planOptions.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {t(option.labelKey)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button 
+              onClick={handleCreate} 
+              disabled={isSubmitting || !newContent.trim()}
+              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
+            >
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {t('admin.announcements.create')}
+            </Button>
           </div>
         </div>
         <div className="space-y-4">
