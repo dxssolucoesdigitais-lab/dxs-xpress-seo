@@ -195,7 +195,17 @@
   },
   "chatInput": {
     "placeholder": "Type something!!!",
-    "disabledPlaceholder": "Type something!!!"
+    "disabledPlaceholder": "Type something!!!",
+    "analyze": "Analyze",
+    "uploadFile": "Upload File (Premium)",
+    "analyzeLink": "Analyze Link",
+    "pause": "Pause",
+    "resume": "Resume",
+    "viewHistory": "View History",
+    "gscAnalysis": "GSC Analysis",
+    "noCreditsTooltip": "You do not have enough credits for this action. Please upgrade your plan.",
+    "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan.",
+    "gscNoProjectTooltip": "Select a project to start GSC analysis."
   },
   "chat": {
     "genericApproval": "Approved",
@@ -353,6 +363,6 @@
     "renew": "Renew Now"
   },
   "changeLanguage": "Change Language",
-  "portuguese": "Portuguese",
-  "english": "English"
+  "portuguese": "Português",
+  "english": "Inglês"
 }
