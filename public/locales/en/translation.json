@@ -162,7 +162,6 @@
       "perAnalysis": "/analysis",
       "features": [
         "2 Credits",
-        "For each credit:",
         "Report and optimization recommendations"
       ],
       "buyNow": "Buy GSC Analysis"
@@ -195,18 +194,8 @@
     "step": "Step"
   },
   "chatInput": {
-    "placeholder": "Digite algo!!!",
-    "disabledPlaceholder": "Digite algo!!!",
-    "analyze": "Analyze",
-    "uploadFile": "Upload File (Premium)",
-    "analyzeLink": "Analyze Link",
-    "pause": "Pause",
-    "resume": "Resume",
-    "viewHistory": "View History",
-    "gscAnalysis": "GSC Analysis",
-    "noCreditsTooltip": "You do not have enough credits for this action. Please upgrade your plan.",
-    "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan.",
-    "gscNoProjectTooltip": "Select a project to start GSC analysis."
+    "placeholder": "Type something!!!",
+    "disabledPlaceholder": "Type something!!!"
   },
   "chat": {
     "genericApproval": "Approved",
@@ -242,7 +231,7 @@
     "noStepsDescription": "As you approve steps, the content will appear here.",
     "copyAll": "Copy All",
     "copied": "Copied!",
-    "close": "Fechar"
+    "close": "Close"
   },
   "profilePage": {
     "title": "Profile Settings",

@@ -162,7 +162,6 @@
       "perAnalysis": "/análise",
       "features": [
         "2 Créditos",
-        "Para cada crédito:",
         "Relatório e recomendações de otimização"
       ],
       "buyNow": "Comprar Análise GSC"
@@ -196,17 +195,7 @@
   },
   "chatInput": {
     "placeholder": "Digite algo!!!",
-    "disabledPlaceholder": "Digite algo!!!",
-    "analyze": "Analisar",
-    "uploadFile": "Upload de Arquivo (Premium)",
-    "analyzeLink": "Analisar Link",
-    "pause": "Pausar",
-    "resume": "Retomar",
-    "viewHistory": "Ver Histórico",
-    "gscAnalysis": "Análise GSC",
-    "noCreditsTooltip": "Você não tem créditos suficientes para esta ação. Faça upgrade do seu plano.",
-    "noCreditsToResumeTooltip": "Você não tem créditos para retomar o projeto. Faça upgrade do seu plano.",
-    "gscNoProjectTooltip": "Selecione um projeto para iniciar a análise GSC."
+    "disabledPlaceholder": "Digite algo!!!"
   },
   "chat": {
     "genericApproval": "Aprovado",
