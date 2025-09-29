@@ -141,7 +141,7 @@ const AnnouncementsManager = () => {
             placeholder={t('admin.announcements.newPlaceholder')}
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
-            className="bg-transparent border-border"
+            className="bg-transparent border-border h-24" // Adicionado h-24 para garantir altura
             disabled={isSubmitting}
           />
           <div className="flex items-center gap-2">
