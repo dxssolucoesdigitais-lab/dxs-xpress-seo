@@ -127,9 +127,10 @@
         "credits": 60,
         "features": [
           "60 Créditos/mês",
-          "Tudo do Plano Básico",
-          "1 Blog otimizado",
-          "2 legendas para redes sociais",
+          "Para cada crédito:",
+          "1 geração completa das etapas de descrição de coleção e produto com SEO",
+          "1 Blog otimizado para SEO e IA",
+          "2 legendas para redes sociais otimizadas para SEO e IA",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
         ],
@@ -142,8 +143,10 @@
         "credits": 120,
         "features": [
           "120 Créditos/mês",
-          "Tudo do Plano Padrão",
-          "5 legendas para redes sociais",
+          "Para cada crédito:",
+          "1 geração completa das etapas de descrição de coleção e produto com SEO",
+          "1 Blog otimizado para SEO e IA",
+          "5 legendas para redes sociais otimizadas para SEO e IA",
           "1 relatório de validação",
           "1 tradução para o idioma selecionado",
           "1 versão HTML otimizada"
@@ -160,8 +163,7 @@
       "features": [
         "2 Créditos",
         "Para cada crédito:",
-        "Análise aprofundada do GSC",
-        "Recomendações de otimização"
+        "Relatório e recomendações de otimização"
       ],
       "buyNow": "Comprar Análise GSC"
     }
@@ -193,8 +195,8 @@
     "step": "Etapa"
   },
   "chatInput": {
-    "placeholder": "Digite algo!!",
-    "disabledPlaceholder": "Digite algo!!",
+    "placeholder": "Digite algo!!!",
+    "disabledPlaceholder": "Digite algo!!!",
     "analyze": "Analisar",
     "uploadFile": "Upload de Arquivo (Premium)",
     "analyzeLink": "Analisar Link",

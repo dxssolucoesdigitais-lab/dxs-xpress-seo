@@ -127,9 +127,10 @@
         "credits": 60,
         "features": [
           "60 Credits/month",
-          "Everything in Basic Plan",
-          "1 optimized Blog",
-          "2 social media captions",
+          "For each credit:",
+          "1 complete SEO generation for collection and product description steps",
+          "1 optimized Blog for SEO and AI",
+          "2 social media captions optimized for SEO and AI",
           "1 translation for the selected language",
           "1 optimized HTML version"
         ],
@@ -142,8 +143,10 @@
         "credits": 120,
         "features": [
           "120 Credits/month",
-          "Everything in Standard Plan",
-          "5 social media captions",
+          "For each credit:",
+          "1 complete SEO generation for collection and product description steps",
+          "1 optimized Blog for SEO and AI",
+          "5 social media captions optimized for SEO and AI",
           "1 validation report",
           "1 translation for the selected language",
           "1 optimized HTML version"
@@ -160,8 +163,7 @@
       "features": [
         "2 Credits",
         "For each credit:",
-        "In-depth GSC analysis",
-        "Optimization recommendations"
+        "Report and optimization recommendations"
       ],
       "buyNow": "Buy GSC Analysis"
     }
@@ -193,8 +195,8 @@
     "step": "Step"
   },
   "chatInput": {
-    "placeholder": "Type something!!",
-    "disabledPlaceholder": "Type something!!",
+    "placeholder": "Digite algo!!!",
+    "disabledPlaceholder": "Digite algo!!!",
     "analyze": "Analyze",
     "uploadFile": "Upload File (Premium)",
     "analyzeLink": "Analyze Link",
@@ -240,7 +242,7 @@
     "noStepsDescription": "As you approve steps, the content will appear here.",
     "copyAll": "Copy All",
     "copied": "Copied!",
-    "close": "Close"
+    "close": "Fechar"
   },
   "profilePage": {
     "title": "Profile Settings",
