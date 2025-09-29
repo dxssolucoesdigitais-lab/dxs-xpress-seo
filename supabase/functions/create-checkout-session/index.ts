@@ -7,9 +7,9 @@ const corsHeaders = {
 }
 
 const PLANS_BRL = {
-  basic: { title: "Plano Basic", price: 79, credits: 50 },
-  standard: { title: "Plano Standard", price: 149, credits: 100 },
-  premium: { title: "Plano Premium", price: 197, credits: 250 },
+  basic: { title: "Plano Basic", price: 79, credits: 20 },
+  standard: { title: "Plano Standard", price: 149, credits: 60 },
+  premium: { title: "Plano Premium", price: 197, credits: 120 },
 };
 
 const SERVICES_BRL = {
@@ -17,13 +17,13 @@ const SERVICES_BRL = {
 };
 
 const PLANS_USD = {
-  basic: { title: "Basic Plan", price: 14, credits: 50 },
-  standard: { title: "Standard Plan", price: 27, credits: 100 },
-  premium: { title: "Premium Plan", price: 34, credits: 250 },
+  basic: { title: "Basic Plan", price: 15, credits: 20 },
+  standard: { title: "Standard Plan", price: 28, credits: 60 },
+  premium: { title: "Premium Plan", price: 37, credits: 120 },
 };
 
 const SERVICES_USD = {
-  gsc_analysis: { title: "Standalone GSC Analysis", price: 49, type: 'gsc_analysis' },
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 9, type: 'gsc_analysis' },
 };
 
 serve(async (req) => {

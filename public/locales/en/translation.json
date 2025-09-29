@@ -95,51 +95,60 @@
         "price": "$0",
         "credits": 3,
         "features": [
-          "✔ 3 Initial Credits",
-          "✔ Title Generation",
-          "✔ Description Generation",
-          "👉 No translation support",
-          "👉 No blog articles"
+          "3 Initial Credits",
+          "For each credit:",
+          "1 complete SEO generation for collection description and product description steps",
+          "1 optimized Blog",
+          "1 optimized Social Media caption",
+          "1 validation report",
+          "1 translation for the selected language",
+          "1 optimized HTML version"
         ],
         "popular": false
       },
       {
         "planId": "basic",
         "name": "Basic",
-        "price": "$14",
-        "credits": 50,
+        "price": "$15",
+        "credits": 20,
         "features": [
-          "✔ 50 Credits/month",
-          "✔ Title Generation",
-          "✔ Description Generation",
-          "✔ Meta Tag Generation",
-          "👉 No translation support",
-          "👉 No blog articles"
+          "20 Credits/month",
+          "For each credit:",
+          "1 complete SEO generation for collection description and product description steps",
+          "1 translation for the selected language",
+          "1 optimized HTML version"
         ],
         "popular": false
       },
       {
         "planId": "standard",
         "name": "Standard",
-        "price": "$27",
-        "credits": 100,
+        "price": "$28",
+        "credits": 60,
         "features": [
-          "✔ 100 Credits/month",
-          "✔ Everything in Basic Plan",
-          "✔ Translation Support",
-          "✔ Blog Article Generation"
+          "60 Credits/month",
+          "For each credit:",
+          "1 complete SEO generation for collection description and product description steps",
+          "1 optimized Blog",
+          "1 translation for the selected language",
+          "1 optimized HTML version"
         ],
         "popular": true
       },
       {
         "planId": "premium",
         "name": "Premium",
-        "price": "$34",
-        "credits": 250,
+        "price": "$37",
+        "credits": 120,
         "features": [
-          "✔ 250 Credits/month",
-          "✔ Everything in Standard Plan",
-          "✔ Priority Support"
+          "120 Credits/month",
+          "For each credit:",
+          "1 complete SEO generation for collection description and product description steps",
+          "1 optimized Blog",
+          "1 optimized Social Media caption",
+          "1 validation report",
+          "1 translation for the selected language",
+          "1 optimized HTML version"
         ],
         "popular": false
       }
@@ -148,12 +157,12 @@
       "serviceId": "gsc_analysis",
       "title": "Standalone GSC Analysis",
       "description": "Get a detailed Google Search Console analysis for a specific project.",
-      "price": "$49.00",
+      "price": "$9.00",
       "perAnalysis": "/analysis",
       "features": [
-        "✔ In-depth GSC analysis",
-        "✔ Optimization recommendations",
-        "✔ One-time purchase, no time restrictions"
+        "In-depth GSC analysis",
+        "Optimization recommendations",
+        "One-time purchase, no time restrictions"
       ],
       "buyNow": "Buy GSC Analysis"
     }
@@ -232,7 +241,7 @@
     "noStepsDescription": "As you approve steps, the content will appear here.",
     "copyAll": "Copy All",
     "copied": "Copied!",
-    "close": "Close"
+    "close": "Fechar"
   },
   "profilePage": {
     "title": "Profile Settings",

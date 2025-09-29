@@ -95,11 +95,14 @@
         "price": "R$0",
         "credits": 3,
         "features": [
-          "✔ 3 Créditos Iniciais",
-          "✔ Geração de Títulos",
-          "✔ Geração de Descrições",
-          "👉 Sem suporte para tradução",
-          "👉 Sem artigos de blog"
+          "3 Créditos Iniciais",
+          "Para cada crédito:",
+          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 Blog otimizado",
+          "1 legenda otimizada para Rede Sociais",
+          "1 relatório de validação",
+          "1 tradução para o idioma selecionado",
+          "1 versão HTML otimizada"
         ],
         "popular": false
       },
@@ -107,14 +110,13 @@
         "planId": "basic",
         "name": "Básico",
         "price": "R$79",
-        "credits": 50,
+        "credits": 20,
         "features": [
-          "✔ 50 Créditos/mês",
-          "✔ Geração de Títulos",
-          "✔ Geração de Descrições",
-          "✔ Geração de Meta Tags",
-          "👉 Sem suporte para tradução",
-          "👉 Sem artigos de blog"
+          "20 Créditos/mês",
+          "Para cada crédito:",
+          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 tradução para o idioma selecionado",
+          "1 versão HTML otimizada"
         ],
         "popular": false
       },
@@ -122,12 +124,14 @@
         "planId": "standard",
         "name": "Padrão",
         "price": "R$149",
-        "credits": 100,
+        "credits": 60,
         "features": [
-          "✔ 100 Créditos/mês",
-          "✔ Tudo do Plano Básico",
-          "✔ Suporte para Tradução",
-          "✔ Geração de Artigos de Blog"
+          "60 Créditos/mês",
+          "Para cada crédito:",
+          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 Blog otimizado",
+          "1 tradução para o idioma selecionado",
+          "1 versão HTML otimizada"
         ],
         "popular": true
       },
@@ -135,11 +139,16 @@
         "planId": "premium",
         "name": "Premium",
         "price": "R$197",
-        "credits": 250,
+        "credits": 120,
         "features": [
-          "✔ 250 Créditos/mês",
-          "✔ Tudo do Plano Padrão",
-          "✔ Suporte Prioritário"
+          "120 Créditos/mês",
+          "Para cada crédito:",
+          "1 geração completa com SEO para etapas de descrição de coleção e descrição de produto",
+          "1 Blog otimizado",
+          "1 legenda otimizada para Rede Sociais",
+          "1 relatório de validação",
+          "1 tradução para o idioma selecionado",
+          "1 versão HTML otimizada"
         ],
         "popular": false
       }
@@ -151,9 +160,9 @@
       "price": "R$49,00",
       "perAnalysis": "/análise",
       "features": [
-        "✔ Análise aprofundada do GSC",
-        "✔ Recomendações de otimização",
-        "✔ Compra avulsa, sem restrições de tempo"
+        "Análise aprofundada do GSC",
+        "Recomendações de otimização",
+        "Compra avulsa, sem restrições de tempo"
       ],
       "buyNow": "Comprar Análise GSC"
     }

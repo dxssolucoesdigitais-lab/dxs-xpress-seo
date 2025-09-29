@@ -137,7 +137,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
                       <ul className="mt-6 space-y-3 text-sm text-muted-foreground flex-grow">
                         {tier.features.map((feature) => (
                           <li key={feature} className="flex items-start gap-2">
-                            <span className="mt-1">{feature.startsWith('👉') ? '' : '✔'}</span>
+                            {!feature.startsWith('👉') && !feature.startsWith('✔') && !feature.includes('Para cada crédito:') && <span className="mt-1">✔</span>}
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -164,7 +164,7 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
                     <ul className="mt-6 space-y-3 text-sm text-muted-foreground flex-grow">
                       {gscService.features.map((feature) => (
                         <li key={feature} className="flex items-start gap-2">
-                          <span className="mt-1">✔</span>
+                          {!feature.startsWith('👉') && !feature.startsWith('✔') && <span className="mt-1">✔</span>}
                           <span>{feature}</span>
                         </li>
                       ))}
