@@ -18,7 +18,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger, // Adicionado aqui
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
@@ -62,7 +62,7 @@ const AnnouncementsManager = () => {
     if (!newContent.trim()) return;
     setIsSubmitting(true);
     try {
-      // 1. Traduzir o conteúdo
+      // 1. Traduzir o conteúdo usando a Edge Function
       const { data: translationData, error: translateError } = await supabase.functions.invoke('translate-announcement', {
         body: { text: newContent },
       });
@@ -93,17 +93,20 @@ const AnnouncementsManager = () => {
     }
   };
 
-  const handleToggleActive = async (announcement: Announcement) => {
+  const handleToggleActive = async (announcementToToggle: Announcement) => {
     try {
-      // Deactivate all other announcements
-      await supabase.from('announcements').update({ is_active: false }).neq('id', announcement.id);
-      // Activate the selected one
-      const { error } = await supabase.from('announcements').update({ is_active: !announcement.is_active }).eq('id', announcement.id);
+      // Desativar todos os outros anúncios primeiro
+      await supabase.from('announcements').update({ is_active: false }).neq('id', announcementToToggle.id);
+      
+      // Ativar/desativar o anúncio selecionado
+      const { error } = await supabase.from('announcements').update({ is_active: !announcementToToggle.is_active }).eq('id', announcementToToggle.id);
       if (error) throw error;
+      
       showSuccess('toasts.admin.announcements.activateSuccess');
-      await fetchAnnouncements();
+      await fetchAnnouncements(); // Re-fetch para atualizar a lista
     } catch (error) {
       showError('toasts.admin.announcements.activateError');
+      console.error("Erro ao ativar/desativar anúncio:", error);
     }
   };
 
@@ -115,6 +118,7 @@ const AnnouncementsManager = () => {
       await fetchAnnouncements();
     } catch (error) {
       showError('toasts.admin.announcements.deleteError');
+      console.error("Erro ao excluir anúncio:", error);
     }
   };
 

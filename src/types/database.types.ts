@@ -12,16 +12,16 @@ export interface Database {
       announcements: {
         Row: {
           id: string
-          content: Json
+          content: Json // Alterado para Json para suportar JSONB
           is_active: boolean
           created_at: string
           updated_at: string
-          target_plan_types: string[] | null // Adicionado
+          target_plan_types: string[] | null
         }
         Insert: {
           content: Json
           is_active?: boolean
-          target_plan_types?: string[] | null // Adicionado
+          target_plan_types?: string[] | null
         }
         Update: Partial<this['Insert']>
       }

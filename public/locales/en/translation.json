@@ -19,8 +19,7 @@
       "generateReplyError": "Error generating automatic reply.",
       "replySuccess": "Reply sent and feedback updated!",
       "replyError": "Error sending reply. Please try again.",
-      "fetchError": "Error fetching feedbacks.",
-      "updateStatusError": "Error updating feedback status."
+      "fetchError": "Error fetching feedbacks."
     },
     "admin": {
       "announcements": {
@@ -39,7 +38,15 @@
           "basic": "Basic Plan",
           "standard": "Standard Plan",
           "premium": "Premium Plan"
-        }
+        },
+        "title": "Announcements Manager",
+        "description": "Create, activate/deactivate, and delete announcements to display to users. Only one announcement can be active at a time.",
+        "newPlaceholder": "Enter the content of the new announcement here...",
+        "create": "Create Announcement",
+        "active": "Active",
+        "deleteConfirmTitle": "Confirm Announcement Deletion",
+        "deleteConfirmDescription": "Are you sure you want to delete this announcement? This action cannot be undone.",
+        "noAnnouncements": "No announcements found."
       },
       "fetchUsersFailed": "Error fetching users.",
       "fetchUserDetailsFailed": "Error fetching user details.",

@@ -15,16 +15,15 @@ const AnnouncementBanner = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        // Apenas busca anúncios ativos, sem filtrar por tipo de plano no cliente
+        // A consulta agora se baseia na política RLS para filtrar por plano
         const { data, error } = await supabase
           .from('announcements')
           .select('*')
           .eq('is_active', true)
-          .or(`target_plan_types.cs.{${user?.plan_type || 'free'}},target_plan_types.cs.{all}`)
           .limit(1)
           .single();
 
-        if (error && error.code !== 'PGRST116') { // Ignore 'exact one row' error
+        if (error && error.code !== 'PGRST116') { // Ignore 'exact one row' error (no rows found)
           throw error;
         }
 
@@ -34,13 +33,34 @@ const AnnouncementBanner = () => {
             setAnnouncement(data);
             setIsVisible(true);
           }
+        } else {
+          setAnnouncement(null);
+          setIsVisible(false);
         }
       } catch (error) {
         console.error('Error fetching announcement:', error);
+        setAnnouncement(null);
+        setIsVisible(false);
       }
     };
 
     fetchAnnouncement();
+
+    // Setup real-time subscription for announcements
+    const channel = supabase
+      .channel('announcements-changes')
+      .on<Announcement>(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'announcements' },
+        () => {
+          fetchAnnouncement(); // Re-fetch on any change to announcements
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user, i18n.language]); // Re-fetch when user or language changes
 
   const handleDismiss = () => {
