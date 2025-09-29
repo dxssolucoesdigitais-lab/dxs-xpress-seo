@@ -20,6 +20,7 @@ const AnnouncementBanner = () => {
           .from('announcements')
           .select('*')
           .eq('is_active', true)
+          .or(`target_plan_types.cs.{${user?.plan_type || 'free'}},target_plan_types.cs.{all}`)
           .limit(1)
           .single();
 
