@@ -15,17 +15,13 @@ const AnnouncementBanner = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        let query = supabase
+        // Apenas busca anúncios ativos, sem filtrar por tipo de plano no cliente
+        const { data, error } = await supabase
           .from('announcements')
           .select('*')
           .eq('is_active', true)
-          .limit(1);
-
-        // Filter by user plan if available, otherwise default to 'all'
-        const userPlanType = user?.plan_type || 'free'; // Default to 'free' if no plan
-        query = query.or(`target_plan_types.cs.{${userPlanType}},target_plan_types.cs.{all}`);
-
-        const { data, error } = await query.single();
+          .limit(1)
+          .single();
 
         if (error && error.code !== 'PGRST116') { // Ignore 'exact one row' error
           throw error;
