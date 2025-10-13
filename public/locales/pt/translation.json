@@ -345,5 +345,9 @@
   },
   "changeLanguage": "Mudar Idioma",
   "portuguese": "Português",
-  "english": "Inglês"
+  "english": "Inglês",
+  "spanish": "Espanhol",
+  "login": {
+    "welcome": "Bem-vindo de volta!"
+  }
 }

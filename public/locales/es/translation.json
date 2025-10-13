@@ -345,5 +345,8 @@
   "changeLanguage": "Cambiar Idioma",
   "portuguese": "Portugués",
   "english": "Inglés",
-  "spanish": "Español"
+  "spanish": "Español",
+  "login": {
+    "welcome": "¡Bienvenido de nuevo!"
+  }
 }

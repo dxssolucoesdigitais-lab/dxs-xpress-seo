@@ -344,5 +344,9 @@
   },
   "changeLanguage": "Change Language",
   "portuguese": "Português",
-  "english": "Inglês"
+  "english": "Inglês",
+  "spanish": "Espanhol",
+  "login": {
+    "welcome": "Welcome back!"
+  }
 }
