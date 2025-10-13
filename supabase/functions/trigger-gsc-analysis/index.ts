@@ -14,7 +14,8 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const n8nWebhookGSC = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS') // Novo ENV para o webhook GSC
+    // User needs to set this environment variable in Supabase project settings
+    const n8nWebhookGSC = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS') || 'http://192.168.0.216:5678/webhook/gsc-@006-xpress-seo'
 
     if (!supabaseUrl || !serviceRoleKey || !n8nWebhookGSC) {
       throw new Error("Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_URL_GSC_ANALYSIS).");

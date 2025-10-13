@@ -17,10 +17,11 @@ serve(async (req) => {
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     
     // Get webhook URLs for each plan from environment variables
-    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
-    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
-    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
-    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
+    // User needs to set these environment variables in Supabase project settings
+    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE') || 'http://192.168.0.216:5678/webhook/free-@002-xpress-seo'
+    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC') || 'http://192.168.0.216:5678/webhook/basic-@003-xpress-seo'
+    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD') || 'http://192.168.0.216:5678/webhook/standard-@004-xpress-seo'
+    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM') || 'http://192.168.0.216:5678/webhook/premium-@005-xpress-seo'
 
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error("Missing Supabase environment variables.");

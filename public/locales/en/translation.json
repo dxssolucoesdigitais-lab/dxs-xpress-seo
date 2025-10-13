@@ -1,7 +1,7 @@
 {
   "currencyDialog": {
     "title": "Select Payment Currency",
-    "description": "Choose how you prefer to pay for your {{plan}} plan",
+    "description": "Choose how you prefer to pay for your {{planName}} plan",
     "noteBRL": "💡 BRL Payments: Instant processing via Mercado Pago",
     "noteUSD": "💡 USD Payments: Bank transfer - activation within 24h after confirmation",
     "success": "Currency selected successfully!"
@@ -121,6 +121,7 @@
           "1 complete SEO generation for collection and product description steps",
           "1 optimized Blog for SEO and AI",
           "2 social media captions optimized for SEO and AI",
+          "1 validation report",
           "1 translation for the selected language",
           "1 optimized HTML version"
         ],
@@ -335,7 +336,7 @@
     "submit": "Send Reply"
   },
   "subscriptionAlert": {
-    "title": "Your Subscription Is Expiring!",
+    "title": "Your Subscription Is Exiring!",
     "expiresInDays": "Your subscription expires in {{count}} days.",
     "expiresInOneDay": "Your subscription expires in 1 day.",
     "expired": "Your subscription has expired!",

@@ -31,6 +31,9 @@ export function LanguageSwitcher() {
         <DropdownMenuItem onClick={() => changeLanguage('en')} className="cursor-pointer">
           {t('english')}
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeLanguage('es')} className="cursor-pointer">
+          {t('spanish')}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -27,6 +27,9 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  // Get the plan name for display in the description
+  const planName = t(`pricingDialog.tiers.${selectedPlan}.name`, { defaultValue: selectedPlan });
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="bg-popover border-border text-popover-foreground max-w-md">
@@ -35,7 +38,7 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
             {t('currencyDialog.title')}
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
-            {t('currencyDialog.description')}
+            {t('currencyDialog.description', { planName })}
           </DialogDescription>
         </DialogHeader>
         

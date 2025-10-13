@@ -3,7 +3,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/contexts/SessionContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // Workaround for the import issue: define pt-BR translations directly
@@ -81,7 +81,13 @@ const Login = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-[#0a0a0f]">
+    <div className="flex flex-col justify-center items-center h-screen bg-[#0a0a0f]">
+      <div className="mb-8">
+        <Link to="/" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="XpressSEO Logo" className="h-10 w-10" />
+          <span className="text-2xl font-bold text-white">XpressSEO</span>
+        </Link>
+      </div>
       <div className="w-full max-w-md p-8 space-y-8 bg-[#1a1a1f] rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-white">{t('login.welcome')}</h2>
         <Auth

@@ -1,0 +1,349 @@
+{
+  "currencyDialog": {
+    "title": "Seleccionar Moneda de Pago",
+    "description": "Elige cómo prefieres realizar el pago de tu plan {{planName}}",
+    "noteBRL": "💡 Pagos en Real: Procesamiento instantáneo vía Mercado Pago",
+    "noteUSD": "💡 Pagos en Dólar: Transferencia bancaria - activación en 24h tras confirmación",
+    "success": "¡Moneda seleccionada con éxito!"
+  },
+  "toasts": {
+    "plans": {
+      "bankInstructionsSent": "¡Instrucciones de transferencia bancaria enviadas a tu correo electrónico!",
+      "loginRequired": "Por favor, inicia sesión para seleccionar un plan.",
+      "checkoutFailed": "Error al iniciar el pago. Inténtalo de nuevo.",
+      "internationalPaymentsNotSupported": "Los pagos internacionales aún no son compatibles con este método."
+    },
+    "feedback": {
+      "success": "¡Comentario enviado con éxito! Gracias por tu contribución.",
+      "error": "Error al enviar el comentario. Inténtalo de nuevo.",
+      "generateReplyError": "Error al generar respuesta automática.",
+      "replySuccess": "¡Respuesta enviada y comentario actualizado!",
+      "replyError": "Error al enviar respuesta. Inténtalo de nuevo.",
+      "fetchError": "Error al buscar comentarios."
+    },
+    "admin": {
+      "fetchUsersFailed": "Error al buscar usuarios.",
+      "fetchUserDetailsFailed": "Error al buscar detalles del usuario.",
+      "updateCreditsSuccess": "¡Créditos de usuario actualizados con éxito!",
+      "updateCreditsFailed": "Error al actualizar créditos de usuario."
+    },
+    "projects": {
+      "fetchFailed": "Error al buscar proyectos.",
+      "createSuccess": "¡Proyecto creado con éxito!",
+      "createFailed": "Error al crear proyecto.",
+      "deleteSuccess": "¡Proyecto eliminado con éxito!",
+      "deleteFailed": "Error al eliminar proyecto.",
+      "paused": "Proyecto pausado con éxito.",
+      "resumed": "Proyecto reanudado con éxito.",
+      "statusUpdateFailed": "Error al actualizar el estado del proyecto.",
+      "triggerFailed": "Error al iniciar el flujo de trabajo del proyecto.",
+      "resumeNoCredits": "Créditos insuficientes para reanudar el proyecto. Por favor, actualiza tu plan.",
+      "noCreditsToStart": "Créditos insuficientes para iniciar el proyecto. Por favor, actualiza tu plan."
+    },
+    "chat": {
+      "responseSaved": "¡Tu selección ha sido guardada!",
+      "responseSaveFailed": "Error al guardar tu selección. Inténtalo de nuevo.",
+      "outOfCredits": "No tienes suficientes créditos para esta acción. Por favor, actualiza tu plan.",
+      "nextStepTriggerFailed": "Error al activar el siguiente paso del flujo de trabajo.",
+      "noCreditsToRegenerate": "No tienes suficientes créditos para regenerar este paso. Por favor, actualiza tu plan.",
+      "regenerating": "Regenerando paso...",
+      "regenerateFailed": "Error al regenerar el paso.",
+      "startWorkflowFailed": "Error al iniciar el flujo de trabajo.",
+      "noProjectForGSC": "Por favor, selecciona un proyecto para iniciar el análisis GSC.",
+      "noGSCAnalysisPurchase": "No tienes un análisis GSC pagado y sin usar. Por favor, compra uno.",
+      "gscAnalysisTriggered": "¡Análisis GSC activado con éxito! Los resultados aparecerán en breve.",
+      "gscAnalysisTriggerFailed": "Error al activar el análisis GSC. Inténtalo de nuevo."
+    },
+    "clipboard": {
+      "notAvailable": "Tu navegador no es compatible con la API del portapapeles.",
+      "success": "¡Copiado al portapapeles!",
+      "failed": "Error al copiar al portapapeles."
+    },
+    "profile": {
+      "updateSuccess": "¡Perfil actualizado con éxito!",
+      "updateFailed": "Error al actualizar perfil."
+    },
+    "password": {
+      "updateSuccess": "¡Contraseña actualizada con éxito!",
+      "updateFailed": "Error al actualizar contraseña."
+    },
+    "genericError": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+    },
+  "pricingDialog": {
+    "title": "Elige el Plan Perfecto para Ti",
+    "description": "Empieza con 3 créditos gratis y actualiza para escalar tu negocio.",
+    "popular": "Popular",
+    "perMonth": "/mes",
+    "currentPlan": "Plan Actual",
+    "selectPlan": "Seleccionar Plan",
+    "footerNote1": "Todos los planes se facturan mensualmente. Cancela en cualquier momento.",
+    "footerNote2": "Los créditos no utilizados no se acumulan para el próximo mes.",
+    "tiers": [
+      {
+        "planId": "free",
+        "name": "Gratis",
+        "price": "$0",
+        "credits": 3,
+        "features": [
+          "3 Créditos Iniciales",
+          "Por cada crédito:",
+          "1 generación completa de los pasos de descripción de colección y producto con SEO",
+          "1 Blog optimizado",
+          "1 pie de foto optimizado para Redes Sociales",
+          "1 informe de validación",
+          "1 traducción al idioma seleccionado",
+          "1 versión HTML optimizada"
+        ],
+        "popular": false
+      },
+      {
+        "planId": "basic",
+        "name": "Básico",
+        "price": "$15",
+        "credits": 20,
+        "features": [
+          "20 Créditos/mes",
+          "Por cada crédito:",
+          "1 generación completa de los pasos de descripción de colección y producto con SEO",
+          "1 traducción al idioma seleccionado",
+          "1 versión HTML optimizada"
+        ],
+        "popular": false
+      },
+      {
+        "planId": "standard",
+        "name": "Estándar",
+        "price": "$28",
+        "credits": 60,
+        "features": [
+          "60 Créditos/mes",
+          "Por cada crédito:",
+          "1 generación completa de los pasos de descripción de colección y producto con SEO",
+          "1 Blog optimizado para SEO e IA",
+          "2 pies de foto para redes sociales optimizados para SEO e IA",
+          "1 informe de validación",
+          "1 traducción al idioma seleccionado",
+          "1 versión HTML optimizada"
+        ],
+        "popular": true
+      },
+      {
+        "planId": "premium",
+        "name": "Premium",
+        "price": "$37",
+        "credits": 120,
+        "features": [
+          "120 Créditos/mes",
+          "Por cada crédito:",
+          "1 generación completa de los pasos de descripción de colección y producto con SEO",
+          "1 Blog optimizado para SEO e IA",
+          "5 pies de foto para redes sociales optimizados para SEO e IA",
+          "1 informe de validación",
+          "1 traducción al idioma seleccionado",
+          "1 versión HTML optimizada"
+        ],
+        "popular": false
+      }
+    ],
+    "gscService": {
+      "serviceId": "gsc_analysis",
+      "title": "Análisis GSC Independiente",
+      "description": "¡Obtén un análisis detallado de Google Search Console para tu sitio web!",
+      "price": "$9.00",
+      "perAnalysis": "/análisis",
+      "features": [
+        "2 Créditos",
+        "Informe y recomendaciones de optimización"
+      ],
+      "buyNow": "Comprar Análisis GSC"
+    }
+  },
+  "header": {
+    "credits": "créditos",
+    "upgradePlan": "Actualizar Plan",
+    "dashboard": "Panel de Administración",
+    "profile": "Mi Perfil",
+    "logout": "Cerrar Sesión"
+  },
+  "newProject": "Nueva Conversación",
+  "feedbackDialog": {
+    "button": "Enviar Comentario",
+    "title": "Envía tu Comentario",
+    "description": "¡Tu opinión es muy importante para nosotros! Ayúdanos a mejorar XpressSEO.",
+    "label": "Tu mensaje",
+    "placeholder": "Escribe tu comentario aquí...",
+    "submit": "Enviar Comentario"
+  },
+  "deleteDialog": {
+    "title": "Confirmar Eliminación",
+    "description": "¿Estás seguro de que quieres eliminar el proyecto \"{{projectName}}\"? Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar"
+  },
+  "chatHeader": {
+    "assistantName": "Asistente XpressSEO",
+    "step": "Paso"
+  },
+  "chatInput": {
+    "placeholder": "¡Escribe algo!",
+    "disabledPlaceholder": "¡Escribe algo!",
+    "analyze": "Analizar",
+    "uploadFile": "Subir Archivo (Premium)",
+    "analyzeLink": "Analizar Enlace",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "viewHistory": "Ver Historial",
+    "gscAnalysis": "Análisis GSC",
+    "noCreditsTooltip": "No tienes suficientes créditos para esta acción. Por favor, actualiza tu plan.",
+    "noCreditsToResumeTooltip": "No tienes suficientes créditos para reanudar el proyecto. Por favor, actualiza tu plan.",
+    "gscNoProjectTooltip": "Selecciona un proyecto para iniciar el análisis GSC."
+  },
+  "chat": {
+    "genericApproval": "Aprobado",
+    "analyzingNextStep": "Analizando el siguiente paso..."
+  },
+  "emptyChat": {
+    "greeting": "¡Hola, {{userName}}!",
+    "guest": "Invitado",
+    "subtitle": "¿Listo para optimizar tu SEO? ¡Inicia una nueva conversación!"
+  },
+  "optionSelector": {
+    "prompt": "Por favor, selecciona una de las opciones a continuación para continuar:",
+    "helperText": "Haz clic en una opción para seleccionarla y avanzar.",
+    "noCreditsTooltip": "No tienes suficientes créditos para seleccionar una opción. Por favor, actualiza tu plan.",
+    "noCreditsWarning": "No tienes suficientes créditos para seleccionar una opción. Por favor, actualiza tu plan."
+  },
+  "progressFlow": {
+    "title": "Progreso del Flujo de Trabajo:",
+    "inProgress": "en curso...",
+    "nextSteps": "Próximos pasos:"
+  },
+  "errorDisplay": {
+    "title": "Error en el Flujo de Trabajo",
+    "message": "Ocurrió un error inesperado en el flujo de trabajo de IA. Por favor, intenta regenerar el paso o contacta con soporte si el problema persiste."
+  },
+  "historySheet": {
+    "title": "Historial del Proyecto",
+    "description": "Contenido aprobado para el proyecto: {{projectName}}",
+    "stepLabel": "Paso",
+    "workflowProgressContent": "Este paso representa el progreso del flujo de trabajo.",
+    "genericApprovedContent": "Contenido aprobado por el usuario.",
+    "noStepsTitle": "Aún no hay pasos aprobados.",
+    "noStepsDescription": "A medida que apruebes los pasos, el contenido aparecerá aquí.",
+    "copyAll": "Copiar Todo",
+    "copied": "¡Copiado!",
+    "close": "Cerrar"
+  },
+  "profilePage": {
+    "title": "Configuración del Perfil",
+    "tabs": {
+      "profile": "Perfil",
+      "password": "Contraseña",
+      "billing": "Facturación",
+      "feedbacks": "Mis Comentarios"
+    },
+    "profileDetails": {
+      "title": "Detalles del Perfil",
+      "description": "Gestiona tu información de perfil.",
+      "email": "Correo Electrónico",
+      "fullName": "Nombre Completo",
+      "save": "Guardar Cambios"
+    },
+    "changePassword": {
+      "title": "Cambiar Contraseña",
+      "description": "Actualiza tu contraseña.",
+      "newPassword": "Nueva Contraseña",
+      "update": "Actualizar Contraseña"
+    }
+  },
+  "billingInfo": {
+    "title": "Información de Facturación",
+    "description": "Gestiona tu plan y créditos.",
+    "currentPlan": "Plan Actual",
+    "freePlan": "Gratis",
+    "creditsRemaining": "Créditos Restantes",
+    "changePlan": "Cambiar Plan"
+  },
+  "usageHistory": {
+    "title": "Historial de Uso",
+    "description": "Tus últimas actividades que consumieron créditos.",
+    "action": "Acción",
+    "creditsUsed": "Créditos Usados",
+    "date": "Fecha",
+    "noHistory": "No se encontró historial de uso."
+  },
+  "feedbackHistory": {
+    "title": "Mis Comentarios",
+    "description": "Visualiza el estado y las respuestas a tus comentarios.",
+    "replied": "Respondido",
+    "yourMessage": "Tu Mensaje",
+    "adminResponse": "Respuesta del Administrador",
+    "noHistory": "Aún no has enviado ningún comentario."
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Panel de Administración",
+      "allUsers": "Todos los Usuarios",
+      "filterByPlan": "Filtrar por Plan",
+      "allPlans": "Todos los Planes",
+      "search": "Buscar usuarios...",
+      "fullName": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "plan": "Plan",
+      "credits": "Créditos",
+      "notApplicable": "N/A",
+      "noUsersFound": "No se encontraron usuarios."
+    },
+    "tabs": {
+      "users": "Usuarios",
+      "feedbacks": "Comentarios"
+    },
+    "userDetail": {
+      "userNotFound": "Usuario no encontrado.",
+      "backToDashboard": "Volver al Panel",
+      "backToUsers": "Volver a Usuarios",
+      "manageCredits": "Gestionar Créditos",
+      "creditBalance": "Saldo de Créditos",
+      "updateCredits": "Actualizar Créditos",
+      "usageHistory": "Historial de Uso",
+      "last50": "Últimas 50 actividades",
+      "userProjects": "Proyectos del Usuario",
+      "projectName": "Nombre del Proyecto",
+      "status": "Estado",
+      "createdAt": "Creado El"
+    }
+  },
+  "feedbackViewer": {
+    "title": "Visor de Comentarios",
+    "description": "Gestiona y responde a los comentarios de los usuarios.",
+    "user": "Usuario",
+    "feedback": "Comentario",
+    "status": "Estado",
+    "actions": "Acciones",
+    "statuses": {
+      "unread": "No Leído",
+      "read": "Leído",
+      "replied": "Respondido"
+    },
+    "noFeedback": "No se encontraron comentarios."
+  },
+  "feedbackReplyDialog": {
+    "title": "Responder Comentario",
+    "description": "Envía una respuesta al comentario del usuario.",
+    "userFeedback": "Comentario del Usuario",
+    "yourReply": "Tu Respuesta",
+    "generate": "Generar Respuesta (IA)",
+    "submit": "Enviar Respuesta"
+  },
+  "subscriptionAlert": {
+    "title": "¡Tu Suscripción Está Expirando!",
+    "expiresInDays": "Tu suscripción expira en {{count}} días.",
+    "expiresInOneDay": "Tu suscripción expira en 1 día.",
+    "expired": "¡Tu suscripción ha expirado!",
+    "renew": "Renovar Ahora"
+  },
+  "changeLanguage": "Cambiar Idioma",
+  "portuguese": "Portugués",
+  "english": "Inglés",
+  "spanish": "Español"
+}
