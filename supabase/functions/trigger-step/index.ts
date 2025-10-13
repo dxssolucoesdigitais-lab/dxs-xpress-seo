@@ -18,10 +18,11 @@ serve(async (req) => {
     
     // Get webhook URLs for each plan from environment variables
     // User needs to set these environment variables in Supabase project settings
-    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE') || 'http://192.168.0.216:5678/webhook/free-@002-xpress-seo'
-    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC') || 'http://192.168.0.216:5678/webhook/basic-@003-xpress-seo'
-    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD') || 'http://192.168.0.216:5678/webhook/standard-@004-xpress-seo'
-    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM') || 'http://192.168.0.216:5678/webhook/premium-@005-xpress-seo'
+    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
+    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
+    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
+    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
+    const n8nWebhookGSCAnalysis = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS')
 
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error("Missing Supabase environment variables.");
@@ -103,7 +104,7 @@ serve(async (req) => {
     }
 
     // --- Trigger n8n Workflow ---
-    fetch(targetWebhookUrl, {
+    const n8nResponse = await fetch(targetWebhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -113,7 +114,12 @@ serve(async (req) => {
         currentStep: project.current_step,
         projectData: project,
       }),
-    }).catch(err => console.error("Error triggering n8n webhook:", err));
+    });
+
+    if (!n8nResponse.ok) {
+      const errorBody = await n8nResponse.text();
+      throw new Error(`Failed to trigger n8n workflow: ${n8nResponse.status} - ${errorBody}`);
+    }
 
     // --- Respond Immediately to the Client ---
     return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully for plan '${userPlan}'.` }), {
