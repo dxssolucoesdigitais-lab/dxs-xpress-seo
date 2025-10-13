@@ -69,7 +69,7 @@
       "updateFailed": "Erro ao atualizar senha."
     },
     "genericError": "Ocorreu um erro inesperado. Por favor, tente novamente."
-  },
+    },
   "pricingDialog": {
     "title": "Escolha o Plano Perfeito para Você",
     "description": "Comece com 3 créditos grátis e faça upgrade para escalar seu negócio.",
@@ -292,7 +292,7 @@
       "email": "Email",
       "plan": "Plano",
       "credits": "Créditos",
-      "notApplicável": "N/A",
+      "notApplicable": "N/A",
       "noUsersFound": "Nenhum usuário encontrado."
     },
     "tabs": {
@@ -349,5 +349,32 @@
   "spanish": "Espanhol",
   "login": {
     "welcome": "Bem-vindo de volta!"
+  },
+  "landingPage": {
+    "hero": {
+      "title": "Transforme de Forma Inteligente Sua Loja de Dropshipping com XpressSEO",
+      "subtitle": "Nos bastidores vários especialistas de IA trabalhando em conjunto para entregar conteúdo otimizado para você dominar os resultados de busca.",
+      "ctaButton": "Começar Agora (É Grátis)",
+      "freeCreditsNote": "3 créditos gratuitos para você começar."
+    },
+    "features": {
+      "title": "Tudo que você precisa para crescer",
+      "subtitle": "Deixe a IA cuidar do trabalho pesado de SEO enquanto você foca em vender.",
+      "keywordResearchTitle": "Pesquisa de Palavras-chave",
+      "keywordResearchDescription": "Nossa IA analisa seu nicho e encontra as palavras-chave de alta intenção que seus clientes estão usando para buscar produtos.",
+      "optimizedContentTitle": "Conteúdo Otimizado",
+      "optimizedContentDescription": "Gere descrições de produtos, categorias e posts de blog que não apenas vendem, mas também são amados pelos motores de busca.",
+      "internationalExpansionTitle": "Expansão Internacional",
+      "internationalExpansionDescription": "Traduza e adapte todo o seu conteúdo de SEO para o país de destino, alcançando um público global com precisão cultural."
+    },
+    "footer": {
+      "blog": "Blog",
+      "contact": "Contato",
+      "faq": "FAQ",
+      "termsOfService": "Termos de Serviço",
+      "privacyPolicy": "Política de Privacidade",
+      "copyright": "XpressSEO. Todos os direitos reservados.",
+      "developedBy": "Desenvolvido por DXS Digital."
+    }
   }
 }

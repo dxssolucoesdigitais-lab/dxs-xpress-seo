@@ -343,10 +343,37 @@
     "renew": "Renovar Ahora"
   },
   "changeLanguage": "Cambiar Idioma",
-  "portuguese": "Portugués",
-  "english": "Inglés",
+  "portuguese": "Português",
+  "english": "Inglês",
   "spanish": "Español",
   "login": {
     "welcome": "¡Bienvenido de nuevo!"
+  },
+  "landingPage": {
+    "hero": {
+      "title": "Transforma Inteligentemente Tu Tienda de Dropshipping con XpressSEO",
+      "subtitle": "Detrás de escena, múltiples especialistas en IA trabajan juntos para ofrecer contenido optimizado para que domines los resultados de búsqueda.",
+      "ctaButton": "Empezar Ahora (Es Gratis)",
+      "freeCreditsNote": "3 créditos gratuitos para empezar."
+    },
+    "features": {
+      "title": "Todo lo que necesitas para crecer",
+      "subtitle": "Deja que la IA se encargue del trabajo pesado de SEO mientras te enfocas en vender.",
+      "keywordResearchTitle": "Investigación de Palabras Clave",
+      "keywordResearchDescription": "Nuestra IA analiza tu nicho y encuentra las palabras clave de alta intención que tus clientes están usando para buscar productos.",
+      "optimizedContentTitle": "Contenido Optimizado",
+      "optimizedContentDescription": "Genera descripciones de productos, categorías y publicaciones de blog que no solo venden, sino que también son amadas por los motores de búsqueda.",
+      "internationalExpansionTitle": "Expansión Internacional",
+      "internationalExpansionDescription": "Traduce y adapta todo tu contenido SEO para el país de destino, llegando a una audiencia global con precisión cultural."
+    },
+    "footer": {
+      "blog": "Blog",
+      "contact": "Contacto",
+      "faq": "FAQ",
+      "termsOfService": "Términos de Servicio",
+      "privacyPolicy": "Política de Privacidad",
+      "copyright": "XpressSEO. Todos los derechos reservados.",
+      "developedBy": "Desarrollado por DXS Digital."
+    }
   }
 }

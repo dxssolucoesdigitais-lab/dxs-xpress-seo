@@ -1,32 +1,35 @@
 import React from 'react';
 import { Search, FileText, Globe, BarChart3 } from 'lucide-react';
-
-const features = [
-  {
-    icon: <Search className="w-8 h-8 text-cyan-400" />,
-    title: 'Pesquisa de Palavras-chave',
-    description: 'Nossa IA analisa seu nicho e encontra as palavras-chave de alta intenção que seus clientes estão usando para buscar produtos.',
-  },
-  {
-    icon: <FileText className="w-8 h-8 text-cyan-400" />,
-    title: 'Conteúdo Otimizado',
-    description: 'Gere descrições de produtos, categorias e posts de blog que não apenas vendem, mas também são amados pelos motores de busca.',
-  },
-  {
-    icon: <Globe className="w-8 h-8 text-cyan-400" />,
-    title: 'Expansão Internacional',
-    description: 'Traduza e adapte todo o seu conteúdo de SEO para o país de destino, alcançando um público global com precisão cultural.',
-  },
-];
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const FeaturesSection = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
+  const features = [
+    {
+      icon: <Search className="w-8 h-8 text-cyan-400" />,
+      title: t('landingPage.features.keywordResearchTitle'),
+      description: t('landingPage.features.keywordResearchDescription'),
+    },
+    {
+      icon: <FileText className="w-8 h-8 text-cyan-400" />,
+      title: t('landingPage.features.optimizedContentTitle'),
+      description: t('landingPage.features.optimizedContentDescription'),
+    },
+    {
+      icon: <Globe className="w-8 h-8 text-cyan-400" />,
+      title: t('landingPage.features.internationalExpansionTitle'),
+      description: t('landingPage.features.internationalExpansionDescription'),
+    },
+  ];
+
   return (
     <section className="py-20 sm:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight">Tudo que você precisa para crescer</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t('landingPage.features.title')}</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Deixe a IA cuidar do trabalho pesado de SEO enquanto você foca em vender.
+            {t('landingPage.features.subtitle')}
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">

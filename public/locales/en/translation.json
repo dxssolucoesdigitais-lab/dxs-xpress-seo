@@ -68,7 +68,7 @@
       "updateFailed": "Error updating password."
     },
     "genericError": "An unexpected error occurred. Please try again."
-  },
+    },
   "pricingDialog": {
     "title": "Choose the Perfect Plan for You",
     "description": "Start with 3 free credits and upgrade to scale your business.",
@@ -348,5 +348,32 @@
   "spanish": "Espanhol",
   "login": {
     "welcome": "Welcome back!"
+  },
+  "landingPage": {
+    "hero": {
+      "title": "Intelligently Transform Your Dropshipping Store with XpressSEO",
+      "subtitle": "Behind the scenes, multiple AI specialists work together to deliver optimized content for you to dominate search results.",
+      "ctaButton": "Start Now (It's Free)",
+      "freeCreditsNote": "3 free credits to get you started."
+    },
+    "features": {
+      "title": "Everything you need to grow",
+      "subtitle": "Let AI handle the heavy lifting of SEO while you focus on selling.",
+      "keywordResearchTitle": "Keyword Research",
+      "keywordResearchDescription": "Our AI analyzes your niche and finds high-intent keywords your customers are using to search for products.",
+      "optimizedContentTitle": "Optimized Content",
+      "optimizedContentDescription": "Generate product descriptions, categories, and blog posts that not only sell but are also loved by search engines.",
+      "internationalExpansionTitle": "International Expansion",
+      "internationalExpansionDescription": "Translate and adapt all your SEO content for the target country, reaching a global audience with cultural precision."
+    },
+    "footer": {
+      "blog": "Blog",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "copyright": "XpressSEO. All rights reserved.",
+      "developedBy": "Developed by DXS Digital."
+    }
   }
 }
