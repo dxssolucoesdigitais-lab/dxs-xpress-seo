@@ -375,5 +375,156 @@
       "copyright": "XpressSEO. All rights reserved.",
       "developedBy": "Developed by DXS Digital."
     }
+  },
+  "faqPage": {
+    "backLink": "Back to Chat",
+    "title": "Frequently Asked Questions (FAQ)",
+    "subtitle": "Find answers to the most common questions about XpressSEO.",
+    "categories": [
+      {
+        "category": "General",
+        "questions": [
+          {
+            "q": "What is XpressSEO?",
+            "a": "XpressSEO is a Software as a Service (SaaS) platform that uses multiple Artificial Intelligence agents to automate and optimize content creation for SEO, especially focused on dropshipping stores."
+          },
+          {
+            "q": "How does XpressSEO work?",
+            "a": "You start a new \"conversation\" by providing a product link. Our AI then initiates a step-by-step workflow, generating titles, descriptions, blog articles, and more. At each step, you approve the content to ensure full control over the final result and advance the process."
+          }
+        ]
+      },
+      {
+        "category": "Usage and Credits",
+        "questions": [
+          {
+            "q": "What is a \"credit\"?",
+            "a": "A credit is consumed each time the AI performs a task to generate new content for you, such as generating title and description options. The initial product analysis does not consume a credit."
+          },
+          {
+            "q": "What happens when my credits run out?",
+            "a": "When your credits reach zero, the AI workflow is paused. You will not be able to approve steps until you acquire more credits. To do this, simply click \"Upgrade Plan\" and choose one of our plans."
+          },
+          {
+            "q": "Do credits expire?",
+            "a": "Your credits are tied to your monthly subscription. They are renewed each billing cycle and are not cumulative."
+          }
+        ]
+      },
+      {
+        "category": "Features",
+        "questions": [
+          {
+            "q": "Can I use the generated content on any platform?",
+            "a": "Yes! The content is yours. You can copy and paste it into your Shopify store, WooCommerce, or any other e-commerce platform."
+          },
+          {
+            "q": "Does XpressSEO work for other languages?",
+            "a": "Yes. Our AI is capable of generating and optimizing content for different countries and languages. The translation feature is available in our plans to help expand your store internationally with precision."
+          }
+        ]
+      }
+    ]
+  },
+  "termsPage": {
+    "backLink": "Back to Home Page",
+    "title": "XpressSEO Terms of Use and Service",
+    "intro1": "Welcome to the XpressSEO website. Before exploring everything we have to offer, it is important that you understand and agree to some basic rules that govern the use of our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, and any other digital service we offer, such as stores and e-commerce platforms.",
+    "intro2": "By using our website and services, you automatically agree to follow the rules we establish here. If you do not agree with something, please consider not using our services. It is very important to us that you feel safe and informed at all times.",
+    "section1": {
+      "title": "1. Accepting the Terms",
+      "p1": "By browsing and using the XpressSEO website, you automatically agree to our rules and conditions. We are always looking to improve, so these terms may change from time to time. If we make significant changes, we will post the updates here on the website. Continuing to use the website after these changes means that you accept the new terms."
+    },
+    "section2": {
+      "title": "2. How to Use Our Website",
+      "p1": "Most of our website is open to you without the need for registration. However, some special sections may require you to create an account. We ask that you be honest when providing your information and keep your password and login secure. If you decide to share any content with us, such as comments, please do so respectfully and within the law."
+    },
+    "section3": {
+      "title": "3. Your Privacy",
+      "p1": "At XpressSEO, privacy is an essential value. By interacting with our website, you accept our Privacy Policy, which details our responsible and law-compliant approach to handling your personal data. Our commitment is to transparency and security: we explain how we collect, use, and protect your information, ensuring your privacy and offering control over your data.",
+      "p2": "We adopt security practices to protect your information against unauthorized access and improper sharing, ensuring that any cooperation with third parties occurs only based on your approval or clear legal requirements, reaffirming our commitment to your trust and digital security."
+    },
+    "section4": {
+      "title": "4. Content Rights",
+      "p1": "The content available on the XpressSEO website, including, but not limited to, texts, images, illustrations, designs, icons, photographs, computer programs, video clips, and audio, constitutes intellectual property protected by both national legislation and international treaties on copyright and industrial property. This property encompasses not only materials directly produced and published by us, but also content used under license or permission from third parties, ensuring that all rights are respected according to current regulations.",
+      "p2": "By accessing our website, you receive a limited, non-exclusive, and revocable license to view and use the content for personal and non-commercial purposes. This implies that any reproduction, distribution, transmission, or modification of the content, without the due written authorization from XpressSEO, is strictly prohibited. Such a restriction aims to protect the intellectual property rights associated with the materials made available, ensuring that their use does not infringe the rights of the creators or holders of these rights, in addition to promoting an environment of respect and appreciation for creativity and innovation."
+    },
+    "section5": {
+      "title": "5. Cookies and More",
+      "p1": "We use cookies to improve your experience, collecting anonymous information during your visit, such as your language preferences, visit duration, pages accessed, and other usage statistics. This data helps us personalize your content, optimize navigation, continuously improve the website in design and functionality, and ensure your online security. This practice is essential to allow us to offer a service more tailored to your needs and resolve any issues that may arise more quickly.",
+      "p2": "If you prefer to limit or refuse the use of cookies, the setting can be adjusted through your browser. This may affect your experience on the website, as some functionalities depend on cookies to work correctly. We understand the importance of control over your information and want you to know that, by adjusting settings to block cookies, some parts of our website may not offer the full intended experience."
+    },
+    "section6": {
+      "title": "6. Exploring External Links",
+      "p1": "Our website may include links to external sites that we think may be of interest to you. Note that we have no control over these external sites and, therefore, are not responsible for their content or policies."
+    },
+    "section7": {
+      "title": "7. Changes and Updates",
+      "p1": "Evolution is part of how we operate, which means that these Terms of Use may undergo updates to better reflect changes in our services or legislation. Whenever this happens, you will find the latest version available here. If the changes are significant, we will do our best to notify you through the contact methods you have provided us.",
+      "p2": "Continuing to access the website after these changes indicates that you agree to the new terms. If, for any reason, you do not agree with the updates, we ask that you do not continue using our website and services."
+    },
+    "contactTitle": "Questions or Comments?",
+    "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>."
+  },
+  "privacyPage": {
+    "backLink": "Back to Home Page",
+    "title": "XpressSEO Privacy Policy",
+    "intro1": "Welcome to XpressSEO, registered under CNPJ 40.080.986/0001-71, with headquarters at Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Our commitment is to the integrity and security of the personal data of our users and clients. This Privacy Policy applies to all digital interactions carried out on our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, associated services, mobile applications, and other digital platforms under our control.",
+    "intro2": "By accessing and using our platforms, you acknowledge and agree to the practices described in this policy. We treat the protection of your personal data with the utmost seriousness and commit to processing it responsibly, transparently, and securely.",
+    "definitionsTitle": "Definitions",
+    "definitionsList": [
+      "<strong>“Personal Data”</strong> refers to information that identifies or can identify a natural person.",
+      "<strong>“Sensitive Personal Data”</strong> refers to information that reveals intimate personal characteristics, such as racial origin, religious convictions, political opinions, genetic or biometric data.",
+      "<strong>“Personal Data Processing”</strong> covers any operation with Personal Data, such as collection, registration, storage, use, sharing, or destruction.",
+      "<strong>“Data Protection Laws”</strong> are all laws that regulate the Processing of Personal Data, including the LGPD (General Personal Data Protection Law, Law nº 13.709/18)."
+    ],
+    "dataCollectionTitle": "Data Collected and Reasons for Collection",
+    "dataCollectionIntro": "We collect and process the following types of personal data:",
+    "dataCollectionList1": "<strong>Information Provided by You:</strong> This includes, but is not limited to, first name, last name, email address, physical address, payment information, and any other information you choose to provide when creating an account, making a purchase, or interacting with our customer service.",
+    "dataCollectionList2": "<strong>Automatically Collected Information:</strong> When you visit our website, we automatically collect information about your device and your interaction with our website. This may include data such as your IP address, browser type, device details, time zone, pages visited, products viewed, websites or search terms that directed you to our website, and information about how you interact with our website.",
+    "cookiesTitle": "Use of Cookies and Tracking Technologies",
+    "cookiesIntro": "XpressSEO uses cookies, which are small text files stored on your device, and other tracking technologies to improve the user experience on our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, understand how our services are used, and optimize our marketing strategies.",
+    "cookiesTypesTitle": "Types of Cookies Used:",
+    "cookiesTypesList": [
+      "<strong>Essential Cookies:</strong> Essential for the website to function, allowing you to browse and use its features. Without these cookies, services such as shopping cart and payment processing cannot be provided.",
+      "<strong>Performance and Analytical Cookies:</strong> Collect information about how visitors use our website, which pages are visited most frequently, and if they receive error messages. These cookies are used only to improve the website's performance and user experience.",
+      "<strong>Functionality Cookies:</strong> Allow the website to remember choices you make (such as your username, language, or the region you are in) and provide enhanced, more personal features.",
+      "<strong>Advertising and Social Media Cookies:</strong> Used to deliver more relevant ads to you and your interests. They are also used to limit the number of times you see an ad, as well as help measure the effectiveness of advertising campaigns."
+    ],
+    "dataProcessingTitle": "Purposes of Data Processing",
+    "dataProcessingIntro": "The collected data is used to:",
+    "dataProcessingList": [
+      "Provide, operate, and improve our services and offerings;",
+      "Process your transactions and send notifications related to your purchases;",
+      "Personalize your user experience and recommend content or products that may be of interest to you;",
+      "Communicate important information, offers, and promotions, according to your communication preference;",
+      "Perform internal analyses to develop and enhance our services;",
+      "Comply with applicable legal and regulatory obligations."
+    ],
+    "dataSharingTitle": "Sharing and Transfer of Personal Data",
+    "dataSharingIntro": "We may share your personal data with third parties in the following circumstances:",
+    "dataSharingList": [
+      "With service providers and partners who assist us in business operations, provided they act in compliance with our data protection guidelines and applicable legislation;",
+      "To comply with legal obligations, respond to legal proceedings, or protect our rights and property, as well as the security of our clients and the public;",
+      "In case of corporate restructuring, sale, merger, or other asset transfer, ensuring that the receiving entity agrees to respect the privacy of your data in accordance with a policy equivalent to ours."
+    ],
+    "externalLinksTitle": "Links to other websites and social media",
+    "externalLinksP1": "Our platform may include links to external websites of partners, advertisers, and suppliers. Clicking on these links means you will be directed outside our website, entering domains that follow their own privacy policies, for which we are not responsible.",
+    "externalLinksP2": "We recommend carefully reading these policies before providing any personal data. Likewise, we do not assume responsibility for the privacy practices of third parties such as Facebook, Apple, Google, and Microsoft. We advise you to inform yourself about the privacy policies of these entities when using their services or applications.",
+    "dataSubjectRightsTitle": "Data Subject Rights",
+    "dataSubjectRightsIntro": "You have several rights regarding your personal data, including:",
+    "dataSubjectRightsList": [
+      "The right to access, rectify, or delete your personal data in our possession;",
+      "The right to limit or object to our processing of your data;",
+      "The right to data portability;",
+      "The right to withdraw your consent at any time, when processing is based on consent."
+    ],
+    "dataSubjectRightsContact": "To exercise these rights, please contact us at <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSecurityTitle": "Data Security",
+    "dataSecurityP1": "We implement technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. However, it is important to note that no system is completely secure. We commit to notifying you and any applicable authority of any security breaches in accordance with current legislation.",
+    "policyChangesTitle": "Changes to the Privacy Policy",
+    "policyChangesP1": "Our Privacy Policy may be updated periodically. The most current version will always be published on our website, indicating the date of the last revision. We encourage you to regularly review our policy to always be informed about how we are protecting your data.",
+    "contactTitle": "Contact",
+    "contactEmail": "If you have questions or concerns about our Privacy Policy or data practices, please do not hesitate to contact us at <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. We are committed to resolving any issues related to the privacy of our users and clients."
   }
 }
