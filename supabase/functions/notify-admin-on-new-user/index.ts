@@ -24,6 +24,7 @@ serve(async (req) => {
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
     // This function is triggered by a database event, so it receives the new user record directly.
+    // No need for Authorization header verification here.
     const { record: newUser } = await req.json();
 
     if (!newUser || !newUser.id) {
