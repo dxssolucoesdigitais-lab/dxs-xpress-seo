@@ -98,6 +98,8 @@ const Login = () => {
           localization={{
             variables: authLocalizationVariables,
           }}
+          defaultView="sign_in"
+          showLinks={true}
         />
       </div>
     </div>

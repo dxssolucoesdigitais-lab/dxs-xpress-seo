@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { LanguageSwitcher } from '../layout/LanguageSwitcher'; // Import LanguageSwitcher
 
 const Footer = () => {
   return (
@@ -22,7 +23,13 @@ const Footer = () => {
             Política de Privacidade
           </Link>
         </div>
+        {/* Language Selector */}
+        <div className="mb-4 flex justify-center">
+          <LanguageSwitcher />
+        </div>
         <p className="text-xs">&copy; {new Date().getFullYear()} XpressSEO. Todos os direitos reservados.</p>
+        {/* New copyright text */}
+        <p className="text-xs mt-1">Desenvolvido por DXS Digital.</p>
       </div>
     </footer>
   );
