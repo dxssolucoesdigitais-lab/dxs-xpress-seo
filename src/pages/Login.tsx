@@ -84,7 +84,7 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-[#0a0a0f] p-4">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-white mb-2">Bem-vindo ao ChatFlow</h1>
+        <h1 className="text-4xl font-bold text-white mb-2">Bem-vindo ao XpressSEO</h1>
         <p className="text-lg text-gray-400">Seu assistente operacional inteligente</p>
       </div>
       <Card className="w-full max-w-md bg-card border-border text-card-foreground shadow-lg">
