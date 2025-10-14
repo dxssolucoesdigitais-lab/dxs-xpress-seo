@@ -376,7 +376,7 @@
       "contact": "Contacto",
       "faq": "FAQ",
       "termsOfService": "Términos de Servicio",
-      "privacyPolicy": "Política de Privacidad",
+      "privacyPolicy": "Política de Privacidade",
       "copyright": "XpressSEO. Todos los derechos reservados.",
       "developedBy": "Desarrollado por DXS Digital."
     }
@@ -395,7 +395,7 @@
           },
           {
             "q": "¿Cómo funciona XpressSEO?",
-            "a": "Inicias una nueva \"conversación\" proporcionando el enlace de un producto. Nuestra IA luego inicia un flujo de trabajo paso a paso, generando títulos, descripciones, artículos de blog y más. En cada paso, apruebas el contenido para asegurar un control total sobre el resultado final y avanzar en el proceso."
+            "a": "Inicias una nueva \"conversación\" proporcionando el enlace de un producto. Nuestra IA luego inicia un flujo de trabajo paso a paso, generando títulos, descrições, artículos de blog y más. En cada paso, apruebas el contenido para asegurar un control total sobre el resultado final y avanzar en el proceso."
           }
         ]
       },
@@ -521,10 +521,10 @@
     "dataSubjectRightsList": [
       "El derecho de acceso, rectificación o eliminación de tus datos personales en nuestra posesión;",
       "El derecho de limitar u oponerte a nuestro procesamiento de tus datos;",
-      "El derecho a la portabilidad de datos;",
+      "El derecho a la portabilidade de datos;",
       "El derecho a retirar tu consentimiento en cualquier momento, cuando el procesamiento se base en el consentimiento."
     ],
-    "dataSubjectRightsContact": "Para ejercer estos derechos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Seguridad de los Datos",
     "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgación o destrucción. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Cambios en la Política de Privacidad",
