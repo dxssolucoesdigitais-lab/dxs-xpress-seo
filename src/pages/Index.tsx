@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Navbar } from "@/components/Navbar";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import LandingHeader from "@/components/landing/LandingHeader"; // Corrigido o import
 import { useNavigate } from "react-router-dom";
 import { Search, FileText, Globe, ArrowRight } from "lucide-react";
 
@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <LandingHeader /> {/* Usando o componente LandingHeader */}
       
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4" style={{ background: "var(--gradient-hero)" }}>
