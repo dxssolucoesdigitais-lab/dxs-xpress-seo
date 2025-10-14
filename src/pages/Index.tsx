@@ -18,7 +18,7 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center animate-fade-in">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              {t('landingPage.hero.title')}{" "} {/* Espaço adicionado aqui */}
+              {t('landingPage.hero.title')}{" "}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 XpressSEO
               </span>
@@ -27,7 +27,7 @@ const Index = () => {
               {t('landingPage.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" onClick={() => navigate("/login")} className="shadow-elegant">
+              <Button size="lg" onClick={() => navigate("/login")} className="shadow-elegant transition-all duration-300 ease-in-out hover:shadow-glow hover:-translate-y-1">
                 {t('landingPage.hero.ctaButton')} <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
               <p className="text-sm text-muted-foreground">{t('landingPage.hero.freeCreditsNote')}</p>
@@ -45,9 +45,9 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="shadow-elegant border-border/50 hover:shadow-glow transition-smooth animate-slide-up">
+            <Card className="shadow-elegant border-border/50 transition-all duration-300 ease-in-out hover:shadow-glow animate-slide-up">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4" style={{ background: "var(--gradient-primary)" }}>
                   <Search className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>{t('landingPage.features.keywordResearchTitle')}</CardTitle>
@@ -57,9 +57,9 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="shadow-elegant border-border/50 hover:shadow-glow transition-smooth animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <Card className="shadow-elegant border-border/50 transition-all duration-300 ease-in-out hover:shadow-glow animate-slide-up" style={{ animationDelay: '0.1s' }}>
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4" style={{ background: "var(--gradient-primary)" }}>
                   <FileText className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>{t('landingPage.features.optimizedContentTitle')}</CardTitle>
@@ -69,9 +69,9 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="shadow-elegant border-border/50 hover:shadow-glow transition-smooth animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <Card className="shadow-elegant border-border/50 transition-all duration-300 ease-in-out hover:shadow-glow animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4" style={{ background: "var(--gradient-primary)" }}>
                   <Globe className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>{t('landingPage.features.internationalExpansionTitle')}</CardTitle>
@@ -93,7 +93,7 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8">
             {t('landingPage.cta.subtitle')}
           </p>
-          <Button size="lg" onClick={() => navigate("/login")} className="shadow-glow">
+          <Button size="lg" onClick={() => navigate("/login")} className="shadow-glow transition-all duration-300 ease-in-out hover:-translate-y-1">
             {t('landingPage.cta.button')} <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
@@ -103,19 +103,19 @@ const Index = () => {
       <footer className="py-8 px-4 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-wrap justify-center gap-6 mb-4 text-sm">
-            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-smooth">
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.blog')}
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-smooth">
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.contact')}
             </a>
-            <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-smooth">
+            <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.faq')}
             </Link>
-            <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-smooth">
+            <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.termsOfService')}
             </Link>
-            <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-smooth">
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.privacyPolicy')}
             </Link>
           </div>
