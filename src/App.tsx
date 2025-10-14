@@ -33,19 +33,19 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} /> {/* Usar o componente Index aqui */}
+              <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
               <Route path="/n8n-test" element={<N8nTestPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/faq" element={<FaqPage />} /> {/* Movido para fora do ProtectedRoute */}
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/:projectId" element={<ChatPage />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/faq" element={<FaqPage />} />
 
                   {/* Admin Routes */}
                   <Route element={<AdminProtectedRoute />}>
