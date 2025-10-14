@@ -10,7 +10,7 @@ const FaqPage = () => {
 
   return (
     <div className="container max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-      <Link to="/chat" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
+      <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"> {/* Alterado de /chat para / */}
         <ArrowLeft className="mr-2 h-4 w-4" />
         {t('faqPage.backLink')}
       </Link>
