@@ -348,7 +348,8 @@
   "english": "Inglês",
   "spanish": "Espanhol",
   "login": {
-    "welcome": "Bem-vindo de volta!",
+    "welcomeTitle": "Bem-vindo ao XpressSEO",
+    "welcomeSubtitle": "Seu assistente operacional inteligente",
     "accessAccount": "Acesse sua conta",
     "signInOrCreateAccount": "Entre ou crie uma nova conta para começar",
     "noAccountSignUp": "Não tem uma conta? Cadastrar",

@@ -139,8 +139,8 @@
           "1 Blog optimizado para SEO e IA",
           "5 pies de foto para redes sociales optimizados para SEO e IA",
           "1 informe de validación",
-          "1 traducción al idioma seleccionado",
-          "1 versión HTML optimizada"
+          "1 tradução para o idioma seleccionado",
+          "1 versão HTML otimizada"
         ],
         "popular": false
       }
@@ -347,7 +347,8 @@
   "english": "Inglês",
   "spanish": "Español",
   "login": {
-    "welcome": "¡Bienvenido de nuevo!",
+    "welcomeTitle": "Bienvenido a XpressSEO",
+    "welcomeSubtitle": "Tu asistente operacional inteligente",
     "accessAccount": "Accede a tu cuenta",
     "signInOrCreateAccount": "Inicia sesión o crea una nueva cuenta para empezar",
     "noAccountSignUp": "No tienes una cuenta? Regístrate",
@@ -520,7 +521,7 @@
     ],
     "externalLinksTitle": "Enlaces a otros sitios web y redes sociales",
     "externalLinksP1": "Nuestra plataforma puede incluir enlaces a sitios web externos de socios, anunciantes y proveedores. Al hacer clic en estos enlaces, serás dirigido fuera de nuestro sitio web, entrando en dominios que siguen sus propias políticas de privacidad, de las cuales no somos responsable.",
-    "externalLinksP2": "Recomendamos leer atentamente estas políticas antes de proporcionar cualquier dato personal. Del mismo modo, no asumimos responsabilidad por las prácticas de privacidad de terceros como Facebook, Apple, Google y Microsoft. Te aconsejamos que te informes sobre las políticas de privacidad de estas entidades al utilizar sus servicios o aplicaciones.",
+    "externalLinksP2": "Recomendamos leer atentamente estas políticas antes de proporcionar cualquier dato personal. Del mismo modo, no asumimos responsabilidad por las prácticas de privacidad de terceros como Facebook, Apple, Google, y Microsoft. Te aconsejamos que te informes sobre las políticas de privacidad de estas entidades al utilizar sus servicios o aplicaciones.",
     "dataSubjectRightsTitle": "Derechos de los Titulares de los Datos",
     "dataSubjectRightsIntro": "Tienes varios derechos en relación con tus datos personales, incluyendo:",
     "dataSubjectRightsList": [
