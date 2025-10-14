@@ -1,34 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import LandingHeader from "@/components/landing/LandingHeader"; // Corrigido o import
-import { useNavigate } from "react-router-dom";
+import LandingHeader from "@/components/landing/LandingHeader";
+import { Link, useNavigate } from "react-router-dom"; // Importar Link
 import { Search, FileText, Globe, ArrowRight } from "lucide-react";
+import { useTranslation } from 'react-i18next'; // Importar useTranslation
 
 const Index = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Inicializar useTranslation
 
   return (
     <div className="min-h-screen">
-      <LandingHeader /> {/* Usando o componente LandingHeader */}
+      <LandingHeader />
       
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4" style={{ background: "var(--gradient-hero)" }}>
         <div className="container mx-auto max-w-6xl">
           <div className="text-center animate-fade-in">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              Transforme de Forma Inteligente Sua Loja de Dropshipping com{" "}
+              {t('landingPage.hero.title')}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 XpressSEO
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Nos bastidores vários especialistas de IA trabalhando em conjunto para entregar conteúdo otimizado para você dominar os resultados de busca.
+              {t('landingPage.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" onClick={() => navigate("/auth")} className="shadow-elegant">
-                Começar Agora (É Grátis) <ArrowRight className="ml-2 w-5 h-5" />
+              <Button size="lg" onClick={() => navigate("/login")} className="shadow-elegant"> {/* Alterado para /login */}
+                {t('landingPage.hero.ctaButton')} <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              <p className="text-sm text-muted-foreground">3 créditos gratuitos para você começar.</p>
+              <p className="text-sm text-muted-foreground">{t('landingPage.hero.freeCreditsNote')}</p>
             </div>
           </div>
         </div>
@@ -38,8 +40,8 @@ const Index = () => {
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Tudo que você precisa para crescer</h2>
-            <p className="text-muted-foreground text-lg">Deixe a IA cuidar do trabalho pesado de SEO enquanto você foca em vender.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('landingPage.features.title')}</h2>
+            <p className="text-muted-foreground text-lg">{t('landingPage.features.subtitle')}</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
@@ -48,9 +50,9 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
                   <Search className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle>Pesquisa de Palavras-chave</CardTitle>
+                <CardTitle>{t('landingPage.features.keywordResearchTitle')}</CardTitle>
                 <CardDescription>
-                  Nossa IA analisa seu nicho e encontra as palavras-chave de alta intenção que seus clientes estão usando para buscar produtos.
+                  {t('landingPage.features.keywordResearchDescription')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -60,9 +62,9 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
                   <FileText className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle>Conteúdo Otimizado</CardTitle>
+                <CardTitle>{t('landingPage.features.optimizedContentTitle')}</CardTitle>
                 <CardDescription>
-                  Gere descrições de produtos, categorias e posts de blog que não apenas vendem, mas também são amados pelos motores de busca.
+                  {t('landingPage.features.optimizedContentDescription')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -72,9 +74,9 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center mb-4">
                   <Globe className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle>Expansão Internacional</CardTitle>
+                <CardTitle>{t('landingPage.features.internationalExpansionTitle')}</CardTitle>
                 <CardDescription>
-                  Traduza e adapte todo o seu conteúdo de SEO para o país de destino, alcançando um público global com precisão cultural.
+                  {t('landingPage.features.internationalExpansionDescription')}
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -86,13 +88,13 @@ const Index = () => {
       <section className="py-20 px-4" style={{ background: "var(--gradient-hero)" }}>
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Pronto para dominar os resultados de busca?
+            {t('landingPage.cta.title')}
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Comece agora com 3 créditos gratuitos e transforme sua loja de dropshipping
+            {t('landingPage.cta.subtitle')}
           </p>
-          <Button size="lg" onClick={() => navigate("/auth")} className="shadow-glow">
-            Começar Agora (É Grátis) <ArrowRight className="ml-2 w-5 h-5" />
+          <Button size="lg" onClick={() => navigate("/login")} className="shadow-glow"> {/* Alterado para /login */}
+            {t('landingPage.cta.button')} <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
       </section>
@@ -101,14 +103,25 @@ const Index = () => {
       <footer className="py-8 px-4 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-wrap justify-center gap-6 mb-4 text-sm">
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-smooth">Blog</a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-smooth">Contato</a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-smooth">FAQ</a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-smooth">Termos de Serviço</a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-smooth">Política de Privacidade</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-smooth">
+              {t('landingPage.footer.blog')}
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-smooth">
+              {t('landingPage.footer.contact')}
+            </a>
+            <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-smooth">
+              {t('landingPage.footer.faq')}
+            </Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-smooth">
+              {t('landingPage.footer.termsOfService')}
+            </Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-smooth">
+              {t('landingPage.footer.privacyPolicy')}
+            </Link>
           </div>
           <div className="text-center text-sm text-muted-foreground">
-            <p>© 2025 XpressSEO. Todos os direitos reservados. Desenvolvido por DXS Digital.</p>
+            <p>© {new Date().getFullYear()} {t('landingPage.footer.copyright')}</p>
+            <p className="text-xs mt-1">{t('landingPage.footer.developedBy')}</p>
           </div>
         </div>
       </footer>
