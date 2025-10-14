@@ -382,7 +382,7 @@
     }
   },
   "faqPage": {
-    "backLink": "Back to Chat",
+    "backLink": "Back to Home Page",
     "title": "Frequently Asked Questions (FAQ)",
     "subtitle": "Find answers to the most common questions about XpressSEO.",
     "categories": [
@@ -504,7 +504,7 @@
       "Personalize your user experience and recommend content or products that may be of interest to you;",
       "Communicate important information, offers, and promotions, according to your communication preference;",
       "Perform internal analyses to develop and enhance our services;",
-      "Comply with applicable legal and regulatory obligations."
+      "Cumprir com as obrigações legais e regulatórias aplicáveis."
     ],
     "dataSharingTitle": "Sharing and Transfer of Personal Data",
     "dataSharingIntro": "We may share your personal data with third parties in the following circumstances:",

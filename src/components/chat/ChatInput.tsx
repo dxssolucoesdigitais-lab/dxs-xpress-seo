@@ -30,6 +30,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isTriggeringGSC, setIsTriggeringGSC] = useState(false);
+  const [prompt, setPrompt] = useState(''); // Adicionado estado para o prompt
 
   const hasCredits = user && user.credits_remaining > 0;
   
@@ -89,22 +90,35 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     }
   };
 
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!prompt.trim() || isDisabled) return; // Use isDisabled aqui
+
+    // Lógica para enviar mensagem ou iniciar novo passo, se aplicável
+    // Por enquanto, este ChatInput é para projetos existentes, então não inicia um novo workflow.
+    // A funcionalidade de enviar prompt para um projeto existente ainda não está implementada.
+    showError('toasts.chat.sendMessageNotImplemented');
+    setPrompt('');
+  };
+
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
 
   return (
     <>
       <div className="p-4 bg-background border-t border-border">
-        <div className="relative mb-4">
+        <form onSubmit={handleSendMessage} className="relative mb-4">
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
-            placeholder=""
+            placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
             rows={1}
-            disabled
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            disabled={isDisabled}
           ></textarea>
-          <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled>
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim()}>
             <Send size={20} />
           </button>
-        </div>
+        </form>
         <div className="flex items-center justify-center gap-2 flex-wrap">
           <DropdownMenu>
             <Tooltip>

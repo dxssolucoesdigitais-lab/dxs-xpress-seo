@@ -382,12 +382,12 @@
     }
   },
   "faqPage": {
-    "backLink": "Volver al Chat",
+    "backLink": "Volver a la Página Inicial",
     "title": "Preguntas Frecuentes (FAQ)",
     "subtitle": "Encuentra respuestas a las preguntas más comunes sobre XpressSEO.",
     "categories": [
       {
-        "category": "General",
+        "category": "Geral",
         "questions": [
           {
             "q": "¿Qué es XpressSEO?",
@@ -461,7 +461,7 @@
     },
     "section6": {
       "title": "6. Explorando Enlaces Externos",
-      "p1": "Nuestro sitio web puede incluir enlaces a sitios externos que creemos que pueden ser de tu interés. Ten en cuenta que no tenemos control sobre estos sitios externos y, por lo tanto, no somos responsables de su contenido o políticas."
+      "p1": "Nuestro sitio web puede incluir enlaces a sitios web externos que creemos que pueden ser de tu interés. Ten en cuenta que no tenemos control sobre estos sitios web externos y, por lo tanto, no somos responsables de su contenido o políticas."
     },
     "section7": {
       "title": "7. Cambios y Actualizaciones",
@@ -526,7 +526,7 @@
     ],
     "dataSubjectRightsContact": "Para ejercer estos derechos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Seguridad de los Datos",
-    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgación o destrucción. Sin embargo, es importante tener en cuenta que ningún sistema es completamente seguro. Nos comprometemos a notificarte a ti y a cualquier autoridad aplicable sobre cualquier violación de seguridad de acuerdo con la legislación vigente.",
+    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgación o destrucción. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Cambios en la Política de Privacidad",
     "policyChangesP1": "Nuestra Política de Privacidad puede actualizarse periódicamente. La versión más actual siempre se publicará en nuestro sitio web, indicando la fecha de la última revisión. Te animamos a revisar regularmente nuestra política para estar siempre informado sobre cómo estamos protegiendo tus datos.",
     "contactTitle": "Contacto",
