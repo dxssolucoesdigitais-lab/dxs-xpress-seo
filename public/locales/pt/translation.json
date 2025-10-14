@@ -352,7 +352,7 @@
   },
   "landingPage": {
     "hero": {
-      "title": "Transforme de Forma Inteligente Sua Loja de Dropshipping com XpressSEO",
+      "title": "Transforme de Forma Inteligente Sua Loja de Dropshipping com",
       "subtitle": "Nos bastidores vários especialistas de IA trabalhando em conjunto para entregar conteúdo otimizado para você dominar os resultados de busca.",
       "ctaButton": "Começar Agora (É Grátis)",
       "freeCreditsNote": "3 créditos gratuitos para você começar."
@@ -366,6 +366,11 @@
       "optimizedContentDescription": "Gere descrições de produtos, categorias e posts de blog que não apenas vendem, mas também são amados pelos motores de busca.",
       "internationalExpansionTitle": "Expansão Internacional",
       "internationalExpansionDescription": "Traduza e adapte todo o seu conteúdo de SEO para o país de destino, alcançando um público global com precisão cultural."
+    },
+    "cta": {
+      "title": "Pronto para dominar os resultados de busca?",
+      "subtitle": "Comece agora com 3 créditos gratuitos e transforme sua loja de dropshipping",
+      "button": "Começar Agora (É Grátis)"
     },
     "footer": {
       "blog": "Blog",

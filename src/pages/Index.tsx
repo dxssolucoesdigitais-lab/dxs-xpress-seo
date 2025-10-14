@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import LandingHeader from "@/components/landing/LandingHeader";
-import { Link, useNavigate } from "react-router-dom"; // Importar Link
+import { Link, useNavigate } from "react-router-dom";
 import { Search, FileText, Globe, ArrowRight } from "lucide-react";
-import { useTranslation } from 'react-i18next'; // Importar useTranslation
+import { useTranslation } from 'react-i18next';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Inicializar useTranslation
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen">
@@ -18,7 +18,7 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center animate-fade-in">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              {t('landingPage.hero.title')}
+              {t('landingPage.hero.title')}{" "} {/* Espaço adicionado aqui */}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 XpressSEO
               </span>
@@ -27,7 +27,7 @@ const Index = () => {
               {t('landingPage.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" onClick={() => navigate("/login")} className="shadow-elegant"> {/* Alterado para /login */}
+              <Button size="lg" onClick={() => navigate("/login")} className="shadow-elegant">
                 {t('landingPage.hero.ctaButton')} <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
               <p className="text-sm text-muted-foreground">{t('landingPage.hero.freeCreditsNote')}</p>
@@ -93,7 +93,7 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8">
             {t('landingPage.cta.subtitle')}
           </p>
-          <Button size="lg" onClick={() => navigate("/login")} className="shadow-glow"> {/* Alterado para /login */}
+          <Button size="lg" onClick={() => navigate("/login")} className="shadow-glow">
             {t('landingPage.cta.button')} <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>

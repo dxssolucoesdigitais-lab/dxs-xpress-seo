@@ -351,7 +351,7 @@
   },
   "landingPage": {
     "hero": {
-      "title": "Intelligently Transform Your Dropshipping Store with XpressSEO",
+      "title": "Intelligently Transform Your Dropshipping Store with",
       "subtitle": "Behind the scenes, multiple AI specialists work together to deliver optimized content for you to dominate search results.",
       "ctaButton": "Start Now (It's Free)",
       "freeCreditsNote": "3 free credits to get you started."
@@ -365,6 +365,11 @@
       "optimizedContentDescription": "Generate product descriptions, categories, and blog posts that not only sell but are also loved by search engines.",
       "internationalExpansionTitle": "International Expansion",
       "internationalExpansionDescription": "Translate and adapt all your SEO content for the target country, reaching a global audience with cultural precision."
+    },
+    "cta": {
+      "title": "Ready to dominate search results?",
+      "subtitle": "Start now with 3 free credits and transform your dropshipping store",
+      "button": "Start Now (It's Free)"
     },
     "footer": {
       "blog": "Blog",
@@ -405,7 +410,7 @@
             "q": "What happens when my credits run out?",
             "a": "When your credits reach zero, the AI workflow is paused. You will not be able to approve steps until you acquire more credits. To do this, simply click \"Upgrade Plan\" and choose one of our plans."
           },
-          {
+            {
             "q": "Do credits expire?",
             "a": "Your credits are tied to your monthly subscription. They are renewed each billing cycle and are not cumulative."
           }
