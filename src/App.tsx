@@ -15,11 +15,12 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import PaymentSimulationPage from "./pages/PaymentSimulationPage";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/LandingPage"; // Manter import para outras rotas se necessário
 import N8nTestPage from "./pages/N8nTestPage";
 import FaqPage from "./pages/FaqPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import Index from "./pages/Index"; // Importar o novo componente Index
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<LandingPage />} />
+              <Route path="/" element={<Index />} /> {/* Usar o componente Index aqui */}
               <Route path="/login" element={<Login />} />
               <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
               <Route path="/n8n-test" element={<N8nTestPage />} />
