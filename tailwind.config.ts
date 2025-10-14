@@ -62,6 +62,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom purple color for authentication UI
+        authpurple: {
+          DEFAULT: "hsl(var(--auth-purple))",
+          foreground: "hsl(var(--auth-purple-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
