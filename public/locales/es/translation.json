@@ -347,7 +347,12 @@
   "english": "Inglês",
   "spanish": "Español",
   "login": {
-    "welcome": "¡Bienvenido de nuevo!"
+    "welcome": "¡Bienvenido de nuevo!",
+    "accessAccount": "Accede a tu cuenta",
+    "signInOrCreateAccount": "Inicia sesión o crea una nueva cuenta para empezar",
+    "noAccountSignUp": "No tienes una cuenta? Regístrate",
+    "alreadyHaveAccountSignIn": "Ya tienes una cuenta? Inicia sesión",
+    "customSignUpLink": "Crear una nueva cuenta"
   },
   "landingPage": {
     "hero": {
@@ -376,13 +381,13 @@
       "contact": "Contacto",
       "faq": "FAQ",
       "termsOfService": "Términos de Servicio",
-      "privacyPolicy": "Política de Privacidade",
+      "privacyPolicy": "Política de Privacidad",
       "copyright": "XpressSEO. Todos los derechos reservados.",
       "developedBy": "Desarrollado por DXS Digital."
     }
   },
   "faqPage": {
-    "backLink": "Volver a la Página Inicial",
+    "backLink": "Volver a la Página de Inicio",
     "title": "Preguntas Frecuentes (FAQ)",
     "subtitle": "Encuentra respuestas a las preguntas más comunes sobre XpressSEO.",
     "categories": [
@@ -531,5 +536,23 @@
     "policyChangesP1": "Nuestra Política de Privacidad puede actualizarse periódicamente. La versión más actual siempre se publicará en nuestro sitio web, indicando la fecha de la última revisión. Te animamos a revisar regularmente nuestra política para estar siempre informado sobre cómo estamos protegiendo tus datos.",
     "contactTitle": "Contacto",
     "contactEmail": "Si tienes preguntas o inquietudes sobre nuestra Política de Privacidad o prácticas de datos, no dudes en contactarnos en <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos a resolver cualquier problema relacionado con la privacidad de nuestros usuarios y clientes."
+  },
+  "signUpForm": {
+    "title": "Crea tu cuenta",
+    "description": "Rellena tus datos para empezar tu viaje con XpressSEO.",
+    "fullNameLabel": "Nombre Completo",
+    "fullNamePlaceholder": "Tu nombre completo",
+    "emailLabel": "Correo Electrónico",
+    "emailPlaceholder": "Tu dirección de correo electrónico",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Crea una contraseña segura",
+    "signUpButton": "Registrarse",
+    "backToSignIn": "Ya tienes una cuenta? Iniciar sesión",
+    "success": "¡Registro exitoso! Por favor, revisa tu correo electrónico para confirmar tu cuenta.",
+    "validation": {
+      "fullNameMin": "El nombre completo debe tener al menos 2 caracteres.",
+      "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida.",
+      "passwordMin": "La contraseña debe tener al menos 6 caracteres."
+    }
   }
 }

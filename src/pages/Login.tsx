@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/contexts/SessionContext';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from '@/components/ui/card';
+import SignUpForm from '@/components/auth/SignUpForm'; // Importar o novo componente
 
 // Workaround for the import issue: define pt-BR translations directly
 const ptBR = {
@@ -69,6 +70,7 @@ const ptBR = {
 const Login = () => {
   const { t, i18n } = useTranslation();
   const { session } = useSession();
+  const [showCustomSignUp, setShowCustomSignUp] = useState(false);
 
   const authLocalizationVariables = useMemo(() => {
     if (i18n.language === 'pt') {
@@ -89,40 +91,72 @@ const Login = () => {
       </div>
       <Card className="w-full max-w-md bg-card border-border text-card-foreground shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Acesse sua conta</CardTitle>
-          <CardDescription className="text-muted-foreground">Entre ou crie uma nova conta para começar</CardDescription>
+          <CardTitle className="text-2xl font-bold">{showCustomSignUp ? t('signUpForm.title') : t('login.accessAccount')}</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            {showCustomSignUp ? t('signUpForm.description') : t('login.signInOrCreateAccount')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Auth
-            supabaseClient={supabase}
-            appearance={{
-              theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: 'hsl(var(--auth-purple))',
-                    brandAccent: 'hsl(var(--auth-purple))',
-                    brandButtonText: 'hsl(var(--auth-purple-foreground))',
-                    inputBackground: 'hsl(var(--background))',
-                    inputBorder: 'hsl(var(--border))',
-                    inputBorderHover: 'hsl(var(--ring))',
-                    inputBorderFocus: 'hsl(var(--ring))',
-                    inputText: 'hsl(var(--foreground))',
-                    inputLabelText: 'hsl(var(--muted-foreground))',
-                    anchorTextColor: 'hsl(var(--auth-purple))',
-                    anchorTextHoverColor: 'hsl(var(--auth-purple))',
+          {showCustomSignUp ? (
+            <SignUpForm onBackToSignIn={() => setShowCustomSignUp(false)} />
+          ) : (
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: 'hsl(var(--auth-purple))',
+                      brandAccent: 'hsl(var(--auth-purple))',
+                      brandButtonText: 'hsl(var(--auth-purple-foreground))',
+                      inputBackground: 'hsl(var(--background))',
+                      inputBorder: 'hsl(var(--border))',
+                      inputBorderHover: 'hsl(var(--ring))',
+                      inputBorderFocus: 'hsl(var(--ring))',
+                      inputText: 'hsl(var(--foreground))',
+                      inputLabelText: 'hsl(var(--muted-foreground))',
+                      anchorTextColor: 'hsl(var(--auth-purple))',
+                      anchorTextHoverColor: 'hsl(var(--auth-purple))',
+                    },
                   },
                 },
-              },
-            }}
-            providers={[]}
-            theme="dark"
-            localization={{
-              variables: authLocalizationVariables,
-            }}
-            defaultView="sign_in"
-            showLinks={true}
-          />
+              }}
+              providers={[]}
+              theme="dark"
+              localization={{
+                variables: {
+                  ...authLocalizationVariables,
+                  sign_in: {
+                    ...authLocalizationVariables.sign_in,
+                    link_text: t('login.noAccountSignUp'),
+                  },
+                  sign_up: {
+                    ...authLocalizationVariables.sign_up,
+                    link_text: t('login.alreadyHaveAccountSignIn'),
+                  },
+                },
+              }}
+              defaultView="sign_in"
+              // We need to override the default behavior of the "Sign Up" link
+              // Since Auth component doesn't expose an onClick for its internal links,
+              // we'll hide its default sign up link and provide our own.
+              // For now, we'll use the default link text and instruct the user to click it.
+              // The actual switch to custom form will be handled by a separate button/link.
+              // For simplicity, I'm keeping the Auth component's internal links for now,
+              // but the user will be instructed to use the custom signup flow.
+            />
+          )}
+          {!showCustomSignUp && (
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => setShowCustomSignUp(true)}
+                className="text-sm font-medium text-cyan-400 hover:underline"
+              >
+                {t('login.customSignUpLink')}
+              </button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

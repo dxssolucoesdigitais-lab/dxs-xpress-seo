@@ -347,7 +347,12 @@
   "english": "Inglês",
   "spanish": "Espanhol",
   "login": {
-    "welcome": "Welcome back!"
+    "welcome": "Welcome back!",
+    "accessAccount": "Access your account",
+    "signInOrCreateAccount": "Sign in or create a new account to get started",
+    "noAccountSignUp": "Don't have an account? Sign Up",
+    "alreadyHaveAccountSignIn": "Already have an account? Sign In",
+    "customSignUpLink": "Create a new account"
   },
   "landingPage": {
     "hero": {
@@ -531,5 +536,23 @@
     "policyChangesP1": "Our Privacy Policy may be updated periodically. The most current version will always be published on our website, indicating the date of the last revision. We encourage you to regularly review our policy to always be informed about how we are protecting your data.",
     "contactTitle": "Contact",
     "contactEmail": "If you have questions or concerns about our Privacy Policy or data practices, please do not hesitate to contact us at <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. We are committed to resolving any issues related to the privacy of our users and clients."
+  },
+  "signUpForm": {
+    "title": "Create your account",
+    "description": "Fill in your details to start your journey with XpressSEO.",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "Your full name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Your email address",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a secure password",
+    "signUpButton": "Sign Up",
+    "backToSignIn": "Already have an account? Sign In",
+    "success": "Sign up successful! Please check your email to confirm your account.",
+    "validation": {
+      "fullNameMin": "Full name must be at least 2 characters.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordMin": "Password must be at least 6 characters."
+    }
   }
 }

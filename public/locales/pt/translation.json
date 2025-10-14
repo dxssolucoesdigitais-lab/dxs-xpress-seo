@@ -348,7 +348,12 @@
   "english": "Inglês",
   "spanish": "Espanhol",
   "login": {
-    "welcome": "Bem-vindo de volta!"
+    "welcome": "Bem-vindo de volta!",
+    "accessAccount": "Acesse sua conta",
+    "signInOrCreateAccount": "Entre ou crie uma nova conta para começar",
+    "noAccountSignUp": "Não tem uma conta? Cadastrar",
+    "alreadyHaveAccountSignIn": "Já tem uma conta? Entrar",
+    "customSignUpLink": "Criar uma nova conta"
   },
   "landingPage": {
     "hero": {
@@ -515,8 +520,9 @@
       "Em caso de reestruturação corporativa, venda, fusão ou outra transferência de ativos, garantindo que a entidade receptora concorde em respeitar a privacidade de seus dados de acordo com uma política equivalente à nossa."
     ],
     "externalLinksTitle": "Links para outros sites e redes sociais",
-    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos de parceiros, anunciantes e fornecedores. Clicar nesses links implica que você será direcionado para fora do nosso site, entrando em domínios que seguem suas próprias políticas de privacidade, pelas quais não somos responsáveis.",
-    "externalLinksP2": "Recomendamos a leitura atenta dessas políticas antes de fornecer qualquer dado pessoal. Da mesma forma, não assumimos responsabilidade pelas práticas de privacidade de terceiros como Facebook, Apple, Google e Microsoft. Aconselhamos você a se informar sobre as políticas de privacidade dessas entidades ao utilizar seus serviços ou aplicativos.",
+    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas."
+    },
+  "externalLinksP2": "Recomendamos a leitura atenta dessas políticas antes de fornecer qualquer dado pessoal. Da mesma forma, não assumimos responsabilidade pelas práticas de privacidade de terceiros como Facebook, Apple, Google e Microsoft. Aconselhamos você a se informar sobre as políticas de privacidade dessas entidades ao utilizar seus serviços ou aplicativos.",
     "dataSubjectRightsTitle": "Direitos dos Titulares dos Dados",
     "dataSubjectRightsIntro": "Você possui diversos direitos em relação aos seus dados pessoais, incluindo:",
     "dataSubjectRightsList": [
@@ -532,5 +538,23 @@
     "policyChangesP1": "Nossa Política de Privacidade pode ser atualizada periodicamente. A versão mais atual será sempre publicada em nosso site, indicando a data da última revisão. Encorajamos você a revisar regularmente nossa política para estar sempre informado sobre como estamos protegendo seus dados.",
     "contactTitle": "Contato",
     "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
+  },
+  "signUpForm": {
+    "title": "Crie sua conta",
+    "description": "Preencha seus dados para começar sua jornada com o XpressSEO.",
+    "fullNameLabel": "Nome Completo",
+    "fullNamePlaceholder": "Seu nome completo",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Seu endereço de e-mail",
+    "passwordLabel": "Senha",
+    "passwordPlaceholder": "Crie uma senha segura",
+    "signUpButton": "Cadastrar",
+    "backToSignIn": "Já tem uma conta? Entrar",
+    "success": "Cadastro realizado com sucesso! Verifique seu e-mail para confirmar sua conta.",
+    "validation": {
+      "fullNameMin": "O nome completo deve ter pelo menos 2 caracteres.",
+      "emailInvalid": "Por favor, insira um endereço de e-mail válido.",
+      "passwordMin": "A senha deve ter pelo menos 6 caracteres."
+    }
   }
 }
