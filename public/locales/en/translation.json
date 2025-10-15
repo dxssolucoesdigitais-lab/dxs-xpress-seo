@@ -52,7 +52,9 @@
       "noProjectForGSC": "Please select a project to start GSC analysis.",
       "noGSCAnalysisPurchase": "You do not have a paid and unused GSC analysis. Please purchase one.",
       "gscAnalysisTriggered": "GSC analysis triggered successfully! Results will appear shortly.",
-      "gscAnalysisTriggerFailed": "Error triggering GSC analysis. Please try again."
+      "gscAnalysisTriggerFailed": "Error triggering GSC analysis. Please try again.",
+      "fetchMessagesFailed": "Error fetching chat messages.",
+      "sendMessageFailed": "Error sending message."
     },
     "clipboard": {
       "notAvailable": "Your browser does not support the clipboard API.",

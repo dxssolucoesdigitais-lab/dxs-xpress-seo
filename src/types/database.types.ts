@@ -105,6 +105,23 @@ export interface Database {
         };
         Update: Partial<this['Insert']>;
       }
+      chat_messages: {
+        Row: {
+          id: string;
+          project_id: string;
+          user_id: string;
+          author: string;
+          content: string;
+          created_at: string;
+        };
+        Insert: {
+          project_id: string;
+          user_id: string;
+          author: string;
+          content: string;
+        };
+        Update: Partial<this['Insert']>;
+      }
     }
     Views: {
       [_ in never]: never
@@ -126,3 +143,4 @@ export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
 export type StepResult = Database['public']['Tables']['step_results']['Row'];
 export type Feedback = Database['public']['Tables']['feedbacks']['Row'];
+export type ChatMessageRow = Database['public']['Tables']['chat_messages']['Row'];

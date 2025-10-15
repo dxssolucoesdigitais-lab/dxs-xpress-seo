@@ -52,7 +52,9 @@
       "noProjectForGSC": "Por favor, selecciona un proyecto para iniciar el análisis GSC.",
       "noGSCAnalysisPurchase": "No tienes un análisis GSC pagado y sin usar. Por favor, compra uno.",
       "gscAnalysisTriggered": "¡Análisis GSC activado con éxito! Los resultados aparecerán en breve.",
-      "gscAnalysisTriggerFailed": "Error al activar el análisis GSC. Inténtalo de nuevo."
+      "gscAnalysisTriggerFailed": "Error al activar el análisis GSC. Inténtalo de nuevo.",
+      "fetchMessagesFailed": "Error al buscar mensajes del chat.",
+      "sendMessageFailed": "Error al enviar mensaje."
     },
     "clipboard": {
       "notAvailable": "Tu navegador no es compatible con la API del portapapeles.",
@@ -345,7 +347,7 @@
   "changeLanguage": "Cambiar Idioma",
   "portuguese": "Português",
   "english": "Inglês",
-  "spanish": "Español",
+  "spanish": "Espanhol",
   "login": {
     "welcomeTitle": "Bienvenido a XpressSEO",
     "welcomeSubtitle": "Tu asistente operacional inteligente",

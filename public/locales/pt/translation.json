@@ -53,7 +53,9 @@
       "noProjectForGSC": "Por favor, selecione um projeto para iniciar a análise GSC.",
       "noGSCAnalysisPurchase": "Você não tem uma análise GSC paga e não utilizada. Por favor, compre uma.",
       "gscAnalysisTriggered": "Análise GSC acionada com sucesso! Os resultados aparecerão em breve.",
-      "gscAnalysisTriggerFailed": "Erro ao acionar a análise GSC. Tente novamente."
+      "gscAnalysisTriggerFailed": "Erro ao acionar a análise GSC. Tente novamente.",
+      "fetchMessagesFailed": "Erro ao buscar mensagens do chat.",
+      "sendMessageFailed": "Erro ao enviar mensagem."
     },
     "clipboard": {
       "notAvailable": "Seu navegador não suporta a API de área de transferência.",

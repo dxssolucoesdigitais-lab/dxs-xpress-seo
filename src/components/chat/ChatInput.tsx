@@ -30,7 +30,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isTriggeringGSC, setIsTriggeringGSC] = useState(false);
-  const [prompt, setPrompt] = useState(''); // Adicionado estado para o prompt
+  const [prompt, setPrompt] = useState('');
 
   const hasCredits = user && user.credits_remaining > 0;
   
@@ -92,13 +92,31 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prompt.trim() || isDisabled) return; // Use isDisabled aqui
+    if (!prompt.trim() || isDisabled || !user || !project) return;
 
-    // Lógica para enviar mensagem ou iniciar novo passo, se aplicável
-    // Por enquanto, este ChatInput é para projetos existentes, então não inicia um novo workflow.
-    // A funcionalidade de enviar prompt para um projeto existente ainda não está implementada.
-    showError('toasts.chat.sendMessageNotImplemented');
-    setPrompt('');
+    try {
+      // Insert the user's message into the new chat_messages table
+      const { error } = await supabase
+        .from('chat_messages')
+        .insert({
+          project_id: project.id,
+          user_id: user.id,
+          author: 'user',
+          content: prompt.trim(),
+        });
+
+      if (error) throw error;
+
+      setPrompt('');
+      // No direct AI response for free-form messages in this iteration,
+      // but the message is now part of the chat history.
+      // If the project is in progress, we might want to trigger the next step
+      // or a regeneration based on this input in a future iteration.
+      // For now, it's just recorded.
+    } catch (error: any) {
+      showError('toasts.chat.sendMessageFailed');
+      console.error('Error sending chat message:', error.message);
+    }
   };
 
   const canPauseOrResume = project.status === 'in_progress' || project.status === 'paused';
