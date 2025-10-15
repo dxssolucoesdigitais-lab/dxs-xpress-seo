@@ -29,7 +29,7 @@ serve(async (req) => {
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    const { projectId } = await req.json();
+    const { projectId, userMessage } = await req.json(); // Recebe userMessage opcionalmente
 
     if (!projectId) {
       return new Response(JSON.stringify({ error: 'projectId is required' }), {
@@ -65,13 +65,13 @@ serve(async (req) => {
     }
 
     // --- Validation ---
-    if (project.status !== 'in_progress') {
+    if (project.status !== 'in_progress' && !userMessage) { // Permite userMessage mesmo se não estiver 'in_progress' para conversas
       return new Response(JSON.stringify({ message: `Project status is '${project.status}'. No action taken.` }), {
         status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    if (user.credits_remaining <= 0) {
+    if (user.credits_remaining <= 0 && !userMessage) { // Não bloqueia se for apenas uma mensagem do usuário sem avançar o fluxo
       await supabaseAdmin.from('projects').update({ status: 'paused' }).eq('id', projectId);
       return new Response(JSON.stringify({ error: 'Insufficient credits.' }), {
         status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -113,6 +113,7 @@ serve(async (req) => {
         planType: userPlan,
         currentStep: project.current_step,
         projectData: project,
+        userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
       }),
     });
 

@@ -31,6 +31,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isTriggeringGSC, setIsTriggeringGSC] = useState(false);
   const [prompt, setPrompt] = useState('');
+  const [isSendingMessage, setIsSendingMessage] = useState(false); // Novo estado para o botão de envio
 
   const hasCredits = user && user.credits_remaining > 0;
   
@@ -46,7 +47,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     } else if (project.status === 'paused') {
       await resumeProject(project.id);
     }
-    setIsPausing(false);
+    setIsPaasing(false);
   };
 
   const handleAnalyzeClick = (type: 'upload' | 'link') => {
@@ -92,30 +93,46 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prompt.trim() || isDisabled || !user || !project) return;
+    if (!prompt.trim() || isDisabled || !user || !project || isSendingMessage) return;
+
+    setIsSendingMessage(true);
+    const userMessage = prompt.trim();
+    setPrompt(''); // Clear input immediately
 
     try {
-      // Insert the user's message into the new chat_messages table
-      const { error } = await supabase
+      // 1. Insert the user's message into the new chat_messages table
+      const { error: insertError } = await supabase
         .from('chat_messages')
         .insert({
           project_id: project.id,
           user_id: user.id,
           author: 'user',
-          content: prompt.trim(),
+          content: userMessage,
         });
 
-      if (error) throw error;
+      if (insertError) throw insertError;
 
-      setPrompt('');
-      // No direct AI response for free-form messages in this iteration,
-      // but the message is now part of the chat history.
-      // If the project is in progress, we might want to trigger the next step
-      // or a regeneration based on this input in a future iteration.
-      // For now, it's just recorded.
+      // 2. Invoke the trigger-step function to process this message
+      // The n8n workflow will need to be updated to handle this 'userMessage'
+      const { error: triggerError } = await supabase.functions.invoke('trigger-step', {
+        body: { projectId: project.id, userMessage: userMessage },
+      });
+
+      if (triggerError) {
+        if (triggerError.context && triggerError.context.response.status === 402) {
+          showError("toasts.chat.outOfCredits");
+        } else {
+          throw triggerError;
+        }
+      } else {
+        console.log('Successfully triggered workflow with user message:', userMessage);
+      }
+
     } catch (error: any) {
       showError('toasts.chat.sendMessageFailed');
-      console.error('Error sending chat message:', error.message);
+      console.error('Error sending chat message or triggering workflow:', error.message);
+    } finally {
+      setIsSendingMessage(false);
     }
   };
 
@@ -131,10 +148,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             rows={1}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            disabled={isDisabled}
+            disabled={isDisabled || isSendingMessage}
           ></textarea>
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim()}>
-            <Send size={20} />
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim() || isSendingMessage}>
+            {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>
         <div className="flex items-center justify-center gap-2 flex-wrap">

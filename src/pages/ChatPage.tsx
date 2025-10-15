@@ -68,7 +68,7 @@ const ChatPage: React.FC = () => {
     }
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleStartNewWorkflow = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt.trim() || isSending) return;
     
@@ -103,7 +103,9 @@ const ChatPage: React.FC = () => {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
-    return lastMessage.author === 'user' || (messages.length === 1 && lastMessage.id === 'welcome-message');
+    // AI is typing if the last message is from the user (meaning AI is yet to respond)
+    // or if the last message is a workflow progress message and the project is still in progress.
+    return lastMessage.author === 'user' || (lastMessage.stepResult?.step_name === 'Workflow Progress' && project.status === 'in_progress');
   }, [messages, isLoading, project]);
 
   const isChatDisabled = useMemo(() => {
@@ -124,6 +126,7 @@ const ChatPage: React.FC = () => {
     );
   }
 
+  // Render initial input for starting a new project
   if (!project) {
     return (
       <div className="flex flex-col h-full">
@@ -131,7 +134,7 @@ const ChatPage: React.FC = () => {
           <EmptyChat userName={sessionUser?.full_name} />
         </div>
         <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
-          <form onSubmit={handleSendMessage} className="relative">
+          <form onSubmit={handleStartNewWorkflow} className="relative">
             <Input
               className="w-full bg-transparent border-border rounded-2xl p-4 pl-12 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect"
               placeholder={t('chatInput.placeholder')}
@@ -163,6 +166,7 @@ const ChatPage: React.FC = () => {
     );
   }
 
+  // Render ChatInput (with only buttons) for existing projects
   return (
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
