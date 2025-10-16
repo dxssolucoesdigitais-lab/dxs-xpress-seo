@@ -16,6 +16,11 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Edge Function generate-feedback-reply started.');
+    console.log('SUPABASE_URL present:', !!supabaseUrl);
+    console.log('SUPABASE_SERVICE_ROLE_KEY present:', !!serviceRoleKey);
+    console.log('GROQ_API_KEY present:', !!groqApiKey);
+
     if (!supabaseUrl || !serviceRoleKey || !groqApiKey) {
       throw new Error("Missing Supabase or Groq environment variables.");
     }
@@ -24,21 +29,27 @@ serve(async (req) => {
 
     // Get user from Authorization header and check if they are an admin
     const authHeader = req.headers.get('Authorization')!
+    console.log('Auth header present:', !!authHeader);
     const { data: { user } = {} } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
+    console.log('User authenticated:', !!user);
     if (!user) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
     }
     
+    console.log('Checking admin role for user:', user.id);
     const { data: adminCheck, error: roleError } = await supabaseAdmin.rpc('get_my_role');
+    console.log('Admin role check result:', adminCheck);
     if (roleError || adminCheck !== 'admin') {
+      console.error('Role check failed:', roleError?.message || 'User is not admin');
       return new Response(JSON.stringify({ error: 'Forbidden: Admins only' }), {
           status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     const { feedbackContent } = await req.json();
+    console.log('Feedback content received:', !!feedbackContent);
     if (!feedbackContent) {
       return new Response(JSON.stringify({ error: 'feedbackContent is required' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -308,7 +319,7 @@ Thank you for sharing your concerns about the interface changes. We understand y
 📋 Resumo do Feedback:
 O usuário elogia a plataforma, destacando que ela tem sido muito útil para melhorar o posicionamento do seu site nos mecanismos de busca.
 💬 Resposta ao Usuário (Espanhol-ES):
-¡Muchísimas gracias por tus palabras! Nos alegra enormemente saber que XpressSEO está ayudándote a mejorar el posicionamiento de tu sitio. Tu mensaje está siendo compartido con nuestro equipo. ¡Seguimos trabajando para ofrecerte la mejor experiencia!
+¡Muchísimas gracias por tus palabras! Nos alegra enormemente saber que XpressSEO está ayudándote a melhorar el posicionamiento de tu sitio. Tu mensaje está sendo compartido com nosso equipo. ¡Seguimos trabajando para ofrecerte la mejor experiencia!
 
 ---
 
@@ -410,7 +421,7 @@ Para melhor compreensão do contexto, conheça os principais termos e funcionali
 
 Sua performance será avaliada por:
 
-1. **Precisão no Registro de Data/Hora:** 100% de acerto
+1. **Precisão no Registro de Data e Hora:** 100% de acerto
 2. **Precisão na Identificação de Idioma:** 100% de acerto
 3. **Qualidade da Tradução:** Fidelidade ao conteúdo original
 4. **Compreensão do Feedback:** Resumo preciso e contextualizado
@@ -456,6 +467,7 @@ Quando receber uma mensagem do usuário, processe-a DIRETAMENTE seguindo o forma
 Você está agora ATIVO e em modo de processamento contínuo de feedbacks.
 `
     // Call Groq API to generate reply
+    console.log('Attempting to call Groq API...');
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -481,11 +493,13 @@ Você está agora ATIVO e em modo de processamento contínuo de feedbacks.
 
     if (!groqResponse.ok) {
       const errorBody = await groqResponse.text();
+      console.error(`Groq API error: ${groqResponse.status} - ${errorBody}`);
       throw new Error(`Groq API responded with ${groqResponse.status}: ${errorBody}`);
     }
 
     const groqData = await groqResponse.json();
     const generatedReply = groqData.choices[0]?.message?.content || 'Não foi possível gerar uma resposta no momento.';
+    console.log('Groq API call successful. Reply generated.');
 
     return new Response(JSON.stringify({ reply: generatedReply }), {
       status: 200,
