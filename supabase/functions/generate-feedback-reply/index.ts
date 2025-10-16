@@ -27,7 +27,7 @@ serve(async (req) => {
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
-    // Get user from Authorization header and check if they are an admin
+    // Get user from Authorization header
     const authHeader = req.headers.get('Authorization')!
     console.log('Auth header present:', !!authHeader);
     const { data: { user } = {} } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
@@ -38,11 +38,20 @@ serve(async (req) => {
         });
     }
     
-    console.log('Checking admin role for user:', user.id);
-    const { data: adminCheck, error: roleError } = await supabaseAdmin.rpc('get_my_role');
-    console.log('Admin role check result:', adminCheck);
-    if (roleError || adminCheck !== 'admin') {
-      console.error('Role check failed:', roleError?.message || 'User is not admin');
+    console.log('Authenticated user ID:', user.id);
+
+    // Directly query the user's role using the service role client
+    const { data: userData, error: userRoleError } = await supabaseAdmin
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    console.log('Direct user role data:', userData);
+    console.log('Direct user role error:', userRoleError);
+
+    if (userRoleError || userData?.role !== 'admin') {
+      console.error('Role check failed: User is not admin or error fetching role.', userRoleError?.message);
       return new Response(JSON.stringify({ error: 'Forbidden: Admins only' }), {
           status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -207,7 +216,7 @@ Thank you so much for your feedback and for the kind words about our keyword tra
 ### Exemplo 3: Espanhol-ES (Solicitação de Recurso)
 
 **Entrada do Usuário:**
-"Me encanta la herramienta, pero sería genial tener soporte para más idiomas en el análisis de contenido."
+"Me encanta la herramienta, pero sería genial tener suporte para más idiomas en el análisis de contenido."
 
 **Resposta do Agente:**
 📅 Data e Hora do Registro: 12/10/2025 às 16:18:47 - UTC-3
@@ -319,7 +328,7 @@ Thank you for sharing your concerns about the interface changes. We understand y
 📋 Resumo do Feedback:
 O usuário elogia a plataforma, destacando que ela tem sido muito útil para melhorar o posicionamento do seu site nos mecanismos de busca.
 💬 Resposta ao Usuário (Espanhol-ES):
-¡Muchísimas gracias por tus palabras! Nos alegra enormemente saber que XpressSEO está ayudándote a melhorar el posicionamiento de tu sitio. Tu mensaje está sendo compartido com nosso equipo. ¡Seguimos trabajando para ofrecerte la mejor experiencia!
+¡Muchísimas gracias por tus palabras! Nos alegra enormemente saber que XpressSEO está ayudándote a melhorar el posicionamento de tu sitio. Tu mensaje está sendo compartido com nosso equipo. ¡Seguimos trabajando para ofrecerte la mejor experiencia!
 
 ---
 
