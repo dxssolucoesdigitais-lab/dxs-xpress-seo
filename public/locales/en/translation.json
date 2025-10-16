@@ -335,7 +335,8 @@
     "userFeedback": "User Feedback",
     "yourReply": "Your Reply",
     "generate": "Generate Reply (AI)",
-    "submit": "Send Reply"
+    "submit": "Send Reply",
+    "generationErrorPrefix": "Generation error:"
   },
   "subscriptionAlert": {
     "title": "Your Subscription Is Exiring!",
@@ -487,7 +488,7 @@
     "definitionsTitle": "Definitions",
     "definitionsList": [
       "<strong>“Personal Data”</strong> refers to information that identifies or can identify a natural person.",
-      "<strong>“Sensitive Personal Data”</strong> refers to information that reveals intimate personal characteristics, such as racial origin, religious convictions, political opinions, genetic or biometric data.",
+      "<strong>“Sensitive Personal Data”</strong> refers to information that reveals intimate personal characteristics, such      as racial origin, religious convictions, political opinions, genetic or biometric data.",
       "<strong>“Personal Data Processing”</strong> covers any operation with Personal Data, such as collection, registration, storage, use, sharing, or destruction.",
       "<strong>“Data Protection Laws”</strong> are all laws that regulate the Processing of Personal Data, including the LGPD (General Personal Data Protection Law, Law nº 13.709/18)."
     ],

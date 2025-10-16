@@ -3,6 +3,7 @@ import i18n from "@/lib/i18n";
 
 type ToastOptions = {
   [key: string]: any;
+  message?: string; // Adiciona 'message' às opções
 };
 
 export const showSuccess = (key: string, options?: ToastOptions) => {
@@ -10,7 +11,9 @@ export const showSuccess = (key: string, options?: ToastOptions) => {
 };
 
 export const showError = (key: string, options?: ToastOptions) => {
-  toast.error(i18n.t(key, options));
+  // Se uma mensagem for fornecida nas opções, usa-a diretamente ou a anexa à chave traduzida
+  const translatedMessage = options?.message ? `${i18n.t(key, options)}: ${options.message}` : i18n.t(key, options);
+  toast.error(translatedMessage);
 };
 
 export const showLoading = (key: string, options?: ToastOptions) => {

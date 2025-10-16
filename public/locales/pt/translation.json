@@ -336,7 +336,8 @@
     "userFeedback": "Feedback do Usuário",
     "yourReply": "Sua Resposta",
     "generate": "Gerar Resposta (IA)",
-    "submit": "Enviar Resposta"
+    "submit": "Enviar Resposta",
+    "generationErrorPrefix": "Erro na geração:"
   },
   "subscriptionAlert": {
     "title": "Sua Assinatura Está Expirando!",

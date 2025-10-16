@@ -28,24 +28,34 @@ const FeedbackReplyDialog: React.FC<FeedbackReplyDialogProps> = ({ feedback, isO
   const [reply, setReply] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generationError, setGenerationError] = useState<string | null>(null); // Novo estado para a mensagem de erro
 
   useEffect(() => {
     if (feedback) {
       setReply(feedback.admin_response || '');
+      setGenerationError(null); // Limpa o erro ao abrir o diálogo ou mudar o feedback
     }
   }, [feedback]);
 
   const handleGenerateReply = async () => {
     if (!feedback) return;
     setIsGenerating(true);
+    setGenerationError(null); // Limpa o erro anterior
     try {
       const { data, error } = await supabase.functions.invoke('generate-feedback-reply', {
         body: { feedbackContent: feedback.content },
       });
-      if (error) throw error;
+      if (error) {
+        // Extrai a mensagem de erro real da resposta da Edge Function
+        const errorMessage = error.context?.json?.error || error.message || 'Erro desconhecido da Edge Function.';
+        setGenerationError(errorMessage);
+        throw new Error(errorMessage); // Relança para ser capturado pelo catch externo
+      }
       setReply(data.reply);
-    } catch (error) {
-      showError('toasts.feedback.generateReplyError');
+    } catch (error: any) {
+      // Este bloco catch agora receberá a mensagem de erro detalhada
+      showError('toasts.feedback.generateReplyError', { message: error.message }); // Passa a mensagem para o toast
+      console.error('Error generating feedback reply:', error.message);
     } finally {
       setIsGenerating(false);
     }
@@ -73,6 +83,7 @@ const FeedbackReplyDialog: React.FC<FeedbackReplyDialogProps> = ({ feedback, isO
       onOpenChange(false);
     } catch (error) {
       showError('toasts.feedback.replyError');
+      console.error('Error submitting feedback reply:', error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -109,6 +120,9 @@ const FeedbackReplyDialog: React.FC<FeedbackReplyDialogProps> = ({ feedback, isO
                 className="bg-transparent border-border"
                 disabled={isSubmitting}
               />
+              {generationError && ( // Exibe a mensagem de erro
+                <p className="text-sm text-red-400 mt-2">{t('feedbackReplyDialog.generationErrorPrefix')} {generationError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>

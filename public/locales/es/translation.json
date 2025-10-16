@@ -125,7 +125,7 @@
           "2 pies de foto para redes sociales optimizados para SEO e IA",
           "1 informe de validación",
           "1 traducción al idioma seleccionado",
-          "1 versión HTML optimizada"
+          "1 versión HTML otimizada"
         ],
         "popular": true
       },
@@ -335,7 +335,8 @@
     "userFeedback": "Comentario del Usuario",
     "yourReply": "Tu Respuesta",
     "generate": "Generar Respuesta (IA)",
-    "submit": "Enviar Respuesta"
+    "submit": "Enviar Respuesta",
+    "generationErrorPrefix": "Error de generación:"
   },
   "subscriptionAlert": {
     "title": "¡Tu Suscripción Está Expirando!",
@@ -489,7 +490,7 @@
       "<strong>“Datos Personales”</strong> son informaciones que identifican o pueden identificar a una persona natural.",
       "<strong>“Datos Personales Sensibles”</strong> son informaciones que revelan características personales íntimas, como origen racial, convicciones religiosas, opiniones políticas, datos genéticos o biométricos.",
       "<strong>“Tratamiento de Datos Personales”</strong> abarca cualquier operación con Datos Personales, como recolección, registro, almacenamiento, uso, compartición o destrucción.",
-      "<strong>“Leyes de Protección de Datos”</strong> son todas las leyes que regulan el Tratamiento de Datos Personales, incluyendo la LGPD (Ley General de Protección de Datos Personales, Ley nº 13.709/18)."
+      "<strong>“Leyes de Protección de Datos”</strong> son todas las leyes que regulan el Tratamiento de Datos Personales, incluyendo la LGPD (Ley Geral de Protección de Datos Personales, Ley nº 13.709/18)."
     ],
     "dataCollectionTitle": "Datos Recopilados y Motivos de la Recopilación",
     "dataCollectionIntro": "Recopilamos y procesamos los siguientes tipos de datos personales:",
