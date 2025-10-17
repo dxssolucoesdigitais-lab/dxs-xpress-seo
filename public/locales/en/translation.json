@@ -207,7 +207,9 @@
   "emptyChat": {
     "greeting": "Hello, {{userName}}!",
     "guest": "Guest",
-    "subtitle": "Ready to optimize your SEO? Start a new conversation!"
+    "subtitle": "Ready to optimize your SEO? Click the button below to start a new conversation!",
+    "startButton": "Start a new conversation!",
+    "initialPrompt": "Hello, XpressSEO! I'd like to start a new product analysis."
   },
   "optionSelector": {
     "prompt": "Please select one of the options below to continue:",
@@ -447,7 +449,7 @@
     "intro2": "By using our website and services, you automatically agree to follow the rules we establish here. If you do not agree with something, please consider not using our services. It is very important to us that you feel safe and informed at all times.",
     "section1": {
       "title": "1. Accepting the Terms",
-      "p1": "By browsing and using the XpressSEO website, you automatically agree to our rules and conditions. We are always looking to improve, so these terms may change from time to time. If we make significant changes, we will post the updates here on the website. Continuing to use the website after these changes means that you accept the new terms."
+      "p1": "By browsing and using the XpressSEO website, you automatically agree to our rules and conditions. We are always looking to improve, so these terms may change from time to time. If we make significant changes, we will post the updates here in the website. Continuing to use the website after these changes means that you accept the new terms."
     },
     "section2": {
       "title": "2. How to Use Our Website",

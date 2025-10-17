@@ -125,7 +125,7 @@
           "2 pies de foto para redes sociales optimizados para SEO e IA",
           "1 informe de validación",
           "1 traducción al idioma seleccionado",
-          "1 versión HTML otimizada"
+          "1 versión HTML optimizada"
         ],
         "popular": true
       },
@@ -142,7 +142,7 @@
           "5 pies de foto para redes sociales optimizados para SEO e IA",
           "1 informe de validación",
           "1 traducción al idioma seleccionado",
-          "1 versión HTML otimizada"
+          "1 versión HTML optimizada"
         ],
         "popular": false
       }
@@ -207,7 +207,9 @@
   "emptyChat": {
     "greeting": "¡Hola, {{userName}}!",
     "guest": "Invitado",
-    "subtitle": "¿Listo para optimizar tu SEO? ¡Inicia una nueva conversación!"
+    "subtitle": "¿Listo para optimizar tu SEO? ¡Haz clic en el botón de abajo para iniciar una nueva conversación!",
+    "startButton": "¡Iniciar una nueva conversación!",
+    "initialPrompt": "Hola, XpressSEO! Me gustaría iniciar un nuevo análisis de producto."
   },
   "optionSelector": {
     "prompt": "Por favor, selecciona una de las opciones a continuación para continuar:",
@@ -535,7 +537,7 @@
     ],
     "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Seguridad de los Datos",
-    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgación o destrucción. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
+    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgação o destrucción. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Cambios en la Política de Privacidad",
     "policyChangesP1": "Nuestra Política de Privacidad puede actualizarse periódicamente. La versión más actual siempre se publicará en nuestro sitio web, indicando la fecha de la última revisión. Te animamos a revisar regularmente nuestra política para estar siempre informado sobre cómo estamos protegiendo tus datos.",
     "contactTitle": "Contacto",

@@ -5,7 +5,8 @@ import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
-import { useSession } from '@/contexts/SessionContext'; // Importar useSession para obter o nome do usuário
+import { useSession } from '@/contexts/SessionContext';
+import EmptyChatPrompt from './EmptyChatPrompt'; // Importar o novo componente
 
 const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
   const { t } = useTranslation();
@@ -54,13 +55,14 @@ interface MessageListProps {
   messages: ChatMessage[];
   isAiTyping: boolean;
   currentStep?: number;
-  hasProject: boolean; // Nova prop para indicar se há um projeto ativo
+  hasProject: boolean;
+  onNewProjectCreated: (projectId: string) => void; // Adicionar prop
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated }) => {
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
   const { t } = useTranslation();
-  const { user: sessionUser } = useSession(); // Obter o usuário da sessão
+  const { user: sessionUser } = useSession();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,17 +73,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   }, [messages, isAiTyping]);
 
   if (!hasProject && messages.length === 0) {
-    // Renderiza o conteúdo do EmptyChat quando não há projeto e nenhuma mensagem
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
-        <div className="w-20 h-20 flex items-center justify-center mb-6">
-          <img src="/logo.svg" alt="Logo" className="w-16 h-16 object-contain" />
-        </div>
-        <h1 className="text-4xl font-bold text-foreground">{t('emptyChat.greeting', { userName: sessionUser?.full_name || t('emptyChat.guest') })}</h1>
-        <p className="mt-2 text-lg text-muted-foreground">{t('emptyChat.subtitle')}</p>
-        <div ref={messagesEndRef} /> {/* Manter o ref para scroll, mesmo no estado vazio */}
-      </div>
-    );
+    return <EmptyChatPrompt onNewProjectCreated={onNewProjectCreated} />;
   }
 
   return (

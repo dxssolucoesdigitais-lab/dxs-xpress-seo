@@ -71,7 +71,7 @@ const ChatPage: React.FC = () => {
     return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
   }, [project]);
 
-  // Callback for ChatInput to update the project ID
+  // Callback for ChatInput and EmptyChatPrompt to update the project ID
   const handleNewProjectCreated = useCallback((newProjectId: string) => {
     setCurrentProjectId(newProjectId);
   }, []);
@@ -94,7 +94,7 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
       {project && <ChatHeader project={project} />}
-      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} />
+      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} onNewProjectCreated={handleNewProjectCreated} />
       {project?.status === 'error' && <ErrorDisplay />}
       <ChatInput 
         project={project} 

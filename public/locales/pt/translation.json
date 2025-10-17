@@ -208,7 +208,9 @@
   "emptyChat": {
     "greeting": "Olá, {{userName}}!",
     "guest": "Visitante",
-    "subtitle": "Pronto para otimizar seu SEO? Comece uma nova conversa!"
+    "subtitle": "Pronto para otimizar seu SEO? Clique no botão abaixo para iniciar uma nova conversa!",
+    "startButton": "Iniciar uma nova conversa!",
+    "initialPrompt": "Olá, XpressSEO! Gostaria de iniciar uma nova análise de produto."
   },
   "optionSelector": {
     "prompt": "Por favor, selecione uma das opções abaixo para continuar:",
@@ -524,7 +526,7 @@
       "Em caso de reestruturação corporativa, venda, fusão ou outra transferência de ativos, garantindo que a entidade receptora concorde em respeitar a privacidade de seus dados de acordo com uma política equivalente à nossa."
     ],
     "externalLinksTitle": "Links para outros sites e redes sociais",
-    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas.",
+    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas."
     "externalLinksP2": "Recomendamos a leitura atenta dessas políticas antes de fornecer qualquer dado pessoal. Da mesma forma, não assumimos responsabilidade pelas práticas de privacidade de terceiros como Facebook, Apple, Google e Microsoft. Aconselhamos você a se informar sobre as políticas de privacidade dessas entidades ao utilizar seus serviços ou aplicativos.",
     "dataSubjectRightsTitle": "Direitos dos Titulares dos Dados",
     "dataSubjectRightsIntro": "Você possui diversos direitos em relação aos seus dados pessoais, incluindo:",
