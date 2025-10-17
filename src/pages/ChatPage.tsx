@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProject } from '@/hooks/useProject';
 import { useChat } from '@/hooks/useChat';
@@ -15,10 +15,33 @@ import { useWindowSize } from '@uidotdev/usehooks';
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId: paramProjectId } = useParams<{ projectId: string }>();
   const { user: sessionUser } = useSession();
+  const navigate = useNavigate();
 
-  const { project, loading: projectLoading } = useProject(projectId);
+  // Use local state for projectId, initialized from URL params
+  const [currentProjectId, setCurrentProjectId] = useState<string | undefined>(paramProjectId);
+
+  // Update local state if URL param changes (e.g., user navigates directly to a project)
+  useEffect(() => {
+    if (paramProjectId !== currentProjectId) {
+      setCurrentProjectId(paramProjectId);
+    }
+  }, [paramProjectId, currentProjectId]);
+
+  // Update URL without full navigation when currentProjectId changes internally
+  useEffect(() => {
+    if (currentProjectId && currentProjectId !== paramProjectId) {
+      // Use replace to avoid cluttering history, and avoid full navigation
+      window.history.replaceState(null, '', `/chat/${currentProjectId}`);
+    } else if (!currentProjectId && paramProjectId) {
+      // If project is cleared, navigate back to /chat
+      window.history.replaceState(null, '', '/chat');
+    }
+  }, [currentProjectId, paramProjectId]);
+
+
+  const { project, loading: projectLoading } = useProject(currentProjectId);
   const { messages, loading: chatLoading } = useChat(project);
   
   const [showConfetti, setShowConfetti] = useState(false);
@@ -34,15 +57,13 @@ const ChatPage: React.FC = () => {
     previousStatus.current = project?.status;
   }, [project?.status]);
 
-  const isLoading = projectLoading || (projectId && chatLoading);
+  const isLoading = projectLoading || (currentProjectId && chatLoading);
 
   const isAiTyping = useMemo(() => {
     if (isLoading || !project || messages.length === 0 || project.status !== 'in_progress') {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
-    // AI is typing if the last message is from the user (meaning AI is yet to respond)
-    // or if the last message is a workflow progress message and the project is still in progress.
     return lastMessage.author === 'user' || (lastMessage.stepResult?.step_name === 'Workflow Progress' && project.status === 'in_progress');
   }, [messages, isLoading, project]);
 
@@ -50,7 +71,12 @@ const ChatPage: React.FC = () => {
     return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
   }, [project]);
 
-  if (isLoading && projectId) {
+  // Callback for ChatInput to update the project ID
+  const handleNewProjectCreated = useCallback((newProjectId: string) => {
+    setCurrentProjectId(newProjectId);
+  }, []);
+
+  if (isLoading && currentProjectId) { // Use currentProjectId for loading state
     return (
       <div className="flex flex-col h-full">
         <Skeleton className="h-16 w-full" />
@@ -70,7 +96,12 @@ const ChatPage: React.FC = () => {
       {project && <ChatHeader project={project} />}
       <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} />
       {project?.status === 'error' && <ErrorDisplay />}
-      <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
+      <ChatInput 
+        project={project} 
+        messages={messages} 
+        isDisabled={isChatDisabled} 
+        onNewProjectCreated={handleNewProjectCreated} // Pass the callback
+      />
     </div>
   );
 };

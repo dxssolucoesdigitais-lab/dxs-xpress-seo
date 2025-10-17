@@ -4,24 +4,25 @@ import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
 import ProjectHistorySheet from './ProjectHistorySheet';
-import { useSession } from '@/contexts/SessionContext';
+import { useSession } => '@/contexts/SessionContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { showError, showSuccess } from '@/utils/toast';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+// Removed useNavigate as it's not needed for new project creation anymore
 
 interface ChatInputProps {
-  project: Project | null; // Pode ser null para iniciar um novo projeto
+  project: Project | null;
   messages: ChatMessage[];
   isDisabled?: boolean;
+  onNewProjectCreated?: (projectId: string) => void; // New prop for callback
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false, onNewProjectCreated }) => {
   const { t } = useTranslation();
   const { user } = useSession();
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Removed
   const { pauseProject, resumeProject } = useProjectActions();
   const [isPausing, setIsPausing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -31,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
   const hasCredits = user && user.credits_remaining > 0;
   
   const handlePauseToggle = async () => {
-    if (!project) return; // Should not happen if button is visible
+    if (!project) return;
     setIsPausing(true);
     if (project.status === 'in_progress') {
       await pauseProject(project.id);
@@ -47,7 +48,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
 
     setIsSendingMessage(true);
     const userMessage = prompt.trim();
-    setPrompt(''); // Clear input immediately
+    setPrompt('');
 
     try {
       if (!project) {
@@ -63,7 +64,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             throw error;
           }
         } else if (newProject) {
-          navigate(`/chat/${newProject.id}`);
+          // Instead of navigating, call the callback to update parent state
+          onNewProjectCreated?.(newProject.id);
+          // The real-time subscription in useChat will pick up the new project and its initial messages.
         }
       } else {
         // If a project exists, send a message to the current project
