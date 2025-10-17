@@ -106,7 +106,7 @@ const Index = () => {
             <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.blog')}
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
+            <a href="mailto:info@dxsdigital.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
               {t('landingPage.footer.contact')}
             </a>
             <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out">
