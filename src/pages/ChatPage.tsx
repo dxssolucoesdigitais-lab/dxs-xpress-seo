@@ -6,7 +6,6 @@ import ChatHeader from "@/components/chat/ChatHeader";
 import ChatInput from "@/components/chat/ChatInput";
 import MessageList from "@/components/chat/MessageList";
 import ErrorDisplay from "@/components/chat/ErrorDisplay";
-import EmptyChat from "@/components/chat/EmptyChat";
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 import { showSuccess } from '@/utils/toast';
@@ -68,17 +67,9 @@ const ChatPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
-      {project ? (
-        <>
-          <ChatHeader project={project} />
-          <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project.current_step} />
-          {project.status === 'error' && <ErrorDisplay />}
-        </>
-      ) : (
-        <div className="flex-1">
-          <EmptyChat userName={sessionUser?.full_name} />
-        </div>
-      )}
+      {project && <ChatHeader project={project} />}
+      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} />
+      {project?.status === 'error' && <ErrorDisplay />}
       <ChatInput project={project} messages={messages} isDisabled={isChatDisabled} />
     </div>
   );
