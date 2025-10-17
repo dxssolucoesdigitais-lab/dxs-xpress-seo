@@ -4,7 +4,7 @@ import { useProjectActions } from '@/hooks/useProjectActions';
 import { ChatMessage } from '@/types/chat.types';
 import { Project } from '@/types/database.types';
 import ProjectHistorySheet from './ProjectHistorySheet';
-import { useSession } => '@/contexts/SessionContext';
+import { useSession } from '@/contexts/SessionContext'; // Correção aqui
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { showError, showSuccess } from '@/utils/toast';
