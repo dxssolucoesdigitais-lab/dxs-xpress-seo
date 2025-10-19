@@ -96,12 +96,14 @@ const ChatPage: React.FC = () => {
       {project && <ChatHeader project={project} />}
       <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} onNewProjectCreated={handleNewProjectCreated} />
       {project?.status === 'error' && <ErrorDisplay />}
-      <ChatInput 
-        project={project} 
-        messages={messages} 
-        isDisabled={isChatDisabled} 
-        onNewProjectCreated={handleNewProjectCreated} // Pass the callback
-      />
+      {project && ( // Render ChatInput only if a project is active
+        <ChatInput 
+          project={project} 
+          messages={messages} 
+          isDisabled={isChatDisabled} 
+          onNewProjectCreated={handleNewProjectCreated} 
+        />
+      )}
     </div>
   );
 };
