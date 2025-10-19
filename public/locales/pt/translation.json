@@ -493,7 +493,7 @@
       "<strong>“Dados Pessoais”</strong> são informações que identificam ou podem identificar uma pessoa natural.",
       "<strong>“Dados Pessoais Sensíveis”</strong> são informações que revelam características pessoais íntimas, como origem racial, convicções religiosas, opiniões políticas, dados genéticos ou biométricos.",
       "<strong>“Tratamento de Dados Pessoais”</strong> abrange qualquer operação com Dados Pessoais, como coleta, registro, armazenamento, uso, compartilhamento ou destruição.",
-      "<strong>“Leis de Proteção de Dados”</strong> são todas as leis que regulamentam o Tratamento de Dados Pessoais, incluindo a LGPD (Lei Geral de Proteção de Dados Pessoais, Lei nº 13.709/18)."
+      "<strong>“Leyes de Proteção de Dados”</strong> são todas as leis que regulamentam o Tratamento de Dados Pessoais, incluindo a LGPD (Lei Geral de Proteção de Dados Pessoais, Lei nº 13.709/18)."
     ],
     "dataCollectionTitle": "Dados Coletados e Motivos da Coleta",
     "dataCollectionIntro": "Nós coletamos e processamos os seguintes tipos de dados pessoais:",
@@ -526,7 +526,7 @@
       "Em caso de reestruturação corporativa, venda, fusão ou outra transferência de ativos, garantindo que a entidade receptora concorde em respeitar a privacidade de seus dados de acordo com uma política equivalente à nossa."
     ],
     "externalLinksTitle": "Links para outros sites e redes sociais",
-    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas."
+    "externalLinksP1": "Nossa plataforma pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas.",
     "externalLinksP2": "Recomendamos a leitura atenta dessas políticas antes de fornecer qualquer dado pessoal. Da mesma forma, não assumimos responsabilidade pelas práticas de privacidade de terceiros como Facebook, Apple, Google e Microsoft. Aconselhamos você a se informar sobre as políticas de privacidade dessas entidades ao utilizar seus serviços ou aplicativos.",
     "dataSubjectRightsTitle": "Direitos dos Titulares dos Dados",
     "dataSubjectRightsIntro": "Você possui diversos direitos em relação aos seus dados pessoais, incluindo:",
