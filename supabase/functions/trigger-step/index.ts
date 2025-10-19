@@ -18,11 +18,12 @@ serve(async (req) => {
     
     // Get webhook URLs for each plan from environment variables
     // User needs to set these environment variables in Supabase project settings
+    const n8nWebhookAdmin = Deno.env.get('N8N_WEBHOOK_URL_ADMIN') // New admin webhook
     const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
     const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
     const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
     const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
-    const n8nWebhookGSCAnalysis = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS')
+    // const n8nWebhookGSCAnalysis = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS') // This is for a different function
 
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error("Missing Supabase environment variables.");
@@ -51,9 +52,10 @@ serve(async (req) => {
       });
     }
 
+    // Fetch user data including their role
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
-      .select('id, credits_remaining, plan_type')
+      .select('id, credits_remaining, plan_type, role') // Added 'role'
       .eq('id', project.user_id)
       .single();
 
@@ -71,36 +73,44 @@ serve(async (req) => {
       });
     }
 
-    if (user.credits_remaining <= 0 && !userMessage) { // Não bloqueia se for apenas uma mensagem do usuário sem avançar o fluxo
+    // Only check credits if the user is NOT an admin and it's not just a user message
+    if (user.role !== 'admin' && user.credits_remaining <= 0 && !userMessage) {
       await supabaseAdmin.from('projects').update({ status: 'paused' }).eq('id', projectId);
       return new Response(JSON.stringify({ error: 'Insufficient credits.' }), {
         status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // --- Select Webhook based on User Plan ---
+    // --- Select Webhook based on User Role (Admin Override) or Plan ---
     let targetWebhookUrl;
-    const userPlan = user.plan_type || 'free';
 
-    switch (userPlan) {
-      case 'free':
-        targetWebhookUrl = n8nWebhookFree;
-        break;
-      case 'basic':
-        targetWebhookUrl = n8nWebhookBasic;
-        break;
-      case 'standard':
-        targetWebhookUrl = n8nWebhookStandard;
-        break;
-      case 'premium':
-        targetWebhookUrl = n8nWebhookPremium;
-        break;
-      default:
-        targetWebhookUrl = n8nWebhookFree; // Fallback to free plan
-    }
+    if (user.role === 'admin') {
+      targetWebhookUrl = n8nWebhookAdmin;
+      if (!targetWebhookUrl) {
+        throw new Error("N8N_WEBHOOK_URL_ADMIN is not configured for admin user.");
+      }
+    } else {
+      const userPlan = user.plan_type || 'free';
+      switch (userPlan) {
+        case 'free':
+          targetWebhookUrl = n8nWebhookFree;
+          break;
+        case 'basic':
+          targetWebhookUrl = n8nWebhookBasic;
+          break;
+        case 'standard':
+          targetWebhookUrl = n8nWebhookStandard;
+          break;
+        case 'premium':
+          targetWebhookUrl = n8nWebhookPremium;
+          break;
+        default:
+          targetWebhookUrl = n8nWebhookFree; // Fallback to free plan
+      }
 
-    if (!targetWebhookUrl) {
-      throw new Error(`n8n webhook URL for plan '${userPlan}' is not configured.`);
+      if (!targetWebhookUrl) {
+        throw new Error(`n8n webhook URL for plan '${userPlan}' is not configured.`);
+      }
     }
 
     // --- Trigger n8n Workflow ---
@@ -110,7 +120,8 @@ serve(async (req) => {
       body: JSON.stringify({
         projectId: project.id,
         userId: user.id,
-        planType: userPlan,
+        planType: user.plan_type, // Still send the actual plan type to n8n
+        userRole: user.role, // Also send user role
         currentStep: project.current_step,
         projectData: project,
         userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
@@ -123,7 +134,7 @@ serve(async (req) => {
     }
 
     // --- Respond Immediately to the Client ---
-    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully for plan '${userPlan}'.` }), {
+    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
