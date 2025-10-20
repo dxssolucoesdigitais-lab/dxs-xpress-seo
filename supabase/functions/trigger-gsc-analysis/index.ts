@@ -15,10 +15,10 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     // User needs to set this environment variable in Supabase project settings
-    const n8nWebhookGSC = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS') || 'http://192.168.0.216:5678/webhook/gsc-@006-xpress-seo'
+    const n8nWebhookGSCStandalone = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS_STANDALONE') || 'http://192.168.0.216:5678/webhook/gsc-analysis-standalone'
 
-    if (!supabaseUrl || !serviceRoleKey || !n8nWebhookGSC) {
-      throw new Error("Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_URL_GSC_ANALYSIS).");
+    if (!supabaseUrl || !serviceRoleKey || !n8nWebhookGSCStandalone) {
+      throw new Error("Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_URL_GSC_ANALYSIS_STANDALONE).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -70,7 +70,7 @@ serve(async (req) => {
     if (updateIntentError) throw updateIntentError;
 
     // 3. Acionar o webhook do n8n para iniciar a análise GSC
-    fetch(n8nWebhookGSC, {
+    fetch(n8nWebhookGSCStandalone, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

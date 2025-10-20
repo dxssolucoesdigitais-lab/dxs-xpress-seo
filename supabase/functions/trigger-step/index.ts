@@ -18,12 +18,11 @@ serve(async (req) => {
     
     // Get webhook URLs for each plan from environment variables
     // User needs to set these environment variables in Supabase project settings
-    const n8nWebhookAdmin = Deno.env.get('N8N_WEBHOOK_URL_ADMIN') // New admin webhook
+    const n8nWebhookAdminDemo = Deno.env.get('N8N_WEBHOOK_URL_ADMIN_DEMO') // New admin demo webhook
     const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
     const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
     const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
     const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
-    // const n8nWebhookGSCAnalysis = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS') // This is for a different function
 
     if (!supabaseUrl || !serviceRoleKey) {
       throw new Error("Missing Supabase environment variables.");
@@ -85,9 +84,9 @@ serve(async (req) => {
     let targetWebhookUrl;
 
     if (user.role === 'admin') {
-      targetWebhookUrl = n8nWebhookAdmin;
+      targetWebhookUrl = n8nWebhookAdminDemo;
       if (!targetWebhookUrl) {
-        throw new Error("N8N_WEBHOOK_URL_ADMIN is not configured for admin user.");
+        throw new Error("N8N_WEBHOOK_URL_ADMIN_DEMO is not configured for admin user.");
       }
     } else {
       const userPlan = user.plan_type || 'free';
