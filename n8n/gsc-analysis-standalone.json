@@ -37,17 +37,187 @@
             {
               "name": "paymentIntentId",
               "value": "={{$json.paymentIntentId}}"
+            },
+            {
+              "name": "currentStep",
+              "value": "1"
             }
           ]
         }
       }
     },
     {
+      "id": "3",
+      "name": "Switch Step",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        640,
+        300
+      ],
+      "parameters": {
+        "property": "={{$json.currentStep}}",
+        "rules": [
+          {
+            "operation": "equal",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "name": "Fetch Project Data",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        840,
+        100
+      ],
+      "parameters": {
+        "operation": "select",
+        "table": "projects",
+        "filters": [
+          {
+            "column": "id",
+            "operator": "equal",
+            "value": "={{$json.projectId}}"
+          }
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "5",
+      "name": "Prepare GSC Analysis Prompt",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1040,
+        100
+      ],
+      "parameters": {
+        "language": "javascript",
+        "functionCode": "return [{ json: { prompt: \"Perform a detailed Google Search Console analysis for the website: \" + $json.projectData.product_link + \". Provide insights and actionable recommendations.\" } }];"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Call LLM for GSC Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1240,
+        100
+      ],
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "method": "POST",
+        "responseFormat": "json",
+        "jsonParameters": true,
+        "body": {
+          "model": "llama-3.1-8b-instant",
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are an expert in Google Search Console analysis. Provide actionable insights and recommendations."
+            },
+            {
+              "role": "user",
+              "content": "={{$json.prompt}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7",
+      "name": "Process GSC LLM Output",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1440,
+        100
+      ],
+      "parameters": {
+        "language": "javascript",
+        "functionCode": "return [{ json: { llm_output: $json.choices[0].message.content } }];"
+      }
+    },
+    {
+      "id": "8",
+      "name": "Insert GSC Step Result",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        1640,
+        100
+      ],
+      "parameters": {
+        "operation": "insert",
+        "table": "step_results",
+        "columns": [
+          "project_id",
+          "step_number",
+          "step_name",
+          "llm_output",
+          "approved"
+        ],
+        "values": [
+          "={{$json.projectId}}",
+          "={{$json.currentStep}}",
+          "GSC Analysis Report",
+          "={{$json.llm_output}}",
+          "true"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "9",
+      "name": "Update Project Status to Completed",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        1840,
+        100
+      ],
+      "parameters": {
+        "operation": "update",
+        "table": "projects",
+        "filters": [
+          {
+            "column": "id",
+            "operator": "equal",
+            "value": "={{$json.projectId}}"
+          }
+        ],
+        "updateColumns": [
+          "status"
+        ],
+        "updateValues": [
+          "completed"
+        ]
+      },
+      "credentials": {}
+    },
+    {
+      "id": "10",
+      "name": "Call Frontend Trigger",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2040,
+        100
+      ],
+      "parameters": {
+        "url": "={{$env.SUPABASE_URL}}/functions/v1/trigger-step",
+        "method": "POST",
+        "jsonParameters": true,
+        "body": {
+          "projectId": "={{$json.projectId}}"
+        }
+      },
+      "credentials": {}
+    },
+    {
       "id": "99",
       "name": "Finalize Response",
       "type": "n8n-nodes-base.code",
       "position": [
-        840,
+        2240,
         300
       ],
       "parameters": {
@@ -65,6 +235,62 @@
       ]
     },
     "Set Variables": {
+      "main": [
+        [
+          "3"
+        ]
+      ]
+    },
+    "Switch Step": {
+      "main": [
+        [
+          "4"
+        ]
+      ]
+    },
+    "Fetch Project Data": {
+      "main": [
+        [
+          "5"
+        ]
+      ]
+    },
+    "Prepare GSC Analysis Prompt": {
+      "main": [
+        [
+          "6"
+        ]
+      ]
+    },
+    "Call LLM for GSC Analysis": {
+      "main": [
+        [
+          "7"
+        ]
+      ]
+    },
+    "Process GSC LLM Output": {
+      "main": [
+        [
+          "8"
+        ]
+      ]
+    },
+    "Insert GSC Step Result": {
+      "main": [
+        [
+          "9"
+        ]
+      ]
+    },
+    "Update Project Status to Completed": {
+      "main": [
+        [
+          "10"
+        ]
+      ]
+    },
+    "Call Frontend Trigger": {
       "main": [
         [
           "99"
