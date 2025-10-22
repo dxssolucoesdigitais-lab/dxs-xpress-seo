@@ -33,24 +33,15 @@ const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ isOpen, onOpenChange })
 
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('feedbacks')
-        .insert({ user_id: user.id, content })
-        .select()
-        .single(); // Select the inserted row to get its ID
+        .insert({ user_id: user.id, content });
 
       if (error) throw error;
 
       showSuccess('toasts.feedback.success');
       setContent('');
       onOpenChange(false);
-
-      // After successful database insert, trigger the n8n webhook via Edge Function
-      if (data) {
-        await supabase.functions.invoke('send-feedback-to-n8n', {
-          body: { feedbackContent: data.content, feedbackId: data.id },
-        });
-      }
 
     } catch (error: any) {
       showError('toasts.feedback.error');
