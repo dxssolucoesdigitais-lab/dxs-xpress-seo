@@ -10,10 +10,22 @@ import { useTranslation } from 'react-i18next';
 const transformStepToMessages = (step: StepResult, t: (key: string) => string): ChatMessage[] => {
   const messages: ChatMessage[] = [];
 
+  let aiContent: React.ReactNode | undefined;
+  // Se llm_output for uma string, use-o diretamente como conteúdo.
+  // Para outros tipos (objetos, arrays), o MessageRenderer usará a prop stepResult
+  // para renderizar componentes específicos (OptionSelector, ProgressFlow).
+  if (typeof step.llm_output === 'string') {
+    aiContent = step.llm_output;
+  }
+  // Se for um objeto/array, o MessageRenderer já tem lógica para OptionSelector e ProgressFlow.
+  // Se não for nenhum desses, o aiContent permanecerá undefined e o MessageRenderer
+  // exibirá a mensagem padrão "Analisando a próxima etapa...".
+
   messages.push({
     id: step.id,
     author: 'ai',
     createdAt: step.created_at,
+    content: aiContent, // Passa o conteúdo da string extraído aqui
     stepResult: step,
   });
 
@@ -23,12 +35,12 @@ const transformStepToMessages = (step: StepResult, t: (key: string) => string): 
       messages.push({
         id: `${step.id}-user`,
         author: 'user',
-        createdAt: step.created_at, // Using step's creation time for sorting
+        createdAt: step.created_at,
         content: selection.content,
         stepResult: step,
       });
     }
-  } else if (step.approved) {
+  } else if (step.approved && step.step_name !== 'Workflow Progress') {
     messages.push({
       id: `${step.id}-user`,
       author: 'user',
