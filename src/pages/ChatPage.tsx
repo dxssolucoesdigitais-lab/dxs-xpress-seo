@@ -80,7 +80,9 @@ const ChatPage: React.FC = () => {
     });
 
     // Sort by createdAt to maintain order
-    return combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    const sortedMessages = combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    console.log("[DEBUG-MESSAGELIST] Final displayed messages order:", sortedMessages.map(m => ({ id: m.id, author: m.author, createdAt: m.createdAt, content: (typeof m.content === 'string' ? m.content.substring(0, 30) : 'Structured') + '...' })));
+    return sortedMessages;
   }, [messages, optimisticMessages]);
 
   // Clear optimistic messages that have been replaced by real ones

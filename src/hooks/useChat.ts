@@ -45,10 +45,12 @@ export const useChat = (project: Project | null) => {
         // Not a JSON string, treat as plain text, rawContent is already msg.content
       }
 
+      console.log(`[DEBUG-CHAT] Fetched message: ID=${msg.id}, Author=${msg.author}, CreatedAt=${msg.created_at}, Content=${msg.content.substring(0, 50)}...`);
+
       return {
         id: msg.id,
         author: msg.author as 'user' | 'ai',
-        createdAt: msg.created_at,
+        createdAt: msg.created_at, // This is from the DB
         content: content,
         rawContent: rawContent, // This will now always be the string content
       };
@@ -72,12 +74,14 @@ export const useChat = (project: Project | null) => {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'chat_messages', filter: `project_id=eq.${projectId}` },
         () => {
+          console.log(`[DEBUG-CHAT] Realtime update detected for project ${projectId}. Invalidating query.`);
           queryClient.invalidateQueries({ queryKey: ['chatHistory', projectId] });
         }
       )
       .subscribe();
 
     return () => {
+      console.log(`[DEBUG-CHAT] Unsubscribing from chat messages channel for project ${projectId}.`);
       supabase.removeChannel(chatMessageChannel);
     };
   }, [projectId, queryClient]);
