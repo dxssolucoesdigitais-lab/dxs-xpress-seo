@@ -172,6 +172,8 @@ const ChatPage: React.FC = () => {
         hasProject={!!project} 
         onNewProjectCreated={handleNewProjectCreated} 
         projectId={currentProjectId} 
+        onOptimisticMessageAdd={addOptimisticMessage}
+        onOptimisticMessageRemove={removeOptimisticMessage}
       />
       {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
       {project ? (

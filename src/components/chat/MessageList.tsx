@@ -67,9 +67,11 @@ interface MessageListProps {
   hasProject: boolean;
   onNewProjectCreated: (projectId: string) => void;
   projectId: string | undefined; // Adicionar projectId aqui
+  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
+  onOptimisticMessageRemove: (id: string) => void; // New prop
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated, projectId }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated, projectId, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
   const { t } = useTranslation();
   const { user: sessionUser } = useSession();
@@ -83,7 +85,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   }, [messages, isAiTyping]);
 
   if (!hasProject && messages.length === 0) {
-    return <EmptyChatPrompt onNewProjectCreated={onNewProjectCreated} />;
+    return <EmptyChatPrompt onNewProjectCreated={onNewProjectCreated} onOptimisticMessageAdd={onOptimisticMessageAdd} onOptimisticMessageRemove={onOptimisticMessageRemove} />;
   }
 
   return (
