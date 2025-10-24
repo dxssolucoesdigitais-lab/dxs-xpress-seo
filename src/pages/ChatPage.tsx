@@ -12,7 +12,8 @@ import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { StructuredChatContent, ChatMessage } from '@/types/chat.types'; // Import ChatMessage
+import { StructuredChatContent, ChatMessage } from '@/types/chat.types';
+import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt'; // Ensure EmptyChatPrompt is imported here
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -110,9 +111,9 @@ const ChatPage: React.FC = () => {
     return lastMessage.author === 'user' || (isLastAiMessageProgress && project.status === 'in_progress');
   }, [displayedMessages, isLoading, project]);
 
-  const isChatDisabled = useMemo(() => {
-    return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
-  }, [project]);
+  const isChatInputDisabled = useMemo(() => {
+    return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused' || isAiTyping;
+  }, [project, isAiTyping]);
 
   const lastAiMessageIsError = useMemo(() => {
     if (displayedMessages.length === 0) return false;
@@ -147,7 +148,7 @@ const ChatPage: React.FC = () => {
     setCurrentProjectId(newProjectId);
   }, []);
 
-  if (isLoading && currentProjectId) {
+  if (projectLoading) {
     return (
       <div className="flex flex-col h-full">
         <Skeleton className="h-16 w-full" />
@@ -164,27 +165,27 @@ const ChatPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
-      {project && <ChatHeader project={project} />}
-      <MessageList 
-        messages={displayedMessages} 
-        isAiTyping={isAiTyping} 
-        currentStep={project?.current_step} 
-        hasProject={!!project} 
-        onNewProjectCreated={handleNewProjectCreated} 
-        projectId={currentProjectId} 
-        onOptimisticMessageAdd={addOptimisticMessage}
-        onOptimisticMessageRemove={removeOptimisticMessage}
-      />
-      {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
+      
       {project ? (
-        <ChatInput 
-          project={project} 
-          isDisabled={isChatDisabled} 
-          onNewProjectCreated={handleNewProjectCreated} 
-          onOptimisticMessageAdd={addOptimisticMessage}
-          onOptimisticMessageRemove={removeOptimisticMessage}
-        />
+        <>
+          <ChatHeader project={project} />
+          <MessageList 
+            messages={displayedMessages} 
+            isAiTyping={isAiTyping} 
+            currentStep={project.current_step} 
+            projectId={currentProjectId} 
+          />
+          {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
+          <ChatInput 
+            project={project} 
+            isDisabled={isChatInputDisabled} 
+            onNewProjectCreated={handleNewProjectCreated} 
+            onOptimisticMessageAdd={addOptimisticMessage}
+            onOptimisticMessageRemove={removeOptimisticMessage}
+          />
+        </>
       ) : (
+        // No project and not loading, show EmptyChatPrompt with its own input
         <EmptyChatPrompt 
           onNewProjectCreated={handleNewProjectCreated} 
           onOptimisticMessageAdd={addOptimisticMessage}

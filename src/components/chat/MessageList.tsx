@@ -6,7 +6,7 @@ import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
-import EmptyChatPrompt from './EmptyChatPrompt';
+// import EmptyChatPrompt from './EmptyChatPrompt'; // Remove this import
 
 const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
@@ -64,14 +64,12 @@ interface MessageListProps {
   messages: ChatMessage[];
   isAiTyping: boolean;
   currentStep?: number;
-  hasProject: boolean;
-  onNewProjectCreated: (projectId: string) => void;
-  projectId: string | undefined; // Adicionar projectId aqui
-  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
-  onOptimisticMessageRemove: (id: string) => void; // New prop
+  // Removed hasProject, onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove
+  // as EmptyChatPrompt is no longer rendered here.
+  projectId: string | undefined; 
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated, projectId, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, projectId }) => {
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
   const { t } = useTranslation();
   const { user: sessionUser } = useSession();
@@ -84,9 +82,9 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
     scrollToBottom();
   }, [messages, isAiTyping]);
 
-  if (!hasProject && messages.length === 0) {
-    return <EmptyChatPrompt onNewProjectCreated={onNewProjectCreated} onOptimisticMessageAdd={onOptimisticMessageAdd} onOptimisticMessageRemove={onOptimisticMessageRemove} />;
-  }
+  // EmptyChatPrompt is no longer rendered here.
+  // The parent component (ChatPage) will handle rendering EmptyChatPrompt
+  // when there is no active project.
 
   return (
     <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
