@@ -6,7 +6,7 @@ import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
-// import EmptyChatPrompt from './EmptyChatPrompt'; // Remove this import
+import { cn } from '@/lib/utils'; // Importar cn para combinar classes
 
 const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
@@ -52,7 +52,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className="prose prose-invert prose-sm max-w-none text-muted-foreground space-y-4">
+        <div className={cn("prose prose-invert prose-sm max-w-none text-muted-foreground space-y-4", "whitespace-pre-wrap")}>
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
@@ -64,8 +64,6 @@ interface MessageListProps {
   messages: ChatMessage[];
   isAiTyping: boolean;
   currentStep?: number;
-  // Removed hasProject, onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove
-  // as EmptyChatPrompt is no longer rendered here.
   projectId: string | undefined; 
 }
 
@@ -81,10 +79,6 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   React.useEffect(() => {
     scrollToBottom();
   }, [messages, isAiTyping]);
-
-  // EmptyChatPrompt is no longer rendered here.
-  // The parent component (ChatPage) will handle rendering EmptyChatPrompt
-  // when there is no active project.
 
   return (
     <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
