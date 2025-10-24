@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react'; // Import useRef
 import { supabase } from '@/integrations/supabase/client';
 import { Project, ChatMessageRow } from '@/types/database.types';
 import { ChatMessage, StructuredChatContent } from '@/types/chat.types';
@@ -11,13 +11,21 @@ export const useChat = (project: Project | null) => {
   const queryClient = useQueryClient();
   const projectId = project?.id;
 
+  // Use a ref to store the current projectId to avoid stale closures in the subscription callback
+  const projectIdRef = useRef(projectId);
+  useEffect(() => {
+    projectIdRef.current = projectId;
+  }, [projectId]);
+
   const fetchChatMessages = async (): Promise<ChatMessage[]> => {
-    if (!projectId) return [];
+    if (!projectIdRef.current) return []; // Use ref here
+
+    console.log(`[DEBUG-CHAT] Fetching chat messages for project: ${projectIdRef.current}`);
 
     const { data: chatMessagesData, error: chatError } = await supabase
       .from('chat_messages')
       .select('*')
-      .eq('project_id', projectId)
+      .eq('project_id', projectIdRef.current) // Use ref here
       .order('created_at', { ascending: true });
 
     if (chatError) {
@@ -42,10 +50,10 @@ export const useChat = (project: Project | null) => {
           content = null; 
         }
       } catch (e) {
-        // Not a JSON string, treat as plain text, rawContent is already msg.content
+        // Not structured content, rawContent is already msg.content
       }
 
-      console.log(`[DEBUG-CHAT] Fetched message: ID=${msg.id}, Author=${msg.author}, CreatedAt=${msg.created_at}, Content=${msg.content.substring(0, 50)}...`);
+      console.log(`[DEBUG-CHAT] Processed fetched message: ID=${msg.id}, Author=${msg.author}, CreatedAt=${msg.created_at}, Content=${msg.content.substring(0, Math.min(msg.content.length, 50))}...`);
 
       return {
         id: msg.id,
@@ -66,25 +74,42 @@ export const useChat = (project: Project | null) => {
   });
 
   useEffect(() => {
-    if (!projectId) return;
+    if (!projectId) {
+      console.log('[DEBUG-CHAT] No projectId, skipping Realtime subscription setup.');
+      return;
+    }
+
+    console.log(`[DEBUG-CHAT] Setting up Realtime subscription for project: ${projectId}`);
 
     const chatMessageChannel = supabase
       .channel(`project_chat_messages_${projectId}`)
       .on<ChatMessageRow>(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'chat_messages', filter: `project_id=eq.${projectId}` },
-        () => {
-          console.log(`[DEBUG-CHAT] Realtime update detected for project ${projectId}. Invalidating query.`);
+        { 
+          event: 'INSERT', // Focando apenas em eventos de INSERT para novas mensagens
+          schema: 'public', 
+          table: 'chat_messages', 
+          filter: `project_id=eq.${projectId}` 
+        },
+        (payload) => {
+          console.log(`[DEBUG-CHAT] Realtime INSERT event detected for project ${projectId}. Payload:`, payload);
           queryClient.invalidateQueries({ queryKey: ['chatHistory', projectId] });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(`[DEBUG-CHAT] Realtime channel status for project ${projectId}: ${status}`);
+        if (status === 'SUBSCRIBED') {
+          console.log(`[DEBUG-CHAT] Successfully subscribed to Realtime channel for project ${projectId}.`);
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error(`[DEBUG-CHAT] Realtime channel error for project ${projectId}.`);
+        }
+      });
 
     return () => {
       console.log(`[DEBUG-CHAT] Unsubscribing from chat messages channel for project ${projectId}.`);
       supabase.removeChannel(chatMessageChannel);
     };
-  }, [projectId, queryClient]);
+  }, [projectId, queryClient]); // Dependencies are correct
 
   return { messages, loading: isLoading };
 };
