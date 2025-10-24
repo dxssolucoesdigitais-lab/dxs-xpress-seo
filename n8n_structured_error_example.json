@@ -1,0 +1,7 @@
+{
+      "type": "error",
+      "data": {
+        "title": "Erro na Geração da IA",
+        "message": "A IA não conseguiu gerar uma resposta para esta etapa. Por favor, tente novamente ou entre em contato com o suporte."
+      }
+    }
