@@ -82,8 +82,7 @@ serve(async (req) => {
     }
 
     // Trigger the first step of the workflow via trigger-step (which then calls n8n)
-    // The trigger-step function will handle sending the initial userMessage to n8n
-    // and n8n will then insert the AI's first response as a chat_message.
+    // The trigger-step function will handle inserting the initial userMessage into chat_messages.
     const { error: triggerError } = await supabaseAdmin.functions.invoke('trigger-step', {
       body: { projectId: newProject.id, userMessage: prompt }, // Send initial prompt as userMessage
     });

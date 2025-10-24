@@ -79,6 +79,25 @@ serve(async (req) => {
       });
     }
 
+    // --- Insert user's message into chat_messages table (OPTIMISTIC UI) ---
+    // This ensures the user's message appears immediately in the UI via real-time subscription.
+    if (projectId && userMessage) {
+      const { error: insertMessageError } = await supabaseAdmin
+        .from('chat_messages')
+        .insert({
+          project_id: projectId,
+          user_id: user.id,
+          author: 'user',
+          content: userMessage,
+        });
+
+      if (insertMessageError) {
+        console.error('Error inserting user message into chat_messages:', insertMessageError);
+        // Don't throw, try to proceed with n8n call if message insertion failed
+      }
+    }
+
+
     // --- Select Webhook based on User Role (Admin Override) or Plan ---
     let targetWebhookUrl;
 
