@@ -23,5 +23,5 @@ export interface ChatMessage {
   author: 'user' | 'ai';
   createdAt: string;
   content: ReactNode; // Pode ser string ou um objeto ReactNode (para componentes)
-  rawContent?: string; // Para armazenar a string JSON original se for estruturado
+  rawContent: string; // Para armazenar a string JSON original se for estruturado, sempre uma string
 }

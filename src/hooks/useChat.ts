@@ -26,7 +26,10 @@ export const useChat = (project: Project | null) => {
       throw chatError;
     }
 
-    const messages: ChatMessage[] = chatMessagesData.map(msg => {
+    // Adiciona uma etapa de desduplicação baseada no ID da mensagem
+    const uniqueMessages = new Map<string, ChatMessageRow>();
+    chatMessagesData.forEach(msg => uniqueMessages.set(msg.id, msg));
+    const processedMessages = Array.from(uniqueMessages.values()).map(msg => {
       let content: React.ReactNode = msg.content;
       let rawContent: string = msg.content; // Always store the original string content here
 
@@ -51,7 +54,7 @@ export const useChat = (project: Project | null) => {
       };
     });
     
-    return messages;
+    return processedMessages;
   };
 
   const { data: messages = [], isLoading } = useQuery<ChatMessage[]>({
