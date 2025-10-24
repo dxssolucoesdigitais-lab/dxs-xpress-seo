@@ -1,23 +1,12 @@
 import React from 'react';
 
 interface TypingIndicatorProps {
-  currentStep?: number;
+  currentStep?: number; // Still keep currentStep for potential future use or general AI thinking
 }
 
-const contextualMessages: { [key: number]: string } = {
-  1: "Ok, começando a análise inicial...",
-  2: "Agora vamos criar títulos irresistíveis! 🎯",
-  3: "Perfeito! Criando descrições que geram cliques...",
-  4: "Hora de descrever o produto com detalhes de mestre. ✍️",
-  5: "Está ficando incrível! Meta titles do produto... 🚀",
-  6: "Criando as meta descriptions perfeitas para o produto.",
-  7: "Escrevendo um artigo de blog para atrair ainda mais gente.",
-  8: "Preparando legendas magnéticas para as redes sociais. 📱",
-  9: "Quase lá! Validação técnica em andamento... 🔍"
-};
-
 const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
-  const message = currentStep ? contextualMessages[currentStep] : "Analisando a próxima etapa...";
+  // Simplified message as frontend is "burro" and doesn't know specific steps
+  const message = "O XpressSEO está pensando...";
 
   return (
     <div className="flex items-start gap-4">

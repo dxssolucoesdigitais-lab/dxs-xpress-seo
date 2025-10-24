@@ -1,46 +1,22 @@
 import React, { useState } from 'react';
-import { Send, Loader2, Play, Pause, BookText } from 'lucide-react';
-import { useProjectActions } from '@/hooks/useProjectActions';
-import { ChatMessage } from '@/types/chat.types';
+import { Send, Loader2 } from 'lucide-react';
 import { Project } from '@/types/database.types';
-import ProjectHistorySheet from './ProjectHistorySheet';
-import { useSession } from '@/contexts/SessionContext'; // Correção aqui
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
-import { showError, showSuccess } from '@/utils/toast';
-import { Button } from '@/components/ui/button';
+import { showError } from '@/utils/toast';
 import { supabase } from '@/integrations/supabase/client';
-// Removed useNavigate as it's not needed for new project creation anymore
 
 interface ChatInputProps {
   project: Project | null;
-  messages: ChatMessage[];
   isDisabled?: boolean;
-  onNewProjectCreated?: (projectId: string) => void; // New prop for callback
+  onNewProjectCreated?: (projectId: string) => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = false, onNewProjectCreated }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNewProjectCreated }) => {
   const { t } = useTranslation();
   const { user } = useSession();
-  // const navigate = useNavigate(); // Removed
-  const { pauseProject, resumeProject } = useProjectActions();
-  const [isPausing, setIsPausing] = useState(false);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
-
-  const hasCredits = user && user.credits_remaining > 0;
-  
-  const handlePauseToggle = async () => {
-    if (!project) return;
-    setIsPausing(true);
-    if (project.status === 'in_progress') {
-      await pauseProject(project.id);
-    } else if (project.status === 'paused') {
-      await resumeProject(project.id);
-    }
-    setIsPausing(false);
-  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,23 +40,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             throw error;
           }
         } else if (newProject) {
-          // Instead of navigating, call the callback to update parent state
           onNewProjectCreated?.(newProject.id);
-          // The real-time subscription in useChat will pick up the new project and its initial messages.
         }
       } else {
         // If a project exists, send a message to the current project
-        const { error: insertError } = await supabase
-          .from('chat_messages')
-          .insert({
-            project_id: project.id,
-            user_id: user.id,
-            author: 'user',
-            content: userMessage,
-          });
-
-        if (insertError) throw insertError;
-
+        // This will be handled by n8n, which will then insert the user's message
+        // and the AI's response into chat_messages.
         const { error: triggerError } = await supabase.functions.invoke('trigger-step', {
           body: { projectId: project.id, userMessage: userMessage },
         });
@@ -103,12 +68,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
     }
   };
 
-  const canPauseOrResume = project && (project.status === 'in_progress' || project.status === 'paused');
-
   return (
     <>
       <div className="p-4 bg-background border-t border-border">
-        <form onSubmit={handleSendMessage} className="relative mb-4">
+        <form onSubmit={handleSendMessage} className="relative">
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
@@ -121,37 +84,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, messages, isDisabled = f
             {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>
-        {project && ( // Only show action buttons if a project is active
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button onClick={handlePauseToggle} disabled={!canPauseOrResume || isPausing || (project.status === 'paused' && !hasCredits)} size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold">
-                  {isPausing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 
-                    project.status === 'paused' ? <Play className="mr-2 h-4 w-4" /> : <Pause className="mr-2 h-4 w-4" />}
-                  {project.status === 'paused' ? t('chatInput.resume') : t('chatInput.pause')}
-                </Button>
-              </TooltipTrigger>
-              {project.status === 'paused' && !hasCredits && <TooltipContent><p>{t('chatInput.noCreditsToResumeTooltip')}</p></TooltipContent>}
-            </Tooltip>
-
-            <Button 
-              onClick={() => setIsHistoryOpen(true)}
-              size="sm" className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
-            >
-              <BookText className="mr-2 h-4 w-4" />
-              {t('chatInput.viewHistory')}
-            </Button>
-          </div>
-        )}
       </div>
-      {project && ( // Only show history sheet if a project is active
-        <ProjectHistorySheet 
-          project={project}
-          messages={messages}
-          isOpen={isHistoryOpen}
-          onOpenChange={setIsHistoryOpen}
-        />
-      )}
     </>
   );
 };

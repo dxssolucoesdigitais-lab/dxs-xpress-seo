@@ -213,9 +213,7 @@
   },
   "optionSelector": {
     "prompt": "Por favor, selecciona una de las opciones a continuación para continuar:",
-    "helperText": "Haz clic en una opción para seleccionarla y avanzar.",
-    "noCreditsTooltip": "No tienes suficientes créditos para seleccionar una opción. Por favor, actualiza tu plan.",
-    "noCreditsWarning": "No tienes suficientes créditos para seleccionar una opción. Por favor, actualiza tu plan."
+    "typeToSelect": "Escribe el número de la opción que deseas seleccionar en el campo de chat."
   },
   "progressFlow": {
     "title": "Progreso del Flujo de Trabajo:",

@@ -1,86 +1,24 @@
-import { supabase } from '@/integrations/supabase/client';
-import { showError, showSuccess } from '@/utils/toast';
-import { LlmOption } from '@/types/chat.types';
-import { StepResult } from '@/types/database.types';
-
-const triggerNextStep = async (projectId: string) => {
-  try {
-    const { error } = await supabase.functions.invoke('trigger-step', {
-      body: { projectId },
-    });
-
-    if (error) {
-      if (error.context && error.context.response.status === 402) {
-        showError("toasts.chat.outOfCredits");
-      } else {
-        throw error;
-      }
-    } else {
-      console.log('Successfully triggered next step for project:', projectId);
-    }
-  } catch (error: any) {
-    showError('toasts.chat.nextStepTriggerFailed');
-    console.error('Error invoking trigger-step function:', error.message);
-  }
-};
+// This file is now largely deprecated as user actions are handled as plain text messages.
+// Keeping it as a placeholder in case structured actions are re-introduced via text parsing.
 
 export const useChatActions = () => {
-  const updateStepResult = async (stepResult: StepResult, updateData: { user_selection?: LlmOption, approved: boolean }) => {
-    try {
-      // 1. Update the current step result (mark as approved/save selection)
-      const { error: updateStepError } = await supabase
-        .from('step_results')
-        .update(updateData)
-        .eq('id', stepResult.id);
+  // All user actions (select option, approve step, regenerate) are now handled by
+  // the user typing a message, which is then sent to n8n via trigger-step.
+  // N8n is responsible for interpreting the user's text input.
 
-      if (updateStepError) throw updateStepError;
-      showSuccess('toasts.chat.responseSaved');
-
-      // 2. Increment the project's current step using the RPC function
-      const { error: rpcError } = await supabase.rpc('increment_project_step', {
-        project_id_param: stepResult.project_id
-      });
-
-      if (rpcError) throw rpcError;
-
-      // 3. Trigger the generation of the new current step
-      await triggerNextStep(stepResult.project_id);
-
-    } catch (error: any) {
-      showError('toasts.chat.responseSaveFailed');
-      console.error('Error updating step result:', error.message);
-    }
+  // Placeholder functions, they no longer perform direct actions on Supabase.
+  const selectOption = async (projectId: string, messageId: string, selection: any) => {
+    console.log("Frontend: User selected option. N8n should interpret this from user's text input.");
+    // In a real scenario, you might send a specific message to n8n here
+    // e.g., `trigger-step` with `userMessage: "Selected option X"`
   };
 
-  const selectOption = async (stepResult: StepResult, selection: LlmOption) => {
-    await updateStepResult(stepResult, { user_selection: selection, approved: true });
+  const approveStep = async (projectId: string, messageId: string) => {
+    console.log("Frontend: User approved step. N8n should interpret this from user's text input.");
   };
 
-  const approveStep = async (stepResult: StepResult) => {
-    await updateStepResult(stepResult, { approved: true });
-  };
-
-  const regenerateStep = async (stepResult: StepResult) => {
-    try {
-      const { error } = await supabase.functions.invoke('regenerate-step', {
-        body: { stepResultId: stepResult.id },
-      });
-
-      if (error) {
-        if (error.context && error.context.response.status === 402) {
-          showError("toasts.chat.noCreditsToRegenerate");
-        } else {
-          throw error;
-        }
-      } else {
-        showSuccess('toasts.chat.regenerating');
-        // After deleting the old step, trigger the generation again for the same step number.
-        await triggerNextStep(stepResult.project_id);
-      }
-    } catch (error: any) {
-      showError('toasts.chat.regenerateFailed');
-      console.error('Error invoking regenerate-step function:', error.message);
-    }
+  const regenerateStep = async (projectId: string, messageId: string) => {
+    console.log("Frontend: User requested regeneration. N8n should interpret this from user's text input.");
   };
 
   return { selectOption, approveStep, regenerateStep };

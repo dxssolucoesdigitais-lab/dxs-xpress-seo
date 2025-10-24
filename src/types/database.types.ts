@@ -69,25 +69,6 @@ export interface Database {
         }
         Update: Partial<this['Insert'] & { status: 'in_progress' | 'completed' | 'paused' | 'error', current_step: number }>
       }
-      step_results: {
-        Row: {
-          id: string
-          project_id: string
-          step_number: number
-          step_name: string
-          llm_output: Json
-          user_selection: Json | null
-          approved: boolean
-          created_at: string
-        }
-        Insert: {
-          project_id: string
-          step_number: number
-          step_name: string
-          llm_output: Json
-        }
-        Update: Partial<this['Insert'] & { user_selection: Json, approved: boolean }>
-      }
       usage_history: {
         Row: {
             id: string;
@@ -141,6 +122,5 @@ export interface Database {
 export type User = Database['public']['Tables']['users']['Row'];
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
-export type StepResult = Database['public']['Tables']['step_results']['Row'];
 export type Feedback = Database['public']['Tables']['feedbacks']['Row'];
 export type ChatMessageRow = Database['public']['Tables']['chat_messages']['Row'];

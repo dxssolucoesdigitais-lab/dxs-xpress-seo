@@ -1,21 +1,14 @@
 import React from 'react';
 import { CheckCircle2, Loader, FileText } from 'lucide-react';
-import { StepResult } from '@/types/database.types';
+import { WorkflowProgress } from '@/types/chat.types'; // Importar o tipo correto
 import { useTranslation } from 'react-i18next';
 
 interface ProgressFlowProps {
-  stepResult: StepResult;
+  progress: WorkflowProgress; // Recebe o objeto de progresso diretamente
 }
 
-interface WorkflowProgress {
-  completed: string[];
-  in_progress: string;
-  upcoming: string[];
-}
-
-const ProgressFlow: React.FC<ProgressFlowProps> = ({ stepResult }) => {
+const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress }) => {
   const { t } = useTranslation();
-  const progress = stepResult.llm_output as WorkflowProgress;
 
   if (!progress || !progress.completed || !progress.in_progress) {
     return null;

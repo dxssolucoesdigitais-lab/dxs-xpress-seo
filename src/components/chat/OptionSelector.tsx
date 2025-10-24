@@ -1,30 +1,14 @@
-import React, { useState } from 'react';
-import { StepResult } from '@/types/database.types';
+import React from 'react';
 import { LlmOption } from '@/types/chat.types';
-import { useChatActions } from '@/hooks/useChatActions';
-import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useSession } from '@/contexts/SessionContext';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 
 interface OptionSelectorProps {
-  stepResult: StepResult;
+  options: LlmOption[];
 }
 
-const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
+const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
   const { t } = useTranslation();
-  const { user } = useSession();
-  const { selectOption } = useChatActions();
-  const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
-  const options = (stepResult.llm_output as LlmOption[]) || [];
-  const hasCredits = user && user.credits_remaining > 0;
-
-  const handleSelect = async (option: LlmOption) => {
-    if (!hasCredits) return;
-    setIsSubmitting(option.number);
-    await selectOption(stepResult, option);
-  };
 
   return (
     <div className="flex items-start gap-4">
@@ -35,38 +19,26 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ stepResult }) => {
         </div>
         <div className="space-y-3">
           {options.map((option) => (
-            <Tooltip key={option.number}>
-              <TooltipTrigger asChild>
-                <div 
-                  onClick={!isSubmitting && hasCredits ? () => handleSelect(option) : undefined}
-                  className={cn(
-                    "flex items-center gap-3 p-3 rounded-lg border border-border transition-all",
-                    !isSubmitting && hasCredits && "hover:bg-accent hover:border-cyan-400 cursor-pointer group",
-                    (isSubmitting || !hasCredits) && "opacity-50 cursor-not-allowed"
-                  )}
-                >
-                  <div className={cn(
-                    "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold",
-                    !isSubmitting && hasCredits && "group-hover:border-cyan-400"
-                  )}>
-                    {isSubmitting === option.number ? <Loader2 className="h-4 w-4 animate-spin" /> : option.number}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-foreground">{option.content}</p>
-                    {option.charCount && <p className="text-xs text-muted-foreground">{option.charCount} caracteres</p>}
-                  </div>
-                </div>
-              </TooltipTrigger>
-              {!hasCredits && (
-                <TooltipContent>
-                  <p>{t('optionSelector.noCreditsTooltip')}</p>
-                </TooltipContent>
+            <div 
+              key={option.number}
+              className={cn(
+                "flex items-center gap-3 p-3 rounded-lg border border-border transition-all"
               )}
-            </Tooltip>
+            >
+              <div className={cn(
+                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold"
+              )}>
+                {option.number}
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-foreground">{option.content}</p>
+                {option.charCount && <p className="text-xs text-muted-foreground">{option.charCount} caracteres</p>}
+              </div>
+            </div>
           ))}
         </div>
         <div className="mt-4 text-center text-xs text-muted-foreground">
-          {hasCredits ? t('optionSelector.helperText') : t('optionSelector.noCreditsWarning')}
+          {t('optionSelector.typeToSelect')}
         </div>
       </div>
     </div>

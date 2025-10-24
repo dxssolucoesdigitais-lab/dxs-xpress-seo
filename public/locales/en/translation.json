@@ -213,9 +213,7 @@
   },
   "optionSelector": {
     "prompt": "Please select one of the options below to continue:",
-    "helperText": "Click an option to select it and proceed.",
-    "noCreditsTooltip": "You do not have enough credits to select an option. Please upgrade your plan.",
-    "noCreditsWarning": "You do not have enough credits to select an option. Please upgrade your plan."
+    "typeToSelect": "Type the number of the option you want to select in the chat input."
   },
   "progressFlow": {
     "title": "Workflow Progress:",
@@ -490,7 +488,7 @@
     "definitionsTitle": "Definitions",
     "definitionsList": [
       "<strong>“Personal Data”</strong> refers to information that identifies or can identify a natural person.",
-      "<strong>“Sensitive Personal Data”</strong> refers to information that reveals intimate personal characteristics, such      as racial origin, religious convictions, political opinions, genetic or biometric data.",
+      "<strong>“Sensitive Personal Data”</strong> refers to information that reveals intimate personal characteristics, such as racial origin, religious convictions, political opinions, genetic or biometric data.",
       "<strong>“Personal Data Processing”</strong> covers any operation with Personal Data, such as collection, registration, storage, use, sharing, or destruction.",
       "<strong>“Data Protection Laws”</strong> are all laws that regulate the Processing of Personal Data, including the LGPD (General Personal Data Protection Law, Law nº 13.709/18)."
     ],

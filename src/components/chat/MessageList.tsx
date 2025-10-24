@@ -1,14 +1,14 @@
 import React from 'react';
-import { ChatMessage } from '@/types/chat.types';
+import { ChatMessage, StructuredChatContent, LlmOption, WorkflowProgress } from '@/types/chat.types';
 import { User } from 'lucide-react';
 import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
-import EmptyChatPrompt from './EmptyChatPrompt'; // Importar o novo componente
+import EmptyChatPrompt from './EmptyChatPrompt';
 
-const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
+const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
 
   if (message.author === 'user') {
@@ -22,22 +22,31 @@ const MessageRenderer: React.FC<{ message: ChatMessage }> = ({ message }) => {
     );
   }
 
-  const { stepResult } = message;
-
-  if (stepResult && !stepResult.approved) {
-    const isOptionList = Array.isArray(stepResult.llm_output) && stepResult.llm_output.length > 0 && typeof stepResult.llm_output[0] === 'object' && 'content' in stepResult.llm_output[0];
-    if (isOptionList) {
-      return <OptionSelector stepResult={stepResult} />;
+  // Try to parse rawContent as structured JSON
+  let structuredContent: StructuredChatContent | undefined;
+  if (typeof message.rawContent === 'string') {
+    try {
+      const parsed = JSON.parse(message.rawContent);
+      if (parsed && typeof parsed === 'object' && 'type' in parsed && 'data' in parsed) {
+        structuredContent = parsed as StructuredChatContent;
+      }
+    } catch (e) {
+      // Not a JSON string, treat as plain text
     }
   }
-  
-  if (stepResult && stepResult.step_name === 'Workflow Progress') {
-    return <ProgressFlow stepResult={stepResult} />;
+
+  if (structuredContent?.type === 'options' && Array.isArray(structuredContent.data)) {
+    return <OptionSelector options={structuredContent.data as LlmOption[]} />;
   }
 
+  if (structuredContent?.type === 'progress' && typeof structuredContent.data === 'object') {
+    return <ProgressFlow progress={structuredContent.data as WorkflowProgress} />;
+  }
+
+  // Default rendering for plain text or unparsed content
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
@@ -56,10 +65,11 @@ interface MessageListProps {
   isAiTyping: boolean;
   currentStep?: number;
   hasProject: boolean;
-  onNewProjectCreated: (projectId: string) => void; // Adicionar prop
+  onNewProjectCreated: (projectId: string) => void;
+  projectId: string | undefined; // Adicionar projectId aqui
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, currentStep, hasProject, onNewProjectCreated, projectId }) => {
   const messagesEndRef = React.useRef<null | HTMLDivElement>(null);
   const { t } = useTranslation();
   const { user: sessionUser } = useSession();
@@ -79,7 +89,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   return (
     <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
       {messages.map((message) => (
-        <MessageRenderer key={message.id} message={message} />
+        <MessageRenderer key={message.id} message={message} projectId={projectId} />
       ))}
       {isAiTyping && <TypingIndicator currentStep={currentStep} />}
       <div ref={messagesEndRef} />

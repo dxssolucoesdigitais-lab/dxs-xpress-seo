@@ -17,7 +17,6 @@ serve(async (req) => {
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     
     // Get webhook URLs for each plan from environment variables
-    // User needs to set these environment variables in Supabase project settings
     const n8nWebhookAdminDemo = Deno.env.get('N8N_WEBHOOK_URL_ADMIN_DEMO') // New admin demo webhook
     const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
     const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
@@ -31,31 +30,20 @@ serve(async (req) => {
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
     const { projectId, userMessage } = await req.json(); // Recebe userMessage opcionalmente
 
-    if (!projectId) {
-      return new Response(JSON.stringify({ error: 'projectId is required' }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    // --- Fetch User Data (always needed for credit/role check) ---
+    const authHeader = req.headers.get('Authorization')!
+    const { data: { user: authUser } } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
+    if (!authUser) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+            status: 401,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
     }
 
-    // --- Fetch Project & User Data ---
-    const { data: project, error: projectError } = await supabaseAdmin
-      .from('projects')
-      .select('*')
-      .eq('id', projectId)
-      .single();
-
-    if (projectError) throw projectError;
-    if (!project) {
-      return new Response(JSON.stringify({ error: 'Project not found' }), {
-        status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Fetch user data including their role
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
-      .select('id, credits_remaining, plan_type, role') // Added 'role'
-      .eq('id', project.user_id)
+      .select('id, credits_remaining, plan_type, role')
+      .eq('id', authUser.id)
       .single();
 
     if (userError) throw userError;
@@ -65,17 +53,28 @@ serve(async (req) => {
       });
     }
 
-    // --- Validation ---
-    if (project.status !== 'in_progress' && !userMessage) { // Permite userMessage mesmo se não estiver 'in_progress' para conversas
-      return new Response(JSON.stringify({ message: `Project status is '${project.status}'. No action taken.` }), {
-        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    // --- Project Data (only if projectId is provided) ---
+    let project = null;
+    if (projectId) {
+      const { data: projectData, error: projectError } = await supabaseAdmin
+        .from('projects')
+        .select('*')
+        .eq('id', projectId)
+        .single();
+
+      if (projectError) throw projectError;
+      if (!projectData) {
+        return new Response(JSON.stringify({ error: 'Project not found' }), {
+          status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      project = projectData;
     }
 
-    // Only check credits if the user is NOT an admin and it's not just a user message
-    if (user.role !== 'admin' && user.credits_remaining <= 0 && !userMessage) {
-      await supabaseAdmin.from('projects').update({ status: 'paused' }).eq('id', projectId);
-      return new Response(JSON.stringify({ error: 'Insufficient credits.' }), {
+    // --- Credit Gatekeeper Logic: Only for NEW projects/conversations ---
+    // If projectId is null, it means a new conversation is being initiated.
+    if (!projectId && user.role !== 'admin' && user.credits_remaining <= 0) {
+      return new Response(JSON.stringify({ error: 'Insufficient credits to start a new conversation.' }), {
         status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -117,12 +116,12 @@ serve(async (req) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        projectId: project.id,
+        projectId: projectId,
         userId: user.id,
-        planType: user.plan_type, // Still send the actual plan type to n8n
-        userRole: user.role, // Also send user role
-        currentStep: project.current_step,
-        projectData: project,
+        planType: user.plan_type,
+        userRole: user.role,
+        currentStep: project?.current_step || 0, // Pass current step if project exists
+        projectData: project, // Pass full project data if exists
         userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
       }),
     });
@@ -133,7 +132,7 @@ serve(async (req) => {
     }
 
     // --- Respond Immediately to the Client ---
-    return new Response(JSON.stringify({ message: `Workflow for step ${project.current_step} triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
+    return new Response(JSON.stringify({ message: `Workflow triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

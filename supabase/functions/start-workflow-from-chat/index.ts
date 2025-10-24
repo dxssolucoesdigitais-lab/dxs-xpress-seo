@@ -41,12 +41,14 @@ serve(async (req) => {
     // Check user credits
     const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
-      .select('credits_remaining')
+      .select('credits_remaining, role')
       .eq('id', user.id)
       .single();
 
     if (userError) throw userError;
-    if (userData.credits_remaining <= 0) {
+    
+    // Only check credits if the user is NOT an admin
+    if (userData.role !== 'admin' && userData.credits_remaining <= 0) {
       return new Response(JSON.stringify({ error: 'Insufficient credits.' }), {
         status: 402,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -59,17 +61,31 @@ serve(async (req) => {
       .from('projects')
       .insert({
         user_id: user.id,
-        product_link: prompt,
+        product_link: prompt, // Using prompt as product_link for initial analysis
         project_name: projectName,
+        // Default values for target_country and target_audience can be set here or in n8n
+        target_country: 'Brazil', // Default
+        target_audience: 'General', // Default
       })
       .select()
       .single();
 
     if (createError) throw createError;
 
-    // Trigger the first step of the workflow
+    // Deduct credit for starting a new project (only if not admin)
+    if (userData.role !== 'admin') {
+      const { error: decrementError } = await supabaseAdmin.rpc('decrement_user_credits', {
+        p_user_id: user.id,
+        p_credits: 1,
+      });
+      if (decrementError) throw decrementError;
+    }
+
+    // Trigger the first step of the workflow via trigger-step (which then calls n8n)
+    // The trigger-step function will handle sending the initial userMessage to n8n
+    // and n8n will then insert the AI's first response as a chat_message.
     const { error: triggerError } = await supabaseAdmin.functions.invoke('trigger-step', {
-      body: { projectId: newProject.id },
+      body: { projectId: newProject.id, userMessage: prompt }, // Send initial prompt as userMessage
     });
 
     if (triggerError) {

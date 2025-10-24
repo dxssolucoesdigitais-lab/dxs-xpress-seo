@@ -70,30 +70,24 @@ export const useProjects = () => {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .insert([{ ...newProjectData, user_id: session.user.id }])
-        .select()
-        .single();
+      // Instead of directly inserting, call the start-workflow-from-chat Edge Function
+      // This function will handle project creation and initial credit deduction.
+      const { data, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
+        body: { prompt: newProjectData.product_link }, // Using product_link as the initial prompt
+      });
 
-      if (error) throw error;
+      if (error) {
+        if (error.context && error.context.response.status === 402) {
+          showError("toasts.projects.noCreditsToStart");
+        } else {
+          console.error('Failed to trigger initial workflow step:', error.message);
+          showError('toasts.projects.triggerFailed');
+        }
+        return null;
+      }
 
       if (data) {
         showSuccess('toasts.projects.createSuccess');
-        
-        const { error: functionError } = await supabase.functions.invoke('trigger-step', {
-          body: { projectId: data.id },
-        });
-
-        if (functionError) {
-          if (functionError.context && functionError.context.response.status === 402) {
-            showError("toasts.projects.noCreditsToStart");
-          } else {
-            console.error('Failed to trigger initial workflow step:', functionError.message);
-            showError('toasts.projects.triggerFailed');
-          }
-        }
-
         return data;
       }
       return null;

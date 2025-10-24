@@ -18,7 +18,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
         </div>
         <span className="text-lg font-bold text-foreground">{t('chatHeader.assistantName')}</span>
       </div>
-      {/* Indicador de etapas e barra de progresso removidos */}
     </div>
   );
 };

@@ -214,9 +214,7 @@
   },
   "optionSelector": {
     "prompt": "Por favor, selecione uma das opções abaixo para continuar:",
-    "helperText": "Clique em uma opção para selecioná-la e avançar.",
-    "noCreditsTooltip": "Você não tem créditos suficientes para selecionar uma opção. Faça upgrade do seu plano.",
-    "noCreditsWarning": "Você não tem créditos suficientes para selecionar uma opção. Por favor, faça upgrade do seu plano."
+    "typeToSelect": "Digite o número da opção que você deseja selecionar no campo de chat."
   },
   "progressFlow": {
     "title": "Progresso do Fluxo de Trabalho:",
@@ -331,7 +329,7 @@
       "replied": "Respondido"
     },
     "noFeedback": "Nenhum feedback encontrado."
-  },
+    },
   "feedbackReplyDialog": {
     "title": "Responder Feedback",
     "description": "Envie uma resposta ao feedback do usuário.",
@@ -493,7 +491,7 @@
       "<strong>“Dados Pessoais”</strong> são informações que identificam ou podem identificar uma pessoa natural.",
       "<strong>“Dados Pessoais Sensíveis”</strong> são informações que revelam características pessoais íntimas, como origem racial, convicções religiosas, opiniões políticas, dados genéticos ou biométricos.",
       "<strong>“Tratamento de Dados Pessoais”</strong> abrange qualquer operação com Dados Pessoais, como coleta, registro, armazenamento, uso, compartilhamento ou destruição.",
-      "<strong>“Leyes de Proteção de Dados”</strong> são todas as leis que regulamentam o Tratamento de Dados Pessoais, incluindo a LGPD (Lei Geral de Proteção de Dados Pessoais, Lei nº 13.709/18)."
+      "<strong>“Leyes de Protección de Datos”</strong> são todas as leis que regulamentam o Tratamento de Dados Pessoais, incluindo a LGPD (Lei Geral de Protección de Datos Personales, Lei nº 13.709/18)."
     ],
     "dataCollectionTitle": "Dados Coletados e Motivos da Coleta",
     "dataCollectionIntro": "Nós coletamos e processamos os seguintes tipos de dados pessoais:",

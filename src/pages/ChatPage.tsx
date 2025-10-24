@@ -12,6 +12,7 @@ import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { StructuredChatContent } from '@/types/chat.types';
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -64,12 +65,55 @@ const ChatPage: React.FC = () => {
       return false;
     }
     const lastMessage = messages[messages.length - 1];
-    return lastMessage.author === 'user' || (lastMessage.stepResult?.step_name === 'Workflow Progress' && project.status === 'in_progress');
+    // AI is typing if the last message is from the user, or if the last AI message is a progress update
+    // and the project is still in progress.
+    let isLastAiMessageProgress = false;
+    if (lastMessage.author === 'ai' && typeof lastMessage.rawContent === 'string') {
+      try {
+        const parsedContent = JSON.parse(lastMessage.rawContent);
+        isLastAiMessageProgress = parsedContent.type === 'progress';
+      } catch (e) {
+        // Not structured content
+      }
+    }
+    return lastMessage.author === 'user' || (isLastAiMessageProgress && project.status === 'in_progress');
   }, [messages, isLoading, project]);
 
   const isChatDisabled = useMemo(() => {
     return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
   }, [project]);
+
+  // Check if the last AI message is an error
+  const lastAiMessageIsError = useMemo(() => {
+    if (messages.length === 0) return false;
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.author === 'ai' && typeof lastMessage.rawContent === 'string') {
+      try {
+        const parsedContent = JSON.parse(lastMessage.rawContent) as StructuredChatContent;
+        return parsedContent.type === 'error';
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }, [messages]);
+
+  // Extract error message if present
+  const errorMessage = useMemo(() => {
+    if (lastAiMessageIsError) {
+      const lastMessage = messages[messages.length - 1];
+      try {
+        const parsedContent = JSON.parse(lastMessage.rawContent as string) as StructuredChatContent;
+        if (parsedContent.type === 'error' && typeof parsedContent.data === 'object' && 'message' in parsedContent.data) {
+          return (parsedContent.data as { message: string }).message;
+        }
+      } catch (e) {
+        return undefined;
+      }
+    }
+    return undefined;
+  }, [lastAiMessageIsError, messages]);
+
 
   // Callback for ChatInput and EmptyChatPrompt to update the project ID
   const handleNewProjectCreated = useCallback((newProjectId: string) => {
@@ -94,12 +138,11 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
       {project && <ChatHeader project={project} />}
-      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} onNewProjectCreated={handleNewProjectCreated} />
-      {project?.status === 'error' && <ErrorDisplay />}
+      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} onNewProjectCreated={handleNewProjectCreated} projectId={currentProjectId} />
+      {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
       {project && ( // Render ChatInput only if a project is active
         <ChatInput 
           project={project} 
-          messages={messages} 
           isDisabled={isChatDisabled} 
           onNewProjectCreated={handleNewProjectCreated} 
         />

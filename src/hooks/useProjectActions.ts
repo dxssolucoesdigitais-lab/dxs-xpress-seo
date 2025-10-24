@@ -1,24 +1,15 @@
-import { supabase } from '@/integrations/supabase/client';
-import { showError, showSuccess } from '@/utils/toast';
-import i18n from '@/lib/i18n';
+// This file is now largely deprecated as project actions are handled by n8n.
+// Keeping it as a placeholder in case structured actions are re-introduced via text parsing.
 
 export const useProjectActions = () => {
-  const updateProjectStatus = async (projectId: string, status: 'in_progress' | 'paused') => {
-    try {
-      const { error } = await supabase
-        .from('projects')
-        .update({ status })
-        .eq('id', projectId);
+  // All project actions (pause, resume) are now handled by
+  // the user typing a message, which is then sent to n8n via trigger-step.
+  // N8n is responsible for interpreting the user's text input.
 
-      if (error) throw error;
-      const toastKey = status === 'paused' ? 'toasts.projects.paused' : 'toasts.projects.resumed';
-      showSuccess(toastKey);
-      return true;
-    } catch (error: any) {
-      showError('toasts.projects.statusUpdateFailed');
-      console.error('Error updating project status:', error.message);
-      return false;
-    }
+  // Placeholder functions, they no longer perform direct actions on Supabase.
+  const updateProjectStatus = async (projectId: string, status: 'in_progress' | 'paused') => {
+    console.log(`Frontend: User requested project status change to ${status}. N8n should interpret this from user's text input.`);
+    return true; // Simulate success
   };
 
   const pauseProject = async (projectId: string) => {
@@ -26,24 +17,7 @@ export const useProjectActions = () => {
   };
 
   const resumeProject = async (projectId: string) => {
-    const success = await updateProjectStatus(projectId, 'in_progress');
-    if (success) {
-      try {
-        const { error } = await supabase.functions.invoke('trigger-step', {
-          body: { projectId },
-        });
-        if (error) {
-           if (error.context && error.context.response.status === 402) {
-            showError("toasts.projects.resumeNoCredits");
-          } else {
-            throw error;
-          }
-        }
-      } catch (error: any) {
-        showError('toasts.projects.resumeWorkflowFailed');
-        console.error('Error invoking trigger-step function on resume:', error.message);
-      }
-    }
+    return await updateProjectStatus(projectId, 'in_progress');
   };
 
   return { pauseProject, resumeProject };
