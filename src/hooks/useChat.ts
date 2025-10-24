@@ -28,19 +28,18 @@ export const useChat = (project: Project | null) => {
 
     const messages: ChatMessage[] = chatMessagesData.map(msg => {
       let content: React.ReactNode = msg.content;
-      let rawContent: string | undefined = undefined;
+      let rawContent: string = msg.content; // Always store the original string content here
 
       // Try to parse content as JSON for structured messages
       try {
         const parsed = JSON.parse(msg.content);
         if (parsed && typeof parsed === 'object' && 'type' in parsed && 'data' in parsed) {
           // If it's structured, store the raw JSON string and let MessageRenderer handle rendering
-          rawContent = msg.content;
-          // For now, content can be a placeholder or null, as MessageRenderer will use rawContent
+          // For now, content can be null, as MessageRenderer will use rawContent
           content = null; 
         }
       } catch (e) {
-        // Not a JSON string, treat as plain text
+        // Not a JSON string, treat as plain text, rawContent is already msg.content
       }
 
       return {
@@ -48,7 +47,7 @@ export const useChat = (project: Project | null) => {
         author: msg.author as 'user' | 'ai',
         createdAt: msg.created_at,
         content: content,
-        rawContent: rawContent,
+        rawContent: rawContent, // This will now always be the string content
       };
     });
     

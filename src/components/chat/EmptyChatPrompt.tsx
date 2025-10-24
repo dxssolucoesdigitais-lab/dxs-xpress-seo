@@ -6,12 +6,15 @@ import { useSession } from '@/contexts/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
+import { ChatMessage } from '@/types/chat.types'; // Import ChatMessage
 
 interface EmptyChatPromptProps {
   onNewProjectCreated: (projectId: string) => void;
+  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
+  onOptimisticMessageRemove: (id: string) => void; // New prop
 }
 
-const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }) => {
+const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
   const { t } = useTranslation();
   const { user } = useSession();
   const [isLoading, setIsLoading] = useState(false);
@@ -20,14 +23,24 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }
     if (!user || isLoading) return;
 
     setIsLoading(true);
+    const initialPrompt = t('emptyChat.initialPrompt'); 
+
+    const tempMessageId = `optimistic-${Date.now()}`;
+    onOptimisticMessageAdd({
+      id: tempMessageId,
+      author: 'user',
+      createdAt: new Date().toISOString(),
+      content: initialPrompt,
+      rawContent: initialPrompt,
+    });
+
     try {
-      // Usar um prompt inicial genérico para criar o projeto
-      const initialPrompt = t('emptyChat.initialPrompt'); 
       const { data: newProject, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
         body: { prompt: initialPrompt },
       });
 
       if (error) {
+        onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
         if (error.context && error.context.response.status === 402) {
           showError("toasts.chat.outOfCredits");
         } else {
@@ -39,6 +52,7 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }
     } catch (error: any) {
       showError('toasts.chat.startWorkflowFailed');
       console.error('Error starting new conversation:', error.message);
+      onOptimisticMessageRemove(tempMessageId); // Ensure removal if generic error
     } finally {
       setIsLoading(false);
     }

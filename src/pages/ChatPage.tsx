@@ -12,7 +12,7 @@ import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { StructuredChatContent } from '@/types/chat.types';
+import { StructuredChatContent, ChatMessage } from '@/types/chat.types'; // Import ChatMessage
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,27 +20,23 @@ const ChatPage: React.FC = () => {
   const { user: sessionUser } = useSession();
   const navigate = useNavigate();
 
-  // Use local state for projectId, initialized from URL params
   const [currentProjectId, setCurrentProjectId] = useState<string | undefined>(paramProjectId);
+  const [optimisticMessages, setOptimisticMessages] = useState<ChatMessage[]>([]);
 
-  // Update local state if URL param changes (e.g., user navigates directly to a project)
   useEffect(() => {
     if (paramProjectId !== currentProjectId) {
       setCurrentProjectId(paramProjectId);
+      setOptimisticMessages([]); // Clear optimistic messages when project changes
     }
   }, [paramProjectId, currentProjectId]);
 
-  // Update URL without full navigation when currentProjectId changes internally
   useEffect(() => {
     if (currentProjectId && currentProjectId !== paramProjectId) {
-      // Use replace to avoid cluttering history, and avoid full navigation
       window.history.replaceState(null, '', `/chat/${currentProjectId}`);
     } else if (!currentProjectId && paramProjectId) {
-      // If project is cleared, navigate back to /chat
       window.history.replaceState(null, '', '/chat');
     }
   }, [currentProjectId, paramProjectId]);
-
 
   const { project, loading: projectLoading } = useProject(currentProjectId);
   const { messages, loading: chatLoading } = useChat(project);
@@ -53,20 +49,55 @@ const ChatPage: React.FC = () => {
     if (project?.status === 'completed' && previousStatus.current !== 'completed') {
       setShowConfetti(true);
       showSuccess("Projeto concluído com sucesso! 🎉");
-      setTimeout(() => setShowConfetti(false), 8000); // Confetti por 8 segundos
+      setTimeout(() => setShowConfetti(false), 8000);
     }
     previousStatus.current = project?.status;
   }, [project?.status]);
 
   const isLoading = projectLoading || (currentProjectId && chatLoading);
 
+  // Function to add an optimistic message
+  const addOptimisticMessage = useCallback((message: ChatMessage) => {
+    setOptimisticMessages(prev => [...prev, message]);
+  }, []);
+
+  // Function to remove an optimistic message (e.g., if API call fails)
+  const removeOptimisticMessage = useCallback((id: string) => {
+    setOptimisticMessages(prev => prev.filter(msg => msg.id !== id));
+  }, []);
+
+  // Combine fetched messages with optimistic ones, ensuring no duplicates
+  const displayedMessages = useMemo(() => {
+    const combined = [...messages];
+    const realMessageContents = new Set(messages.map(m => m.rawContent)); // Use rawContent for matching
+
+    optimisticMessages.forEach(optMsg => {
+      // Only add optimistic message if a real message with the same content hasn't arrived yet
+      if (!realMessageContents.has(optMsg.rawContent)) {
+        combined.push(optMsg);
+      }
+    });
+
+    // Sort by createdAt to maintain order
+    return combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }, [messages, optimisticMessages]);
+
+  // Clear optimistic messages that have been replaced by real ones
+  useEffect(() => {
+    if (messages.length > 0 && optimisticMessages.length > 0) {
+      setOptimisticMessages(prev => {
+        const realMessageContents = new Set(messages.map(m => m.rawContent));
+        return prev.filter(optMsg => !realMessageContents.has(optMsg.rawContent));
+      });
+    }
+  }, [messages, optimisticMessages]);
+
+
   const isAiTyping = useMemo(() => {
-    if (isLoading || !project || messages.length === 0 || project.status !== 'in_progress') {
+    if (isLoading || !project || displayedMessages.length === 0 || project.status !== 'in_progress') {
       return false;
     }
-    const lastMessage = messages[messages.length - 1];
-    // AI is typing if the last message is from the user, or if the last AI message is a progress update
-    // and the project is still in progress.
+    const lastMessage = displayedMessages[displayedMessages.length - 1];
     let isLastAiMessageProgress = false;
     if (lastMessage.author === 'ai' && typeof lastMessage.rawContent === 'string') {
       try {
@@ -77,16 +108,15 @@ const ChatPage: React.FC = () => {
       }
     }
     return lastMessage.author === 'user' || (isLastAiMessageProgress && project.status === 'in_progress');
-  }, [messages, isLoading, project]);
+  }, [displayedMessages, isLoading, project]);
 
   const isChatDisabled = useMemo(() => {
     return project?.status === 'completed' || project?.status === 'error' || project?.status === 'paused';
   }, [project]);
 
-  // Check if the last AI message is an error
   const lastAiMessageIsError = useMemo(() => {
-    if (messages.length === 0) return false;
-    const lastMessage = messages[messages.length - 1];
+    if (displayedMessages.length === 0) return false;
+    const lastMessage = displayedMessages[displayedMessages.length - 1];
     if (lastMessage.author === 'ai' && typeof lastMessage.rawContent === 'string') {
       try {
         const parsedContent = JSON.parse(lastMessage.rawContent) as StructuredChatContent;
@@ -96,12 +126,11 @@ const ChatPage: React.FC = () => {
       }
     }
     return false;
-  }, [messages]);
+  }, [displayedMessages]);
 
-  // Extract error message if present
   const errorMessage = useMemo(() => {
     if (lastAiMessageIsError) {
-      const lastMessage = messages[messages.length - 1];
+      const lastMessage = displayedMessages[displayedMessages.length - 1];
       try {
         const parsedContent = JSON.parse(lastMessage.rawContent as string) as StructuredChatContent;
         if (parsedContent.type === 'error' && typeof parsedContent.data === 'object' && 'message' in parsedContent.data) {
@@ -112,15 +141,13 @@ const ChatPage: React.FC = () => {
       }
     }
     return undefined;
-  }, [lastAiMessageIsError, messages]);
+  }, [lastAiMessageIsError, displayedMessages]);
 
-
-  // Callback for ChatInput and EmptyChatPrompt to update the project ID
   const handleNewProjectCreated = useCallback((newProjectId: string) => {
     setCurrentProjectId(newProjectId);
   }, []);
 
-  if (isLoading && currentProjectId) { // Use currentProjectId for loading state
+  if (isLoading && currentProjectId) {
     return (
       <div className="flex flex-col h-full">
         <Skeleton className="h-16 w-full" />
@@ -138,13 +165,28 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
       {project && <ChatHeader project={project} />}
-      <MessageList messages={messages} isAiTyping={isAiTyping} currentStep={project?.current_step} hasProject={!!project} onNewProjectCreated={handleNewProjectCreated} projectId={currentProjectId} />
+      <MessageList 
+        messages={displayedMessages} 
+        isAiTyping={isAiTyping} 
+        currentStep={project?.current_step} 
+        hasProject={!!project} 
+        onNewProjectCreated={handleNewProjectCreated} 
+        projectId={currentProjectId} 
+      />
       {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
-      {project && ( // Render ChatInput only if a project is active
+      {project ? (
         <ChatInput 
           project={project} 
           isDisabled={isChatDisabled} 
           onNewProjectCreated={handleNewProjectCreated} 
+          onOptimisticMessageAdd={addOptimisticMessage}
+          onOptimisticMessageRemove={removeOptimisticMessage}
+        />
+      ) : (
+        <EmptyChatPrompt 
+          onNewProjectCreated={handleNewProjectCreated} 
+          onOptimisticMessageAdd={addOptimisticMessage}
+          onOptimisticMessageRemove={removeOptimisticMessage}
         />
       )}
     </div>

@@ -5,14 +5,17 @@ import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
 import { showError } from '@/utils/toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ChatMessage } from '@/types/chat.types'; // Import ChatMessage
 
 interface ChatInputProps {
   project: Project | null;
   isDisabled?: boolean;
   onNewProjectCreated?: (projectId: string) => void;
+  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
+  onOptimisticMessageRemove: (id: string) => void; // New prop
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNewProjectCreated }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
   const { t } = useTranslation();
   const { user } = useSession();
   const [prompt, setPrompt] = useState('');
@@ -26,14 +29,23 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
     const userMessage = prompt.trim();
     setPrompt('');
 
+    const tempMessageId = `optimistic-${Date.now()}`;
+    onOptimisticMessageAdd({
+      id: tempMessageId,
+      author: 'user',
+      createdAt: new Date().toISOString(),
+      content: userMessage,
+      rawContent: userMessage,
+    });
+
     try {
       if (!project) {
-        // If no project is selected, start a new workflow
         const { data: newProject, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
           body: { prompt: userMessage },
         });
 
         if (error) {
+          onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
           if (error.context && error.context.response.status === 402) {
             showError("toasts.chat.outOfCredits");
           } else {
@@ -43,14 +55,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
           onNewProjectCreated?.(newProject.id);
         }
       } else {
-        // If a project exists, send a message to the current project
-        // This will be handled by n8n, which will then insert the user's message
-        // and the AI's response into chat_messages.
         const { error: triggerError } = await supabase.functions.invoke('trigger-step', {
           body: { projectId: project.id, userMessage: userMessage },
         });
 
         if (triggerError) {
+          onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
           if (triggerError.context && triggerError.context.response.status === 402) {
             showError("toasts.chat.outOfCredits");
           } else {
@@ -63,6 +73,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
     } catch (error: any) {
       showError('toasts.chat.sendMessageFailed');
       console.error('Error sending chat message or triggering workflow:', error.message);
+      onOptimisticMessageRemove(tempMessageId); // Ensure removal if generic error
     } finally {
       setIsSendingMessage(false);
     }
