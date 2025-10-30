@@ -37,6 +37,7 @@ export const useChat = (project: Project | null) => {
     // Adiciona uma etapa de desduplicação baseada no ID da mensagem
     const uniqueMessages = new Map<string, ChatMessageRow>();
     chatMessagesData.forEach(msg => uniqueMessages.set(msg.id, msg));
+    
     const processedMessages = Array.from(uniqueMessages.values()).map(msg => {
       let content: React.ReactNode = msg.content;
       let rawContent: string = msg.content; // Always store the original string content here
@@ -63,8 +64,22 @@ export const useChat = (project: Project | null) => {
         rawContent: rawContent, // This will now always be the string content
       };
     });
+
+    // Adiciona uma segunda passagem para deduplicar mensagens AI consecutivas com conteúdo idêntico
+    const finalMessages: ChatMessage[] = [];
+    for (let i = 0; i < processedMessages.length; i++) {
+      const current = processedMessages[i];
+      if (current.author === 'ai' && i > 0) {
+        const previous = finalMessages[finalMessages.length - 1];
+        // Se a mensagem AI atual for idêntica à mensagem AI anterior, pule-a
+        if (previous && previous.author === 'ai' && previous.rawContent === current.rawContent) {
+          continue;
+        }
+      }
+      finalMessages.push(current);
+    }
     
-    return processedMessages;
+    return finalMessages;
   };
 
   const { data: messages = [], isLoading } = useQuery<ChatMessage[]>({
