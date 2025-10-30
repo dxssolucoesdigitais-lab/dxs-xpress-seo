@@ -6,12 +6,12 @@ import { useSession } from '@/contexts/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
-import { ChatMessage } from '@/types/chat.types'; // Import ChatMessage
+import { ChatMessage } from '@/types/chat.types';
 
 interface EmptyChatPromptProps {
   onNewProjectCreated: (projectId: string) => void;
-  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
-  onOptimisticMessageRemove: (id: string) => void; // New prop
+  onOptimisticMessageAdd: (message: ChatMessage) => void;
+  onOptimisticMessageRemove: (id: string) => void;
 }
 
 const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
@@ -41,18 +41,21 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, 
 
       if (error) {
         onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
+        const errorMessage = error.context?.json?.error || error.message; // Extrai a mensagem de erro específica
         if (error.context && error.context.response.status === 402) {
-          showError("toasts.chat.outOfCredits");
+          showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
         } else {
-          throw error;
+          showError('toasts.chat.startWorkflowFailed', { message: errorMessage }); // Passa a mensagem específica
         }
+        return; // Sai da função após mostrar o erro
       } else if (newProject) {
         onNewProjectCreated(newProject.id);
       }
     } catch (error: any) {
-      showError('toasts.chat.startWorkflowFailed');
+      // Este bloco catch agora lida com erros de rede ou exceções inesperadas
+      showError('toasts.chat.startWorkflowFailed', { message: error.message });
       console.error('Error starting new conversation:', error.message);
-      onOptimisticMessageRemove(tempMessageId); // Ensure removal if generic error
+      onOptimisticMessageRemove(tempMessageId); // Garante a remoção em caso de erro genérico
     } finally {
       setIsLoading(false);
     }

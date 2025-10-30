@@ -5,14 +5,14 @@ import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
 import { showError } from '@/utils/toast';
 import { supabase } from '@/integrations/supabase/client';
-import { ChatMessage } from '@/types/chat.types'; // Import ChatMessage
+import { ChatMessage } from '@/types/chat.types';
 
 interface ChatInputProps {
   project: Project | null;
   isDisabled?: boolean;
   onNewProjectCreated?: (projectId: string) => void;
-  onOptimisticMessageAdd: (message: ChatMessage) => void; // New prop
-  onOptimisticMessageRemove: (id: string) => void; // New prop
+  onOptimisticMessageAdd: (message: ChatMessage) => void;
+  onOptimisticMessageRemove: (id: string) => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
@@ -46,11 +46,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
 
         if (error) {
           onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
+          const errorMessage = error.context?.json?.error || error.message; // Extrai a mensagem de erro específica
           if (error.context && error.context.response.status === 402) {
-            showError("toasts.chat.outOfCredits");
+            showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
           } else {
-            throw error;
+            showError('toasts.chat.startWorkflowFailed', { message: errorMessage }); // Passa a mensagem específica
           }
+          return; // Sai da função após mostrar o erro
         } else if (newProject) {
           onNewProjectCreated?.(newProject.id);
         }
@@ -61,19 +63,22 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
 
         if (triggerError) {
           onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
+          const errorMessage = triggerError.context?.json?.error || triggerError.message; // Extrai a mensagem de erro específica
           if (triggerError.context && triggerError.context.response.status === 402) {
-            showError("toasts.chat.outOfCredits");
+            showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
           } else {
-            throw triggerError;
+            showError('toasts.chat.sendMessageFailed', { message: errorMessage }); // Passa a mensagem específica
           }
+          return; // Sai da função após mostrar o erro
         } else {
           console.log('Successfully triggered workflow with user message:', userMessage);
         }
       }
     } catch (error: any) {
-      showError('toasts.chat.sendMessageFailed');
+      // Este bloco catch agora lida com erros de rede ou exceções inesperadas
+      showError('toasts.chat.sendMessageFailed', { message: error.message });
       console.error('Error sending chat message or triggering workflow:', error.message);
-      onOptimisticMessageRemove(tempMessageId); // Ensure removal if generic error
+      onOptimisticMessageRemove(tempMessageId); // Garante a remoção em caso de erro genérico
     } finally {
       setIsSendingMessage(false);
     }
