@@ -128,6 +128,7 @@ serve(async (req) => {
           user_id: user.id,
           author: 'user',
           content: userMessage,
+          metadata: { current_step: project?.current_step || 0 }, // Adiciona o current_step ao metadata
         });
 
       if (insertMessageError) {

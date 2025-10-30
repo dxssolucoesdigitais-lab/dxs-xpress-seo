@@ -32,6 +32,7 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, 
       createdAt: new Date().toISOString(),
       content: initialPrompt,
       rawContent: initialPrompt,
+      metadata: { current_step: 0 }, // Adiciona o current_step inicial ao metadata
     });
 
     try {

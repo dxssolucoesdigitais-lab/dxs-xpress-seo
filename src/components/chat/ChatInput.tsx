@@ -36,6 +36,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
       createdAt: new Date().toISOString(),
       content: userMessage,
       rawContent: userMessage,
+      metadata: { current_step: project?.current_step || 0 }, // Adiciona o current_step ao metadata
     });
 
     try {

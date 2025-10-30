@@ -94,12 +94,14 @@ export interface Database {
           author: string;
           content: string;
           created_at: string;
+          metadata: Json | null; // Adicionada a coluna metadata
         };
         Insert: {
           project_id: string;
           user_id: string;
           author: string;
           content: string;
+          metadata?: Json | null; // Adicionada a coluna metadata
         };
         Update: Partial<this['Insert']>;
       }
