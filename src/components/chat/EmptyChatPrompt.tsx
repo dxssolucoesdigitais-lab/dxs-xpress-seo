@@ -42,10 +42,12 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, 
       if (error) {
         onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
         const errorMessage = error.context?.json?.error || error.message; // Extrai a mensagem de erro específica
-        if (error.context && error.context.response.status === 402) {
+        const statusCode = error.context?.response?.status; // Acessa o status de forma segura
+
+        if (statusCode === 402) {
           showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
         } else {
-          showError('toasts.chat.startWorkflowFailed', { message: errorMessage }); // Passa a mensagem específica
+          showError('toasts.chat.startWorkflowFailed', { message: errorMessage || t('toasts.genericError') }); // Fallback genérico
         }
         return; // Sai da função após mostrar o erro
       } else if (newProject) {
@@ -53,7 +55,7 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, 
       }
     } catch (error: any) {
       // Este bloco catch agora lida com erros de rede ou exceções inesperadas
-      showError('toasts.chat.startWorkflowFailed', { message: error.message });
+      showError('toasts.chat.startWorkflowFailed', { message: error.message || t('toasts.genericError') });
       console.error('Error starting new conversation:', error.message);
       onOptimisticMessageRemove(tempMessageId); // Garante a remoção em caso de erro genérico
     } finally {

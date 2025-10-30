@@ -26,6 +26,12 @@ serve(async (req) => {
     const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
 
     console.log('trigger-step: Environment variables loaded.');
+    console.log('trigger-step: N8N_WEBHOOK_URL_ADMIN_DEMO present:', !!n8nWebhookAdminDemo);
+    console.log('trigger-step: N8N_WEBHOOK_URL_FREE present:', !!n8nWebhookFree);
+    console.log('trigger-step: N8N_WEBHOOK_URL_BASIC present:', !!n8nWebhookBasic);
+    console.log('trigger-step: N8N_WEBHOOK_URL_STANDARD present:', !!n8nWebhookStandard);
+    console.log('trigger-step: N8N_WEBHOOK_URL_PREMIUM present:', !!n8nWebhookPremium);
+
 
     if (!supabaseUrl || !serviceRoleKey) {
       console.error('trigger-step: Missing Supabase environment variables.');
@@ -114,6 +120,7 @@ serve(async (req) => {
     // --- Insert user's message into chat_messages table (OPTIMISTIC UI) ---
     // This ensures the user's message appears immediately in the UI via real-time subscription.
     if (projectId && userMessage) {
+      console.log('trigger-step: Attempting to insert user message into chat_messages.');
       const { error: insertMessageError } = await supabaseAdmin
         .from('chat_messages')
         .insert({
