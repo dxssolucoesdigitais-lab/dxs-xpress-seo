@@ -3,5 +3,5 @@
   "user_id": "{{$json.userId}}",
   "author": "ai",
   "content": "{{$json.message}}",
-  "metadata": {{JSON.parse($json.metadata)}}
+  "metadata": {{ $json.metadata ? JSON.parse($json.metadata) : null }}
 }
