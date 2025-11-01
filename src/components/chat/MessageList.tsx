@@ -44,6 +44,13 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   }
 
   // Default rendering for plain text or unparsed content
+  // Adicionado log para depuração
+  if (message.author === 'ai') {
+    console.log(`[DEBUG-MESSAGELIST-AI] AI Message Content:`, message.content);
+    console.log(`[DEBUG-MESSAGELIST-AI] AI Message RawContent:`, message.rawContent);
+    console.log(`[DEBUG-MESSAGELIST-AI] AI Message Structured Type:`, structuredContent?.type);
+  }
+
   return (
     <div className="flex items-start gap-4">
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
