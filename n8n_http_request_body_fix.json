@@ -1,0 +1,7 @@
+{
+  "project_id": "{{$json.project_id}}",
+  "user_id": "{{$json.userId}}",
+  "author": "ai",
+  "content": "{{$json.message}}",
+  "metadata": {{JSON.parse($json.metadata)}}
+}
