@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react'; // Import useRef
+import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Project, ChatMessageRow } from '@/types/database.types';
 import { ChatMessage, StructuredChatContent } from '@/types/chat.types';
@@ -18,14 +18,14 @@ export const useChat = (project: Project | null) => {
   }, [projectId]);
 
   const fetchChatMessages = async (): Promise<ChatMessage[]> => {
-    if (!projectIdRef.current) return []; // Use ref here
+    if (!projectIdRef.current) return [];
 
     console.log(`[DEBUG-CHAT] Fetching chat messages for project: ${projectIdRef.current}`);
 
     const { data: chatMessagesData, error: chatError } = await supabase
       .from('chat_messages')
       .select('*')
-      .eq('project_id', projectIdRef.current) // Use ref here
+      .eq('project_id', projectIdRef.current)
       .order('created_at', { ascending: true });
 
     if (chatError) {
@@ -39,29 +39,37 @@ export const useChat = (project: Project | null) => {
     chatMessagesData.forEach(msg => uniqueMessages.set(msg.id, msg));
     
     const processedMessages = Array.from(uniqueMessages.values()).map(msg => {
-      let content: React.ReactNode = msg.content;
-      let rawContent: string = msg.content; // Always store the original string content here
+      let content: React.ReactNode = msg.content; // Começa com o conteúdo bruto da DB
+      let rawContent: string = msg.content; // Sempre armazena o conteúdo original da string aqui
 
-      // Try to parse content as JSON for structured messages
+      // Tenta analisar o conteúdo como JSON para mensagens estruturadas
       try {
         const parsed = JSON.parse(msg.content);
         if (parsed && typeof parsed === 'object' && 'type' in parsed && 'data' in parsed) {
-          // If it's structured, store the raw JSON string and let MessageRenderer handle rendering
-          // For now, content can be null, as MessageRenderer will use rawContent
-          content = null; 
+          rawContent = msg.content; // Mantém a string JSON original em rawContent
+
+          // Se for do tipo 'text', extrai o texto real para renderização
+          if (parsed.type === 'text' && typeof parsed.data === 'string') {
+            content = parsed.data; // Este é o texto real a ser exibido
+          } else {
+            // Para 'options', 'progress' ou outros tipos estruturados,
+            // define content como null para que MessageRenderer use os componentes específicos.
+            content = null;
+          }
         }
       } catch (e) {
-        // Not structured content, rawContent is already msg.content
+        // Não é conteúdo estruturado, `content` permanece `msg.content` (a string simples)
+        // `rawContent` também permanece `msg.content`
       }
 
-      console.log(`[DEBUG-CHAT] Processed fetched message: ID=${msg.id}, Author=${msg.author}, CreatedAt=${msg.created_at}, Content=${msg.content.substring(0, Math.min(msg.content.length, 50))}...`);
+      console.log(`[DEBUG-CHAT] Processed fetched message: ID=${msg.id}, Author=${msg.author}, CreatedAt=${msg.created_at}, Content=${msg.content ? (typeof msg.content === 'string' ? msg.content.substring(0, Math.min(msg.content.length, 50)) : 'Structured') : 'null'}...`);
 
       return {
         id: msg.id,
         author: msg.author as 'user' | 'ai',
-        createdAt: msg.created_at, // This is from the DB
+        createdAt: msg.created_at,
         content: content,
-        rawContent: rawContent, // This will now always be the string content
+        rawContent: rawContent,
       };
     });
 
@@ -124,7 +132,7 @@ export const useChat = (project: Project | null) => {
       console.log(`[DEBUG-CHAT] Unsubscribing from chat messages channel for project ${projectId}.`);
       supabase.removeChannel(chatMessageChannel);
     };
-  }, [projectId, queryClient]); // Dependencies are correct
+  }, [projectId, queryClient]);
 
   return { messages, loading: isLoading };
 };
