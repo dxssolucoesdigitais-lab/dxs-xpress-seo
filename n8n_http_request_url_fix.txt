@@ -1,1 +1,1 @@
-https://pppnieeztijtvwencdng.supabase.co/rest/v1/projects?id=eq."{{$json.project_id}}"
+https://pppnieeztijtvwencdng.supabase.co/rest/v1/projects?id=eq.{{$json.project_id}}
