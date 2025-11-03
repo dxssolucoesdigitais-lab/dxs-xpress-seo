@@ -1,0 +1,63 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+
+// Inputs que este script receberá das Edge Functions do Supabase
+interface ScriptInput {
+  projectId: string | null;
+  userId: string;
+  planType: string | null;
+  userRole: string | null;
+  currentStep: number;
+  projectData: any | null; // Objeto completo do projeto
+  userMessage: string | null;
+}
+
+export async function main(input: ScriptInput) {
+  console.log("Windmill: ai-workflow-orchestrator recebeu input:", input);
+
+  // Obter credenciais do Supabase dos segredos do Windmill
+  // Você precisará configurar estas variáveis como segredos no Windmill (próximo passo)
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error("Missing Supabase environment variables in Windmill (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY). Please configure them as secrets.");
+  }
+
+  const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+
+  // --- Lógica de IA (Placeholder por enquanto) ---
+  // Aqui é onde você integraria com Groq, OpenAI, ou sua lógica de IA real.
+  // Por enquanto, vamos gerar uma mensagem de placeholder.
+  const aiResponseContent = {
+    type: "text",
+    data: `Olá! Recebi sua mensagem: "${input.userMessage}". Estou processando isso no Windmill.dev! (Projeto: ${input.projectId || 'Novo'})`
+  };
+
+  // --- Inserir a mensagem da IA na tabela chat_messages do Supabase ---
+  if (input.projectId) {
+    const { error: insertMessageError } = await supabaseAdmin
+      .from('chat_messages')
+      .insert({
+        project_id: input.projectId,
+        user_id: input.userId,
+        author: 'ai',
+        content: JSON.stringify(aiResponseContent), // Armazena o conteúdo estruturado como string JSON
+        metadata: {
+          current_step: input.currentStep + 1, // Simula o avanço de uma etapa
+          // Adicione qualquer outro metadado relevante aqui
+        },
+      });
+
+    if (insertMessageError) {
+      console.error('Windmill: Erro ao inserir mensagem da IA no chat_messages:', insertMessageError);
+      throw new Error(`Falha ao inserir mensagem da IA: ${insertMessageError.message}`);
+    }
+    console.log('Windmill: Mensagem da IA inserida no chat_messages com sucesso.');
+  } else {
+    console.warn('Windmill: Nenhum projectId fornecido, não é possível inserir a mensagem da IA.');
+  }
+
+  // Este script não precisa retornar nada específico para a Edge Function do Supabase,
+  // pois ele mesmo lida com a inserção da mensagem no chat.
+  return { status: "success", message: "Fluxo de trabalho da IA processado e mensagem inserida." };
+}
