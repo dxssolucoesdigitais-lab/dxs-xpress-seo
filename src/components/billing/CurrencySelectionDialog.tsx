@@ -14,7 +14,7 @@ interface CurrencySelectionDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   selectedPlan: string;
-  onCurrencySelected: (currency: 'BRL' | 'USD') => void;
+  onCurrencySelected: (currency: 'BRL' | 'USD' | 'EUR') => void;
   isLoading?: boolean;
 }
 
@@ -76,11 +76,29 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
                 </>
               )}
             </Button>
+
+            <Button
+              onClick={() => onCurrencySelected('EUR')}
+              disabled={isLoading}
+              variant="outline"
+              className="h-20 flex flex-col items-center justify-center space-y-2 border-2 border-green-400 text-green-400 hover:bg-green-400/10 font-bold transition-all duration-300"
+            >
+              {isLoading ? (
+                <Loader2 className="h-8 w-8 animate-spin" />
+              ) : (
+                <>
+                  <Banknote className="h-8 w-8" />
+                  <span>EUR - Euro</span>
+                  <span className="text-sm font-normal">Transferência Bancária</span>
+                </>
+              )}
+            </Button>
           </div>
 
           <div className="text-xs text-muted-foreground text-center space-y-1">
             <p>{t('currencyDialog.noteBRL')}</p>
             <p>{t('currencyDialog.noteUSD')}</p>
+            <p>{t('currencyDialog.noteEUR')}</p>
           </div>
         </div>
       </DialogContent>

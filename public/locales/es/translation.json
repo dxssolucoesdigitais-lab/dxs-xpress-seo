@@ -4,6 +4,7 @@
     "description": "Elige cómo prefieres realizar el pago de tu plan {{planName}}",
     "noteBRL": "💡 Pagos en Real: Procesamiento instantáneo vía Mercado Pago",
     "noteUSD": "💡 Pagos en Dólar: Transferencia bancaria - activación en 24h tras confirmación",
+    "noteEUR": "💡 Pagos en Euro: Transferencia bancaria - activación en 24h tras confirmación",
     "success": "¡Moneda seleccionada con éxito!"
   },
   "toasts": {

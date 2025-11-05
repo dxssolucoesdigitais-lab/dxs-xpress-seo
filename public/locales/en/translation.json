@@ -4,6 +4,7 @@
     "description": "Choose how you prefer to pay for your {{planName}} plan",
     "noteBRL": "💡 BRL Payments: Instant processing via Mercado Pago",
     "noteUSD": "💡 USD Payments: Bank transfer - activation within 24h after confirmation",
+    "noteEUR": "💡 EUR Payments: Bank transfer - activation within 24h after confirmation",
     "success": "Currency selected successfully!"
   },
   "toasts": {

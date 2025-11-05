@@ -29,6 +29,17 @@ const SERVICES_USD = {
   gsc_analysis: { title: "Standalone GSC Analysis", price: 900, type: 'gsc_analysis' }, // Preço em centavos
 };
 
+const PLANS_EUR = {
+  free: { title: "Free Plan", price: 0, credits: 3 },
+  basic: { title: "Basic Plan", price: 1400, credits: 20 },
+  standard: { title: "Standard Plan", price: 2600, credits: 60 },
+  premium: { title: "Premium Plan", price: 3500, credits: 120 },
+};
+
+const SERVICES_EUR = {
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 800, type: 'gsc_analysis' },
+};
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -54,7 +65,7 @@ serve(async (req) => {
 
     const { serviceType = 'plan', serviceId, currency = 'BRL' } = await req.json();
     
-    if (!['BRL', 'USD'].includes(currency)) {
+    if (!['BRL', 'USD', 'EUR'].includes(currency)) {
       return new Response(JSON.stringify({ error: 'Moeda inválida' }), { status: 400, headers: corsHeaders });
     }
 
@@ -63,12 +74,18 @@ serve(async (req) => {
     let itemTitle;
 
     if (serviceType === 'plan') {
-      const plans = currency === 'BRL' ? PLANS_BRL : PLANS_USD;
+      const plans = 
+        currency === 'BRL' ? PLANS_BRL : 
+        currency === 'USD' ? PLANS_USD : 
+        PLANS_EUR;
       itemToPurchase = plans[serviceId];
       itemPrice = itemToPurchase?.price;
       itemTitle = itemToPurchase?.title;
     } else if (serviceType === 'gsc_analysis') {
-      const services = currency === 'BRL' ? SERVICES_BRL : SERVICES_USD;
+      const services = 
+        currency === 'BRL' ? SERVICES_BRL : 
+        currency === 'USD' ? SERVICES_USD : 
+        SERVICES_EUR;
       itemToPurchase = services[serviceId];
       itemPrice = itemToPurchase?.price;
       itemTitle = itemToPurchase?.title;
@@ -105,7 +122,7 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: currency.toLowerCase(), // 'brl' ou 'usd'
+            currency: currency.toLowerCase(), // 'brl', 'usd' ou 'eur'
             product_data: {
               name: itemTitle,
             },
