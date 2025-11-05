@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import Stripe from 'npm:stripe@16.5.0'; // Importar a biblioteca Stripe
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -7,23 +8,25 @@ const corsHeaders = {
 }
 
 const PLANS_BRL = {
-  basic: { title: "Plano Basic", price: 79, credits: 20 },
-  standard: { title: "Plano Standard", price: 149, credits: 60 },
-  premium: { title: "Plano Premium", price: 197, credits: 120 },
+  free: { title: "Plano Grátis", price: 0, credits: 3 }, // Free plan for reference, no actual checkout
+  basic: { title: "Plano Basic", price: 7900, credits: 20 }, // Preço em centavos
+  standard: { title: "Plano Standard", price: 14900, credits: 60 },
+  premium: { title: "Plano Premium", price: 19700, credits: 120 },
 };
 
 const SERVICES_BRL = {
-  gsc_analysis: { title: "Análise GSC Avulsa", price: 49, type: 'gsc_analysis' },
+  gsc_analysis: { title: "Análise GSC Avulsa", price: 4900, type: 'gsc_analysis' }, // Preço em centavos
 };
 
 const PLANS_USD = {
-  basic: { title: "Basic Plan", price: 15, credits: 20 },
-  standard: { title: "Standard Plan", price: 28, credits: 60 },
-  premium: { title: "Premium Plan", price: 37, credits: 120 },
+  free: { title: "Free Plan", price: 0, credits: 3 }, // Free plan for reference, no actual checkout
+  basic: { title: "Basic Plan", price: 1500, credits: 20 }, // Preço em centavos
+  standard: { title: "Standard Plan", price: 2800, credits: 60 },
+  premium: { title: "Premium Plan", price: 3700, credits: 120 },
 };
 
 const SERVICES_USD = {
-  gsc_analysis: { title: "Standalone GSC Analysis", price: 9, type: 'gsc_analysis' },
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 900, type: 'gsc_analysis' }, // Preço em centavos
 };
 
 serve(async (req) => {
@@ -35,6 +38,11 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const siteUrl = Deno.env.get('SITE_URL') || 'http://localhost:8080'
+    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')! // Nova variável de ambiente
+
+    if (!stripeSecretKey) {
+      throw new Error("STRIPE_SECRET_KEY não configurada.");
+    }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
     const authHeader = req.headers.get('Authorization')!
@@ -52,18 +60,21 @@ serve(async (req) => {
 
     let itemToPurchase;
     let itemPrice;
+    let itemTitle;
 
     if (serviceType === 'plan') {
       const plans = currency === 'BRL' ? PLANS_BRL : PLANS_USD;
       itemToPurchase = plans[serviceId];
       itemPrice = itemToPurchase?.price;
+      itemTitle = itemToPurchase?.title;
     } else if (serviceType === 'gsc_analysis') {
       const services = currency === 'BRL' ? SERVICES_BRL : SERVICES_USD;
       itemToPurchase = services[serviceId];
       itemPrice = itemToPurchase?.price;
+      itemTitle = itemToPurchase?.title;
     }
 
-    if (!itemToPurchase || !itemPrice) {
+    if (!itemToPurchase || itemPrice === undefined || itemTitle === undefined) {
       return new Response(JSON.stringify({ error: 'Item ou serviço inválido' }), { status: 400, headers: corsHeaders });
     }
 
@@ -72,11 +83,11 @@ serve(async (req) => {
       .from('payment_intents')
       .insert({
         user_id: user.id,
-        plan_id: serviceType === 'plan' ? serviceId : null, // Define plan_id apenas se for um plano
-        service_id: serviceType === 'gsc_analysis' ? serviceId : null, // Define service_id se for um serviço
-        service_type: serviceType, // Nova coluna para diferenciar
+        plan_id: serviceType === 'plan' ? serviceId : null,
+        service_id: serviceType === 'gsc_analysis' ? serviceId : null,
+        service_type: serviceType,
         selected_currency: currency,
-        amount: itemPrice,
+        amount: itemPrice / 100, // Armazenar em formato de moeda (ex: 79.00)
         status: 'pending'
       })
       .select()
@@ -84,80 +95,45 @@ serve(async (req) => {
 
     if (intentError) throw intentError;
 
-    // Fluxo para BRL (Mercado Pago)
-    if (currency === 'BRL') {
-      const mpAccessToken = Deno.env.get('MERCADO_PAGO_ACCESS_TOKEN');
-      if (!mpAccessToken) {
-        throw new Error("Mercado Pago Access Token não configurado.");
-      }
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: '2024-06-20',
+      typescript: true,
+    });
 
-      const preference = {
-        items: [
-          {
-            title: itemToPurchase.title,
-            unit_price: itemPrice,
-            quantity: 1,
+    const checkoutSession = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'], // Pode adicionar 'pix' ou outros se configurado na Stripe
+      line_items: [
+        {
+          price_data: {
+            currency: currency.toLowerCase(), // 'brl' ou 'usd'
+            product_data: {
+              name: itemTitle,
+            },
+            unit_amount: itemPrice, // Preço em centavos
           },
-        ],
-        external_reference: JSON.stringify({
-          user_id: user.id,
-          service_type: serviceType,
-          service_id: serviceId,
-          payment_intent_id: paymentIntent.id,
-        }),
-        back_urls: {
-          success: `${siteUrl}/payment-simulation?status=success&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
-          failure: `${siteUrl}/payment-simulation?status=failure&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
-          pending: `${siteUrl}/payment-simulation?status=pending&userId=${user.id}&serviceType=${serviceType}&serviceId=${serviceId}`,
+          quantity: 1,
         },
-        auto_return: "approved",
-        notification_url: `${supabaseUrl}/functions/v1/mercadopago-webhook`,
-      };
+      ],
+      mode: 'payment',
+      success_url: `${siteUrl}/profile?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/profile?payment=cancelled`,
+      metadata: {
+        user_id: user.id,
+        payment_intent_id: paymentIntent.id,
+        service_type: serviceType,
+        service_id: serviceId,
+        plan_id: serviceType === 'plan' ? serviceId : null,
+      },
+      customer_email: user.email, // Pré-preenche o email do cliente
+    });
 
-      const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${mpAccessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(preference),
-      });
-
-      if (!mpResponse.ok) {
-        const errorBody = await mpResponse.text();
-        throw new Error(`Erro ao criar preferência no Mercado Pago: ${mpResponse.status} - ${errorBody}`);
-      }
-
-      const preferenceData = await mpResponse.json();
-
-      return new Response(JSON.stringify({ 
-        checkoutUrl: preferenceData.init_point,
-        paymentIntentId: paymentIntent.id 
-      }), { status: 200, headers: corsHeaders });
-
-    } else {
-      // Fluxo para USD (Pagamento Manual)
-      // Buscar informações bancárias/configurações
-      const bankDetails = {
-        bankName: Deno.env.get('BANK_NAME') || 'Banco X',
-        accountNumber: Deno.env.get('BANK_ACCOUNT') || '0000000-1',
-        swiftCode: Deno.env.get('SWIFT_CODE') || 'ABCDEFG',
-        beneficiary: Deno.env.get('BENEFICIARY_NAME') || 'Sua Empresa LTDA',
-        instructions: 'Envie o comprovante para payments@empresa.com'
-      };
-
-      // Aqui você implementaria o envio de email com os dados bancários
-      // Usando seu serviço de email preferido (Resend, SendGrid, etc.)
-
-      return new Response(JSON.stringify({
-        paymentMethod: 'bank_transfer',
-        bankDetails,
-        paymentIntentId: paymentIntent.id,
-        message: 'Você será redirecionado para as instruções de transferência bancária'
-      }), { status: 200, headers: corsHeaders });
-    }
+    return new Response(JSON.stringify({ 
+      checkoutUrl: checkoutSession.url,
+      paymentIntentId: paymentIntent.id 
+    }), { status: 200, headers: corsHeaders });
 
   } catch (error) {
+    console.error("Erro na Edge Function create-checkout-session:", error.message);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

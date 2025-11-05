@@ -83,19 +83,15 @@ const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) =
 
       if (error) throw error;
 
-      if (currency === 'BRL' && data.checkoutUrl) {
-        // Redirecionar para checkout BRL
-        window.location.href = data.checkoutUrl;
-      } else if (currency === 'USD' && data.bankDetails) {
-        // Mostrar instruções para USD
-        showSuccess('toasts.plans.bankInstructionsSent');
-        // Aqui você pode redirecionar para uma página com instruções detalhadas
-        // ou mostrar um modal com os dados bancários
-        console.log('Bank details:', data.bankDetails);
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl; // Redireciona para a URL de checkout da Stripe
+      } else {
+        // Se não houver URL de checkout (ex: para pagamentos manuais futuros ou erro)
+        showError('toasts.plans.checkoutFailed');
       }
 
     } catch (error: any) {
-      showError('toasts.plans.checkoutFailed');
+      showError('toasts.plans.checkoutFailed', { message: error.message });
     } finally {
       setIsSubmitting(null);
       setSelectedItemForCurrency(null);

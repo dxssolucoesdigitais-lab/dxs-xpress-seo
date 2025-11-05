@@ -14,7 +14,6 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
-import PaymentSimulationPage from "./pages/PaymentSimulationPage";
 import LandingPage from "./pages/LandingPage"; // Manter import para outras rotas se necessário
 import N8nTestPage from "./pages/N8nTestPage";
 import FaqPage from "./pages/FaqPage";
@@ -35,11 +34,11 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/payment-simulation" element={<PaymentSimulationPage />} />
+              {/* <Route path="/payment-simulation" element={<PaymentSimulationPage />} /> REMOVIDO */}
               <Route path="/n8n-test" element={<N8nTestPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/faq" element={<FaqPage />} /> {/* Movido para fora do ProtectedRoute */}
+              <Route path="/faq" element={<FaqPage />} />
               
               <Route element={<ProtectedRoute />}>
                 <Route element={<Layout />}>
