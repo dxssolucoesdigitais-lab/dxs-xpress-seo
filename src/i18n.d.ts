@@ -8,8 +8,6 @@ declare module 'react-i18next' {
         currencyDialog: {
           title: string;
           description: string;
-          noteBRL: string;
-          noteUSD: string;
           success: string;
         };
         toasts: {

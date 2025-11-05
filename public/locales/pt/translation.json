@@ -2,9 +2,6 @@
   "currencyDialog": {
     "title": "Selecione a Moeda de Pagamento",
     "description": "Escolha como você prefere realizar o pagamento do seu plano de {{planName}}",
-    "noteBRL": "💡 Pagamentos em Real: Processamento instantâneo via Mercado Pago",
-    "noteUSD": "💡 Pagamentos em Dólar: Transferência bancária - ativação em até 24h após confirmação",
-    "noteEUR": "💡 Pagamentos em Euro: Transferência bancária - ativação em até 24h após confirmação",
     "success": "Moeda selecionada com sucesso!"
   },
   "toasts": {
@@ -497,7 +494,7 @@
     "dataCollectionTitle": "Dados Coletados e Motivos da Coleta",
     "dataCollectionIntro": "Nós coletamos e processamos os seguintes tipos de dados pessoais:",
     "dataCollectionList1": "<strong>Informações Fornecidas por Você:</strong> Isso inclui, mas não se limita a, nome, sobrenome, endereço de e-mail, endereço físico, informações de pagamento e quaisquer outras informações que você optar por fornecer ao criar uma conta, fazer uma compra ou interagir com nossos serviços de atendimento ao cliente.",
-    "dataCollectionList2": "<strong>Informações Coletadas Automaticamente:</strong> Quando você visita nosso site, coletamos automaticamente informações sobre seu dispositivo e sua interação com nosso site. Isso pode incluir dados como seu endereço IP, tipo de navegador, detalhes do dispositivo, fuso horário, páginas visitadas, produtos visualizados, sites ou termos de busca que o direcionaram ao nosso site, e informações sobre como você interage com nosso site.",
+    "dataCollectionList2": "<strong>Informações Coletadas Automaticamente:</strong> Quando você visita nosso site, coletamos automaticamente informações sobre seu dispositivo e sua interação com nosso site. Isso pode incluir dados como seu endereço IP, tipo de navegador, detalhes do dispositivo, fuso horário, páginas visitadas, produtos visualizados, sites ou termos de busca que o direcionaram ao nosso site, e informações sobre como você interage com o site.",
     "cookiesTitle": "Uso de Cookies e Tecnologias de Rastreamento",
     "cookiesIntro": "A XpressSEO utiliza cookies, que são pequenos arquivos de texto armazenados no seu dispositivo, e outras tecnologias de rastreamento para melhorar a experiência do usuário em nosso site <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, entender como nossos serviços são utilizados e otimizar nossas estratégias de marketing.",
     "cookiesTypesTitle": "Tipos de Cookies Utilizados:",
@@ -535,7 +532,7 @@
       "O direito à portabilidade de dados;",
       "O direito de retirar seu consentimento a qualquer momento, quando o processamento for baseado em consentimento."
     ],
-    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>.",
     "dataSecurityTitle": "Segurança dos Dados",
     "dataSecurityP1": "Implementamos medidas de segurança técnica e organizacional para proteger seus dados pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, é importante notar que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Alterações na Política de Privacidade",

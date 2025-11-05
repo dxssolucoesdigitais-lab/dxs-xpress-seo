@@ -2,9 +2,6 @@
   "currencyDialog": {
     "title": "Seleccionar Moneda de Pago",
     "description": "Elige cómo prefieres realizar el pago de tu plan {{planName}}",
-    "noteBRL": "💡 Pagos en Real: Procesamiento instantáneo vía Mercado Pago",
-    "noteUSD": "💡 Pagos en Dólar: Transferencia bancaria - activación en 24h tras confirmación",
-    "noteEUR": "💡 Pagos en Euro: Transferencia bancaria - activación en 24h tras confirmación",
     "success": "¡Moneda seleccionada con éxito!"
   },
   "toasts": {
@@ -536,7 +533,7 @@
     ],
     "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Seguridad de los Datos",
-    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgação o destrucción. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
+    "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgação o destruição. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Cambios en la Política de Privacidad",
     "policyChangesP1": "Nuestra Política de Privacidad puede actualizarse periódicamente. La versión más actual siempre se publicará en nuestro sitio web, indicando la fecha de la última revisión. Te animamos a revisar regularmente nuestra política para estar siempre informado sobre cómo estamos protegiendo tus datos.",
     "contactTitle": "Contacto",

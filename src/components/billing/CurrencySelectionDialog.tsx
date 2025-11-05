@@ -55,7 +55,6 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
                 <>
                   <CreditCard className="h-8 w-8" />
                   <span>BRL - Real Brasileiro</span>
-                  <span className="text-sm font-normal">Cartão, PIX, Boleto</span>
                 </>
               )}
             </Button>
@@ -72,7 +71,6 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
                 <>
                   <Banknote className="h-8 w-8" />
                   <span>USD - Dólar Americano</span>
-                  <span className="text-sm font-normal">Transferência Bancária</span>
                 </>
               )}
             </Button>
@@ -89,16 +87,9 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
                 <>
                   <Banknote className="h-8 w-8" />
                   <span>EUR - Euro</span>
-                  <span className="text-sm font-normal">Transferência Bancária</span>
                 </>
               )}
             </Button>
-          </div>
-
-          <div className="text-xs text-muted-foreground text-center space-y-1">
-            <p>{t('currencyDialog.noteBRL')}</p>
-            <p>{t('currencyDialog.noteUSD')}</p>
-            <p>{t('currencyDialog.noteEUR')}</p>
           </div>
         </div>
       </DialogContent>
