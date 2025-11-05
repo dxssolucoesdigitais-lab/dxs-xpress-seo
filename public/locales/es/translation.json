@@ -99,7 +99,7 @@
       {
         "planId": "basic",
         "name": "Básico",
-        "price": "$15",
+        "price": "$14",
         "credits": 20,
         "features": [
           "20 Créditos/mes",
@@ -113,7 +113,7 @@
       {
         "planId": "standard",
         "name": "Estándar",
-        "price": "$28",
+        "price": "$26",
         "credits": 60,
         "features": [
           "60 Créditos/mes",
@@ -130,17 +130,17 @@
       {
         "planId": "premium",
         "name": "Premium",
-        "price": "$37",
+        "price": "$35",
         "credits": 120,
         "features": [
           "120 Créditos/mes",
           "Por cada crédito:",
-          "1 generación completa de los pasos de descripción de colección y producto con SEO",
-          "1 Blog optimizado para SEO e IA",
-          "5 pies de foto para redes sociales optimizados para SEO e IA",
-          "1 informe de validación",
-          "1 traducción al idioma seleccionado",
-          "1 versión HTML optimizada"
+          "1 geração completa das etapas de descrição de coleção e produto com SEO",
+          "1 Blog otimizado para SEO e IA",
+          "5 legendas para redes sociais otimizadas para SEO e IA",
+          "1 relatório de validação",
+          "1 tradução para o idioma selecionado",
+          "1 versão HTML otimizada"
         ],
         "popular": false
       }
@@ -383,9 +383,9 @@
       "contact": "Contacto",
       "faq": "FAQ",
       "termsOfService": "Términos de Servicio",
-      "privacyPolicy": "Política de Privacidad",
+      "privacyPolicy": "Política de Privacidade",
       "copyright": "XpressSEO. Todos los derechos reservados.",
-      "developedBy": "Desarrollado por DXS Digital."
+      "developedBy": "Desenvolvido por DXS Digital."
     }
   },
   "faqPage": {
@@ -402,7 +402,7 @@
           },
           {
             "q": "¿Cómo funciona XpressSEO?",
-            "a": "Inicias una nueva \"conversación\" proporcionando el enlace de un producto. Nuestra IA luego inicia un flujo de trabajo paso a paso, generando títulos, descrições, artículos de blog y más. En cada paso, apruebas el contenido para asegurar un control total sobre el resultado final y avanzar en el proceso."
+            "a": "Inicias una nueva \"conversación\" proporcionando el enlace de um produto. Nuestra IA luego inicia un flujo de trabajo paso a paso, generando títulos, descrições, artículos de blog y más. En cada paso, apruebas el contenido para asegurar un control total sobre el resultado final y avanzar en el proceso."
           }
         ]
       },
@@ -495,7 +495,7 @@
     "dataCollectionList1": "<strong>Información Proporcionada por Ti:</strong> Esto incluye, entre otros, nombre, apellido, dirección de correo electrónico, dirección física, información de pago y cualquier otra información que elijas proporcionar al crear una cuenta, realizar una compra o interactuar con nuestros servicios de atención al cliente.",
     "dataCollectionList2": "<strong>Información Recopilada Automáticamente:</strong> Cuando visitas nuestro sitio web, recopilamos automáticamente información sobre tu dispositivo y tu interacción con nuestro sitio web. Esto puede incluir datos como tu IP address, tipo de navegador, detalles del dispositivo, zona horaria, páginas visitadas, productos visualizados, sitios web o términos de búsqueda que te dirigieron a nuestro sitio web, e información sobre cómo interactúas con nuestro sitio web.",
     "cookiesTitle": "Uso de Cookies y Tecnologías de Rastreo",
-    "cookiesIntro": "XpressSEO utiliza cookies, que son pequeños archivos de texto almacenados en tu dispositivo, y otras tecnologías de rastreo para mejorar la experiencia del usuario en nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, comprender cómo se utilizan nuestros servicios y optimizar nuestras estrategias de marketing.",
+    "cookiesIntro": "XpressSEO utiliza cookies, que son pequeños archivos de texto almacenados en tu dispositivo, y otras tecnologías de rastreo para mejorar la experiencia del usuario en nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, comprender cómo se utilizan nuestros servicios y otimizar nuestras estratégias de marketing.",
     "cookiesTypesTitle": "Tipos de Cookies Utilizadas:",
     "cookiesTypesList": [
       "<strong>Cookies Esenciales:</strong> Esenciales para el funcionamiento del sitio web, permitiéndote navegar y usar sus funcionalidades. Sin estas cookies, servicios como el carrito de compras y el procesamiento de pagos no pueden ser proporcionados.",
@@ -529,7 +529,7 @@
       "El derecho de acceso, rectificación o eliminación de tus datos personales en nuestra posesión;",
       "El derecho de limitar u oponerte a nuestro procesamiento de tus datos;",
       "El derecho a la portabilidade de datos;",
-      "El derecho a retirar tu consentimiento en cualquier momento, cuando el procesamiento se base en el consentimiento."
+      "El derecho a retirar tu consentimiento a cualquier momento, cuando el procesamiento se base en el consentimiento."
     ],
     "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Seguridad de los Datos",

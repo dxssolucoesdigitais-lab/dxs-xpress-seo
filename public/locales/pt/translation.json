@@ -292,7 +292,7 @@
       "email": "Email",
       "plan": "Plano",
       "credits": "Créditos",
-      "notApplicable": "N/A",
+      "notApplicavel": "N/A",
       "noUsersFound": "Nenhum usuário encontrado."
     },
     "tabs": {
@@ -532,13 +532,13 @@
       "O direito à portabilidade de dados;",
       "O direito de retirar seu consentimento a qualquer momento, quando o processamento for baseado em consentimento."
     ],
-    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>.",
+    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
     "dataSecurityTitle": "Segurança dos Dados",
     "dataSecurityP1": "Implementamos medidas de segurança técnica e organizacional para proteger seus dados pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, é importante notar que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Alterações na Política de Privacidade",
     "policyChangesP1": "Nossa Política de Privacidade pode ser atualizada periodicamente. A versão mais atual será sempre publicada em nosso site, indicando a data da última revisão. Encorajamos você a revisar regularmente nossa política para estar sempre informado sobre como estamos protegendo seus dados.",
     "contactTitle": "Contato",
-    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
+    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
   },
   "signUpForm": {
     "title": "Crie sua conta",

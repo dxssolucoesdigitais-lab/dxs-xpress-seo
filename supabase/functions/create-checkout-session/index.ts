@@ -20,13 +20,13 @@ const SERVICES_BRL = {
 
 const PLANS_USD = {
   free: { title: "Free Plan", price: 0, credits: 3 }, // Free plan for reference, no actual checkout
-  basic: { title: "Basic Plan", price: 1500, credits: 20 }, // Preço em centavos
-  standard: { title: "Standard Plan", price: 2800, credits: 60 },
-  premium: { title: "Premium Plan", price: 3700, credits: 120 },
+  basic: { title: "Basic Plan", price: 1700, credits: 20 }, // Preço em centavos
+  standard: { title: "Standard Plan", price: 3100, credits: 60 },
+  premium: { title: "Premium Plan", price: 4100, credits: 120 },
 };
 
 const SERVICES_USD = {
-  gsc_analysis: { title: "Standalone GSC Analysis", price: 900, type: 'gsc_analysis' }, // Preço em centavos
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 1000, type: 'gsc_analysis' }, // Preço em centavos
 };
 
 const PLANS_EUR = {
@@ -37,7 +37,7 @@ const PLANS_EUR = {
 };
 
 const SERVICES_EUR = {
-  gsc_analysis: { title: "Standalone GSC Analysis", price: 800, type: 'gsc_analysis' },
+  gsc_analysis: { title: "Standalone GSC Analysis", price: 900, type: 'gsc_analysis' },
 };
 
 serve(async (req) => {

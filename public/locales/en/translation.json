@@ -99,7 +99,7 @@
       {
         "planId": "basic",
         "name": "Basic",
-        "price": "$15",
+        "price": "$17",
         "credits": 20,
         "features": [
           "20 Credits/month",
@@ -113,7 +113,7 @@
       {
         "planId": "standard",
         "name": "Standard",
-        "price": "$28",
+        "price": "$31",
         "credits": 60,
         "features": [
           "60 Credits/month",
@@ -130,7 +130,7 @@
       {
         "planId": "premium",
         "name": "Premium",
-        "price": "$37",
+        "price": "$41",
         "credits": 120,
         "features": [
           "120 Credits/month",
@@ -149,7 +149,7 @@
       "serviceId": "gsc_analysis",
       "title": "Standalone GSC Analysis",
       "description": "Get a detailed Google Search Console analysis for your website!",
-      "price": "$9.00",
+      "price": "$10.00",
       "perAnalysis": "/analysis",
       "features": [
         "2 Credits",
@@ -468,7 +468,7 @@
     },
     "section6": {
       "title": "6. Exploring External Links",
-      "p1": "Our website may include links to external sites that we think may be of interest to you. Note that we have no control over these external sites and, therefore, are not responsible for their content or policies."
+      "p1": "Our platform may include links to external sites that we think may be of interest to you. Note that we have no control over these external sites and, therefore, are not responsible for their content or policies."
     },
     "section7": {
       "title": "7. Changes and Updates",
