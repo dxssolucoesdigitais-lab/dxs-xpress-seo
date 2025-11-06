@@ -14,7 +14,7 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import { ThemeProvider } from "./components/theme/theme-provider";
-import LandingPage from "./pages/LandingPage"; // Manter import para outras rotas se necessário
+import LandingPage from "./pages/Index"; // Manter import para outras rotas se necessário
 import N8nTestPage from "./pages/N8nTestPage";
 import FaqPage from "./pages/FaqPage";
 import TermsPage from "./pages/TermsPage";
