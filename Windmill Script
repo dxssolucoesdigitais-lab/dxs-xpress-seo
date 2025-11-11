@@ -1,0 +1,269 @@
+# requirements:
+# requests==2.31.0
+# tenacity==8.2.3
+
+"""
+OpenRouter Client V2 - Production Ready (SEM wmill)
+Versão temporária sem dependência do wmill para testes
+"""
+
+import requests
+import os
+import json
+import logging
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class OpenRouterClientV2:
+    """Cliente OpenRouter otimizado - versão sem wmill"""
+    
+    # Circuit breaker state
+    circuit_open = False
+    circuit_last_failure = None
+    circuit_threshold = 5
+    circuit_timeout = 60
+    
+    # Cache para prompts similares
+    _cache = {}
+    _cache_ttl = 300
+    
+    # Modelos atualizados
+    MODELOS = {
+        'geral': 'meta-llama/llama-3.1-8b-instant', # Mais rápido para tarefas gerais
+        'criativo': 'anthropic/claude-3.5-sonnet',
+        'tecnico': 'openai/gpt-4o',
+        'traducao': 'openai/gpt-4o-mini', # Usando gpt-4o-mini para tradução
+        'analise': 'anthropic/claude-3-opus',
+        'conciso': 'openai/gpt-4o-mini', # Novo papel para saída concisa e de alta qualidade
+        'fallback': 'meta-llama/llama-3.1-70b-instruct' # Mantido como fallback robusto
+    }
+    
+    def __init__(self, api_key: str = None):
+        """
+        Inicializa cliente OpenRouter
+        Se api_key não for fornecida, tenta buscar de variável de ambiente
+        """
+        self.api_key = api_key or os.getenv('OPENROUTER_API_KEY', 'sua_chave_aqui')
+        self.base_url = 'https://openrouter.ai/api/v1/chat/completions'
+        self.headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://windmill.dxsdigital.com',
+            'X-Title': 'XpressSEO Windmill'
+        }
+        
+        logger.info("OpenRouter Client V2 inicializado (sem wmill)")
+    
+    def _check_circuit_breaker(self):
+        """Verifica se circuit breaker está aberto"""
+        if self.circuit_open:
+            if datetime.now() - self.circuit_last_failure < timedelta(seconds=self.circuit_timeout):
+                raise Exception("Circuit breaker aberto - OpenRouter temporariamente indisponível")
+            else:
+                self.circuit_open = False
+                logger.info("Circuit breaker fechado - retentando conexão")
+    
+    def _record_failure(self):
+        """Registra falha e gerencia circuit breaker"""
+        self.circuit_last_failure = datetime.now()
+        self.circuit_open = True
+        logger.warning("Circuit breaker aberto devido a falhas consecutivas")
+    
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        retry=retry_if_exception_type((requests.RequestException,)),
+        reraise=True
+    )
+    def gerar_conteudo(self, prompt: str, modelo: str = 'geral', temperatura: float = 0.7, 
+                      max_tokens: int = 2048, system_prompt: Optional[str] = None) -> str:
+        """Gera conteúdo com circuit breaker e cache"""
+        
+        # Verificar circuit breaker primeiro
+        self._check_circuit_breaker()
+        
+        # Validar inputs
+        if not prompt or len(prompt.strip()) < 10:
+            raise ValueError("Prompt deve ter pelo menos 10 caracteres")
+        
+        if modelo not in self.MODELOS:
+            raise ValueError(f"Modelo inválido: {modelo}. Disponíveis: {list(self.MODELOS.keys())}")
+        
+        # Gerar cache key
+        cache_key = f"{modelo}:{hash(prompt)}:{hash(system_prompt or '')}"
+        
+        # Verificar cache
+        if cache_key in self._cache:
+            cache_data = self._cache[cache_key]
+            if datetime.now() - cache_data['timestamp'] < timedelta(seconds=self._cache_ttl):
+                logger.info(f"Cache hit para prompt: {cache_key[:50]}...")
+                return cache_data['response']
+        
+        try:
+            model_id = self.MODELOS[modelo]
+            
+            # Montar payload
+            messages = []
+            if system_prompt:
+                messages.append({'role': 'system', 'content': system_prompt})
+            messages.append({'role': 'user', 'content': prompt})
+            
+            payload = {
+                'model': model_id,
+                'messages': messages,
+                'temperature': max(0.1, min(1.0, temperatura)),
+                'max_tokens': max(100, min(4000, max_tokens))
+            }
+            
+            # Fazer requisição
+            response = requests.post(
+                self.base_url,
+                headers=self.headers,
+                json=payload,
+                timeout=60
+            )
+            
+            if response.status_code != 200:
+                logger.error(f"OpenRouter error {response.status_code}: {response.text}")
+                self._record_failure()
+                raise Exception(f"Erro OpenRouter: {response.status_code} - {response.text}")
+            
+            result = response.json()
+            conteudo = result['choices'][0]['message']['content']
+            
+            # Calcular custo aproximado
+            usage = result.get('usage', {})
+            tokens = usage.get('total_tokens', 0)
+            logger.info(f"OpenRouter: {tokens} tokens usados - Modelo: {modelo}")
+            
+            # Salvar no cache
+            self._cache[cache_key] = {
+                'response': conteudo,
+                'timestamp': datetime.now(),
+                'tokens': tokens,
+                'modelo': modelo
+            }
+            
+            # Limpar cache antigo
+            self._limpar_cache_antigo()
+            
+            # Reset circuit breaker em caso de sucesso
+            self.circuit_open = False
+            
+            return conteudo
+            
+        except requests.RequestException as e:
+            logger.error(f"Request error: {str(e)}")
+            self._record_failure()
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}")
+            raise
+    
+    def _limpar_cache_antigo(self):
+        """Limpa entradas de cache antigas"""
+        now = datetime.now()
+        keys_to_remove = []
+        
+        for key, data in self._cache.items():
+            if now - data['timestamp'] > timedelta(seconds=self._cache_ttl):
+                keys_to_remove.append(key)
+        
+        for key in keys_to_remove:
+            del self._cache[key]
+        
+        if keys_to_remove:
+            logger.info(f"Limpos {len(keys_to_remove)} entradas de cache antigas")
+    
+    def gerar_etapa1_titulo_h2(self, contexto: Dict[str, Any]) -> str:
+        """Gera título H2 da coleção (Etapa 1)"""
+        system_prompt = "Você é um Web Designer e Redator Criativo. Combine criatividade na escrita com conhecimento técnico em HTML responsivo."
+        
+        prompt = f"""
+CONTEXTO DO PRODUTO:
+- Nome do produto: {contexto.get('nome_produto', 'N/A')}
+- Palavra-chave principal: {contexto.get('palavra_chave_principal', 'N/A')}
+- País de venda: {contexto.get('pais_venda', 'N/A')}
+- Site: {contexto.get('nome_site_usuario', 'N/A')}
+
+TAREFA: Crie uma frase para título H2 incluindo o nome da coleção baseado na palavra-chave principal,
+e adicione uma breve descrição complementar (1-2 linhes).
+
+FORMATO:
+[Título H2 Criativo e Atrativo]
+*[Descrição complementar breve e envolvente]*
+
+EXEMPLO:
+Calçados Esportivos Premium: Performance e Estilo
+*Descubra nossa coleção exclusiva de calçados esportivos premium, criados para unir conforto e tecnologia.*
+"""
+        return self.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
+    
+    def listar_modelos_disponiveis(self) -> Dict[str, str]:
+        """Retorna lista de modelos disponíveis"""
+        return self.MODELOS.copy()
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Retorna estatísticas do cache"""
+        return {
+            'total_entries': len(self._cache),
+            'cache_ttl': self._cache_ttl,
+            'circuit_status': 'OPEN' if self.circuit_open else 'CLOSED'
+        }
+
+
+def main(
+    acao: str,
+    contexto: Optional[Dict[str, Any]] = None,
+    prompt_custom: Optional[str] = None,
+    modelo: str = 'geral',
+    temperatura: float = 0.7,
+    max_tokens: int = 2048,
+    api_key: str = None  # Nova opção: passar API key diretamente
+) -> Any:
+    """
+    Função principal para Windmill (SEM wmill)
+    
+    Args:
+        acao: ETAPA1, LISTAR_MODELOS, CACHE_STATS, CUSTOM
+        contexto: Dados do produto/workflow (para ETAPA1)
+        prompt_custom: Prompt customizado (para CUSTOM)
+        modelo: Modelo a usar
+        temperatura: Temperatura da geração
+        max_tokens: Máximo de tokens
+        api_key: API key do OpenRouter (opcional)
+    """
+    
+    # Inicializar cliente
+    client = OpenRouterClientV2(api_key)
+    
+    if acao == "ETAPA1":
+        if not contexto:
+            raise ValueError("contexto é obrigatório para ETAPA1")
+        return client.gerar_etapa1_titulo_h2(contexto)
+    
+    elif acao == "LISTAR_MODELOS":
+        return client.listar_modelos_disponiveis()
+    
+    elif acao == "CACHE_STATS":
+        return client.get_cache_stats()
+    
+    elif acao == "CUSTOM":
+        if not prompt_custom:
+            raise ValueError("prompt_custom é obrigatório para ação CUSTOM")
+        return client.gerar_conteudo(prompt_custom, modelo, temperatura, max_tokens)
+    
+    else:
+        raise ValueError(f"Ação inválida: {acao}")
+
+
+# Para teste rápido
+if __name__ == "__main__":
+    # Teste básico
+    resultado = main(acao="LISTAR_MODELOS")
+    print("Modelos disponíveis:", resultado)
