@@ -87,7 +87,7 @@ class OpenRouterClientV2:
         reraise=True
     )
     def gerar_conteudo(self, prompt: str, modelo_chave: str = 'geral', temperatura: float = 0.7, 
-                      max_tokens: int = 2048, system_prompt: Optional[str] = None) -> str:
+                      max_tokens: int = 2048, system_prompt: Optional[str] = None) -> Tuple[str, int, str]:
         
         self._check_circuit_breaker()
         
@@ -97,17 +97,16 @@ class OpenRouterClientV2:
         if modelo_chave not in self.MODELOS:
             raise ValueError(f"Modelo inválido: {modelo_chave}. Disponíveis: {list(self.MODELOS.keys())}")
         
-        cache_key = f"{modelo_chave}:{hash(prompt)}:{hash(system_prompt or '')}"
+        model_id = self.MODELOS[modelo_chave]
+        cache_key = f"{model_id}:{hash(prompt)}:{hash(system_prompt or '')}"
         
         if cache_key in self._cache:
             cache_data = self._cache[cache_key]
             if datetime.now() - cache_data['timestamp'] < timedelta(seconds=self._cache_ttl):
                 logger.info(f"Cache hit para prompt: {cache_key[:50]}...")
-                return cache_data['response']
+                return cache_data['response'], cache_data['tokens'], cache_data['modelo_id']
         
         try:
-            model_id = self.MODELOS[modelo_chave]
-            
             messages = []
             if system_prompt:
                 messages.append({'role': 'system', 'content': system_prompt})
@@ -137,19 +136,19 @@ class OpenRouterClientV2:
             
             usage = result.get('usage', {})
             tokens = usage.get('total_tokens', 0)
-            logger.info(f"OpenRouter: {tokens} tokens usados - Modelo: {modelo_chave}")
+            logger.info(f"OpenRouter: {tokens} tokens usados - Modelo: {model_id}")
             
             self._cache[cache_key] = {
                 'response': conteudo,
                 'timestamp': datetime.now(),
                 'tokens': tokens,
-                'modelo': modelo_chave
+                'modelo_id': model_id
             }
             
             self._limpar_cache_antigo()
             self.circuit_open = False
             
-            return conteudo
+            return conteudo, tokens, model_id
             
         except requests.RequestException as e:
             logger.error(f"Request error: {str(e)}")
@@ -255,6 +254,8 @@ class XpressSEOMaster:
             self.memoria.setdefault(f'etapa{i}_resultado', '')
             self.memoria.setdefault(f'etapa{i}_escolha', '')
             self.memoria.setdefault(f'etapa{i}_status', 'PENDENTE')
+            self.memoria.setdefault(f'etapa{i}_llm_usada', '') # Novo campo
+            self.memoria.setdefault(f'etapa{i}_tokens_usados', 0) # Novo campo
         self.memoria.setdefault('etapa7a_resultado', '')
         self.memoria.setdefault('etapa7b_resultado', '')
 
@@ -377,24 +378,26 @@ class XpressSEOMaster:
                 return True # Ação tratada, mas com feedback de erro
             
             # Aprova o resultado da etapa anterior
-            last_step_result_key = f'etapa{self.current_step - 1}_resultado'
-            if self.current_step - 1 == 2: # Etapa 2 (Meta Title)
-                last_step_result_key = f'etapa{self.current_step - 1}_escolha'
-            elif self.current_step - 1 == 3: # Etapa 3 (Meta Description)
-                last_step_result_key = f'etapa{self.current_step - 1}_escolha'
-            elif self.current_step - 1 == 5: # Etapa 5 (Meta Title Produto)
-                last_step_result_key = f'etapa{self.current_step - 1}_escolha'
-            elif self.current_step - 1 == 6: # Etapa 6 (Meta Description Produto)
-                last_step_result_key = f'etapa{self.current_step - 1}_escolha'
-            elif self.current_step - 1 == 8: # Etapa 8 (Legendas Redes Sociais)
-                last_step_result_key = f'etapa{self.current_step - 1}_escolha'
-
+            # A etapa 9 (Validação Técnica) é a última etapa de geração de conteúdo antes da tradução.
+            # Se o current_step é 10, significa que a etapa 9 foi a última a ser gerada.
+            if self.current_step == 10: # Etapa 9 (Validação Técnica)
+                last_step_num = 9
+                last_step_result_key = f'etapa{last_step_num}_resultado'
+            else: # Para as etapas 1 a 8
+                last_step_num = self.current_step - 1
+                last_step_result_key = f'etapa{last_step_num}_resultado'
+                if last_step_num in [2, 3, 5, 6, 8]: # Etapas que retornam opções
+                    last_step_result_key = f'etapa{last_step_num}_escolha' # A escolha já foi feita na seleção de opção
+            
             if self.memoria.get(last_step_result_key):
-                self.memoria[f'etapa{self.current_step - 1}_status'] = 'APROVADO'
-                self.memoria[f'etapa{self.current_step - 1}_escolha'] = self.memoria[last_step_result_key] # Salva o resultado como escolha
+                self.memoria[f'etapa{last_step_num}_status'] = 'APROVADO'
+                # Se não foi uma etapa de opções, o resultado é a escolha
+                if last_step_num not in [2, 3, 5, 6, 8]:
+                    self.memoria[f'etapa{last_step_num}_escolha'] = self.memoria[last_step_result_key]
+                
                 output_messages.append({
                     "type": "text",
-                    "data": f"✅ Conteúdo da Etapa {self.current_step - 1} aprovado!"
+                    "data": f"✅ Conteúdo da Etapa {last_step_num} aprovado!"
                 })
                 self.current_step += 1 # Avança para a próxima etapa
                 self._save_project_state()
@@ -415,11 +418,12 @@ class XpressSEOMaster:
                 
                 if selected_option:
                     # Salva a escolha do usuário para a etapa atual
-                    self.memoria[f'etapa{self.current_step - 1}_escolha'] = selected_option['content']
-                    self.memoria[f'etapa{self.current_step - 1}_status'] = 'APROVADO'
+                    last_step_num = self.current_step - 1
+                    self.memoria[f'etapa{last_step_num}_escolha'] = selected_option['content']
+                    self.memoria[f'etapa{last_step_num}_status'] = 'APROVADO'
                     output_messages.append({
                         "type": "text",
-                        "data": f"✅ Opção {selected_number} selecionada para a Etapa {self.current_step - 1}!"
+                        "data": f"✅ Opção {selected_number} selecionada para a Etapa {last_step_num}!"
                     })
                     self.current_step += 1 # Avança para a próxima etapa
                     self._save_project_state()
@@ -437,18 +441,33 @@ class XpressSEOMaster:
         
         # Ação de regeneração
         if user_input == 'regenerar':
+            # A etapa a ser regenerada é sempre a anterior à current_step
+            step_to_regenerate = self.current_step - 1
+            if step_to_regenerate < 1:
+                output_messages.append({
+                    "type": "text",
+                    "data": "Não há etapa anterior para regenerar."
+                })
+                return True
+            
             output_messages.append({
                 "type": "text",
-                "data": f"🔄 Regenerando conteúdo para a Etapa {self.current_step - 1}..."
+                "data": f"🔄 Regenerando conteúdo para a Etapa {step_to_regenerate}..."
             })
             # Não avança o current_step, apenas força a re-execução da etapa anterior
             # O `executar_sistema` chamará a etapa correta novamente.
+            # Limpa o resultado anterior para forçar a nova geração
+            self.memoria[f'etapa{step_to_regenerate}_resultado'] = ''
+            self.memoria[f'etapa{step_to_regenerate}_escolha'] = ''
+            self.memoria[f'etapa{step_to_regenerate}_status'] = 'PENDENTE'
+            self.memoria['last_ai_message_type'] = 'text' # Reseta o tipo de mensagem da IA
+            self.memoria['last_ai_options'] = []
             self._save_project_state()
             return True
         
         # Ação de seleção de idioma (na fase de conclusão)
         idiomas_siglas = ['pt', 'en', 'es', 'fr', 'de', 'uk'] # Adicione outras siglas se necessário
-        if self.current_step == 10 and user_input.upper() in [s.upper() for s in idiomas_siglas]:
+        if self.current_step == 11 and user_input.upper() in [s.upper() for s in idiomas_siglas]:
             self.memoria['idioma_final_escolhido'] = user_input.upper()
             output_messages.append({
                 "type": "text",
@@ -729,8 +748,8 @@ class XpressSEOMaster:
             8: (self._etapa_7a_blog_shopify, 'criativo', "E-commerce Copywriter & Sales Conversion Specialist"),
             9: (self._etapa_7b_blog_google_seo, 'analise', "SEO Content Strategist & AI Search Optimization Expert"),
             10: (self._etapa_8_legendas_redes_sociais, 'criativo', "Social Media Strategist & AI Search Optimization Specialist"),
-            # Etapa 9 (Validação Técnica) será a última antes da conclusão
-            # 11: (self._etapa_9_validacao_tecnica, 'tecnico', "Especialista em SEO Técnico")
+            # A etapa 9 (Validação Técnica) é a última etapa de geração de conteúdo antes da tradução.
+            # Ela será chamada diretamente no _fase_3_conclusao_entrega para garantir que todos os conteúdos estejam prontos.
         }
 
         if self.current_step in etapas_map:
@@ -749,9 +768,8 @@ class XpressSEOMaster:
                 return self._fase_2_execucao_etapas(output_messages) # Chama a próxima etapa
             
             # Gera o conteúdo
-            resultado = func(insights_pesquisa)
-            self.memoria[f'etapa{self.current_step - 1}_resultado'] = resultado
-            self._save_project_state()
+            resultado, tokens_usados, modelo_usado = func(insights_pesquisa)
+            self._salvar_na_memoria(str(self.current_step - 1), resultado, "PENDENTE", modelo_usado, tokens_usados)
             
             # Verifica se o resultado é uma lista de opções ou texto simples
             try:
@@ -878,7 +896,7 @@ class XpressSEOMaster:
     # IMPLEMENTAÇÃO DAS 9 ETAPAS (CHAMADAS OPENROUTER)
     # ============================================================================
 
-    def _etapa_1_titulo_h2_colecao(self, insights_pesquisa: Dict) -> str:
+    def _etapa_1_titulo_h2_colecao(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 1: Título H2 da Coleção"""
         system_prompt = "Você é um Web Designer e Redator Criativo. Combine criatividade na escrita com conhecimento técnico em HTML responsivo."
         
@@ -902,7 +920,7 @@ Calçados Esportivos Premium: Performance e Estilo
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_2_meta_title_colecao(self, insights_pesquisa: Dict) -> str:
+    def _etapa_2_meta_title_colecao(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 2: Meta Title da Coleção"""
         system_prompt = "Você é um Especialista SEO e Growth Hacker. Crie meta titles otimizados para cliques e ranqueamento."
         prompt = f"""
@@ -924,7 +942,7 @@ FORMATO:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'analise', system_prompt=system_prompt)
 
-    def _etapa_3_meta_description_colecao(self, insights_pesquisa: Dict) -> str:
+    def _etapa_3_meta_description_colecao(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 3: Meta Description da Coleção"""
         system_prompt = "Você é um Especialista em Copywriting Persuasivo. Crie meta descriptions que incentivem o clique e resumam o conteúdo."
         prompt = f"""
@@ -946,7 +964,7 @@ FORMATO:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_4_descricao_produto(self, insights_pesquisa: Dict) -> str:
+    def _etapa_4_descricao_produto(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 4: Descrição do Produto"""
         system_prompt = "Você é um Especialista em E-commerce e Marketing de Produto. Crie descrições de produto que vendam e informem."
         prompt = f"""
@@ -964,7 +982,7 @@ Inclua:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_5_meta_title_produto(self, insights_pesquisa: Dict) -> str:
+    def _etapa_5_meta_title_produto(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 5: Meta Title do Produto"""
         system_prompt = "Você é um Especialista em SEM e Anúncios Pagos. Crie meta titles para produtos que se destacam em resultados de busca e anúncios."
         prompt = f"""
@@ -986,7 +1004,7 @@ FORMATO:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'analise', system_prompt=system_prompt)
 
-    def _etapa_6_meta_description_produto(self, insights_pesquisa: Dict) -> str:
+    def _etapa_6_meta_description_produto(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 6: Meta Description do Produto"""
         system_prompt = "Você é um Especialista em CRO (Conversion Rate Optimization). Crie meta descriptions que maximizem a taxa de cliques e a intenção de compra."
         prompt = f"""
@@ -1009,7 +1027,7 @@ FORMATO:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_7a_blog_shopify(self, insights_pesquisa: Dict) -> str:
+    def _etapa_7a_blog_shopify(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 7a: Artigo Blog Shopify (comercial)"""
         system_prompt = "Você é um E-commerce Copywriter & Sales Conversion Specialist. Crie artigos de blog focados em vendas e conversão para plataformas como Shopify."
         prompt = f"""
@@ -1030,7 +1048,7 @@ Inclua:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_7b_blog_google_seo(self, insights_pesquisa: Dict) -> str:
+    def _etapa_7b_blog_google_seo(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 7b: Artigo Blog Google SEO (informativo)"""
         system_prompt = "Você é um SEO Content Strategist & AI Search Optimization Expert. Crie artigos de blog informativos e aprofundados, otimizados para ranqueamento no Google."
         prompt = f"""
@@ -1051,7 +1069,7 @@ Inclua:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'analise', system_prompt=system_prompt)
 
-    def _etapa_8_legendas_redes_sociais(self, insights_pesquisa: Dict) -> str:
+    def _etapa_8_legendas_redes_sociais(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 8: Legendas Redes Sociais"""
         system_prompt = "Você é um Social Media Strategist & AI Search Optimization Specialist. Crie legendas de redes sociais que gerem engajamento e tráfego."
         prompt = f"""
@@ -1073,13 +1091,13 @@ FORMATO:
 """
         return self.openrouter_client.gerar_conteudo(prompt, 'criativo', system_prompt=system_prompt)
 
-    def _etapa_9_validacao_tecnica(self, insights_pesquisa: Dict) -> str:
+    def _etapa_9_validacao_tecnica(self, insights_pesquisa: Dict) -> Tuple[str, int, str]:
         """Etapa 9: Validação Técnica (será a última etapa de geração antes da tradução)"""
         system_prompt = "Você é um Especialista em SEO Técnico. Analise o conteúdo gerado para conformidade com as melhores práticas de SEO técnico."
         prompt = f"""
 CONTEXTO DO PROJETO:
 - Palavra-chave principal: {self.memoria.get('palavra_chave_principal', 'N/A')}
-- Título H2 da Coleção: {self.memoria.get('etapa1_resultado', 'N/A')}
+- Título H2 da Coleção: {self.memoria.get('etapa1_escolha', 'N/A')}
 - Meta Title da Coleção: {self.memoria.get('etapa2_escolha', 'N/A')}
 - Meta Description da Coleção: {self.memoria.get('etapa3_escolha', 'N/A')}
 - Descrição do Produto: {self.memoria.get('etapa4_resultado', 'N/A')}
@@ -1113,12 +1131,44 @@ Verifique:
     # MÉTODOS AUXILIARES
     # ============================================================================
 
+    def _salvar_na_memoria(self, etapa: str, conteudo: str, status: str = "APROVADO", 
+                           llm_usada: str = "", tokens_usados: int = 0):
+        """Salva conteúdo na memória, incluindo LLM usada e tokens."""
+        variaveis_etapa = {
+            '1': 'etapa1_resultado', '2': 'etapa2_resultado', '3': 'etapa3_resultado',
+            '4': 'etapa4_resultado', '5': 'etapa5_resultado', '6': 'etapa6_resultado',
+            '7a': 'etapa7a_resultado', '7b': 'etapa7b_resultado', '8': 'etapa8_resultado',
+            '9': 'etapa9_resultado'
+        }
+        
+        if etapa in variaveis_etapa:
+            self.memoria[variaveis_etapa[etapa]] = conteudo
+            self.memoria[f'etapa{etapa}_status'] = status
+            self.memoria[f'etapa{etapa}_llm_usada'] = llm_usada
+            self.memoria[f'etapa{etapa}_tokens_usados'] = tokens_usados
+            self._save_project_state() # Salva no Supabase após cada atualização da memória
+
     def _gerar_html_final(self, resultados: Dict, idioma: str) -> str:
         """Gera HTML final responsivo com todos os resultados traduzidos."""
         
         # Traduzir os conteúdos gerados
         conteudos_traduzidos = {}
-        for i in range(1, 10):
+        
+        # Primeiro, gera a validação técnica (Etapa 9)
+        validacao_tecnica_content, validacao_tokens, validacao_llm = self._etapa_9_validacao_tecnica(resultados.get('insights_pesquisa', {}))
+        
+        # Traduz a validação técnica
+        translated_validacao_tecnica, _, _ = self.openrouter_client.gerar_conteudo(
+            prompt=f"Traduza para {idioma}: {validacao_tecnica_content}",
+            modelo_chave='traducao',
+            max_tokens=2000,
+            system_prompt="Você é um tradutor profissional. Traduza o texto fornecido para o idioma especificado, mantendo o contexto e o tom."
+        )
+        conteudos_traduzidos['etapa9_resultado'] = translated_validacao_tecnica
+        self.memoria['etapa9_llm_usada'] = validacao_llm # Armazena LLM e tokens da validação
+        self.memoria['etapa9_tokens_usados'] = validacao_tokens
+
+        for i in range(1, 9): # Etapas 1 a 8
             key_resultado = f'etapa{i}_resultado'
             key_escolha = f'etapa{i}_escolha'
             
@@ -1131,7 +1181,7 @@ Verifique:
                         translated_options = []
                         for item in parsed_content:
                             if 'content' in item:
-                                translated_content = self.openrouter_client.gerar_conteudo(
+                                translated_content, _, _ = self.openrouter_client.gerar_conteudo(
                                     prompt=f"Traduza para {idioma}: {item['content']}",
                                     modelo_chave='traducao',
                                     max_tokens=500,
@@ -1143,31 +1193,25 @@ Verifique:
                         conteudos_traduzidos[key_escolha] = json.dumps(translated_options, ensure_ascii=False)
                     else:
                         # Se for texto simples, traduz
-                        conteudos_traduzidos[key_escolha] = self.openrouter_client.gerar_conteudo(
+                        translated_content, _, _ = self.openrouter_client.gerar_conteudo(
                             prompt=f"Traduza para {idioma}: {conteudo_original}",
                             modelo_chave='traducao',
                             max_tokens=2000,
                             system_prompt="Você é um tradutor profissional. Traduza o texto fornecido para o idioma especificado, mantendo o contexto e o tom."
                         )
+                        conteudos_traduzidos[key_escolha] = translated_content
                 except json.JSONDecodeError:
                     # Não é JSON, é texto simples
-                    conteudos_traduzidos[key_escolha] = self.openrouter_client.gerar_conteudo(
+                    translated_content, _, _ = self.openrouter_client.gerar_conteudo(
                         prompt=f"Traduza para {idioma}: {conteudo_original}",
                         modelo_chave='traducao',
                         max_tokens=2000,
                         system_prompt="Você é um tradutor profissional. Traduza o texto fornecido para o idioma especificado, mantendo o contexto e o tom."
                     )
+                    conteudos_traduzidos[key_escolha] = translated_content
             else:
                 conteudos_traduzidos[key_escolha] = 'Conteúdo não gerado ou não aprovado.'
         
-        # Adiciona a validação técnica como a última etapa de conteúdo
-        conteudos_traduzidos['etapa9_resultado'] = self.openrouter_client.gerar_conteudo(
-            prompt=f"Traduza para {idioma} a validação técnica: {self._etapa_9_validacao_tecnica(resultados.get('insights_pesquisa', {}))}",
-            modelo_chave='traducao',
-            max_tokens=2000,
-            system_prompt="Você é um tradutor profissional. Traduza o texto fornecido para o idioma especificado, mantendo o contexto e o tom."
-        )
-
         html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -1183,6 +1227,7 @@ Verifique:
         .section:last-child {{ border-bottom: none; }}
         pre {{ background: #e9e9e9; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; }}
         .meta-info {{ font-size: 0.9em; color: #666; text-align: center; margin-bottom: 20px; }}
+        .llm-info {{ font-size: 0.8em; color: #888; margin-top: 5px; }}
     </style>
 </head>
 <body>
@@ -1200,51 +1245,61 @@ Verifique:
         <div class="section">
             <h2>Etapa 1: Título H2 da Coleção</h2>
             <pre>{conteudos_traduzidos.get('etapa1_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa1_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa1_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 2: Meta Title da Coleção</h2>
             <pre>{conteudos_traduzidos.get('etapa2_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa2_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa2_tokens_usados', 0)}</p>
         </div>
         
         <div class="section">
             <h2>Etapa 3: Meta Description da Coleção</h2>
             <pre>{conteudos_traduzidos.get('etapa3_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa3_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa3_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 4: Descrição do Produto</h2>
             <pre>{conteudos_traduzidos.get('etapa4_resultado', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa4_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa4_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 5: Meta Title do Produto</h2>
             <pre>{conteudos_traduzidos.get('etapa5_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa5_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa5_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 6: Meta Description do Produto</h2>
             <pre>{conteudos_traduzidos.get('etapa6_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa6_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa6_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 7a: Artigo Blog Shopify</h2>
             <pre>{conteudos_traduzidos.get('etapa7a_resultado', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa7a_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa7a_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 7b: Artigo Blog Google SEO</h2>
             <pre>{conteudos_traduzidos.get('etapa7b_resultado', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa7b_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa7b_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 8: Legendas Redes Sociais</h2>
             <pre>{conteudos_traduzidos.get('etapa8_escolha', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa8_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa8_tokens_usados', 0)}</p>
         </div>
 
         <div class="section">
             <h2>Etapa 9: Validação Técnica</h2>
             <pre>{conteudos_traduzidos.get('etapa9_resultado', 'Conteúdo não gerado.')}</pre>
+            <p class="llm-info">LLM: {resultados.get('etapa9_llm_usada', 'N/A')} | Tokens: {resultados.get('etapa9_tokens_usados', 0)}</p>
         </div>
 
         <p style="text-align: center; margin-top: 30px; font-size: 0.8em; color: #999;">
