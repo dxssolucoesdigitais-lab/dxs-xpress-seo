@@ -14,11 +14,12 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    // User needs to set this environment variable in Supabase project settings
-    const n8nAdminWebhook = Deno.env.get('N8N_WEBHOOK_URL_ADMIN') || 'http://192.168.0.216:5678/webhook/master-@001-xpress-seo'
+    const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
+    const windmillWorkspaceAdminDemo = Deno.env.get('WINDMILL_WORKSPACE_ADMIN_DEMO')!
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')! // Nova variável para OpenRouter
 
-    if (!supabaseUrl || !serviceRoleKey || !n8nAdminWebhook) {
-      throw new Error("Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_URL_ADMIN).");
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillWorkspaceAdminDemo || !openrouterApiKey) {
+      throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -34,21 +35,33 @@ serve(async (req) => {
       });
     }
 
-    // Trigger n8n webhook for admin notification
-    fetch(n8nAdminWebhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: newUser.id,
-        userEmail: newUser.email,
-        userName: newUser.full_name,
-        userRole: newUser.role,
-        createdAt: newUser.created_at,
-        // Add any other relevant user data
-      }),
-    }).catch(err => console.error("Error triggering n8n admin webhook:", err));
+    // --- Trigger Windmill Workflow for Admin Notification ---
+    // Assuming the admin demo script can also handle new user notifications.
+    // If a dedicated Windmill script for new user notifications exists, please provide its path.
+    const windmillAdminNotificationWebhookUrl = `https://${windmillWorkspaceAdminDemo}.windmill.dev/api/w/u/admin/demo/master_admin_demo`;
+    
+    const payload = {
+      acao: "notify_new_user", // Ação específica para o script Windmill
+      userId: newUser.id,
+      userEmail: newUser.email,
+      userName: newUser.full_name,
+      userRole: newUser.role,
+      createdAt: newUser.created_at,
+      supabase_url: supabaseUrl,
+      supabase_key: serviceRoleKey,
+      openrouter_key: openrouterApiKey,
+    };
 
-    return new Response(JSON.stringify({ message: 'Admin notification sent to n8n webhook successfully.' }), {
+    fetch(windmillAdminNotificationWebhookUrl, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${windmillToken}`,
+      },
+      body: JSON.stringify(payload),
+    }).catch(err => console.error("Error triggering Windmill admin notification webhook:", err));
+
+    return new Response(JSON.stringify({ message: 'Admin notification sent to Windmill webhook successfully.' }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

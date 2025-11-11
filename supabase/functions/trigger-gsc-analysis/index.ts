@@ -14,11 +14,12 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    // User needs to set this environment variable in Supabase project settings
-    const n8nWebhookGSCStandalone = Deno.env.get('N8N_WEBHOOK_URL_GSC_ANALYSIS_STANDALONE') || 'http://192.168.0.216:5678/webhook/gsc-analysis-standalone'
+    const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
+    const windmillWorkspaceAdminDemo = Deno.env.get('WINDMILL_WORKSPACE_ADMIN_DEMO')!
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')! // Nova variável para OpenRouter
 
-    if (!supabaseUrl || !serviceRoleKey || !n8nWebhookGSCStandalone) {
-      throw new Error("Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_URL_GSC_ANALYSIS_STANDALONE).");
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillWorkspaceAdminDemo || !openrouterApiKey) {
+      throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -69,19 +70,31 @@ serve(async (req) => {
 
     if (updateIntentError) throw updateIntentError;
 
-    // 3. Acionar o webhook do n8n para iniciar a análise GSC
-    fetch(n8nWebhookGSCStandalone, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        projectId: projectId,
-        userId: user.id,
-        paymentIntentId: paymentIntent.id,
-        // Outros dados relevantes para o n8n
-      }),
-    }).catch(err => console.error("Error triggering n8n GSC webhook:", err));
+    // --- Trigger Windmill Workflow for GSC Analysis ---
+    // Assuming a dedicated Windmill script for GSC analysis will be provided.
+    // For now, using a placeholder path. Please provide the correct path when ready.
+    const windmillGSCAnalysisWebhookUrl = `https://${windmillWorkspaceAdminDemo}.windmill.dev/api/w/u/admin/demo/gsc_analysis_workflow`; // Placeholder path
+    
+    const payload = {
+      acao: "start_gsc_analysis", // Ação específica para o script Windmill
+      projectId: projectId,
+      userId: user.id,
+      paymentIntentId: paymentIntent.id,
+      supabase_url: supabaseUrl,
+      supabase_key: serviceRoleKey,
+      openrouter_key: openrouterApiKey,
+    };
 
-    return new Response(JSON.stringify({ message: 'Análise GSC acionada com sucesso!' }), {
+    fetch(windmillGSCAnalysisWebhookUrl, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${windmillToken}`,
+      },
+      body: JSON.stringify(payload),
+    }).catch(err => console.error("Error triggering Windmill GSC analysis webhook:", err));
+
+    return new Response(JSON.stringify({ message: 'Análise GSC acionada com sucesso via Windmill!' }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

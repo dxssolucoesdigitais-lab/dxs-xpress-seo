@@ -17,25 +17,29 @@ serve(async (req) => {
     // --- Environment & Client Setup ---
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    
-    // Get webhook URLs for each plan from environment variables
-    const n8nWebhookAdminDemo = Deno.env.get('N8N_WEBHOOK_URL_ADMIN_DEMO') // New admin demo webhook
+    const windmillToken = Deno.env.get('WINDMILL_TOKEN')
+    const windmillWorkspaceAdminDemo = Deno.env.get('WINDMILL_WORKSPACE_ADMIN_DEMO')
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY') // Nova variável para OpenRouter
+
+    // Get webhook URLs for each plan from environment variables (n8n still in standby)
     const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
     const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
     const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
     const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
 
     console.log('trigger-step: Environment variables loaded.');
-    console.log('trigger-step: N8N_WEBHOOK_URL_ADMIN_DEMO present:', !!n8nWebhookAdminDemo);
+    console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
+    console.log('trigger-step: WINDMILL_WORKSPACE_ADMIN_DEMO present:', !!windmillWorkspaceAdminDemo);
+    console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: N8N_WEBHOOK_URL_FREE present:', !!n8nWebhookFree);
     console.log('trigger-step: N8N_WEBHOOK_URL_BASIC present:', !!n8nWebhookBasic);
     console.log('trigger-step: N8N_WEBHOOK_URL_STANDARD present:', !!n8nWebhookStandard);
     console.log('trigger-step: N8N_WEBHOOK_URL_PREMIUM present:', !!n8nWebhookPremium);
 
 
-    if (!supabaseUrl || !serviceRoleKey) {
-      console.error('trigger-step: Missing Supabase environment variables.');
-      throw new Error("Missing Supabase environment variables.");
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillWorkspaceAdminDemo || !openrouterApiKey) {
+      console.error('trigger-step: Missing critical environment variables (Supabase, Windmill, OpenRouter).');
+      throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -142,15 +146,31 @@ serve(async (req) => {
 
     // --- Select Webhook based on User Role (Admin Override) or Plan ---
     let targetWebhookUrl;
+    let targetWebhookHeaders = { 'Content-Type': 'application/json' };
+    let payloadBody: any = {
+      projectId: projectId,
+      userId: user.id,
+      planType: user.plan_type,
+      userRole: user.role,
+      currentStep: project?.current_step || 0, // Pass current step if project exists
+      projectData: project, // Pass full project data if exists
+      userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
+    };
 
     if (user.role === 'admin') {
-      targetWebhookUrl = n8nWebhookAdminDemo;
-      console.log('trigger-step: User is admin, using N8N_WEBHOOK_URL_ADMIN_DEMO.');
-      if (!targetWebhookUrl) {
-        console.error('trigger-step: N8N_WEBHOOK_URL_ADMIN_DEMO is not configured.');
-        throw new Error("N8N_WEBHOOK_URL_ADMIN_DEMO is not configured for admin user.");
-      }
+      // Use Windmill for admin
+      targetWebhookUrl = `https://${windmillWorkspaceAdminDemo}.windmill.dev/api/w/u/admin/demo/master_admin_demo`;
+      targetWebhookHeaders['Authorization'] = `Bearer ${windmillToken}`;
+      payloadBody = {
+        ...payloadBody,
+        acao: "demo_rapida", // Ação específica para o script Windmill
+        supabase_url: supabaseUrl,
+        supabase_key: serviceRoleKey, // Passa a service_role_key como supabase_key
+        openrouter_key: openrouterApiKey,
+      };
+      console.log('trigger-step: User is admin, using Windmill webhook:', targetWebhookUrl);
     } else {
+      // Keep n8n for other plans for now
       const userPlan = user.plan_type || 'free';
       switch (userPlan) {
         case 'free':
@@ -168,8 +188,7 @@ serve(async (req) => {
         default:
           targetWebhookUrl = n8nWebhookFree; // Fallback to free plan
       }
-
-      console.log('trigger-step: User plan:', userPlan, 'using webhook:', targetWebhookUrl);
+      console.log('trigger-step: User plan:', userPlan, 'using n8n webhook:', targetWebhookUrl);
 
       if (!targetWebhookUrl) {
         console.error(`trigger-step: n8n webhook URL for plan '${userPlan}' is not configured.`);
@@ -177,28 +196,20 @@ serve(async (req) => {
       }
     }
 
-    // --- Trigger n8n Workflow ---
-    console.log('trigger-step: Attempting to call n8n webhook:', targetWebhookUrl);
-    const n8nResponse = await fetch(targetWebhookUrl, {
+    // --- Trigger Workflow ---
+    console.log('trigger-step: Attempting to call webhook:', targetWebhookUrl);
+    const response = await fetch(targetWebhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        projectId: projectId,
-        userId: user.id,
-        planType: user.plan_type,
-        userRole: user.role,
-        currentStep: project?.current_step || 0, // Pass current step if project exists
-        projectData: project, // Pass full project data if exists
-        userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
-      }),
+      headers: targetWebhookHeaders,
+      body: JSON.stringify(payloadBody),
     });
 
-    if (!n8nResponse.ok) {
-      const errorBody = await n8nResponse.text();
-      console.error(`trigger-step: Failed to trigger n8n workflow. Status: ${n8nResponse.status}, Body: ${errorBody}`);
-      throw new Error(`Failed to trigger n8n workflow: ${n8nResponse.status} - ${errorBody}`);
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${errorBody}`);
+      throw new Error(`Failed to trigger workflow: ${response.status} - ${errorBody}`);
     }
-    console.log('trigger-step: n8n workflow triggered successfully.');
+    console.log('trigger-step: Workflow triggered successfully.');
 
     // --- Respond Immediately to the Client ---
     return new Response(JSON.stringify({ message: `Workflow triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
