@@ -197,7 +197,7 @@ serve(async (req) => {
 
 
     if (!response.ok) {
-      const errorBody = await response.text();
+      const errorBody = await response.text(); // Read once for error logging
       console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${errorBody}`);
       throw new Error(`Failed to trigger workflow: ${response.status} - ${errorBody}`);
     }
@@ -206,11 +206,11 @@ serve(async (req) => {
     // Capture the response from Windmill
     console.log('trigger-step: Before parsing Windmill response.');
     let windmillResponse;
+    const rawWindmillResponse = await response.text(); // Read the body once as text
     try {
-      windmillResponse = await response.json();
+      windmillResponse = JSON.parse(rawWindmillResponse); // Try to parse the text as JSON
       console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
     } catch (jsonError: any) {
-      const rawWindmillResponse = await response.text();
       console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
       throw new Error(`Windmill returned non-JSON response: ${rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 100))}...`);
     }
