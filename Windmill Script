@@ -1,8 +1,50 @@
+import json
+import datetime
 from supabase import create_client
 
-# ... (outras partes do seu script)
+# --- Assumindo que estas variáveis já estão disponíveis no seu script Windmill ---
+# (Elas são passadas como argumentos para o script, como visto no seu anexo)
+# Exemplo: supabase_url, supabase_key, projectId, userId, currentStep
+# Se você as acessa via 'w.args', ajuste conforme necessário (ex: w.args.supabase_url)
 
-# Certifique-se de que a chamada create_client seja assim:
+# --- 1. Defina a resposta estruturada da IA que você quer enviar ---
+# Esta é a mesma estrutura JSON que você mostrou no resultado do Windmill.
+# Substitua '...' pelo dicionário Python real que representa sua resposta.
+ai_structured_response_dict = {
+  "type": "structured_response",
+  "messages": [
+    {
+      "data": "Olá! Por favor, me forneça o link do produto que você deseja analisar para começarmos.",
+      "type": "text"
+    }
+  ]
+}
+
+# --- 2. Converta o dicionário para uma string JSON para armazenar no banco de dados ---
+ai_message_content_json_string = json.dumps(ai_structured_response_dict)
+
+# --- 3. Inicialize o cliente Supabase com a service_role_key ---
+# A 'supabase_key' que você está passando para o Windmill deve ser a service_role_key
 supabase = create_client(supabase_url, supabase_key)
 
-# ... (o restante do seu script Windmill)
+# --- 4. Insira a mensagem da IA na tabela 'chat_messages' ---
+try:
+    response = supabase.table('chat_messages').insert({
+        'project_id': projectId,
+        'user_id': userId,
+        'author': 'ai',
+        'content': ai_message_content_json_string,
+        'created_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'metadata': { 'current_step': currentStep } # Use o currentStep do projeto
+    }).execute()
+
+    if response.data:
+        print("Mensagem da IA inserida com sucesso no Supabase.")
+    if response.error:
+        print("Erro ao inserir mensagem da IA no Supabase:", response.error)
+
+except Exception as e:
+    print(f"Ocorreu um erro inesperado durante a inserção no Supabase: {e}")
+
+# --- O script Windmill ainda deve retornar a resposta estruturada como sua saída final ---
+# return ai_structured_response_dict
