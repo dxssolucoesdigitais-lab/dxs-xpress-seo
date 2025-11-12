@@ -18,7 +18,8 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    const windmillWorkspaceAdminDemo = Deno.env.get('WINDMILL_WORKSPACE_ADMIN_DEMO')
+    // ATUALIZE ESTA URL COM A URL REAL DO SEU SCRIPT WINDMILL
+    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL') // Nova variável de ambiente para a URL do script master
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY') // Nova variável para OpenRouter
 
     // Get webhook URLs for each plan from environment variables (n8n still in standby)
@@ -29,7 +30,7 @@ serve(async (req) => {
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
-    console.log('trigger-step: WINDMILL_WORKSPACE_ADMIN_DEMO present:', !!windmillWorkspaceAdminDemo);
+    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptUrl);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: N8N_WEBHOOK_URL_FREE present:', !!n8nWebhookFree);
     console.log('trigger-step: N8N_WEBHOOK_URL_BASIC present:', !!n8nWebhookBasic);
@@ -37,7 +38,7 @@ serve(async (req) => {
     console.log('trigger-step: N8N_WEBHOOK_URL_PREMIUM present:', !!n8nWebhookPremium);
 
 
-    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillWorkspaceAdminDemo || !openrouterApiKey) {
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillMasterScriptUrl || !openrouterApiKey) {
       console.error('trigger-step: Missing critical environment variables (Supabase, Windmill, OpenRouter).');
       throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
@@ -159,16 +160,17 @@ serve(async (req) => {
 
     if (user.role === 'admin') {
       // Use Windmill for admin
-      targetWebhookUrl = `https://${windmillWorkspaceAdminDemo}.windmill.dev/api/w/u/admin/demo/master_admin_demo`;
+      targetWebhookUrl = windmillMasterScriptUrl; // Usa a nova variável
       targetWebhookHeaders['Authorization'] = `Bearer ${windmillToken}`;
       payloadBody = {
         ...payloadBody,
         acao: "demo_rapida", // Ação específica para o script Windmill
         supabase_url: supabaseUrl,
         supabase_key: serviceRoleKey, // Passa a service_role_key como supabase_key
-        openrouter_key: openrouterApiKey,
+        openrouter_key: Deno.env.get('OPENROUTER_API_KEY'), // Passa a chave OpenRouter
+        serpi_api_key: Deno.env.get('SERPI_API_KEY'), // Passa a chave SerpiAPI
       };
-      console.log('trigger-step: User is admin, using Windmill webhook:', targetWebhookUrl);
+      console.log('trigger-step: User is admin, using Windmill master script:', targetWebhookUrl);
     } else {
       // Keep n8n for other plans for now
       const userPlan = user.plan_type || 'free';
