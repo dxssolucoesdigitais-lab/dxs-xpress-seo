@@ -1,2 +1,8 @@
 from supabase import create_client
-# ... o restante do seu script Windmill
+
+# ... (outras partes do seu script)
+
+# Certifique-se de que a chamada create_client seja assim:
+supabase = create_client(supabase_url, supabase_key)
+
+# ... (o restante do seu script Windmill)
