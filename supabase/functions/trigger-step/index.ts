@@ -199,25 +199,39 @@ serve(async (req) => {
     const rawWindmillResponse = await response.text();
     console.log('trigger-step: Raw Windmill response body:', rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 500))); // Log first 500 chars
 
+    let aiMessageContent: string; // This will be the content for chat_messages.content
+
     if (!response.ok) {
       console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${rawWindmillResponse}`);
-      throw new Error(`Failed to trigger workflow: ${response.status} - ${rawWindmillResponse}`);
+      // Construct an error message for the AI to "say" in the chat
+      aiMessageContent = JSON.stringify({
+        type: 'error',
+        data: {
+          title: 'Erro no Fluxo de Trabalho',
+          message: `O Windmill retornou um erro (Status ${response.status}). Detalhes: ${rawWindmillResponse.substring(0, 200)}...`
+        }
+      });
+    } else {
+      // Workflow triggered successfully, now try to parse the response
+      try {
+        const windmillResponse = JSON.parse(rawWindmillResponse);
+        console.log('trigger-step: Received parsed response from Windmill:', JSON.stringify(windmillResponse));
+        aiMessageContent = JSON.stringify(windmillResponse); // Assume Windmill returns valid structured JSON
+      } catch (jsonError: any) {
+        console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
+        // If Windmill returns non-JSON, create an error message for the AI to "say"
+        aiMessageContent = JSON.stringify({
+          type: 'error',
+          data: {
+            title: 'Erro de Resposta da IA',
+            message: `O Windmill não retornou uma resposta JSON válida. Resposta recebida: ${rawWindmillResponse.substring(0, 200)}... Por favor, verifique o script do Windmill.`
+          }
+        });
+      }
     }
-    console.log('trigger-step: Workflow triggered successfully.');
 
-    // Capture the response from Windmill
-    console.log('trigger-step: Before parsing Windmill response.');
-    let windmillResponse;
-    try {
-      windmillResponse = JSON.parse(rawWindmillResponse); // Try to parse the pre-read text as JSON
-      console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
-    } catch (jsonError: any) {
-      console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
-      throw new Error(`Windmill returned non-JSON response: ${rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 100))}...`);
-    }
-
-    // Insert AI's response into chat_messages table
-    if (projectId && windmillResponse) {
+    // Insert AI's response (or error message) into chat_messages table
+    if (projectId) {
       console.log('trigger-step: Attempting to insert AI message into chat_messages.');
       const { error: insertAiMessageError } = await supabaseAdmin
         .from('chat_messages')
@@ -225,7 +239,7 @@ serve(async (req) => {
           project_id: projectId,
           user_id: user.id,
           author: 'ai',
-          content: JSON.stringify(windmillResponse),
+          content: aiMessageContent, // Use the determined content
           metadata: { current_step: project?.current_step || 0 },
         });
 
@@ -238,7 +252,10 @@ serve(async (req) => {
     console.log('trigger-step: End of try block, before final response.');
 
     // --- Respond Immediately to the Client ---
-    return new Response(JSON.stringify({ message: `Workflow triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
+    // Always return 200 OK if the Edge Function itself didn't crash,
+    // even if Windmill returned an error or non-JSON. The actual error
+    // will be in the chat message content.
+    return new Response(JSON.stringify({ message: `Workflow triggered successfully, response processed.`, aiResponseContent: aiMessageContent }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
