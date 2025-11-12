@@ -178,8 +178,9 @@ serve(async (req) => {
 
     // --- Execute Windmill Script and Poll for Result ---
     try {
+      console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL value from env:', windmillMasterScriptPath); // NOVO LOG
       const windmillExecutionUrl = `https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`;
-      console.log('trigger-step: Attempting to call Windmill at URL:', windmillExecutionUrl);
+      console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl); // Log mais explícito
       const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
@@ -262,7 +263,7 @@ serve(async (req) => {
                   });
                 } else if (resultData.result) {
                   const windmillResult = typeof resultData.result === 'string' 
-                    ? JSON.parse(windmillResult) 
+                    ? JSON.parse(resultData.result) 
                     : resultData.result;
                   
                   if (windmillResult.type === 'structured_response' && windmillResult.messages) {
