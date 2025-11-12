@@ -8,13 +8,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError } from '@/utils/toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import UsageHistory from '@/components/profile/UsageHistory';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BillingInfo from '@/components/profile/BillingInfo';
 import { useTranslation } from 'react-i18next';
 import FeedbackHistory from '@/components/profile/FeedbackHistory';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -29,6 +30,8 @@ const Profile = () => {
   const { user, session } = useSession();
   const [isSubmittingProfile, setIsSubmittingProfile] = useState(false);
   const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -43,6 +46,27 @@ const Profile = () => {
       password: '',
     },
   });
+
+  // Update default values when user data loads
+  useEffect(() => {
+    if (user) {
+      profileForm.reset({ fullName: user.full_name || '' });
+    }
+  }, [user, profileForm]);
+
+  // Handle payment success/cancellation from Stripe redirect
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const paymentStatus = queryParams.get('payment');
+
+    if (paymentStatus === 'success') {
+      showSuccess('toasts.plans.checkoutSuccess'); // Assuming you'll add this key to i18n
+      navigate(location.pathname, { replace: true }); // Clear query params
+    } else if (paymentStatus === 'cancelled') {
+      showError('toasts.plans.checkoutCancelled'); // Assuming you'll add this key to i18n
+      navigate(location.pathname, { replace: true }); // Clear query params
+    }
+  }, [location.search, navigate]);
 
   const onProfileSubmit = async (values: z.infer<typeof profileSchema>) => {
     if (!user) return;

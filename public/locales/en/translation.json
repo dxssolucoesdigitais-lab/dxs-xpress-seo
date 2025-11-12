@@ -9,7 +9,9 @@
       "bankInstructionsSent": "Bank transfer instructions sent to your email!",
       "loginRequired": "Please log in to select a plan.",
       "checkoutFailed": "Failed to initiate checkout. Please try again.",
-      "internationalPaymentsNotSupported": "International payments are not yet supported for this method."
+      "internationalPaymentsNotSupported": "International payments are not yet supported for this method.",
+      "checkoutSuccess": "Payment successful! Your plan has been updated.",
+      "checkoutCancelled": "Payment cancelled. You can try again anytime."
     },
     "feedback": {
       "success": "Feedback submitted successfully! Thank you for your contribution.",

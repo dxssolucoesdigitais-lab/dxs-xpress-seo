@@ -9,7 +9,9 @@
       "bankInstructionsSent": "Instruções de transferência bancária enviadas para seu e-mail!",
       "loginRequired": "Por favor, faça login para selecionar um plano.",
       "checkoutFailed": "Falha ao iniciar o checkout. Tente novamente.",
-      "internationalPaymentsNotSupported": "Pagamentos internacionais ainda não são suportados para este método."
+      "internationalPaymentsNotSupported": "Pagamentos internacionais ainda não são suportados para este método.",
+      "checkoutSuccess": "Pagamento realizado com sucesso! Seu plano foi atualizado.",
+      "checkoutCancelled": "Pagamento cancelado. Você pode tentar novamente a qualquer momento."
     },
     "feedback": {
       "success": "Feedback enviado com sucesso! Agradecemos sua contribuição.",
@@ -538,7 +540,7 @@
     "policyChangesTitle": "Alterações na Política de Privacidade",
     "policyChangesP1": "Nossa Política de Privacidade pode ser atualizada periodicamente. A versão mais atual será sempre publicada em nosso site, indicando a data da última revisão. Encorajamos você a revisar regularmente nossa política para estar sempre informado sobre como estamos protegendo seus dados.",
     "contactTitle": "Contato",
-    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
+    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
   },
   "signUpForm": {
     "title": "Crie sua conta",

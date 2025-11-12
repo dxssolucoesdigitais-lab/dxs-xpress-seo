@@ -16,6 +16,8 @@ declare module 'react-i18next' {
             loginRequired: string;
             checkoutFailed: string;
             internationalPaymentsNotSupported: string;
+            checkoutSuccess: string; // Adicionado
+            checkoutCancelled: string; // Adicionado
           };
           feedback: {
             success: string;
