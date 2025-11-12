@@ -20,7 +20,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL') // Agora é o PATH do script, não a URL completa
+    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
     const serpiApiKey = Deno.env.get('SERPI_API_KEY')
 
@@ -32,12 +32,11 @@ serve(async (req) => {
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
 
-
     const missingEnvVars = [];
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
     if (!serviceRoleKey) missingEnvVars.push('SUPABASE_SERVICE_ROLE_KEY');
     if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
-    if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL'); // Usando o nome original para o erro
+    if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL');
     if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
     if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY');
 
@@ -52,35 +51,49 @@ serve(async (req) => {
     console.log('trigger-step: All critical environment variables are present.');
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    const { projectId, userMessage } = await req.json();
+    const { projectId, userMessage, userId: userIdFromBody } = await req.json();
 
-    console.log('trigger-step: Request body parsed. projectId:', projectId, 'userMessage:', userMessage);
+    console.log('trigger-step: Request body parsed. projectId:', projectId, 'userMessage:', userMessage, 'userIdFromBody:', userIdFromBody);
 
-    // --- Fetch User Data (always needed for credit/role check) ---
-    const authHeader = req.headers.get('Authorization')!
-    console.log('trigger-step: Auth header present:', !!authHeader);
-    const { data: { user: authUser }, error: authUserError } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
-    
-    if (authUserError) {
-      console.error('trigger-step: Error fetching authenticated user:', authUserError.message);
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    // --- Determine currentUserId ---
+    let currentUserId: string | undefined;
+
+    if (userIdFromBody) {
+      currentUserId = userIdFromBody;
+      console.log('trigger-step: User ID determined from request body:', currentUserId);
+    } else {
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) {
+        console.error('trigger-step: No Authorization header found.');
+        return new Response(JSON.stringify({ error: 'Unauthorized: Missing Authorization header' }), {
+            status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user: authUser }, error: authUserError } = await supabaseAdmin.auth.getUser(token);
+
+      if (authUserError || !authUser) {
+        console.error('trigger-step: Error fetching authenticated user or user not found:', authUserError?.message);
+        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token or user not found' }), {
+            status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      currentUserId = authUser.id;
+      console.log('trigger-step: User ID determined from Authorization header:', currentUserId);
+    }
+
+    if (!currentUserId) {
+      console.error('trigger-step: Could not determine user ID after all attempts.');
+      return new Response(JSON.stringify({ error: 'Unauthorized: User ID could not be determined' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    if (!authUser) {
-        console.error('trigger-step: No authenticated user found.');
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-            status: 401,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-    }
-    console.log('trigger-step: Authenticated user ID:', authUser.id);
 
+    // --- Fetch User Data (using currentUserId) ---
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
       .select('id, credits_remaining, plan_type, role')
-      .eq('id', authUser.id)
+      .eq('id', currentUserId)
       .single();
 
     if (userError) {
@@ -88,7 +101,7 @@ serve(async (req) => {
       throw userError;
     }
     if (!user) {
-      console.error('trigger-step: User profile not found for ID:', authUser.id);
+      console.error('trigger-step: User profile not found for ID:', currentUserId);
       return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -165,8 +178,9 @@ serve(async (req) => {
 
     // --- Execute Windmill Script and Poll for Result ---
     try {
-      console.log('trigger-step: Calling Windmill jobs/run API for script:', windmillMasterScriptPath);
-      const executionResponse = await fetch(`https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`, {
+      const windmillExecutionUrl = `https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`;
+      console.log('trigger-step: Attempting to call Windmill at URL:', windmillExecutionUrl);
+      const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${windmillToken}`,
@@ -248,7 +262,7 @@ serve(async (req) => {
                   });
                 } else if (resultData.result) {
                   const windmillResult = typeof resultData.result === 'string' 
-                    ? JSON.parse(resultData.result) 
+                    ? JSON.parse(windmillResult) 
                     : resultData.result;
                   
                   if (windmillResult.type === 'structured_response' && windmillResult.messages) {

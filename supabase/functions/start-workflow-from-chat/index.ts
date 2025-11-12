@@ -84,7 +84,7 @@ serve(async (req) => {
     // Trigger the first step of the workflow via trigger-step (which then calls n8n)
     // The trigger-step function will handle inserting the initial userMessage into chat_messages.
     const { error: triggerError } = await supabaseAdmin.functions.invoke('trigger-step', {
-      body: { projectId: newProject.id, userMessage: prompt }, // Send initial prompt as userMessage
+      body: { projectId: newProject.id, userMessage: prompt, userId: user.id }, // Pass user.id explicitly
     });
 
     if (triggerError) {
