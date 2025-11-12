@@ -29,6 +29,8 @@ serve(async (req) => {
     const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
 
     console.log('trigger-step: Environment variables loaded.');
+    console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
+    console.log('trigger-step: SUPABASE_SERVICE_ROLE_KEY present:', !!serviceRoleKey);
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
     console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptUrl);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
@@ -37,11 +39,22 @@ serve(async (req) => {
     console.log('trigger-step: N8N_WEBHOOK_URL_STANDARD present:', !!n8nWebhookStandard);
     console.log('trigger-step: N8N_WEBHOOK_URL_PREMIUM present:', !!n8nWebhookPremium);
 
+    const missingEnvVars = [];
+    if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
+    if (!serviceRoleKey) missingEnvVars.push('SUPABASE_SERVICE_ROLE_KEY');
+    if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
+    if (!windmillMasterScriptUrl) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL');
+    if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
 
-    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillMasterScriptUrl || !openrouterApiKey) {
-      console.error('trigger-step: Missing critical environment variables (Supabase, Windmill, OpenRouter).');
-      throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
+    if (missingEnvVars.length > 0) {
+      const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
+      console.error(`trigger-step: ${errorMessage}`);
+      return new Response(JSON.stringify({ error: errorMessage }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
+    console.log('trigger-step: All critical environment variables are present.');
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
     const { projectId, userMessage } = await req.json();
@@ -189,8 +202,11 @@ serve(async (req) => {
       console.log('trigger-step: User plan:', userPlan, 'using n8n webhook:', targetWebhookUrl);
 
       if (!targetWebhookUrl) {
-        console.error(`trigger-step: n8n webhook URL for plan '${userPlan}' is not configured.`);
-        throw new Error(`n8n webhook URL for plan '${userPlan}' is not configured.`);
+        const errorMessage = `n8n webhook URL for plan '${userPlan}' is not configured. Missing env var: N8N_WEBHOOK_URL_${userPlan.toUpperCase()}.`;
+        console.error(`trigger-step: ${errorMessage}`);
+        return new Response(JSON.stringify({ error: errorMessage }), {
+          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
       }
     }
 
@@ -243,9 +259,8 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("trigger-step: Unhandled error in Edge Function:", error.message);
-    console.error("trigger-step: Full error object:", error); // Log the full error object
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("trigger-step: Unhandled error in Edge Function:", error); // Log the full error object
+    return new Response(JSON.stringify({ error: error.message || "An unknown error occurred in the Edge Function." }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
