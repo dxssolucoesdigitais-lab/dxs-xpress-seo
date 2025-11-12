@@ -20,15 +20,15 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')
+    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL') // Agora é o PATH do script, não a URL completa
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
-    const serpiApiKey = Deno.env.get('SERPI_API_KEY') // Adicionado SerpiAPI Key
+    const serpiApiKey = Deno.env.get('SERPI_API_KEY')
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
     console.log('trigger-step: SUPABASE_SERVICE_ROLE_KEY present:', !!serviceRoleKey);
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
-    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptUrl);
+    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
 
@@ -37,9 +37,9 @@ serve(async (req) => {
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
     if (!serviceRoleKey) missingEnvVars.push('SUPABASE_SERVICE_ROLE_KEY');
     if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
-    if (!windmillMasterScriptUrl) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL');
+    if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL'); // Usando o nome original para o erro
     if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
-    if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY'); // SerpiAPI Key também é crítica
+    if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY');
 
     if (missingEnvVars.length > 0) {
       const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
@@ -130,6 +130,17 @@ serve(async (req) => {
     }
     console.log('trigger-step: Credit check passed.');
 
+    // --- Determine Windmill Action ---
+    let acao: string;
+    if (!projectId) {
+      acao = "start_new_project";
+    } else if (user.role === 'admin') {
+      acao = "demo_rapida";
+    } else {
+      acao = "continue_workflow";
+    }
+    console.log('trigger-step: Windmill action determined:', acao);
+
     // --- Insert user's message into chat_messages table (OPTIMISTIC UI) ---
     if (projectId && userMessage) {
       console.log('trigger-step: Attempting to insert user message into chat_messages.');
@@ -150,84 +161,145 @@ serve(async (req) => {
       }
     }
 
-
-    // --- Select Webhook (always Windmill Master Script) ---
-    const targetWebhookUrl = windmillMasterScriptUrl;
-    const targetWebhookHeaders = { 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${windmillToken}`,
-    };
-    
-    let payloadBody: any = {
-      projectId: projectId,
-      userId: user.id,
-      planType: user.plan_type,
-      userRole: user.role,
-      currentStep: project?.current_step || 0,
-      projectData: project,
-      userMessage: userMessage || null,
-      supabase_url: supabaseUrl,
-      supabase_key: serviceRoleKey,
-      openrouter_key: openrouterApiKey,
-      serpi_api_key: serpiApiKey, // Passa a chave SerpiAPI
-    };
-
-    // If it's a new project, set a specific action for Windmill
-    if (!projectId) {
-      payloadBody.acao = "start_new_project"; // Ação para iniciar um novo projeto no Windmill
-    } else if (user.role === 'admin') {
-      payloadBody.acao = "demo_rapida"; // Ação para admin
-    } else {
-      payloadBody.acao = "continue_workflow"; // Ação para continuar o workflow existente
-    }
-
-    console.log('trigger-step: Using Windmill master script:', targetWebhookUrl);
-    console.log('trigger-step: Payload action:', payloadBody.acao);
-
-
-    // --- Trigger Workflow ---
-    console.log('trigger-step: Before calling external webhook:', targetWebhookUrl);
-    const response = await fetch(targetWebhookUrl, {
-      method: 'POST',
-      headers: targetWebhookHeaders,
-      body: JSON.stringify(payloadBody),
-    });
-    console.log('trigger-step: After calling external webhook. Response status:', response.status);
-    console.log('trigger-step: Windmill Response Content-Type:', response.headers.get('Content-Type'));
-
-    // Read the response body ONCE as text
-    const rawWindmillResponse = await response.text();
-    console.log('trigger-step: Raw Windmill response body:', rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 500))); // Log first 500 chars
-
     let aiMessageContent: string; // This will be the content for chat_messages.content
 
-    if (!response.ok) {
-      console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${rawWindmillResponse}`);
-      // Construct an error message for the AI to "say" in the chat
-      aiMessageContent = JSON.stringify({
-        type: 'error',
-        data: {
-          title: 'Erro no Fluxo de Trabalho',
-          message: `O Windmill retornou um erro (Status ${response.status}). Detalhes: ${rawWindmillResponse.substring(0, 200)}...`
-        }
+    // --- Execute Windmill Script and Poll for Result ---
+    try {
+      console.log('trigger-step: Calling Windmill jobs/run API for script:', windmillMasterScriptPath);
+      const executionResponse = await fetch(`https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${windmillToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          args: {
+            userMessage: userMessage,
+            projectId: projectId,
+            userId: user.id,
+            planType: user.plan_type,
+            userRole: user.role,
+            currentStep: project?.current_step || 0,
+            projectData: project,
+            supabase_url: supabaseUrl,
+            supabase_key: serviceRoleKey,
+            openrouter_key: openrouterApiKey,
+            serpi_api_key: serpiApiKey,
+            acao: acao
+          }
+        })
       });
-    } else {
-      // Workflow triggered successfully, now try to parse the response
-      try {
-        const windmillResponse = JSON.parse(rawWindmillResponse);
-        console.log('trigger-step: Received parsed response from Windmill:', JSON.stringify(windmillResponse));
-        aiMessageContent = JSON.stringify(windmillResponse); // Assume Windmill returns valid structured JSON
-      } catch (jsonError: any) {
-        console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
-        // If Windmill returns non-JSON, create an error message for the AI to "say"
+
+      const executionText = await executionResponse.text();
+      console.log('trigger-step: Windmill execution response status:', executionResponse.status);
+      console.log('trigger-step: Windmill execution response body (first 200 chars):', executionText.substring(0, Math.min(executionText.length, 200)));
+
+      if (!executionResponse.ok) {
+        console.error('trigger-step: Windmill Execution Error:', executionResponse.status, executionText);
         aiMessageContent = JSON.stringify({
           type: 'error',
           data: {
-            title: 'Erro de Resposta da IA',
-            message: `O Windmill não retornou uma resposta JSON válida. Resposta recebida: ${rawWindmillResponse.substring(0, 200)}... Por favor, verifique o script do Windmill.`
+            title: 'Erro na Execução do Windmill',
+            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Detalhes: ${executionText.substring(0, 200)}...`
           }
         });
+      } else {
+        let executionId;
+        try {
+          const executionData = JSON.parse(executionText);
+          executionId = executionData.id || executionData;
+        } catch (parseError: any) {
+          executionId = executionText.trim();
+          console.warn('trigger-step: Could not parse Windmill execution response as JSON, using raw text as ID:', executionId, 'Error:', parseError.message);
+        }
+
+        console.log('trigger-step: Windmill Execution ID:', executionId);
+
+        const maxAttempts = 15;
+        const delayMs = 1500;
+        let pollingSuccess = false;
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          await new Promise(resolve => setTimeout(resolve, delayMs));
+          
+          console.log(`trigger-step: Polling attempt ${attempt + 1} for Windmill job ${executionId}`);
+          const resultResponse = await fetch(`https://app.windmill.dev/api/w/jobs/${executionId}/result`, {
+            headers: {
+              'Authorization': `Bearer ${windmillToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (resultResponse.ok) {
+            const resultText = await resultResponse.text();
+            console.log(`trigger-step: Attempt ${attempt + 1} result (first 200 chars):`, resultText.substring(0, Math.min(resultText.length, 200)));
+            
+            try {
+              const resultData = JSON.parse(resultText);
+              
+              // CRITICAL CHECK: Process structured response from Windmill
+              if (resultData && (resultData.completed || resultData.type === 'structured_response' || resultData.result)) {
+                let finalResponseContent: string;
+                
+                if (resultData.type === 'structured_response' && resultData.messages) {
+                  finalResponseContent = JSON.stringify({
+                    type: 'text',
+                    data: resultData.messages.map((msg: any) => msg.data || msg.content).join('\n\n')
+                  });
+                } else if (resultData.result) {
+                  const windmillResult = typeof resultData.result === 'string' 
+                    ? JSON.parse(resultData.result) 
+                    : resultData.result;
+                  
+                  if (windmillResult.type === 'structured_response' && windmillResult.messages) {
+                    finalResponseContent = JSON.stringify({
+                      type: 'text',
+                      data: windmillResult.messages.map((msg: any) => msg.data || msg.content).join('\n\n')
+                    });
+                  } else if (windmillResult.type && windmillResult.data) {
+                    finalResponseContent = JSON.stringify(windmillResult);
+                  } else {
+                    finalResponseContent = JSON.stringify({ type: 'text', data: JSON.stringify(windmillResult) });
+                  }
+                } else if (resultData.type && resultData.data) {
+                   finalResponseContent = JSON.stringify(resultData);
+                }
+                else {
+                  finalResponseContent = JSON.stringify({ type: 'text', data: JSON.stringify(resultData) });
+                }
+                
+                aiMessageContent = finalResponseContent;
+                pollingSuccess = true;
+                break; // Exit polling loop
+              }
+            } catch (parseError: any) {
+              console.log(`trigger-step: Attempt ${attempt + 1}: Parsing error, continuing polling...`, parseError.message);
+              // Continues polling
+            }
+          } else {
+            console.log(`trigger-step: Attempt ${attempt + 1}: Result not ready, status: ${resultResponse.status}`);
+          }
+        }
+
+        if (!pollingSuccess) {
+          aiMessageContent = JSON.stringify({
+            type: 'error',
+            data: {
+              title: 'Erro no Fluxo de Trabalho',
+              message: `Timeout aguardando resposta do Windmill para execução ${executionId}.`
+            }
+          });
+        }
       }
+    } catch (windmillError: any) {
+      console.error('trigger-step: Error during Windmill interaction:', windmillError);
+      aiMessageContent = JSON.stringify({
+        type: 'error',
+        data: {
+          title: 'Erro Interno da IA',
+          message: `Ocorreu um erro ao interagir com o sistema de IA: ${windmillError.message.substring(0, 200)}...`
+        }
+      });
     }
 
     // Insert AI's response (or error message) into chat_messages table
@@ -239,7 +311,7 @@ serve(async (req) => {
           project_id: projectId,
           user_id: user.id,
           author: 'ai',
-          content: aiMessageContent, // Use the determined content
+          content: aiMessageContent,
           metadata: { current_step: project?.current_step || 0 },
         });
 
@@ -261,7 +333,7 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("trigger-step: Unhandled error in Edge Function:", error); // Log the full error object
+    console.error("trigger-step: Unhandled error in Edge Function:", error);
     return new Response(JSON.stringify({ error: error.message || "An unknown error occurred in the Edge Function." }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
