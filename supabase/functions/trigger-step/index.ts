@@ -24,11 +24,14 @@ serve(async (req) => {
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
     const serpiApiKey = Deno.env.get('SERPI_API_KEY')
 
+    // NOVO LOG: Exibe o valor bruto da variável de ambiente
+    console.log(`trigger-step: DEBUG - WINDMILL_MASTER_SCRIPT_URL raw value: "${windmillMasterScriptPath}"`);
+
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
     console.log('trigger-step: SUPABASE_SERVICE_ROLE_KEY present:', !!serviceRoleKey);
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
-    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
+    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptPath);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
 
@@ -178,9 +181,8 @@ serve(async (req) => {
 
     // --- Execute Windmill Script and Poll for Result ---
     try {
-      console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL value from env:', windmillMasterScriptPath); // NOVO LOG
       const windmillExecutionUrl = `https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`;
-      console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl); // Log mais explícito
+      console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl);
       const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
@@ -215,7 +217,7 @@ serve(async (req) => {
           type: 'error',
           data: {
             title: 'Erro na Execução do Windmill',
-            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Detalhes: ${executionText.substring(0, 200)}...`
+            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Verifique se a variável de ambiente WINDMILL_MASTER_SCRIPT_URL está correta. O valor lido foi: "${windmillMasterScriptPath}". Detalhes: ${executionText.substring(0, 200)}...`
           }
         });
       } else {
