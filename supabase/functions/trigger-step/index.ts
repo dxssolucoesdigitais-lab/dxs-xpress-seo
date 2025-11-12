@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { createClient } = 'https://esm.sh/@supabase/supabase-js@2.45.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -193,6 +193,8 @@ serve(async (req) => {
       body: JSON.stringify(payloadBody),
     });
     console.log('trigger-step: After calling external webhook. Response status:', response.status);
+    console.log('trigger-step: Windmill Response Content-Type:', response.headers.get('Content-Type'));
+
 
     if (!response.ok) {
       const errorBody = await response.text();
@@ -203,8 +205,15 @@ serve(async (req) => {
 
     // Capture the response from Windmill
     console.log('trigger-step: Before parsing Windmill response.');
-    const windmillResponse = await response.json();
-    console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
+    let windmillResponse;
+    try {
+      windmillResponse = await response.json();
+      console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
+    } catch (jsonError: any) {
+      const rawWindmillResponse = await response.text();
+      console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
+      throw new Error(`Windmill returned non-JSON response: ${rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 100))}...`);
+    }
 
     // Insert AI's response into chat_messages table
     if (projectId && windmillResponse) {
