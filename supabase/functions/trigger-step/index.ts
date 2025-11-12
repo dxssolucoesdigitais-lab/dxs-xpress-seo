@@ -213,6 +213,31 @@ serve(async (req) => {
     }
     console.log('trigger-step: Workflow triggered successfully.');
 
+    // Capture the response from Windmill
+    const windmillResponse = await response.json(); // Assuming Windmill returns JSON
+    console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
+
+    // Insert AI's response into chat_messages table
+    if (projectId && windmillResponse) {
+      console.log('trigger-step: Attempting to insert AI message into chat_messages.');
+      const { error: insertAiMessageError } = await supabaseAdmin
+        .from('chat_messages')
+        .insert({
+          project_id: projectId,
+          user_id: user.id, // Use the authenticated user's ID
+          author: 'ai',
+          content: JSON.stringify(windmillResponse), // Store the full structured JSON from Windmill
+          metadata: { current_step: project?.current_step || 0 }, // Add current_step to metadata
+        });
+
+      if (insertAiMessageError) {
+        console.error('trigger-step: Error inserting AI message into chat_messages:', insertAiMessageError);
+        // Don't throw, just log the error, as the workflow might still be considered "triggered"
+      } else {
+        console.log('trigger-step: AI message inserted into chat_messages.');
+      }
+    }
+
     // --- Respond Immediately to the Client ---
     return new Response(JSON.stringify({ message: `Workflow triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
       status: 200,
