@@ -14,15 +14,15 @@ serve(async (req) => {
   console.log('trigger-step: Function started.');
 
   try {
+    console.log('trigger-step: Start of try block.');
+
     // --- Environment & Client Setup ---
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    // ATUALIZE ESTA URL COM A URL REAL DO SEU SCRIPT WINDMILL
-    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL') // Nova variável de ambiente para a URL do script master
-    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY') // Nova variável para OpenRouter
+    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
 
-    // Get webhook URLs for each plan from environment variables (n8n still in standby)
     const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
     const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
     const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
@@ -44,7 +44,7 @@ serve(async (req) => {
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    const { projectId, userMessage } = await req.json(); // Recebe userMessage opcionalmente
+    const { projectId, userMessage } = await req.json();
 
     console.log('trigger-step: Request body parsed. projectId:', projectId, 'userMessage:', userMessage);
 
@@ -90,6 +90,7 @@ serve(async (req) => {
     // --- Project Data (only if projectId is provided) ---
     let project = null;
     if (projectId) {
+      console.log('trigger-step: Fetching project data for projectId:', projectId);
       const { data: projectData, error: projectError } = await supabaseAdmin
         .from('projects')
         .select('*')
@@ -113,7 +114,6 @@ serve(async (req) => {
     }
 
     // --- Credit Gatekeeper Logic: Only for NEW projects/conversations ---
-    // If projectId is null, it means a new conversation is being initiated.
     if (!projectId && user.role !== 'admin' && user.credits_remaining <= 0) {
       console.warn('trigger-step: Insufficient credits for new conversation for user:', user.id);
       return new Response(JSON.stringify({ error: 'Insufficient credits to start a new conversation.' }), {
@@ -123,7 +123,6 @@ serve(async (req) => {
     console.log('trigger-step: Credit check passed.');
 
     // --- Insert user's message into chat_messages table (OPTIMISTIC UI) ---
-    // This ensures the user's message appears immediately in the UI via real-time subscription.
     if (projectId && userMessage) {
       console.log('trigger-step: Attempting to insert user message into chat_messages.');
       const { error: insertMessageError } = await supabaseAdmin
@@ -133,12 +132,11 @@ serve(async (req) => {
           user_id: user.id,
           author: 'user',
           content: userMessage,
-          metadata: { current_step: project?.current_step || 0 }, // Adiciona o current_step ao metadata
+          metadata: { current_step: project?.current_step || 0 },
         });
 
       if (insertMessageError) {
         console.error('trigger-step: Error inserting user message into chat_messages:', insertMessageError);
-        // Don't throw, try to proceed with n8n call if message insertion failed
       } else {
         console.log('trigger-step: User message inserted into chat_messages.');
       }
@@ -153,26 +151,24 @@ serve(async (req) => {
       userId: user.id,
       planType: user.plan_type,
       userRole: user.role,
-      currentStep: project?.current_step || 0, // Pass current step if project exists
-      projectData: project, // Pass full project data if exists
-      userMessage: userMessage || null, // Inclui a mensagem do usuário no payload
+      currentStep: project?.current_step || 0,
+      projectData: project,
+      userMessage: userMessage || null,
     };
 
     if (user.role === 'admin') {
-      // Use Windmill for admin
-      targetWebhookUrl = windmillMasterScriptUrl; // Usa a nova variável
+      targetWebhookUrl = windmillMasterScriptUrl;
       targetWebhookHeaders['Authorization'] = `Bearer ${windmillToken}`;
       payloadBody = {
         ...payloadBody,
-        acao: "demo_rapida", // Ação específica para o script Windmill
+        acao: "demo_rapida",
         supabase_url: supabaseUrl,
-        supabase_key: serviceRoleKey, // Passa a service_role_key como supabase_key
-        openrouter_key: Deno.env.get('OPENROUTER_API_KEY'), // Passa a chave OpenRouter
-        serpi_api_key: Deno.env.get('SERPI_API_KEY'), // Passa a chave SerpiAPI
+        supabase_key: serviceRoleKey,
+        openrouter_key: Deno.env.get('OPENROUTER_API_KEY'),
+        serpi_api_key: Deno.env.get('SERPI_API_KEY'),
       };
       console.log('trigger-step: User is admin, using Windmill master script:', targetWebhookUrl);
     } else {
-      // Keep n8n for other plans for now
       const userPlan = user.plan_type || 'free';
       switch (userPlan) {
         case 'free':
@@ -188,7 +184,7 @@ serve(async (req) => {
           targetWebhookUrl = n8nWebhookPremium;
           break;
         default:
-          targetWebhookUrl = n8nWebhookFree; // Fallback to free plan
+          targetWebhookUrl = n8nWebhookFree;
       }
       console.log('trigger-step: User plan:', userPlan, 'using n8n webhook:', targetWebhookUrl);
 
@@ -199,12 +195,13 @@ serve(async (req) => {
     }
 
     // --- Trigger Workflow ---
-    console.log('trigger-step: Attempting to call webhook:', targetWebhookUrl);
+    console.log('trigger-step: Before calling external webhook:', targetWebhookUrl);
     const response = await fetch(targetWebhookUrl, {
       method: 'POST',
       headers: targetWebhookHeaders,
       body: JSON.stringify(payloadBody),
     });
+    console.log('trigger-step: After calling external webhook. Response status:', response.status);
 
     if (!response.ok) {
       const errorBody = await response.text();
@@ -214,7 +211,8 @@ serve(async (req) => {
     console.log('trigger-step: Workflow triggered successfully.');
 
     // Capture the response from Windmill
-    const windmillResponse = await response.json(); // Assuming Windmill returns JSON
+    console.log('trigger-step: Before parsing Windmill response.');
+    const windmillResponse = await response.json();
     console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
 
     // Insert AI's response into chat_messages table
@@ -224,19 +222,19 @@ serve(async (req) => {
         .from('chat_messages')
         .insert({
           project_id: projectId,
-          user_id: user.id, // Use the authenticated user's ID
+          user_id: user.id,
           author: 'ai',
-          content: JSON.stringify(windmillResponse), // Store the full structured JSON from Windmill
-          metadata: { current_step: project?.current_step || 0 }, // Add current_step to metadata
+          content: JSON.stringify(windmillResponse),
+          metadata: { current_step: project?.current_step || 0 },
         });
 
       if (insertAiMessageError) {
         console.error('trigger-step: Error inserting AI message into chat_messages:', insertAiMessageError);
-        // Don't throw, just log the error, as the workflow might still be considered "triggered"
       } else {
         console.log('trigger-step: AI message inserted into chat_messages.');
       }
     }
+    console.log('trigger-step: End of try block, before final response.');
 
     // --- Respond Immediately to the Client ---
     return new Response(JSON.stringify({ message: `Workflow triggered successfully for plan '${user.plan_type}' (role: ${user.role}).` }), {
@@ -246,6 +244,7 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("trigger-step: Unhandled error in Edge Function:", error.message);
+    console.error("trigger-step: Full error object:", error); // Log the full error object
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
