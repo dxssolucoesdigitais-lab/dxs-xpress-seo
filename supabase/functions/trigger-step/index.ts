@@ -22,11 +22,7 @@ serve(async (req) => {
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
     const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
-
-    const n8nWebhookFree = Deno.env.get('N8N_WEBHOOK_URL_FREE')
-    const n8nWebhookBasic = Deno.env.get('N8N_WEBHOOK_URL_BASIC')
-    const n8nWebhookStandard = Deno.env.get('N8N_WEBHOOK_URL_STANDARD')
-    const n8nWebhookPremium = Deno.env.get('N8N_WEBHOOK_URL_PREMIUM')
+    const serpiApiKey = Deno.env.get('SERPI_API_KEY') // Adicionado SerpiAPI Key
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
@@ -34,10 +30,8 @@ serve(async (req) => {
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
     console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptUrl);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
-    console.log('trigger-step: N8N_WEBHOOK_URL_FREE present:', !!n8nWebhookFree);
-    console.log('trigger-step: N8N_WEBHOOK_URL_BASIC present:', !!n8nWebhookBasic);
-    console.log('trigger-step: N8N_WEBHOOK_URL_STANDARD present:', !!n8nWebhookStandard);
-    console.log('trigger-step: N8N_WEBHOOK_URL_PREMIUM present:', !!n8nWebhookPremium);
+    console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
+
 
     const missingEnvVars = [];
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
@@ -45,6 +39,7 @@ serve(async (req) => {
     if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
     if (!windmillMasterScriptUrl) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL');
     if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
+    if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY'); // SerpiAPI Key também é crítica
 
     if (missingEnvVars.length > 0) {
       const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
@@ -156,9 +151,13 @@ serve(async (req) => {
     }
 
 
-    // --- Select Webhook based on User Role (Admin Override) or Plan ---
-    let targetWebhookUrl;
-    let targetWebhookHeaders = { 'Content-Type': 'application/json' };
+    // --- Select Webhook (always Windmill Master Script) ---
+    const targetWebhookUrl = windmillMasterScriptUrl;
+    const targetWebhookHeaders = { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${windmillToken}`,
+    };
+    
     let payloadBody: any = {
       projectId: projectId,
       userId: user.id,
@@ -167,48 +166,24 @@ serve(async (req) => {
       currentStep: project?.current_step || 0,
       projectData: project,
       userMessage: userMessage || null,
+      supabase_url: supabaseUrl,
+      supabase_key: serviceRoleKey,
+      openrouter_key: openrouterApiKey,
+      serpi_api_key: serpiApiKey, // Passa a chave SerpiAPI
     };
 
-    if (user.role === 'admin') {
-      targetWebhookUrl = windmillMasterScriptUrl;
-      targetWebhookHeaders['Authorization'] = `Bearer ${windmillToken}`;
-      payloadBody = {
-        ...payloadBody,
-        acao: "demo_rapida",
-        supabase_url: supabaseUrl,
-        supabase_key: serviceRoleKey,
-        openrouter_key: Deno.env.get('OPENROUTER_API_KEY'),
-        serpi_api_key: Deno.env.get('SERPI_API_KEY'),
-      };
-      console.log('trigger-step: User is admin, using Windmill master script:', targetWebhookUrl);
+    // If it's a new project, set a specific action for Windmill
+    if (!projectId) {
+      payloadBody.acao = "start_new_project"; // Ação para iniciar um novo projeto no Windmill
+    } else if (user.role === 'admin') {
+      payloadBody.acao = "demo_rapida"; // Ação para admin
     } else {
-      const userPlan = user.plan_type || 'free';
-      switch (userPlan) {
-        case 'free':
-          targetWebhookUrl = n8nWebhookFree;
-          break;
-        case 'basic':
-          targetWebhookUrl = n8nWebhookBasic;
-          break;
-        case 'standard':
-          targetWebhookUrl = n8nWebhookStandard;
-          break;
-        case 'premium':
-          targetWebhookUrl = n8nWebhookPremium;
-          break;
-        default:
-          targetWebhookUrl = n8nWebhookFree;
-      }
-      console.log('trigger-step: User plan:', userPlan, 'using n8n webhook:', targetWebhookUrl);
-
-      if (!targetWebhookUrl) {
-        const errorMessage = `n8n webhook URL for plan '${userPlan}' is not configured. Missing env var: N8N_WEBHOOK_URL_${userPlan.toUpperCase()}.`;
-        console.error(`trigger-step: ${errorMessage}`);
-        return new Response(JSON.stringify({ error: errorMessage }), {
-          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
+      payloadBody.acao = "continue_workflow"; // Ação para continuar o workflow existente
     }
+
+    console.log('trigger-step: Using Windmill master script:', targetWebhookUrl);
+    console.log('trigger-step: Payload action:', payloadBody.acao);
+
 
     // --- Trigger Workflow ---
     console.log('trigger-step: Before calling external webhook:', targetWebhookUrl);
