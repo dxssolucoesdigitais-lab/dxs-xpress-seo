@@ -195,20 +195,21 @@ serve(async (req) => {
     console.log('trigger-step: After calling external webhook. Response status:', response.status);
     console.log('trigger-step: Windmill Response Content-Type:', response.headers.get('Content-Type'));
 
+    // Read the response body ONCE as text
+    const rawWindmillResponse = await response.text();
+    console.log('trigger-step: Raw Windmill response body:', rawWindmillResponse.substring(0, Math.min(rawWindmillResponse.length, 500))); // Log first 500 chars
 
     if (!response.ok) {
-      const errorBody = await response.text(); // Read once for error logging
-      console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${errorBody}`);
-      throw new Error(`Failed to trigger workflow: ${response.status} - ${errorBody}`);
+      console.error(`trigger-step: Failed to trigger workflow. Status: ${response.status}, Body: ${rawWindmillResponse}`);
+      throw new Error(`Failed to trigger workflow: ${response.status} - ${rawWindmillResponse}`);
     }
     console.log('trigger-step: Workflow triggered successfully.');
 
     // Capture the response from Windmill
     console.log('trigger-step: Before parsing Windmill response.');
     let windmillResponse;
-    const rawWindmillResponse = await response.text(); // Read the body once as text
     try {
-      windmillResponse = JSON.parse(rawWindmillResponse); // Try to parse the text as JSON
+      windmillResponse = JSON.parse(rawWindmillResponse); // Try to parse the pre-read text as JSON
       console.log('trigger-step: Received response from Windmill:', JSON.stringify(windmillResponse));
     } catch (jsonError: any) {
       console.error(`trigger-step: Error parsing Windmill response as JSON: ${jsonError.message}. Raw response: ${rawWindmillResponse}`);
