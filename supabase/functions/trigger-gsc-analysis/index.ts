@@ -15,11 +15,10 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
-    // ATUALIZE ESTA URL COM A URL REAL DO SEU SCRIPT WINDMILL
-    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')! // Nova variável de ambiente para a URL do script master
-    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')! // Nova variável para OpenRouter
+    const windmillGSCAnalysisWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_GSC_ANALYSIS')! // Nova variável
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')!
 
-    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillMasterScriptUrl || !openrouterApiKey) {
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillGSCAnalysisWebhookUrl || !openrouterApiKey) {
       throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
     
@@ -72,18 +71,15 @@ serve(async (req) => {
     if (updateIntentError) throw updateIntentError;
 
     // --- Trigger Windmill Workflow for GSC Analysis ---
-    // Usando a URL do script master para análise GSC
-    const windmillGSCAnalysisWebhookUrl = windmillMasterScriptUrl;
-    
     const payload = {
-      acao: "start_gsc_analysis", // Ação específica para o script Windmill
+      acao: "start_gsc_analysis",
       projectId: projectId,
       userId: user.id,
       paymentIntentId: paymentIntent.id,
       supabase_url: supabaseUrl,
       supabase_key: serviceRoleKey,
       openrouter_key: openrouterApiKey,
-      serpi_api_key: Deno.env.get('SERPI_API_KEY'), // Passa a chave SerpiAPI
+      serpi_api_key: Deno.env.get('SERPI_API_KEY'),
     };
 
     fetch(windmillGSCAnalysisWebhookUrl, {

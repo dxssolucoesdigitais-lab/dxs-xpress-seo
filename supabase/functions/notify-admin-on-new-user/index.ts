@@ -15,18 +15,15 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
-    // ATUALIZE ESTA URL COM A URL REAL DO SEU SCRIPT WINDMILL
-    const windmillMasterScriptUrl = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')! // Nova variável de ambiente para a URL do script master
-    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')! // Nova variável para OpenRouter
+    const windmillAdminNotificationWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_ADMIN_NOTIFICATION')! // Nova variável
+    const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')!
 
-    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillMasterScriptUrl || !openrouterApiKey) {
+    if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillAdminNotificationWebhookUrl || !openrouterApiKey) {
       throw new Error("Missing critical environment variables (Supabase, Windmill, OpenRouter).");
     }
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
-    // This function is triggered by a database event, so it receives the new user record directly.
-    // No need for Authorization header verification here.
     const { record: newUser } = await req.json();
 
     if (!newUser || !newUser.id) {
@@ -37,11 +34,8 @@ serve(async (req) => {
     }
 
     // --- Trigger Windmill Workflow for Admin Notification ---
-    // Usando a URL do script master para notificação de novo usuário
-    const windmillAdminNotificationWebhookUrl = windmillMasterScriptUrl;
-    
     const payload = {
-      acao: "notify_new_user", // Ação específica para o script Windmill
+      acao: "notify_new_user",
       userId: newUser.id,
       userEmail: newUser.email,
       userName: newUser.full_name,
@@ -50,7 +44,7 @@ serve(async (req) => {
       supabase_url: supabaseUrl,
       supabase_key: serviceRoleKey,
       openrouter_key: openrouterApiKey,
-      serpi_api_key: Deno.env.get('SERPI_API_KEY'), // Passa a chave SerpiAPI
+      serpi_api_key: Deno.env.get('SERPI_API_KEY'),
     };
 
     fetch(windmillAdminNotificationWebhookUrl, {

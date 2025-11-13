@@ -20,18 +20,17 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_URL')
+    const windmillBaseUrl = Deno.env.get('WINDMILL_BASE_URL') // Nova variável
+    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_PATH') // Nova variável
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
     const serpiApiKey = Deno.env.get('SERPI_API_KEY')
-
-    // NOVO LOG: Exibe o valor bruto da variável de ambiente
-    console.log(`trigger-step: DEBUG - WINDMILL_MASTER_SCRIPT_URL raw value: "${windmillMasterScriptPath}"`);
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
     console.log('trigger-step: SUPABASE_SERVICE_ROLE_KEY present:', !!serviceRoleKey);
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
-    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_URL present:', !!windmillMasterScriptPath);
+    console.log('trigger-step: WINDMILL_BASE_URL present:', !!windmillBaseUrl);
+    console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
     console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
 
@@ -39,7 +38,8 @@ serve(async (req) => {
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
     if (!serviceRoleKey) missingEnvVars.push('SUPABASE_SERVICE_ROLE_KEY');
     if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
-    if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_URL');
+    if (!windmillBaseUrl) missingEnvVars.push('WINDMILL_BASE_URL');
+    if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_PATH');
     if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
     if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY');
 
@@ -181,7 +181,8 @@ serve(async (req) => {
 
     // --- Execute Windmill Script and Poll for Result ---
     try {
-      const windmillExecutionUrl = `https://app.windmill.dev/api/w/${windmillMasterScriptPath}/jobs/run`;
+      // Construct the Windmill execution URL correctly
+      const windmillExecutionUrl = `${windmillBaseUrl}/${windmillMasterScriptPath}/jobs/run`;
       console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl);
       const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
@@ -217,7 +218,7 @@ serve(async (req) => {
           type: 'error',
           data: {
             title: 'Erro na Execução do Windmill',
-            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Verifique se a variável de ambiente WINDMILL_MASTER_SCRIPT_URL está correta. O valor lido foi: "${windmillMasterScriptPath}". Detalhes: ${executionText.substring(0, 200)}...`
+            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Verifique se as variáveis de ambiente WINDMILL_BASE_URL e WINDMILL_MASTER_SCRIPT_PATH estão corretas. O valor lido para a URL foi: "${windmillExecutionUrl}". Detalhes: ${executionText.substring(0, 200)}...`
           }
         });
       } else {
@@ -240,7 +241,7 @@ serve(async (req) => {
           await new Promise(resolve => setTimeout(resolve, delayMs));
           
           console.log(`trigger-step: Polling attempt ${attempt + 1} for Windmill job ${executionId}`);
-          const resultResponse = await fetch(`https://app.windmill.dev/api/w/jobs/${executionId}/result`, {
+          const resultResponse = await fetch(`${windmillBaseUrl}/jobs/${executionId}/result`, { // Usando windmillBaseUrl
             headers: {
               'Authorization': `Bearer ${windmillToken}`,
               'Content-Type': 'application/json'
