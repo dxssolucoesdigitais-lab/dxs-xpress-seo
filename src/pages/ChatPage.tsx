@@ -13,7 +13,9 @@ import { useSession } from '@/contexts/SessionContext';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { StructuredChatContent, ChatMessage } from '@/types/chat.types';
-import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt'; // Ensure EmptyChatPrompt is imported here
+import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt';
+import { Button } from '@/components/ui/button';
+import { MessageSquarePlus } from 'lucide-react';
 
 const ChatPage: React.FC = () => {
   const { t } = useTranslation();
@@ -150,6 +152,14 @@ const ChatPage: React.FC = () => {
     setCurrentProjectId(newProjectId);
   }, []);
 
+  const showNewConversationButton = useMemo(() => {
+    return project && (project.status === 'completed' || project.status === 'error');
+  }, [project]);
+
+  const handleStartNewConversationFromExisting = () => {
+    navigate('/chat'); // This will clear paramProjectId and trigger EmptyChatPrompt
+  };
+
   if (projectLoading) {
     return (
       <div className="flex flex-col h-full">
@@ -178,13 +188,26 @@ const ChatPage: React.FC = () => {
             projectId={currentProjectId} 
           />
           {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
-          <ChatInput 
-            project={project} 
-            isDisabled={isChatInputDisabled} 
-            onNewProjectCreated={handleNewProjectCreated} 
-            onOptimisticMessageAdd={addOptimisticMessage}
-            onOptimisticMessageRemove={removeOptimisticMessage}
-          />
+          {showNewConversationButton ? (
+            <div className="p-4 bg-background border-t border-border flex justify-center">
+              <Button
+                size="lg"
+                onClick={handleStartNewConversationFromExisting}
+                className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold transition-all duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px"
+              >
+                <MessageSquarePlus className="mr-2 h-5 w-5" />
+                {t('emptyChat.startButton')}
+              </Button>
+            </div>
+          ) : (
+            <ChatInput 
+              project={project} 
+              isDisabled={isChatInputDisabled} 
+              onNewProjectCreated={handleNewProjectCreated} 
+              onOptimisticMessageAdd={addOptimisticMessage}
+              onOptimisticMessageRemove={removeOptimisticMessage}
+            />
+          )}
         </>
       ) : (
         // No project and not loading, show EmptyChatPrompt with its own input

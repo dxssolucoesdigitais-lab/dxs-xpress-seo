@@ -1,10 +1,10 @@
 import React from 'react';
 import { CheckCircle2, Loader, FileText } from 'lucide-react';
-import { WorkflowProgress } from '@/types/chat.types'; // Importar o tipo correto
+import { WorkflowProgress } from '@/types/chat.types';
 import { useTranslation } from 'react-i18next';
 
 interface ProgressFlowProps {
-  progress: WorkflowProgress; // Recebe o objeto de progresso diretamente
+  progress: WorkflowProgress;
 }
 
 const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress }) => {
@@ -16,7 +16,9 @@ const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress }) => {
 
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
+        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+      </div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10">
         <div className="space-y-3">
           <p className="text-sm font-bold text-white mb-2">{t('progressFlow.title')}</p>

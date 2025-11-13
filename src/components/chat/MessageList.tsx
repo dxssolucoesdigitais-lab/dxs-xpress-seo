@@ -6,7 +6,7 @@ import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
-import { cn } from '@/lib/utils'; // Importar cn para combinar classes
+import { cn } from '@/lib/utils';
 
 const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
@@ -44,16 +44,11 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   }
 
   // Default rendering for plain text or unparsed content
-  // Adicionado log para depuração
-  if (message.author === 'ai') {
-    console.log(`[DEBUG-MESSAGELIST-AI] AI Message Content:`, message.content);
-    console.log(`[DEBUG-MESSAGELIST-AI] AI Message RawContent:`, message.rawContent);
-    console.log(`[DEBUG-MESSAGELIST-AI] AI Message Structured Type:`, structuredContent?.type);
-  }
-
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
+        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+      </div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
