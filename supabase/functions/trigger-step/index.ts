@@ -14,7 +14,7 @@ serve(async (req) => {
   console.log('trigger-step: Function started.');
 
   try {
-    console.log('trigger-step: Start of try block.');
+    console.log('trigger-step: Start of main try block.');
 
     // --- Environment & Client Setup ---
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
@@ -266,8 +266,8 @@ serve(async (req) => {
                   });
                 } else if (resultData.result) {
                   const windmillResult = typeof resultData.result === 'string' 
-                    ? JSON.parse(resultData.result) 
-                    : resultData.result;
+                    ? JSON.parse(windmillResult.result) 
+                    : windmillResult.result;
                   
                   if (windmillResult.type === 'structured_response' && windmillResult.messages) {
                     finalResponseContent = JSON.stringify({
@@ -339,7 +339,7 @@ serve(async (req) => {
         console.log('trigger-step: AI message inserted into chat_messages.');
       }
     }
-    console.log('trigger-step: End of try block, before final response.');
+    console.log('trigger-step: End of main try block, before final response.');
 
     // --- Respond Immediately to the Client ---
     // Always return 200 OK if the Edge Function itself didn't crash,
@@ -350,8 +350,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("trigger-step: Unhandled error in Edge Function:", error);
+    // Return a 500 response with the error message
     return new Response(JSON.stringify({ error: error.message || "An unknown error occurred in the Edge Function." }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
