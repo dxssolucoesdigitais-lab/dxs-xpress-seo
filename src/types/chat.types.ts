@@ -14,8 +14,9 @@ export interface WorkflowProgress {
 }
 
 export interface StructuredChatContent {
-  type: 'options' | 'progress' | 'text' | 'error';
-  data: string | LlmOption[] | WorkflowProgress | { title: string; message: string };
+  type: 'options' | 'progress' | 'text' | 'error' | 'structured_response';
+  data?: string | LlmOption[] | WorkflowProgress | { title: string; message: string };
+  messages?: { type: 'text' | 'options' | 'progress' | 'error'; data: any }[]; // Adicionado para structured_response
 }
 
 export interface ChatMessage {
