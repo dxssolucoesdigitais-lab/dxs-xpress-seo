@@ -182,7 +182,8 @@ serve(async (req) => {
     // --- Execute Windmill Script and Poll for Result ---
     try {
       // Construct the Windmill execution URL correctly
-      const windmillExecutionUrl = `${windmillBaseUrl}/${windmillMasterScriptPath}/jobs/run`;
+      // Removed the redundant '/jobs/run' as it's now part of WINDMILL_MASTER_SCRIPT_PATH
+      const windmillExecutionUrl = `${windmillBaseUrl}/${windmillMasterScriptPath}`; 
       console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl);
       const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
