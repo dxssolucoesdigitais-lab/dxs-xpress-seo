@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+import { Menu, ChevronLeft, ChevronRight, LogOut, LayoutDashboard, CreditCard, PlusCircle, User as UserIcon } from 'lucide-react';
 import { useSession } from '@/contexts/SessionContext';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, LayoutDashboard, CreditCard, PlusCircle, User as UserIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,9 +21,11 @@ import { useTranslation } from 'react-i18next';
 interface HeaderProps {
   onMenuClick: () => void;
   onBuyCreditsClick: () => void;
+  onToggleSidebar: () => void; // Novo prop
+  isSidebarExpanded: boolean; // Novo prop
 }
 
-const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
+const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick, onToggleSidebar, isSidebarExpanded }) => {
   const { t } = useTranslation();
   const { session, user } = useSession();
   const navigate = useNavigate();
@@ -41,10 +42,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick }) => {
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b border-border bg-background/80 backdrop-blur-lg px-4 md:px-6">
-      <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
-        <Menu className="h-6 w-6" />
-        <span className="sr-only">Toggle Menu</span>
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
+          <Menu className="h-6 w-6" />
+          <span className="sr-only">Toggle Mobile Menu</span>
+        </Button>
+        <Button variant="ghost" size="icon" className="hidden md:flex" onClick={onToggleSidebar}>
+          {isSidebarExpanded ? <ChevronLeft className="h-6 w-6" /> : <ChevronRight className="h-6 w-6" />}
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+      </div>
       <div className="flex-1" />
       <div className="flex items-center gap-2 sm:gap-4">
         {user && (

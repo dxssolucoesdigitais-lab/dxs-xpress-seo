@@ -81,7 +81,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
             onChange={(e) => setPrompt(e.target.value)}
             disabled={isDisabled || !user || isSendingMessage} // Desabilita se não houver usuário
           ></textarea>
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black disabled:bg-gray-600" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
             {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>
