@@ -20,8 +20,8 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')
-    const windmillBaseUrl = Deno.env.get('WINDMILL_BASE_URL') // Nova variável
-    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_PATH') // Nova variável
+    const windmillBaseUrl = Deno.env.get('WINDMILL_BASE_URL')
+    const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_PATH')
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
     const serpiApiKey = Deno.env.get('SERPI_API_KEY')
 
@@ -31,8 +31,8 @@ serve(async (req) => {
     console.log('trigger-step: WINDMILL_TOKEN present:', !!windmillToken);
     console.log('trigger-step: WINDMILL_BASE_URL present:', !!windmillBaseUrl);
     console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
-    console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey);
-    console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey);
+    console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey, 'Value (first 5 chars):', openrouterApiKey ? openrouterApiKey.substring(0, 5) : 'N/A');
+    console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey, 'Value (first 5 chars):', serpiApiKey ? serpiApiKey.substring(0, 5) : 'N/A');
 
     const missingEnvVars = [];
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
@@ -40,8 +40,8 @@ serve(async (req) => {
     if (!windmillToken) missingEnvVars.push('WINDMILL_TOKEN');
     if (!windmillBaseUrl) missingEnvVars.push('WINDMILL_BASE_URL');
     if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_PATH');
-    if (!openrouterApiKey) missingEnvVars.push('OPENROUTER_API_KEY');
-    if (!serpiApiKey) missingEnvVars.push('SERPI_API_KEY');
+    if (!openrouterApiKey || openrouterApiKey.trim() === '') missingEnvVars.push('OPENROUTER_API_KEY');
+    if (!serpiApiKey || serpiApiKey.trim() === '') missingEnvVars.push('SERPI_API_KEY');
 
     if (missingEnvVars.length > 0) {
       const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
@@ -182,9 +182,25 @@ serve(async (req) => {
     // --- Execute Windmill Script and Poll for Result ---
     try {
       // Construct the Windmill execution URL correctly
-      // Removed the redundant '/jobs/run' as it's now part of WINDMILL_MASTER_SCRIPT_PATH
       const windmillExecutionUrl = `${windmillBaseUrl}/${windmillMasterScriptPath}`; 
       console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl);
+
+      const windmillArgs = {
+        userMessage: userMessage,
+        projectId: projectId,
+        userId: user.id,
+        planType: user.plan_type,
+        userRole: user.role,
+        currentStep: project?.current_step || 0,
+        projectData: project,
+        supabase_url: supabaseUrl,
+        supabase_key: serviceRoleKey,
+        openrouter_key: openrouterApiKey,
+        serpi_api_key: serpiApiKey,
+        acao: acao
+      };
+      console.log('trigger-step: Windmill arguments being sent:', JSON.stringify(windmillArgs, null, 2)); // Log the full args object
+
       const executionResponse = await fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
@@ -192,20 +208,7 @@ serve(async (req) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          args: {
-            userMessage: userMessage,
-            projectId: projectId,
-            userId: user.id,
-            planType: user.plan_type,
-            userRole: user.role,
-            currentStep: project?.current_step || 0,
-            projectData: project,
-            supabase_url: supabaseUrl,
-            supabase_key: serviceRoleKey,
-            openrouter_key: openrouterApiKey,
-            serpi_api_key: serpiApiKey,
-            acao: acao
-          }
+          args: windmillArgs
         })
       });
 
@@ -242,7 +245,7 @@ serve(async (req) => {
           await new Promise(resolve => setTimeout(resolve, delayMs));
           
           console.log(`trigger-step: Polling attempt ${attempt + 1} for Windmill job ${executionId}`);
-          const resultResponse = await fetch(`${windmillBaseUrl}/jobs/${executionId}/result`, { // Usando windmillBaseUrl
+          const resultResponse = await fetch(`${windmillBaseUrl}/jobs/${executionId}/result`, {
             headers: {
               'Authorization': `Bearer ${windmillToken}`,
               'Content-Type': 'application/json'
@@ -267,8 +270,8 @@ serve(async (req) => {
                   });
                 } else if (resultData.result) {
                   const windmillResult = typeof resultData.result === 'string' 
-                    ? JSON.parse(windmillResult.result) 
-                    : windmillResult.result;
+                    ? JSON.parse(resultData.result)
+                    : resultData.result;
                   
                   if (windmillResult.type === 'structured_response' && windmillResult.messages) {
                     finalResponseContent = JSON.stringify({
