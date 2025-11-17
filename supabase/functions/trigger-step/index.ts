@@ -177,11 +177,8 @@ serve(async (req) => {
       }
     }
 
-    let aiMessageContent: string; // This will be the content for chat_messages.content
-
-    // --- Execute Windmill Script and Poll for Result ---
+    // --- Execute Windmill Script (without polling) ---
     try {
-      // Construct the Windmill execution URL correctly
       const windmillExecutionUrl = `${windmillBaseUrl}/${windmillMasterScriptPath}`; 
       console.log('trigger-step: Attempting to call Windmill at constructed URL:', windmillExecutionUrl);
 
@@ -199,9 +196,11 @@ serve(async (req) => {
         serpi_api_key: serpiApiKey,
         acao: acao
       };
-      console.log('trigger-step: Windmill arguments being sent:', JSON.stringify(windmillArgs, null, 2)); // Log the full args object
+      console.log('trigger-step: Windmill arguments being sent:', JSON.stringify(windmillArgs, null, 2));
 
-      const executionResponse = await fetch(windmillExecutionUrl, {
+      // Invoke Windmill and do NOT wait for its result.
+      // The Windmill script is responsible for inserting AI messages into Supabase.
+      fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${windmillToken}`,
@@ -210,153 +209,31 @@ serve(async (req) => {
         body: JSON.stringify({
           args: windmillArgs
         })
-      });
+      }).catch(err => console.error("trigger-step: Error triggering Windmill workflow (fire-and-forget):", err));
 
-      const executionText = await executionResponse.text();
-      console.log('trigger-step: Windmill execution response status:', executionResponse.status);
-      console.log('trigger-step: Windmill execution response body (first 200 chars):', executionText.substring(0, Math.min(executionText.length, 200)));
+      console.log('trigger-step: Windmill workflow triggered (fire-and-forget).');
 
-      if (!executionResponse.ok) {
-        console.error('trigger-step: Windmill Execution Error:', executionResponse.status, executionText);
-        aiMessageContent = JSON.stringify({
-          type: 'error',
-          data: {
-            title: 'Erro na Execução do Windmill',
-            message: `Falha ao iniciar o workflow no Windmill (Status ${executionResponse.status}). Verifique se as variáveis de ambiente WINDMILL_BASE_URL e WINDMILL_MASTER_SCRIPT_PATH estão corretas. O valor lido para a URL foi: "${windmillExecutionUrl}". Detalhes: ${executionText.substring(0, 200)}...`
-          }
-        });
-      } else {
-        let executionId;
-        try {
-          const executionData = JSON.parse(executionText);
-          executionId = executionData.id || executionData;
-        } catch (parseError: any) {
-          executionId = executionText.trim();
-          console.warn('trigger-step: Could not parse Windmill execution response as JSON, using raw text as ID:', executionId, 'Error:', parseError.message);
-        }
-
-        console.log('trigger-step: Windmill Execution ID:', executionId);
-
-        const maxAttempts = 15;
-        const delayMs = 1500;
-        let pollingSuccess = false;
-
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          await new Promise(resolve => setTimeout(resolve, delayMs));
-          
-          console.log(`trigger-step: Polling attempt ${attempt + 1} for Windmill job ${executionId}`);
-          const resultResponse = await fetch(`${windmillBaseUrl}/jobs/${executionId}/result`, {
-            headers: {
-              'Authorization': `Bearer ${windmillToken}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (resultResponse.ok) {
-            const resultText = await resultResponse.text();
-            console.log(`trigger-step: Attempt ${attempt + 1} result (first 200 chars):`, resultText.substring(0, Math.min(resultText.length, 200)));
-            
-            try {
-              const resultData = JSON.parse(resultText);
-              
-              // CRITICAL CHECK: Process structured response from Windmill
-              if (resultData && (resultData.completed || resultData.type === 'structured_response' || resultData.result)) {
-                let finalResponseContent: string;
-                
-                if (resultData.type === 'structured_response' && resultData.messages) {
-                  finalResponseContent = JSON.stringify({
-                    type: 'text',
-                    data: resultData.messages.map((msg: any) => msg.data || msg.content).join('\n\n')
-                  });
-                } else if (resultData.result) {
-                  const windmillResult = typeof resultData.result === 'string' 
-                    ? JSON.parse(resultData.result)
-                    : resultData.result;
-                  
-                  if (windmillResult.type === 'structured_response' && windmillResult.messages) {
-                    finalResponseContent = JSON.stringify({
-                      type: 'text',
-                      data: windmillResult.messages.map((msg: any) => msg.data || msg.content).join('\n\n')
-                    });
-                  } else if (windmillResult.type && windmillResult.data) {
-                    finalResponseContent = JSON.stringify(windmillResult);
-                  } else {
-                    finalResponseContent = JSON.stringify({ type: 'text', data: JSON.stringify(windmillResult) });
-                  }
-                } else if (resultData.type && resultData.data) {
-                   finalResponseContent = JSON.stringify(resultData);
-                }
-                else {
-                  finalResponseContent = JSON.stringify({ type: 'text', data: JSON.stringify(resultData) });
-                }
-                
-                aiMessageContent = finalResponseContent;
-                pollingSuccess = true;
-                break; // Exit polling loop
-              }
-            } catch (parseError: any) {
-              console.log(`trigger-step: Attempt ${attempt + 1}: Parsing error, continuing polling...`, parseError.message);
-              // Continues polling
-            }
-          } else {
-            console.log(`trigger-step: Attempt ${attempt + 1}: Result not ready, status: ${resultResponse.status}`);
-          }
-        }
-
-        if (!pollingSuccess) {
-          aiMessageContent = JSON.stringify({
-            type: 'error',
-            data: {
-              title: 'Erro no Fluxo de Trabalho',
-              message: `Timeout aguardando resposta do Windmill para execução ${executionId}.`
-            }
-          });
-        }
-      }
     } catch (windmillError: any) {
-      console.error('trigger-step: Error during Windmill interaction:', windmillError);
-      aiMessageContent = JSON.stringify({
-        type: 'error',
-        data: {
-          title: 'Erro Interno da IA',
-          message: `Ocorreu um erro ao interagir com o sistema de IA: ${windmillError.message.substring(0, 200)}...`
-        }
+      console.error('trigger-step: Error during Windmill invocation (unexpected):', windmillError);
+      // If there's an error *invoking* Windmill, we should still report it.
+      return new Response(JSON.stringify({ error: `Failed to invoke Windmill: ${windmillError.message}` }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Insert AI's response (or error message) into chat_messages table
-    if (projectId) {
-      console.log('trigger-step: Attempting to insert AI message into chat_messages.');
-      const { error: insertAiMessageError } = await supabaseAdmin
-        .from('chat_messages')
-        .insert({
-          project_id: projectId,
-          user_id: user.id,
-          author: 'ai',
-          content: aiMessageContent,
-          metadata: { current_step: project?.current_step || 0 },
-        });
-
-      if (insertAiMessageError) {
-        console.error('trigger-step: Error inserting AI message into chat_messages:', insertAiMessageError);
-      } else {
-        console.log('trigger-step: AI message inserted into chat_messages.');
-      }
-    }
-    console.log('trigger-step: End of main try block, before final response.');
+    console.log('trigger-step: End of main try block, returning success response.');
 
     // --- Respond Immediately to the Client ---
-    // Always return 200 OK if the Edge Function itself didn't crash,
-    // even if Windmill returned an error or non-JSON. The actual error
-    // will be in the chat message content.
-    return new Response(JSON.stringify({ message: `Workflow triggered successfully, response processed.`, aiResponseContent: aiMessageContent }), {
+    // Return 200 OK, indicating that the Edge Function successfully processed the request
+    // and triggered the Windmill workflow. AI responses will come via Realtime.
+    return new Response(JSON.stringify({ message: `Workflow triggered successfully. AI responses will appear shortly.` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error: any) {
     console.error("trigger-step: Unhandled error in Edge Function:", error);
-    // Return a 500 response with the error message
     return new Response(JSON.stringify({ error: error.message || "An unknown error occurred in the Edge Function." }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
