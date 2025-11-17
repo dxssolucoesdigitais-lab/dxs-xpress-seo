@@ -3,62 +3,43 @@ import { Button } from '@/components/ui/button';
 import { Loader2, MessageSquarePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
-import { supabase } from '@/integrations/supabase/client';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
 import { ChatMessage } from '@/types/chat.types';
+import { useProjects } from '@/hooks/useProjects'; // Import useProjects
 
 interface EmptyChatPromptProps {
   onNewProjectCreated: (projectId: string) => void;
-  onOptimisticMessageAdd: (message: ChatMessage) => void;
-  onOptimisticMessageRemove: (id: string) => void;
+  // onOptimisticMessageAdd e onOptimisticMessageRemove não são mais necessários aqui
+  // pois o prompt inicial não é enviado deste componente.
 }
 
-const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
+const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }) => {
   const { t } = useTranslation();
   const { user } = useSession();
+  const { createProject } = useProjects(); // Use o hook createProject
   const [isLoading, setIsLoading] = useState(false);
 
   const handleStartNewConversation = async () => {
     if (!user || isLoading) return;
 
     setIsLoading(true);
-    const initialPrompt = t('emptyChat.initialPrompt'); 
-
-    const tempMessageId = `optimistic-${Date.now()}`;
-    onOptimisticMessageAdd({
-      id: tempMessageId,
-      author: 'user',
-      createdAt: new Date().toISOString(),
-      content: initialPrompt,
-      rawContent: initialPrompt,
-      metadata: { current_step: 0 }, // Adiciona o current_step inicial ao metadata
-    });
+    const initialPromptForProjectName = t('emptyChat.initialPrompt'); // Isso agora é apenas para o nome do projeto
 
     try {
-      const { data: newProject, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
-        body: { prompt: initialPrompt },
+      const newProject = await createProject({
+        project_name: `Análise de ${initialPromptForProjectName.substring(0, 40)}...`,
+        product_link: initialPromptForProjectName, // Use isso como um placeholder para o link inicial do produto
+        target_country: 'Brazil', // Default
+        target_audience: 'General', // Default
       });
 
-      if (error) {
-        onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
-        const errorMessage = error.context?.json?.error || error.message; // Extrai a mensagem de erro específica
-        const statusCode = error.context?.response?.status; // Acessa o status de forma segura
-
-        if (statusCode === 402) {
-          showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
-        } else {
-          showError('toasts.chat.startWorkflowFailed', { message: errorMessage || t('toasts.genericError') }); // Fallback genérico
-        }
-        return; // Sai da função após mostrar o erro
-      } else if (newProject) {
+      if (newProject) {
         onNewProjectCreated(newProject.id);
       }
     } catch (error: any) {
-      // Este bloco catch agora lida com erros de rede ou exceções inesperadas
-      showError('toasts.chat.startWorkflowFailed', { message: error.message || t('toasts.genericError') });
+      // O tratamento de erros já está em useProjects.createProject
       console.error('Error starting new conversation:', error.message);
-      onOptimisticMessageRemove(tempMessageId); // Garante a remoção em caso de erro genérico
     } finally {
       setIsLoading(false);
     }

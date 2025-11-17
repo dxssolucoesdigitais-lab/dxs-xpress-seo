@@ -23,16 +23,15 @@ serve(async (req) => {
     // Get user from Authorization header
     const authHeader = req.headers.get('Authorization')!
     const { data: { user } } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''))
+    
     if (!user) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-            status: 401,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
     }
 
+    // The 'prompt' here is just used for the initial project name, not to trigger a workflow yet.
     const { prompt } = await req.json();
     if (!prompt) {
-      return new Response(JSON.stringify({ error: 'Prompt is required' }), {
+      return new Response(JSON.stringify({ error: 'Prompt is required for project name' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -61,9 +60,8 @@ serve(async (req) => {
       .from('projects')
       .insert({
         user_id: user.id,
-        product_link: prompt, // Using prompt as product_link for initial analysis
         project_name: projectName,
-        // Default values for target_country and target_audience can be set here or in n8n
+        product_link: prompt, // Using prompt as product_link for initial analysis
         target_country: 'Brazil', // Default
         target_audience: 'General', // Default
       })
@@ -81,15 +79,9 @@ serve(async (req) => {
       if (decrementError) throw decrementError;
     }
 
-    // Trigger the first step of the workflow via trigger-step (which then calls n8n)
-    // The trigger-step function will handle inserting the initial userMessage into chat_messages.
-    const { error: triggerError } = await supabaseAdmin.functions.invoke('trigger-step', {
-      body: { projectId: newProject.id, userMessage: prompt, userId: user.id }, // Pass user.id explicitly
-    });
-
-    if (triggerError) {
-        console.error(`Failed to trigger workflow for project ${newProject.id}`, triggerError);
-    }
+    // IMPORTANT: We no longer trigger 'trigger-step' here.
+    // The frontend will navigate to the new project and the user's first message
+    // will then call 'trigger-step'.
 
     return new Response(JSON.stringify(newProject), {
       status: 200,

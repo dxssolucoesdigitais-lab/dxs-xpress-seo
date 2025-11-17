@@ -8,14 +8,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { ChatMessage } from '@/types/chat.types';
 
 interface ChatInputProps {
-  project: Project | null;
+  project: Project; // Project agora é sempre esperado estar presente
   isDisabled?: boolean;
-  onNewProjectCreated?: (projectId: string) => void;
+  // onNewProjectCreated não é mais necessário aqui, pois a criação do projeto é tratada por EmptyChatPrompt
   onOptimisticMessageAdd: (message: ChatMessage) => void;
   onOptimisticMessageRemove: (id: string) => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNewProjectCreated, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
   const { t } = useTranslation();
   const { user } = useSession();
   const [prompt, setPrompt] = useState('');
@@ -36,48 +36,28 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
       createdAt: new Date().toISOString(),
       content: userMessage,
       rawContent: userMessage,
-      metadata: { current_step: project?.current_step || 0 }, // Adiciona o current_step ao metadata
+      metadata: { current_step: project.current_step || 0 }, // Adiciona o current_step ao metadata
     });
 
     try {
-      if (!project) {
-        const { data: newProject, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
-          body: { prompt: userMessage },
-        });
+      // Agora, ChatInput sempre assume que um projeto existe e envia mensagens para trigger-step
+      const { error: triggerError } = await supabase.functions.invoke('trigger-step', {
+        body: { projectId: project.id, userMessage: userMessage },
+      });
 
-        if (error) {
-          onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
-          const errorMessage = error.context?.json?.error || error.message; // Extrai a mensagem de erro específica
-          const statusCode = error.context?.response?.status; // Acessa o status de forma segura
+      if (triggerError) {
+        onOptimisticMessageRemove(tempMessageId); // Remove a mensagem otimista em caso de erro
+        const errorMessage = triggerError.context?.json?.error || triggerError.message; // Extrai a mensagem de erro específica
+        const statusCode = triggerError.context?.response?.status; // Acessa o status de forma segura
 
-          if (statusCode === 402) {
-            showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
-          } else {
-            showError('toasts.chat.startWorkflowFailed', { message: errorMessage || t('toasts.genericError') }); // Fallback genérico
-          }
-          return; // Sai da função após mostrar o erro
-        } else if (newProject) {
-          onNewProjectCreated?.(newProject.id);
-        }
-      } else {
-        const { error: triggerError } = await supabase.functions.invoke('trigger-step', {
-          body: { projectId: project.id, userMessage: userMessage },
-        });
-
-        if (triggerError) {
-          onOptimisticMessageRemove(tempMessageId); // Remove optimistic message on error
-          const errorMessage = triggerError.context?.json?.error || triggerError.message; // Extrai a mensagem de erro específica
-          const statusCode = triggerError.context?.response?.status; // Acessa o status de forma segura
-
-          if (statusCode === 402) {
-            showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
-          } else {
-            showError('toasts.chat.sendMessageFailed', { message: errorMessage || t('toasts.genericError') }); // Fallback genérico
-          }
-          return; // Sai da função após mostrar o erro
+        if (statusCode === 402) {
+          showError("toasts.chat.outOfCredits", { message: errorMessage }); // Passa a mensagem específica
         } else {
-          console.log('Successfully triggered workflow with user message:', userMessage);
+          showError('toasts.chat.sendMessageFailed', { message: errorMessage || t('toasts.genericError') }); // Fallback genérico
         }
+        return; // Sai da função após mostrar o erro
+      } else {
+        console.log('Successfully triggered workflow with user message:', userMessage);
       }
     } catch (error: any) {
       // Este bloco catch agora lida com erros de rede ou exceções inesperadas
@@ -99,9 +79,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onNe
             rows={1}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            disabled={isDisabled || isSendingMessage}
+            disabled={isDisabled || !user || isSendingMessage} // Desabilita se não houver usuário
           ></textarea>
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim() || isSendingMessage}>
+          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black hover:bg-cyan-400 transition-all disabled:bg-gray-600 duration-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.6)] hover:-translate-y-px" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
             {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>

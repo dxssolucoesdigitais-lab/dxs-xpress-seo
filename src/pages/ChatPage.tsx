@@ -29,7 +29,7 @@ const ChatPage: React.FC = () => {
   useEffect(() => {
     if (paramProjectId !== currentProjectId) {
       setCurrentProjectId(paramProjectId);
-      setOptimisticMessages([]); // Clear optimistic messages when project changes
+      setOptimisticMessages([]); // Limpa mensagens otimistas quando o projeto muda
     }
   }, [paramProjectId, currentProjectId]);
 
@@ -59,35 +59,35 @@ const ChatPage: React.FC = () => {
 
   const isLoading = projectLoading || (currentProjectId && chatLoading);
 
-  // Function to add an optimistic message
+  // Função para adicionar uma mensagem otimista
   const addOptimisticMessage = useCallback((message: ChatMessage) => {
     setOptimisticMessages(prev => [...prev, message]);
   }, []);
 
-  // Function to remove an optimistic message (e.g., if API call fails)
+  // Função para remover uma mensagem otimista (ex: se a chamada da API falhar)
   const removeOptimisticMessage = useCallback((id: string) => {
     setOptimisticMessages(prev => prev.filter(msg => msg.id !== id));
   }, []);
 
-  // Combine fetched messages with optimistic ones, ensuring no duplicates
+  // Combina mensagens buscadas com as otimistas, garantindo que não haja duplicatas
   const displayedMessages = useMemo(() => {
     const combined = [...messages];
-    const realMessageContents = new Set(messages.map(m => m.rawContent)); // Use rawContent for matching
+    const realMessageContents = new Set(messages.map(m => m.rawContent)); // Usa rawContent para correspondência
 
     optimisticMessages.forEach(optMsg => {
-      // Only add optimistic message if a real message with the same content hasn't arrived yet
+      // Adiciona a mensagem otimista apenas se uma mensagem real com o mesmo conteúdo ainda não chegou
       if (!realMessageContents.has(optMsg.rawContent)) {
         combined.push(optMsg);
       }
     });
 
-    // Sort by createdAt to maintain order
+    // Ordena por createdAt para manter a ordem
     const sortedMessages = combined.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     console.log("[DEBUG-MESSAGELIST] Final displayed messages order:", sortedMessages.map(m => ({ id: m.id, author: m.author, createdAt: m.createdAt, content: (typeof m.content === 'string' ? m.content.substring(0, 30) : 'Structured') + '...' })));
     return sortedMessages;
   }, [messages, optimisticMessages]);
 
-  // Clear optimistic messages that have been replaced by real ones
+  // Limpa mensagens otimistas que foram substituídas por mensagens reais
   useEffect(() => {
     if (messages.length > 0 && optimisticMessages.length > 0) {
       setOptimisticMessages(prev => {
@@ -109,7 +109,7 @@ const ChatPage: React.FC = () => {
         const parsedContent = JSON.parse(lastMessage.rawContent);
         isLastAiMessageProgress = parsedContent.type === 'progress';
       } catch (e) {
-        // Not structured content
+        // Não é conteúdo estruturado
       }
     }
     return lastMessage.author === 'user' || (isLastAiMessageProgress && project.status === 'in_progress');
@@ -150,14 +150,15 @@ const ChatPage: React.FC = () => {
 
   const handleNewProjectCreated = useCallback((newProjectId: string) => {
     setCurrentProjectId(newProjectId);
-  }, []);
+    navigate(`/chat/${newProjectId}`); // Navega para a página de chat do novo projeto
+  }, [navigate]);
 
   const showNewConversationButton = useMemo(() => {
     return project && (project.status === 'completed' || project.status === 'error');
   }, [project]);
 
   const handleStartNewConversationFromExisting = () => {
-    navigate('/chat'); // This will clear paramProjectId and trigger EmptyChatPrompt
+    navigate('/chat'); // Isso limpará paramProjectId e acionará EmptyChatPrompt
   };
 
   if (projectLoading) {
@@ -178,7 +179,7 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
       
-      {project ? (
+      {currentProjectId && project ? ( // Renderiza a UI do chat se um projeto for selecionado/criado
         <>
           <ChatHeader project={project} />
           <MessageList 
@@ -203,18 +204,16 @@ const ChatPage: React.FC = () => {
             <ChatInput 
               project={project} 
               isDisabled={isChatInputDisabled} 
-              onNewProjectCreated={handleNewProjectCreated} 
+              // onNewProjectCreated não é mais necessário aqui
               onOptimisticMessageAdd={addOptimisticMessage}
               onOptimisticMessageRemove={removeOptimisticMessage}
             />
           )}
         </>
       ) : (
-        // No project and not loading, show EmptyChatPrompt with its own input
+        // Nenhum projeto selecionado/criado, mostra EmptyChatPrompt
         <EmptyChatPrompt 
           onNewProjectCreated={handleNewProjectCreated} 
-          onOptimisticMessageAdd={addOptimisticMessage}
-          onOptimisticMessageRemove={removeOptimisticMessage}
         />
       )}
     </div>
