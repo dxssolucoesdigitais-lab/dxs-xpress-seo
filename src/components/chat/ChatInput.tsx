@@ -21,8 +21,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   const [prompt, setPrompt] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendMessage = async (e?: React.FormEvent | React.KeyboardEvent) => {
+    e?.preventDefault(); // Conditionally call preventDefault
+
     if (!prompt.trim() || isDisabled || !user || isSendingMessage) return;
 
     setIsSendingMessage(true);
@@ -69,6 +70,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSendMessage(e); // Pass the keyboard event to handleSendMessage
+    }
+  };
+
   return (
     <>
       <div className="p-4 bg-background border-t border-border flex justify-center">
@@ -79,6 +86,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
             rows={1}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={handleKeyDown} {/* Adicionado o manipulador de evento onKeyDown */}
             disabled={isDisabled || !user || isSendingMessage} // Desabilita se não houver usuário
           ></textarea>
           <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black disabled:bg-gray-600" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
