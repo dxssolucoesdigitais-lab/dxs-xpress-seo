@@ -14,7 +14,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   if (message.author === 'user') {
     return (
       <div className="flex items-start justify-end gap-4">
-        <div className="flex-1 max-w-xl p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white break-words overflow-hidden text-wrap">
+        <div className="flex-1 max-w-xl p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
           <p>{message.content}</p>
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
@@ -50,12 +50,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="flex-1 max-w-xl p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden text-wrap">
+        <div className="flex-1 max-w-xl p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
             <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
           </div>
-          <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4 break-words", "whitespace-pre-wrap")}>
+          <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
             {structuredContent.messages.map((msgItem: any, index: number) => {
               if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
                 return <p key={index}>{msgItem.data}</p>;
@@ -75,12 +75,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 max-w-xl p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden text-wrap">
+      <div className="flex-1 max-w-xl p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4 break-words", "whitespace-pre-wrap")}>
+        <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
