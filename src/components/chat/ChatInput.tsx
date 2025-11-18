@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { showError } from '@/utils/toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ChatMessage } from '@/types/chat.types';
+import { cn } from '@/lib/utils'; // Importar cn para utilitários de classe
 
 interface ChatInputProps {
   project: Project; // Project agora é sempre esperado estar presente
   isDisabled?: boolean;
-  // onNewProjectCreated não é mais necessário aqui, pois a criação do projeto é tratada por EmptyChatPrompt
   onOptimisticMessageAdd: (message: ChatMessage) => void;
   onOptimisticMessageRemove: (id: string) => void;
 }
@@ -72,7 +72,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   return (
     <>
       <div className="p-4 bg-background border-t border-border">
-        <form onSubmit={handleSendMessage} className="relative">
+        <form onSubmit={handleSendMessage} className="relative max-w-xl"> {/* Removido 'w-full' */}
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
