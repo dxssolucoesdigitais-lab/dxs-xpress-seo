@@ -14,7 +14,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   if (message.author === 'user') {
     return (
       <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem do usuário */}
-        <div className="flex items-start justify-end gap-4 max-w-2xl w-full"> {/* Largura máxima para o balão */}
+        <div className="flex items-start justify-end gap-4 max-w-2xl w-full ml-auto mr-4"> {/* Largura máxima para o balão, com leve alinhamento à direita */}
           <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
             <p>{message.content}</p>
           </div>
@@ -51,7 +51,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
     return (
       <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem da IA */}
-        <div className="flex items-start gap-4 max-w-2xl w-full"> {/* Largura máxima para o balão */}
+        <div className="flex items-start gap-4 max-w-2xl w-full mr-auto ml-4"> {/* Largura máxima para o balão, com leve alinhamento à esquerda */}
           <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
             <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
           </div>
@@ -78,7 +78,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   // Default rendering for plain text or unparsed content (if structuredContent is undefined or not handled above)
   return (
     <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem da IA */}
-      <div className="flex items-start gap-4 max-w-2xl w-full"> {/* Largura máxima para o balão */}
+      <div className="flex items-start gap-4 max-w-2xl w-full mr-auto ml-4"> {/* Largura máxima para o balão, com leve alinhamento à esquerda */}
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
@@ -92,8 +92,8 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 interface MessageListProps {
