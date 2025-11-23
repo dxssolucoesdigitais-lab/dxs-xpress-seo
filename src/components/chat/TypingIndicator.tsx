@@ -9,7 +9,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
   const message = "O XpressSEO está pensando...";
 
   return (
-    <div className="max-w-2xl w-full mx-auto flex items-start gap-4"> {/* Centered block for TypingIndicator */}
+    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for TypingIndicator */}
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
@@ -21,6 +21,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
           <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
         </div>
       </div>
+      <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
     </div>
   );
 };

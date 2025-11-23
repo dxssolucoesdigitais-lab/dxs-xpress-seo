@@ -13,11 +13,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
   if (message.author === 'user') {
     return (
-      <div className="max-w-2xl w-full mx-auto flex items-start gap-4 flex-row-reverse"> {/* Centered block for user message */}
+      <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse"> {/* Centered block for user message */}
         <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
           <p>{message.content}</p>
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
+        <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
       </div>
     );
   }
@@ -48,7 +49,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   // Handle the 'structured_response' type from Windmill
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
     return (
-      <div className="max-w-2xl w-full mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+      <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
@@ -67,13 +68,14 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
             })}
           </div>
         </div>
+        <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
       </div>
     );
   }
 
   // Default rendering for plain text or unparsed content (if structuredContent is undefined or not handled above)
   return (
-    <div className="max-w-2xl w-full mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
@@ -86,6 +88,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
+      <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
     </div>
   );
 };
