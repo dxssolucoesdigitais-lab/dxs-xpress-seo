@@ -79,8 +79,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   return (
     <>
       <div className="p-4 bg-background border-t border-border flex justify-center">
-        <form onSubmit={handleSendMessage} className="relative max-w-3xl w-full"> {/* Alterado para max-w-3xl */}
-          {/* Adicionado o manipulador de evento onKeyDown */}
+        <form onSubmit={handleSendMessage} className="relative max-w-4xl w-full"> {/* Alterado para max-w-4xl */}
           <textarea
             className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}

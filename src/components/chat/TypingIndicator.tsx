@@ -10,7 +10,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
 
   return (
     <div className="flex justify-center w-full"> {/* Centraliza o bloco inteiro */}
-      <div className="flex items-start gap-4 max-w-2xl w-full mr-auto ml-4"> {/* Largura máxima para o balão, com leve alinhamento à esquerda */}
+      <div className="flex items-start gap-4 max-w-2xl w-full mx-auto"> {/* Largura máxima para o balão, centralizado, avatar à esquerda */}
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
