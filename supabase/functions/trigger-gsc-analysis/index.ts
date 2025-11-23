@@ -15,7 +15,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
-    const windmillGSCAnalysisWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_GSC_ANALYSIS')! // Nova variável
+    const windmillGSCAnalysisWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_GSC_ANALYSIS')!
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')!
 
     if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillGSCAnalysisWebhookUrl || !openrouterApiKey) {
@@ -34,9 +34,15 @@ serve(async (req) => {
         });
     }
 
-    const { projectId } = await req.json();
+    const { projectId, fileMetadata } = await req.json(); // Recebe fileMetadata
     if (!projectId) {
       return new Response(JSON.stringify({ error: 'projectId is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    if (!fileMetadata || !fileMetadata.fileUrl || !fileMetadata.fileName) {
+      return new Response(JSON.stringify({ error: 'fileMetadata (fileUrl, fileName) is required for GSC analysis' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -70,12 +76,32 @@ serve(async (req) => {
 
     if (updateIntentError) throw updateIntentError;
 
+    // 3. Inserir mensagem no chat_messages para indicar o início da análise GSC
+    const { error: insertMessageError } = await supabaseAdmin
+      .from('chat_messages')
+      .insert({
+        project_id: projectId,
+        user_id: user.id,
+        author: 'user',
+        content: `Análise GSC iniciada com o arquivo: ${fileMetadata.fileName}`, // Mensagem padrão
+        metadata: {
+          gscAnalysis: true,
+          file: fileMetadata,
+        },
+      });
+
+    if (insertMessageError) {
+      console.error('Error inserting GSC analysis message into chat_messages:', insertMessageError);
+      // Não impede o fluxo, mas registra o erro
+    }
+
     // --- Trigger Windmill Workflow for GSC Analysis ---
     const payload = {
       acao: "start_gsc_analysis",
       projectId: projectId,
       userId: user.id,
       paymentIntentId: paymentIntent.id,
+      fileMetadata: fileMetadata, // Passa os metadados do arquivo para o Windmill
       supabase_url: supabaseUrl,
       supabase_key: serviceRoleKey,
       openrouter_key: openrouterApiKey,

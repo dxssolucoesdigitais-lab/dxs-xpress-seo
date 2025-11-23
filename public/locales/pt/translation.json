@@ -70,6 +70,12 @@
       "updateSuccess": "Senha atualizada com sucesso!",
       "updateFailed": "Erro ao atualizar senha."
     },
+    "fileUpload": {
+      "success": "Arquivo enviado com sucesso!",
+      "failed": "Falha ao enviar arquivo. Por favor, tente novamente.",
+      "noFileSelected": "Nenhum arquivo selecionado.",
+      "loginRequired": "Por favor, faça login para enviar arquivos."
+    },
     "genericError": "Ocorreu um erro inesperado. Por favor, tente novamente."
     },
   "pricingDialog": {
@@ -199,7 +205,11 @@
     "gscAnalysis": "Análise GSC",
     "noCreditsTooltip": "Você não tem créditos suficientes para esta ação. Faça upgrade do seu plano.",
     "noCreditsToResumeTooltip": "Você não tem créditos para retomar o projeto. Faça upgrade do seu plano.",
-    "gscNoProjectTooltip": "Selecione um projeto para iniciar a análise GSC."
+    "gscNoProjectTooltip": "Selecione um projeto para iniciar a análise GSC.",
+    "attachFile": "Anexar Arquivo",
+    "fileAttached": "Arquivo anexado: {{fileName}}",
+    "downloadFile": "Baixar Arquivo",
+    "gscAnalysisStarted": "Análise GSC iniciada com o arquivo: {{fileName}}"
   },
   "chat": {
     "genericApproval": "Aprovado",

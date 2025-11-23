@@ -69,6 +69,12 @@
       "updateSuccess": "Password updated successfully!",
       "updateFailed": "Error updating password."
     },
+    "fileUpload": {
+      "success": "File uploaded successfully!",
+      "failed": "Failed to upload file. Please try again.",
+      "noFileSelected": "No file selected.",
+      "loginRequired": "Please log in to upload files."
+    },
     "genericError": "An unexpected error occurred. Please try again."
     },
   "pricingDialog": {
@@ -198,7 +204,11 @@
     "gscAnalysis": "GSC Analysis",
     "noCreditsTooltip": "You do not have enough credits for this action. Please upgrade your plan.",
     "noCreditsToResumeTooltip": "You do not have enough credits to resume the project. Please upgrade your plan.",
-    "gscNoProjectTooltip": "Select a project to start GSC analysis."
+    "gscNoProjectTooltip": "Select a project to start GSC analysis.",
+    "attachFile": "Attach File",
+    "fileAttached": "File attached: {{fileName}}",
+    "downloadFile": "Download File",
+    "gscAnalysisStarted": "GSC analysis started with file: {{fileName}}"
   },
   "chat": {
     "genericApproval": "Approved",

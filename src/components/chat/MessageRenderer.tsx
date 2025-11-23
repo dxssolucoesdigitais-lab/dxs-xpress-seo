@@ -1,24 +1,58 @@
 import React from 'react';
 import { ChatMessage, StructuredChatContent, LlmOption, WorkflowProgress } from '@/types/chat.types';
-import { User } from 'lucide-react';
+import { User, FileText, Download, BarChart3 } from 'lucide-react'; // Adicionado BarChart3
 import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '@/contexts/SessionContext';
 import { cn } from '@/lib/utils';
+import { FileMetadata } from '@/types/database.types';
 
 const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
 
+  const renderFileAttachment = (file: FileMetadata, isGSCAnalysis: boolean = false) => (
+    <div className={cn(
+      "flex items-center gap-2 p-3 rounded-lg border",
+      isGSCAnalysis ? "bg-amber-600/20 border-amber-500 text-amber-300" : "bg-blue-600/20 border-blue-500 text-blue-300"
+    )}>
+      {isGSCAnalysis ? <BarChart3 className="h-5 w-5 flex-shrink-0" /> : <FileText className="h-5 w-5 flex-shrink-0" />}
+      <a
+        href={file.fileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-1 text-sm font-medium hover:underline truncate"
+      >
+        {file.fileName}
+      </a>
+      <a
+        href={file.fileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        download
+        className={cn("flex-shrink-0", isGSCAnalysis ? "text-amber-200 hover:text-amber-100" : "text-blue-200 hover:text-blue-100")}
+        title={t('chatInput.downloadFile')}
+      >
+        <Download className="h-4 w-4" />
+      </a>
+    </div>
+  );
+
   if (message.author === 'user') {
+    const fileAttachment = message.metadata?.file as FileMetadata | undefined;
+    const isGSCAnalysisRequest = message.metadata?.gscAnalysis === true;
+
     return (
-      <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse"> {/* Centered block for user message */}
+      <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
         <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
-          <p>{message.content}</p>
+          {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
+          {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
+            <p className={cn({ 'mt-3': fileAttachment })}>{message.content}</p>
+          )}
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
-        <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
+        <div className="w-10 h-10 flex-shrink-0 invisible"></div>
       </div>
     );
   }
@@ -35,21 +69,17 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
     }
   }
 
-  // Handle specific structured types first
   if (structuredContent?.type === 'options' && Array.isArray(structuredContent.data)) {
-    // OptionSelector já será envolvido por um div com max-w-2xl e centralizado
     return <OptionSelector options={structuredContent.data as LlmOption[]} />;
   }
 
   if (structuredContent?.type === 'progress' && typeof structuredContent.data === 'object') {
-    // ProgressFlow já será envolvido por um div com max-w-2xl e centralizado
     return <ProgressFlow progress={structuredContent.data as WorkflowProgress} />;
   }
 
-  // Handle the 'structured_response' type from Windmill
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
     return (
-      <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+      <div className="max-w-2xl mx-auto flex items-start gap-4">
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
@@ -63,19 +93,17 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
               if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
                 return <p key={index}>{msgItem.data}</p>;
               }
-              // Add handling for other message types within structured_response if needed
               return null;
             })}
           </div>
         </div>
-        <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
+        <div className="w-10 h-10 flex-shrink-0 invisible"></div>
       </div>
     );
   }
 
-  // Default rendering for plain text or unparsed content (if structuredContent is undefined or not handled above)
   return (
-    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+    <div className="max-w-2xl mx-auto flex items-start gap-4">
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
@@ -88,7 +116,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
-      <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
+      <div className="w-10 h-10 flex-shrink-0 invisible"></div>
     </div>
   );
 };

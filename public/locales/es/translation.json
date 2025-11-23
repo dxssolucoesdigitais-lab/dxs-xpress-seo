@@ -69,6 +69,12 @@
       "updateSuccess": "¡Contraseña actualizada con éxito!",
       "updateFailed": "Error al actualizar contraseña."
     },
+    "fileUpload": {
+      "success": "¡Archivo subido con éxito!",
+      "failed": "Error al subir archivo. Inténtalo de nuevo.",
+      "noFileSelected": "No se seleccionó ningún archivo.",
+      "loginRequired": "Por favor, inicia sesión para subir archivos."
+    },
     "genericError": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
     },
   "pricingDialog": {
@@ -137,8 +143,8 @@
         "features": [
           "120 Créditos/mes",
           "Por cada crédito:",
-          "1 geração completa das etapas de descrição de coleção e produto com SEO",
-          "1 Blog otimizado para SEO e IA",
+          "1 generación completa de los pasos de descripción de colección y producto con SEO",
+          "1 Blog optimizado para SEO e IA",
           "5 legendas para redes sociais otimizadas para SEO e IA",
           "1 relatório de validação",
           "1 tradução para o idioma selecionado",
@@ -198,7 +204,11 @@
     "gscAnalysis": "Análisis GSC",
     "noCreditsTooltip": "No tienes suficientes créditos para esta acción. Por favor, actualiza tu plan.",
     "noCreditsToResumeTooltip": "No tienes suficientes créditos para reanudar el proyecto. Por favor, actualiza tu plan.",
-    "gscNoProjectTooltip": "Selecciona un proyecto para iniciar el análisis GSC."
+    "gscNoProjectTooltip": "Selecciona un proyecto para iniciar el análisis GSC.",
+    "attachFile": "Adjuntar Archivo",
+    "fileAttached": "Archivo adjunto: {{fileName}}",
+    "downloadFile": "Descargar Archivo",
+    "gscAnalysisStarted": "Análisis GSC iniciado con el archivo: {{fileName}}"
   },
   "chat": {
     "genericApproval": "Aprobado",

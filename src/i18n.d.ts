@@ -76,6 +76,12 @@ declare module 'react-i18next' {
             updateSuccess: string;
             updateFailed: string;
           };
+          fileUpload: {
+            success: string;
+            failed: string;
+            noFileSelected: string;
+            loginRequired: string;
+          };
           genericError: string;
         };
         pricingDialog: {
@@ -144,6 +150,10 @@ declare module 'react-i18next' {
           noCreditsTooltip: string;
           noCreditsToResumeTooltip: string;
           gscNoProjectTooltip: string;
+          attachFile: string;
+          fileAttached: string;
+          downloadFile: string;
+          gscAnalysisStarted: string; // New key
         };
         chat: {
           genericApproval: string;
