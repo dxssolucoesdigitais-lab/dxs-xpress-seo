@@ -215,7 +215,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       <div className="p-4 bg-background border-t border-border flex justify-center">
         <form onSubmit={handleSendMessage} className="relative max-w-4xl w-full">
           <textarea
-            className="w-full bg-transparent border border-border rounded-2xl p-4 pl-14 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
+            className="w-full bg-transparent border border-border rounded-2xl p-4 pl-28 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChatMessage, StructuredChatContent, LlmOption, WorkflowProgress } from '@/types/chat.types';
-import { User, FileText, Download, BarChart3 } from 'lucide-react'; // Adicionado BarChart3
+import { User, FileText, Download, BarChart3 } from 'lucide-react';
 import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
