@@ -81,15 +81,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       <div className="p-4 bg-background border-t border-border flex justify-center">
         <form onSubmit={handleSendMessage} className="relative max-w-4xl w-full"> {/* Alterado para max-w-4xl */}
           <textarea
-            className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
+            className="w-full bg-transparent border border-border rounded-2xl p-4 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
             placeholder={isDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
-            rows={1}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isDisabled || !user || isSendingMessage} // Desabilita se não houver usuário
           ></textarea>
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-cyan-500 text-black disabled:bg-gray-600" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
+          <button type="submit" className="absolute right-4 bottom-4 p-2 rounded-full bg-cyan-500 text-black disabled:bg-gray-600" disabled={isDisabled || !prompt.trim() || isSendingMessage || !user}>
             {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>
