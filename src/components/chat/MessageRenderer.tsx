@@ -13,13 +13,11 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
   if (message.author === 'user') {
     return (
-      <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem do usuário */}
-        <div className="flex items-start gap-4 max-w-2xl w-full mx-auto flex-row-reverse"> {/* Largura máxima para o balão, centralizado, avatar à direita */}
-          <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
-            <p>{message.content}</p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
+      <div className="max-w-2xl w-full mx-auto flex items-start gap-4 flex-row-reverse"> {/* Centered block for user message */}
+        <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
+          <p>{message.content}</p>
         </div>
+        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
       </div>
     );
   }
@@ -50,25 +48,23 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   // Handle the 'structured_response' type from Windmill
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
     return (
-      <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem da IA */}
-        <div className="flex items-start gap-4 max-w-2xl w-full mx-auto"> {/* Largura máxima para o balão, centralizado, avatar à esquerda */}
-          <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
-            <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+      <div className="max-w-2xl w-full mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
+          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+        </div>
+        <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+            <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
           </div>
-          <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all"> {/* Removido max-w-xl */}
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
-              <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
-            </div>
-            <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
-              {structuredContent.messages.map((msgItem: any, index: number) => {
-                if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
-                  return <p key={index}>{msgItem.data}</p>;
-                }
-                // Add handling for other message types within structured_response if needed
-                return null;
-              })}
-            </div>
+          <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+            {structuredContent.messages.map((msgItem: any, index: number) => {
+              if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
+                return <p key={index}>{msgItem.data}</p>;
+              }
+              // Add handling for other message types within structured_response if needed
+              return null;
+            })}
           </div>
         </div>
       </div>
@@ -77,19 +73,17 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
   // Default rendering for plain text or unparsed content (if structuredContent is undefined or not handled above)
   return (
-    <div className="flex justify-center w-full"> {/* Centraliza o bloco da mensagem da IA */}
-      <div className="flex items-start gap-4 max-w-2xl w-full mx-auto"> {/* Largura máxima para o balão, centralizado, avatar à esquerda */}
-        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
-          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+    <div className="max-w-2xl w-full mx-auto flex items-start gap-4"> {/* Centered block for AI message */}
+      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
+        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
+      </div>
+      <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all">
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+          <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-border overflow-hidden break-all"> {/* Removido max-w-xl */}
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
-            <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
-          </div>
-          <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
-            {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
-          </div>
+        <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+          {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
     </div>
