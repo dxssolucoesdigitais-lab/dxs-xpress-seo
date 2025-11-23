@@ -14,7 +14,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10 relative ai-thinking">
+        <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10 relative ai-thinking"> {/* Removido max-w-xl */}
           <p className="font-medium text-sm text-cyan-300 mb-2">{message}</p>
           <div className="flex items-center gap-2 typing-dots">
             <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
