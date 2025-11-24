@@ -15,7 +15,7 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
       <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0"> {/* Alterado para bg-secondary */}
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border">
+      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border max-w-[calc(100%-6rem)]">
         <div className="prose prose-invert text-lg max-w-none text-card-foreground mb-4">
           <p>{t('optionSelector.prompt')}</p>
         </div>

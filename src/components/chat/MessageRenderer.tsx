@@ -45,7 +45,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
     return (
       <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
-        <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
+        <div className="p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all max-w-[calc(100%-6rem)]">
           {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
           {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
             <p className={cn("text-lg", { 'mt-3': fileAttachment })}>{message.content}</p>
@@ -83,7 +83,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all">
+        <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-[calc(100%-6rem)]">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
             <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
@@ -107,7 +107,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all">
+      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-[calc(100%-6rem)]">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
