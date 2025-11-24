@@ -6,24 +6,24 @@ import MobileSidebar from './MobileSidebar';
 import Header from './Header';
 import FeedbackDialog from './FeedbackDialog';
 import SubscriptionAlert from './SubscriptionAlert';
-import { cn } from '@/lib/utils'; // Importar cn para utilitários de classe
+import { cn } from '@/lib/utils';
 
 const Layout = () => {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true); // Novo estado para a barra lateral do desktop
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
 
   return (
-    <div className="min-h-screen flex bg-transparent text-foreground">
+    <div className="min-h-screen flex bg-background text-foreground"> {/* Alterado para bg-background */}
       <Sidebar 
         onFeedbackClick={() => setIsFeedbackDialogOpen(true)} 
-        isExpanded={isSidebarExpanded} // Passar o estado para a Sidebar
-        toggleSidebar={toggleSidebar} // Passar a função de toggle
+        isExpanded={isSidebarExpanded}
+        toggleSidebar={toggleSidebar}
       />
       <MobileSidebar 
         isOpen={isMobileMenuOpen} 
@@ -33,16 +33,16 @@ const Layout = () => {
       
       <div className={cn(
         "flex flex-col flex-1 transition-all duration-300",
-        isSidebarExpanded ? "md:pl-64" : "md:pl-20" // Ajustar padding com base na expansão
+        isSidebarExpanded ? "md:pl-64" : "md:pl-20"
       )}>
         <Header 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           onBuyCreditsClick={() => setIsPricingDialogOpen(true)}
-          onToggleSidebar={toggleSidebar} // Adicionar toggle para o Header
-          isSidebarExpanded={isSidebarExpanded} // Passar estado para o Header
+          onToggleSidebar={toggleSidebar}
+          isSidebarExpanded={isSidebarExpanded}
         />
         <SubscriptionAlert onRenewClick={() => setIsPricingDialogOpen(true)} />
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col"> {/* Adicionado flex flex-col para o layout do chat */}
           <Outlet />
         </main>
       </div>

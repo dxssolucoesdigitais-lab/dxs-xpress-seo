@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Send, Loader2, Paperclip, BarChart3 } from 'lucide-react'; // Adicionado BarChart3
+import { Send, Loader2, Paperclip, BarChart3 } from 'lucide-react';
 import { Project } from '@/types/database.types';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const gscFileInputRef = useRef<HTMLInputElement>(null); // Novo ref para input de GSC
+  const gscFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = () => {
     fileInputRef.current?.click();
@@ -78,7 +78,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       showError('toasts.fileUpload.noFileSelected');
       return;
     }
-    if (fileInputRef.current) fileInputRef.current.value = ''; // Clear the input
+    if (fileInputRef.current) fileInputRef.current.value = '';
 
     const fileMetadata = await uploadFileToStorage(file);
     if (fileMetadata) {
@@ -93,7 +93,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       showError('toasts.fileUpload.noFileSelected');
       return;
     }
-    if (gscFileInputRef.current) gscFileInputRef.current.value = ''; // Clear the input
+    if (gscFileInputRef.current) gscFileInputRef.current.value = '';
 
     if (!project.id) {
       showError('toasts.chat.noProjectForGSC');
@@ -103,7 +103,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
     const fileMetadata = await uploadFileToStorage(file);
     if (!fileMetadata) return;
 
-    setIsSendingMessage(true); // Bloqueia o input enquanto a análise GSC é acionada
+    setIsSendingMessage(true);
     const tempMessageId = `optimistic-gsc-${Date.now()}`;
     onOptimisticMessageAdd({
       id: tempMessageId,
@@ -215,7 +215,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       <div className="p-4 bg-background border-t border-border flex justify-center">
         <form onSubmit={handleSendMessage} className="relative max-w-4xl w-full">
           <textarea
-            className="w-full bg-transparent border border-border rounded-2xl p-4 pl-28 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none glass-effect disabled:opacity-50"
+            className="w-full bg-transparent border border-border rounded-2xl p-4 pl-28 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none disabled:opacity-50" // Removido glass-effect
             placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -235,7 +235,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
             onChange={handleGSCFileChange}
             className="hidden"
             disabled={inputDisabled}
-            accept=".csv,.json" // Sugerir tipos de arquivo GSC
+            accept=".csv,.json"
           />
           <button
             type="button"
@@ -250,7 +250,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
             type="button"
             onClick={handleGSCFileSelect}
             className="absolute left-16 bottom-4 h-10 w-10 flex items-center justify-center rounded-full text-muted-foreground hover:bg-accent disabled:opacity-50"
-            disabled={inputDisabled || !project.id} // Desabilita se não houver projeto selecionado
+            disabled={inputDisabled || !project.id}
             title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
           >
             {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={20} className="animate-spin" /> : <BarChart3 size={20} />}

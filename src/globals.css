@@ -105,8 +105,9 @@
 }
 
 @layer utilities {
+  /* Removendo o glass-effect padrão para evitar inconsistências */
   .glass-effect {
-    @apply bg-card/5 backdrop-blur-lg;
+    /* @apply bg-card/5 backdrop-blur-lg; */
   }
 
   .animate-pulse-glow {

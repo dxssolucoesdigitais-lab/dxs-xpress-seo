@@ -64,14 +64,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
   return (
     <>
       <Sheet open={isOpen} onOpenChange={onOpenChange}>
-        <SheetContent side="left" className="w-64 bg-background border-r border-border p-0 flex flex-col">
-          <div className="flex items-center h-16 px-4 border-b border-border">
-            <Link to="/chat" onClick={() => onOpenChange(false)} className="text-xl font-bold">
+        <SheetContent side="left" className="w-64 bg-sidebar border-r border-sidebar-border p-0 flex flex-col"> {/* Usando cores da sidebar */}
+          <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
+            <Link to="/chat" onClick={() => onOpenChange(false)} className="text-xl font-bold text-sidebar-foreground">
               XpressSEO
             </Link>
           </div>
           <div className="p-4">
-            <Button variant="outline" className="w-full justify-start" onClick={handleNewConversationClick}>
+            <Button variant="outline" className="w-full justify-start bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-sidebar-border" onClick={handleNewConversationClick}>
               <PlusCircle className="mr-2 h-4 w-4" />
               {t('newProject')}
             </Button>
@@ -91,8 +91,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                     className={cn(
                       'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md',
                       projectId === project.id
-                        ? 'bg-accent text-accent-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                        : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                     )}
                   >
                     <Link to={`/chat/${project.id}`} onClick={() => onOpenChange(false)} className="flex items-center flex-1 min-w-0">
@@ -104,12 +104,12 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 flex-shrink-0"
+                          className="h-6 w-6 flex-shrink-0 text-sidebar-foreground hover:bg-sidebar-accent"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-popover border-border text-popover-foreground">
                         <DropdownMenuItem onSelect={(e) => { e.preventDefault(); alert('Função de renomear em breve!'); }}>
                           Renomear
                         </DropdownMenuItem>
@@ -123,7 +123,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
               )}
             </nav>
           </ScrollArea>
-          <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
+          <nav className="px-4 py-4 border-t border-sidebar-border mt-auto space-y-1">
             {availableNav.map((item) => (
               <Link
                 key={item.name}
@@ -132,8 +132,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                 className={cn(
                   'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
                   location.pathname.startsWith(item.href)
-                    ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 )}
               >
                 <item.icon className="mr-3 h-5 w-5" />
@@ -142,7 +142,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
             ))}
             <Button
               variant="ghost"
-              className="w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3"
+              className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground px-3"
               onClick={handleFeedbackClick}
             >
               <MessageCircleQuestion className="mr-3 h-5 w-5" />
@@ -152,7 +152,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
         </SheetContent>
       </Sheet>
       <AlertDialog open={!!projectToDelete} onOpenChange={(isOpen) => !isOpen && setProjectToDelete(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-popover border-border text-popover-foreground">
           <AlertDialogHeader>
             <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>

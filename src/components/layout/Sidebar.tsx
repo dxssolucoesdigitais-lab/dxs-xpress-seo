@@ -28,8 +28,8 @@ const mainNavigation = [
 
 interface SidebarProps {
   onFeedbackClick: () => void;
-  isExpanded: boolean; // Novo prop
-  toggleSidebar: () => void; // Novo prop
+  isExpanded: boolean;
+  toggleSidebar: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSidebar }) => {
@@ -53,12 +53,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
   return (
     <>
       <aside className={cn(
-        "hidden md:flex md:flex-col md:fixed md:inset-y-0 bg-background border-r border-border z-50 transition-all duration-300",
-        isExpanded ? "w-64" : "w-20" // Ajustar largura
+        "hidden md:flex md:flex-col md:fixed md:inset-y-0 bg-sidebar border-r border-sidebar-border z-50 transition-all duration-300", // Usando cores da sidebar
+        isExpanded ? "w-64" : "w-20"
       )}>
-        <div className="flex items-center h-16 px-4 border-b border-border relative">
+        <div className="flex items-center h-16 px-4 border-b border-sidebar-border relative">
           {isExpanded ? (
-            <Link to="/chat" className="text-xl font-bold">
+            <Link to="/chat" className="text-xl font-bold text-sidebar-foreground">
               XpressSEO
             </Link>
           ) : (
@@ -70,14 +70,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 bg-background border border-border rounded-full shadow-md hover:bg-accent hidden md:flex"
+            className="absolute -right-4 top-1/2 -translate-y-1/2 bg-sidebar border border-sidebar-border rounded-full shadow-md hover:bg-sidebar-accent hidden md:flex"
           >
-            {isExpanded ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            {isExpanded ? <ChevronLeft className="h-4 w-4 text-sidebar-foreground" /> : <ChevronRight className="h-4 w-4 text-sidebar-foreground" />}
           </Button>
         </div>
         <div className="flex flex-col flex-1 overflow-y-hidden">
           <div className="p-4">
-            <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/chat')}>
+            <Button variant="outline" className="w-full justify-start bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-sidebar-border" onClick={() => navigate('/chat')}>
               <PlusCircle className={cn("h-4 w-4", isExpanded ? "mr-2" : "")} />
               {isExpanded && t('newProject')}
             </Button>
@@ -97,27 +97,27 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
                     className={cn(
                       'flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md',
                       projectId === project.id
-                        ? 'bg-accent text-accent-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                      !isExpanded && "justify-center" // Centralizar ícone quando colapsado
+                        ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                        : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                      !isExpanded && "justify-center"
                     )}
                   >
                     <Link to={`/chat/${project.id}`} className={cn("flex items-center flex-1 min-w-0", !isExpanded && "justify-center")}>
                       <MessageSquare className={cn("h-5 w-5 flex-shrink-0", isExpanded ? "mr-3" : "")} />
                       {isExpanded && <span className="truncate">{project.project_name || 'Nova Conversa'}</span>}
                     </Link>
-                    {isExpanded && ( // Mostrar dropdown apenas quando expandido
+                    {isExpanded && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-6 w-6 flex-shrink-0"
+                            className="h-6 w-6 flex-shrink-0 text-sidebar-foreground hover:bg-sidebar-accent"
                           >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-popover border-border text-popover-foreground">
                           <DropdownMenuItem onSelect={(e) => { e.preventDefault(); alert('Função de renomear em breve!'); }}>
                             Renomear
                           </DropdownMenuItem>
@@ -132,7 +132,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
               )}
             </nav>
           </ScrollArea>
-          <nav className="px-4 py-4 border-t border-border mt-auto space-y-1">
+          <nav className="px-4 py-4 border-t border-sidebar-border mt-auto space-y-1">
             {availableNav.map((item) => (
               <Link
                 key={item.name}
@@ -140,8 +140,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
                 className={cn(
                   'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
                   location.pathname.startsWith(item.href)
-                    ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                   !isExpanded && "justify-center"
                 )}
               >
@@ -152,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
             <Button
               variant="ghost"
               className={cn(
-                "w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground px-3",
+                "w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground px-3",
                 !isExpanded && "justify-center"
               )}
               onClick={onFeedbackClick}
@@ -164,7 +164,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
         </div>
       </aside>
       <AlertDialog open={!!projectToDelete} onOpenChange={(isOpen) => !isOpen && setProjectToDelete(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-popover border-border text-popover-foreground">
           <AlertDialogHeader>
             <AlertDialogTitle>{t('deleteDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>

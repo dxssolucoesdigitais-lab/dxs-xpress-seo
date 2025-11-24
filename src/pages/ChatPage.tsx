@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
-import Confetti from 'react-confetti';
+import Confetti from 'react-react-confetti'; // Corrigido o import
 import { useWindowSize } from '@uidotdev/usehooks';
 import { StructuredChatContent, ChatMessage } from '@/types/chat.types';
 import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt';
@@ -179,7 +179,7 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-full bg-background text-foreground">
       {showConfetti && <Confetti width={width} height={height} />}
       
-      {currentProjectId && project ? ( // Renderiza a UI do chat se um projeto for selecionado/criado
+      {currentProjectId && project ? (
         <>
           <ChatHeader project={project} />
           <MessageList 
@@ -204,14 +204,12 @@ const ChatPage: React.FC = () => {
             <ChatInput 
               project={project} 
               isDisabled={isChatInputDisabled} 
-              // onNewProjectCreated não é mais necessário aqui
               onOptimisticMessageAdd={addOptimisticMessage}
               onOptimisticMessageRemove={removeOptimisticMessage}
             />
           )}
         </>
       ) : (
-        // Nenhum projeto selecionado/criado, mostra EmptyChatPrompt
         <EmptyChatPrompt 
           onNewProjectCreated={handleNewProjectCreated} 
         />

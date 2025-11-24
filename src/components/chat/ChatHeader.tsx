@@ -10,7 +10,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-border glass-effect z-10">
+    <div className="flex items-center justify-between p-4 border-b border-border bg-background z-10"> {/* Removido glass-effect */}
       <div className="flex items-center gap-3">
         <div className="relative w-10 h-10">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain" />

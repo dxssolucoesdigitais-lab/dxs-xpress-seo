@@ -21,8 +21,8 @@ import { useTranslation } from 'react-i18next';
 interface HeaderProps {
   onMenuClick: () => void;
   onBuyCreditsClick: () => void;
-  onToggleSidebar: () => void; // Novo prop
-  isSidebarExpanded: boolean; // Novo prop
+  onToggleSidebar: () => void;
+  isSidebarExpanded: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick, onToggleSidebar, isSidebarExpanded }) => {
@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick, onToggl
           <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle Mobile Menu</span>
         </Button>
-        <Button variant="ghost" size="icon" className="hidden md:flex" onClick={onToggleSidebar}>
+        <Button variant="ghost" size="icon" className="hidden md:flex text-foreground" onClick={onToggleSidebar}>
           {isSidebarExpanded ? <ChevronLeft className="h-6 w-6" /> : <ChevronRight className="h-6 w-6" />}
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
