@@ -16,7 +16,7 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border">
-        <div className="prose prose-invert dark:prose-invert prose-sm max-w-none text-muted-foreground mb-4">
+        <div className="prose prose-invert text-base max-w-none text-muted-foreground mb-4"> {/* Ajustado para text-base */}
           <p>{t('optionSelector.prompt')}</p>
         </div>
         <div className="space-y-3">
@@ -24,23 +24,23 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
             <div 
               key={option.number}
               className={cn(
-                "flex items-center gap-3 p-3 rounded-lg border border-border transition-all cursor-pointer", // Adicionado cursor-pointer
-                "hover:bg-accent hover:text-accent-foreground" // Efeito de hover
+                "flex items-center gap-3 p-3 rounded-lg border border-border transition-all cursor-pointer",
+                "hover:bg-accent hover:text-accent-foreground"
               )}
             >
               <div className={cn(
-                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold"
+                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold text-base" {/* Ajustado para text-base */}
               )}>
                 {option.number}
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-foreground">{option.content}</p>
-                {option.charCount && <p className="text-xs text-muted-foreground">{option.charCount} caracteres</p>}
+                <p className="font-semibold text-base text-foreground">{option.content}</p> {/* Ajustado para text-base */}
+                {option.charCount && <p className="text-sm text-muted-foreground">{option.charCount} caracteres</p>} {/* Ajustado para text-sm */}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-4 text-center text-xs text-muted-foreground">
+        <div className="mt-4 text-center text-sm text-muted-foreground"> {/* Ajustado para text-sm */}
           {t('optionSelector.typeToSelect')}
         </div>
       </div>

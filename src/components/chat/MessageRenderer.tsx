@@ -22,7 +22,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         href={file.fileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 text-sm font-medium hover:underline truncate"
+        className="flex-1 text-base font-medium hover:underline truncate" {/* Ajustado para text-base */}
       >
         {file.fileName}
       </a>
@@ -48,7 +48,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
           {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
           {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
-            <p className={cn({ 'mt-3': fileAttachment })}>{message.content}</p>
+            <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p> {/* Ajustado para text-base */}
           )}
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
@@ -88,7 +88,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
             <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
             <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
           </div>
-          <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+          <div className={cn("prose prose-invert text-base text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-base */}
             {structuredContent.messages.map((msgItem: any, index: number) => {
               if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
                 return <p key={index}>{msgItem.data}</p>;
@@ -112,7 +112,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className={cn("prose prose-invert prose-sm text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+        <div className={cn("prose prose-invert text-base text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-base */}
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>

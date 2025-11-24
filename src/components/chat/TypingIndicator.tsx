@@ -14,7 +14,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ currentStep }) => {
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border relative">
-        <p className="font-medium text-sm text-cyan-300 mb-2">{message}</p>
+        <p className="font-medium text-base text-cyan-300 mb-2">{message}</p> {/* Ajustado para text-base */}
         <Loader variant="typing" size="md" className="text-cyan-400" /> {/* Usando o novo Loader */}
       </div>
       <div className="w-10 h-10 flex-shrink-0 invisible"></div>
