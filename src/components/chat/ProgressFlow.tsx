@@ -16,14 +16,16 @@ const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress, messageTime }) =>
   }
 
   return (
-    <div className="message ai animate-fadeIn">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white" style={{ background: 'var(--chat-ai-avatar-gradient)' }}>AI</div>
-        <span className="font-semibold text-sm text-[var(--chat-message-author)]">{t('chatHeader.assistantName')}</span>
-        <span className="text-xs text-[var(--chat-message-time)]">{messageTime}</span>
+    <div className="message ai animate-fadeIn max-w-2xl mx-auto flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
+        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="pl-11"> {/* Espaçamento para alinhar com o avatar */}
-        <div className="p-4 rounded-xl text-base leading-relaxed max-w-md" style={{ background: 'var(--chat-ai-message-bg-gradient)', border: '1px solid var(--chat-ai-message-border)', color: 'var(--chat-ai-message-text)' }}>
+      <div className="flex-1">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+          <span className="text-xs text-muted-foreground">{messageTime}</span>
+        </div>
+        <div className="p-4 rounded-xl text-base leading-relaxed max-w-md bg-card border border-border text-foreground">
           <p className="font-bold text-base mb-2">{t('progressFlow.title')}</p>
           {progress.completed.map((step, index) => (
             <div key={index} className="flex items-center gap-2 text-green-400 text-base">
@@ -36,8 +38,8 @@ const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress, messageTime }) =>
             <span>{progress.in_progress} {t('progressFlow.inProgress')}</span>
           </div>
           {progress.upcoming && progress.upcoming.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-[var(--chat-ai-message-border)]">
-              <p className="text-sm text-[var(--chat-message-time)] flex items-center gap-2">
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="text-sm text-muted-foreground flex items-center gap-2">
                 <FileText size={16} />
                 <span>{t('progressFlow.nextSteps')} {progress.upcoming.join(', ')}...</span>
               </p>

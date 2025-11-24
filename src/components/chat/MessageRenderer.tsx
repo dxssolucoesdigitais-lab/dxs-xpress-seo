@@ -29,20 +29,28 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   const { t } = useTranslation();
 
   const renderFileAttachment = (file: FileMetadata, isGSCAnalysis: boolean = false) => (
-    <div className="flex items-center gap-3 p-3 bg-[var(--chat-file-message-bg)] border-[var(--chat-file-message-border)] rounded-lg mt-2">
-      <span className="text-2xl flex-shrink-0">{getFileIcon(file.fileName)}</span>
-      <div className="flex-1">
-        <div className="font-semibold text-base text-[var(--chat-file-message-name)]">{file.fileName}</div>
-        <div className="text-sm text-[var(--chat-file-message-meta)]">{file.fileSize}</div>
-      </div>
+    <div className={cn(
+      "flex items-center gap-2 p-3 rounded-lg border",
+      isGSCAnalysis ? "bg-amber-600/20 border-amber-500 text-amber-300" : "bg-blue-600/20 border-blue-500 text-blue-300"
+    )}>
+      {isGSCAnalysis ? <BarChart3 className="h-5 w-5 flex-shrink-0" /> : <FileText className="h-5 w-5 flex-shrink-0" />}
+      <a
+        href={file.fileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-1 text-base font-medium hover:underline truncate"
+      >
+        {file.fileName}
+      </a>
       <a
         href={file.fileUrl}
         target="_blank"
         rel="noopener noreferrer"
         download
-        className="px-3 py-1 bg-[var(--chat-file-download-bg)] text-[var(--chat-file-download-text)] rounded-md text-sm font-semibold cursor-pointer transition-all hover:bg-[var(--chat-file-download-hover-bg)]"
+        className={cn("flex-shrink-0", isGSCAnalysis ? "text-amber-200 hover:text-amber-100" : "text-blue-200 hover:text-blue-100")}
+        title={t('chatInput.downloadFile')}
       >
-        Download
+        <Download className="h-4 w-4" />
       </a>
     </div>
   );
@@ -54,19 +62,19 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
     const isGSCAnalysisRequest = message.metadata?.gscAnalysis === true;
 
     return (
-      <div className="message user animate-fadeIn">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white" style={{ background: 'var(--chat-user-avatar-gradient)' }}>VC</div>
-          <span className="font-semibold text-sm text-[var(--chat-message-author)]">{t('chat.you')}</span>
-          <span className="text-xs text-[var(--chat-message-time)]">{time}</span>
-        </div>
-        <div className="pl-11"> {/* Espaçamento para alinhar com o avatar */}
-          {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
-          {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
-            <div className="p-4 rounded-xl bg-[var(--chat-user-message-bg)] border border-[var(--chat-user-message-border)] text-[var(--chat-user-message-text)] text-base leading-relaxed max-w-md">
-              <p>{message.content}</p>
-            </div>
-          )}
+      <div className="message user animate-fadeIn max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
+        <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white bg-gradient-to-br from-purple-600 to-blue-600 flex-shrink-0">VC</div>
+        <div className="flex-1">
+          <div className="flex items-center justify-end gap-3 mb-2">
+            <span className="font-semibold text-sm text-foreground">{t('chat.you')}</span>
+            <span className="text-xs text-muted-foreground">{time}</span>
+          </div>
+          <div className="p-4 rounded-2xl rounded-br-none bg-secondary border border-border text-foreground text-base leading-relaxed max-w-md ml-auto">
+            {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
+            {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
+              <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -96,19 +104,21 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
   // Handle the 'structured_response' type from Windmill
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
     return (
-      <div className="message ai animate-fadeIn">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white" style={{ background: 'var(--chat-ai-avatar-gradient)' }}>AI</div>
-          <span className="font-semibold text-sm text-[var(--chat-message-author)]">{t('chatHeader.assistantName')}</span>
-          <span className="text-xs text-[var(--chat-message-time)]">{time}</span>
-          {message.metadata?.current_step && (
-            <span className="px-2 py-1 bg-[var(--chat-badge-bg)] text-[var(--chat-badge-text)] rounded-md text-xs font-semibold">
-              {t('chatHeader.step')} {message.metadata.current_step}
-            </span>
-          )}
+      <div className="message ai animate-fadeIn max-w-2xl mx-auto flex items-start gap-4">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
+          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="pl-11"> {/* Espaçamento para alinhar com o avatar */}
-          <div className="p-4 rounded-xl text-base leading-relaxed max-w-md" style={{ background: 'var(--chat-ai-message-bg-gradient)', border: '1px solid var(--chat-ai-message-border)', color: 'var(--chat-ai-message-text)' }}>
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+            <span className="text-xs text-muted-foreground">{time}</span>
+            {message.metadata?.current_step && (
+              <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
+                {t('chatHeader.step')} {message.metadata.current_step}
+              </span>
+            )}
+          </div>
+          <div className="p-4 rounded-2xl rounded-tl-none bg-card border border-border text-foreground text-base leading-relaxed max-w-md">
             <div className="space-y-4">
               {structuredContent.messages.map((msgItem: any, index: number) => {
                 if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
@@ -125,19 +135,21 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
   // Default rendering for plain text or unparsed content
   return (
-    <div className="message ai animate-fadeIn">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white" style={{ background: 'var(--chat-ai-avatar-gradient)' }}>AI</div>
-        <span className="font-semibold text-sm text-[var(--chat-message-author)]">{t('chatHeader.assistantName')}</span>
-        <span className="text-xs text-[var(--chat-message-time)]">{time}</span>
-        {project?.current_step && (
-          <span className="px-2 py-1 bg-[var(--chat-badge-bg)] text-[var(--chat-badge-text)] rounded-md text-xs font-semibold">
-            {t('chatHeader.step')} {project.current_step}
-          </span>
-        )}
+    <div className="message ai animate-fadeIn max-w-2xl mx-auto flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
+        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="pl-11"> {/* Espaçamento para alinhar com o avatar */}
-        <div className="p-4 rounded-xl text-base leading-relaxed max-w-md" style={{ background: 'var(--chat-ai-message-bg-gradient)', border: '1px solid var(--chat-ai-message-border)', color: 'var(--chat-ai-message-text)' }}>
+      <div className="flex-1">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+          <span className="text-xs text-muted-foreground">{time}</span>
+          {project?.current_step && (
+            <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
+              {t('chatHeader.step')} {project.current_step}
+            </span>
+          )}
+        </div>
+        <div className="p-4 rounded-2xl rounded-tl-none bg-card border border-border text-foreground text-base leading-relaxed max-w-md">
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
@@ -164,7 +176,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   }, [messages, isAiTyping]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-[var(--chat-messages-bg)]">
+    <div className="flex-1 overflow-y-auto p-6 bg-background"> {/* Alterado para bg-background */}
       {messages.map((message) => (
         <MessageRenderer key={message.id} message={message} projectId={projectId} />
       ))}

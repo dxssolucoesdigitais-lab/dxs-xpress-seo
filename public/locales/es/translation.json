@@ -360,7 +360,7 @@
   "changeLanguage": "Cambiar Idioma",
   "portuguese": "Português",
   "english": "Inglês",
-  "spanish": "Espanhol",
+    "spanish": "Espanhol",
   "login": {
     "welcomeTitle": "Bienvenido a XpressSEO",
     "welcomeSubtitle": "Tu asistente operacional inteligente",
@@ -514,7 +514,7 @@
     "cookiesTypesList": [
       "<strong>Cookies Esenciales:</strong> Esenciales para el funcionamiento del sitio web, permitiéndote navegar y usar sus funcionalidades. Sin estas cookies, servicios como el carrito de compras y el procesamiento de pagos no pueden ser proporcionados.",
       "<strong>Cookies de Rendimiento y Analíticas:</strong> Recopilan información sobre cómo los visitantes usan nuestro sitio web, qué páginas se visitan con más frecuencia y si reciben mensajes de error. Estas cookies se utilizan únicamente para mejorar el rendimiento y la experiencia del usuario en el sitio web.",
-      "<strong>Cookies de Funcionalidad:</strong> Permiten que el sitio web recuerde las elecciones que haces (como tu nombre de usuario, idioma o la región en la que te encuentras) y proporcione funciones mejoradas y más personales.",
+      "<strong>Cookies de Funcionalidad:</strong> Permiten que el sitio web recuerde las elecciones que haces (como tu nombre de usuario, idioma o la región en que te encuentras) y proporcione funciones mejoradas y más personales.",
       "<strong>Cookies de Publicidad y Redes Sociales:</strong> Se utilizan para ofrecerte anuncios más relevantes para ti y tus intereses. También se utilizan para limitar el número de veces que ves un anuncio, así como para ayudar a medir la eficacia de las campañas publicitarias."
     ],
     "dataProcessingTitle": "Finalidades del Procesamiento de Datos",

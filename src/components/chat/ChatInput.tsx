@@ -269,23 +269,23 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   }, [prompt]);
 
   return (
-    <div className="p-5 bg-[var(--chat-input-bg)] border-t border-[var(--chat-input-border)] shadow-md">
+    <div className="p-5 bg-background border-t border-border shadow-md">
       <div className="flex flex-col md:flex-row gap-3 items-end">
         <div className="flex flex-col gap-2 flex-1 w-full">
           {uploadedFiles.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-2">
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-2 px-3 py-1 bg-[var(--chat-file-chip-bg-gradient)] border border-[var(--chat-file-chip-border)] rounded-lg text-sm text-[var(--chat-file-chip-text)]">
+                <div key={index} className="flex items-center gap-2 px-3 py-1 bg-blue-900/20 border border-blue-500/40 rounded-lg text-sm text-foreground">
                   <span className="text-base">{getFileIcon(file.fileName)}</span>
                   <span className="font-medium max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">{file.fileName}</span>
-                  <span className="text-xs text-[var(--chat-file-chip-size-text)]">{file.fileSize}</span>
-                  <X className="w-4 h-4 text-[var(--chat-file-chip-remove)] cursor-pointer hover:scale-110 transition-transform" onClick={() => removeFile(index)} />
+                  <span className="text-xs text-muted-foreground">{file.fileSize}</span>
+                  <X className="w-4 h-4 text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={() => removeFile(index)} />
                 </div>
               ))}
             </div>
           )}
           <div className="flex gap-2 items-center w-full">
-            <label htmlFor="fileInput" className="px-3 py-2 bg-[var(--chat-upload-button-bg)] border border-[var(--chat-upload-button-border)] rounded-lg cursor-pointer transition-all hover:bg-[var(--chat-upload-button-hover-bg)] hover:border-[var(--chat-upload-button-hover-border)] hover:text-[var(--chat-upload-button-hover-text)] flex items-center gap-2 text-sm text-[var(--chat-upload-button-text)] font-medium">
+            <label htmlFor="fileInput" className="px-3 py-2 bg-secondary border border-border rounded-lg cursor-pointer transition-all hover:bg-accent hover:border-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm text-muted-foreground font-medium">
               {isUploadingFile && !gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <Paperclip size={16} />}
               {t('chatInput.attachFile')}
             </label>
@@ -299,7 +299,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
               accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.csv"
               id="fileInput"
             />
-            <label htmlFor="gscFileInput" className="px-3 py-2 bg-[var(--chat-upload-button-bg)] border border-[var(--chat-upload-button-border)] rounded-lg cursor-pointer transition-all hover:bg-[var(--chat-upload-button-hover-bg)] hover:border-[var(--chat-upload-button-hover-border)] hover:text-[var(--chat-upload-button-hover-text)] flex items-center gap-2 text-sm text-[var(--chat-upload-button-text)] font-medium"
+            <label htmlFor="gscFileInput" className="px-3 py-2 bg-secondary border border-border rounded-lg cursor-pointer transition-all hover:bg-accent hover:border-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm text-muted-foreground font-medium"
               title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
             >
               {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <BarChart3 size={16} />}
@@ -316,7 +316,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
             />
             <textarea
               ref={textareaRef}
-              className="flex-1 p-3 border-2 border-[var(--chat-input-border)] rounded-xl text-base text-foreground placeholder:text-muted-foreground resize-none min-h-[50px] max-h-[150px] focus:outline-none focus:border-[var(--chat-input-focus-border)] focus:shadow-[0_0_0_3px_var(--chat-input-focus-shadow)] bg-transparent"
+              className="flex-1 p-3 border-2 border-border rounded-xl text-base text-foreground placeholder:text-muted-foreground resize-none min-h-[50px] max-h-[150px] focus:outline-none focus:border-blue-500 focus:shadow-[0_0_0_3px_rgba(102,126,234,0.15)] bg-transparent"
               placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -329,7 +329,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
         <button
           type="submit"
           onClick={handleSendMessage}
-          className="px-6 py-3 bg-[var(--chat-send-button-gradient)] text-[var(--chat-send-button-text)] rounded-xl text-base font-semibold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[var(--chat-send-button-shadow)] disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px]"
+          className="px-6 py-3 bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-xl text-base font-semibold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-600/40 disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px]"
           disabled={inputDisabled || (!prompt.trim() && uploadedFiles.length === 0)}
         >
           {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <span className="flex items-center justify-center gap-1">Enviar <Send size={16} /></span>}

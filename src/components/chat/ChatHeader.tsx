@@ -19,7 +19,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
     >
       <h1 className="text-xl font-semibold">🤖 {t('chatHeader.assistantName')}</h1>
       <div className="flex items-center gap-4 text-sm opacity-90">
-        <div className="w-2 h-2 bg-chat-status-indicator rounded-full animate-pulse"></div>
+        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div> {/* Corrigido para green-400 */}
         <span>Online</span>
       </div>
     </div>
