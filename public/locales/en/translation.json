@@ -54,7 +54,8 @@
       "gscAnalysisTriggered": "GSC analysis triggered successfully! Results will appear shortly.",
       "gscAnalysisTriggerFailed": "Error triggering GSC analysis. Please try again.",
       "fetchMessagesFailed": "Error fetching chat messages.",
-      "sendMessageFailed": "Error sending message."
+      "sendMessageFailed": "Error sending message.",
+      "you": "You"
     },
     "clipboard": {
       "notAvailable": "Your browser does not support the clipboard API.",
@@ -212,7 +213,8 @@
   },
   "chat": {
     "genericApproval": "Approved",
-    "analyzingNextStep": "Analyzing next step..."
+    "analyzingNextStep": "Analyzing next step...",
+    "you": "You"
   },
   "emptyChat": {
     "greeting": "Hello, {{userName}}!",

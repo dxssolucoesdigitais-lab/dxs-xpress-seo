@@ -54,7 +54,8 @@
       "gscAnalysisTriggered": "¡Análisis GSC activado con éxito! Los resultados aparecerán en breve.",
       "gscAnalysisTriggerFailed": "Error al activar el análisis GSC. Inténtalo de nuevo.",
       "fetchMessagesFailed": "Error al buscar mensajes del chat.",
-      "sendMessageFailed": "Error al enviar mensaje."
+      "sendMessageFailed": "Error al enviar mensaje.",
+      "you": "Tú"
     },
     "clipboard": {
       "notAvailable": "Tu navegador no es compatible con la API del portapapeles.",
@@ -212,7 +213,8 @@
   },
   "chat": {
     "genericApproval": "Aprobado",
-    "analyzingNextStep": "Analizando el siguiente paso..."
+    "analyzingNextStep": "Analizando el siguiente paso...",
+    "you": "Tú"
   },
   "emptyChat": {
     "greeting": "¡Hola, {{userName}}!",
@@ -505,7 +507,7 @@
     "dataCollectionTitle": "Datos Recopilados y Motivos de la Recopilación",
     "dataCollectionIntro": "Recopilamos y procesamos los siguientes tipos de datos personales:",
     "dataCollectionList1": "<strong>Información Proporcionada por Ti:</strong> Esto incluye, entre otros, nombre, apellido, dirección de correo electrónico, dirección física, información de pago y cualquier otra información que elijas proporcionar al crear una cuenta, realizar una compra o interactuar con nuestros servicios de atención al cliente.",
-    "dataCollectionList2": "<strong>Información Recopilada Automáticamente:</strong> Cuando visitas nuestro sitio web, recopilamos automáticamente información sobre tu dispositivo y tu interacción con nuestro sitio web. Esto puede incluir datos como tu IP address, tipo de navegador, detalles del dispositivo, zona horaria, páginas visitadas, productos visualizados, sitios web o términos de búsqueda que te dirigieron a nuestro sitio web, e información sobre cómo interactúas con nuestro sitio web.",
+    "dataCollectionList2": "<strong>Información Recopilada Automáticamente:</strong> Cuando visitas nuestro sitio web, recopilamos automáticamente información sobre tu dispositivo y tu interacción con nuestro sitio web. Esto puede incluir datos como tu IP address, tipo de navegador, detalles del dispositivo, zona horaria, páginas visitadas, productos visualizados, sitios web o términos de búsqueda que te dirigieron a nuestro sitio web, e información sobre cómo interactúas con el sitio web.",
     "cookiesTitle": "Uso de Cookies y Tecnologías de Rastreo",
     "cookiesIntro": "XpressSEO utiliza cookies, que son pequeños archivos de texto almacenados en tu dispositivo, y otras tecnologías de rastreo para mejorar la experiencia del usuario en nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, comprender cómo se utilizan nuestros servicios y otimizar nuestras estratégias de marketing.",
     "cookiesTypesTitle": "Tipos de Cookies Utilizadas:",

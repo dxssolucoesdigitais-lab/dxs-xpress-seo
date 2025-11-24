@@ -126,3 +126,11 @@ export type Project = Database['public']['Tables']['projects']['Row'];
 export type NewProject = Database['public']['Tables']['projects']['Insert'];
 export type Feedback = Database['public']['Tables']['feedbacks']['Row'];
 export type ChatMessageRow = Database['public']['Tables']['chat_messages']['Row'];
+
+// Nova interface para metadados de arquivo
+export interface FileMetadata {
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: string; // Alterado para string para armazenar o formato formatado
+}

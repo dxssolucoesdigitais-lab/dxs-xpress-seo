@@ -62,6 +62,7 @@ declare module 'react-i18next' {
             gscAnalysisTriggerFailed: string;
             fetchMessagesFailed: string;
             sendMessageFailed: string;
+            you: string; // Adicionado
           };
           clipboard: {
             notAvailable: string;
@@ -158,6 +159,7 @@ declare module 'react-i18next' {
         chat: {
           genericApproval: string;
           analyzingNextStep: string;
+          you: string; // Adicionado
         };
         emptyChat: {
           greeting: string;

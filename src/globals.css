@@ -45,7 +45,7 @@
   .dark {
     --background: 240 10% 3.9%; /* Very dark, main chat background */
     --foreground: 0 0% 98%; /* White */
-    --card: 240 3.7% 15.9%; /* AI message bubble background (lighter gray) */
+    --card: 240 3.7% 15.9%; /* AI message bubble background (lighter dark gray) */
     --card-foreground: 0 0% 98%; /* White text on AI bubble */
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -77,6 +77,72 @@
     /* Landing Page Gradients */
     --gradient-hero: linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
     --gradient-primary: linear-gradient(45deg, #38bdf8, #8b5cf6); /* Cyan to Purple */
+
+    /* Chat Interface - Adapted for Dark Theme */
+    --chat-header-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --chat-status-indicator: #4ade80; /* Green */
+    --chat-messages-bg: #1a1a2e; /* Slightly lighter than background for contrast */
+
+    --chat-user-avatar-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --chat-ai-avatar-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --chat-message-author: var(--foreground);
+    --chat-message-time: var(--muted-foreground);
+
+    --chat-user-message-bg: var(--background); /* Darker background for user message */
+    --chat-user-message-border: var(--border);
+    --chat-user-message-text: var(--foreground);
+
+    --chat-ai-message-bg-gradient: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    --chat-ai-message-border: rgba(102, 126, 234, 0.3);
+    --chat-ai-message-text: var(--foreground);
+
+    --chat-options-list-bg: var(--secondary);
+    --chat-options-list-border-left: #667eea;
+    --chat-option-number: #667eea;
+    --chat-option-item-text: var(--foreground);
+
+    --chat-instructions-bg: rgba(59, 130, 246, 0.2); /* Blue-500 with transparency */
+    --chat-instructions-border-left: #3b82f6;
+    --chat-instructions-text: #93c5fd; /* Light blue for contrast */
+
+    --chat-input-bg: var(--background);
+    --chat-input-border: var(--border);
+    --chat-input-focus-border: #667eea;
+    --chat-input-focus-shadow: rgba(102, 126, 234, 0.15);
+
+    --chat-send-button-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --chat-send-button-text: white;
+    --chat-send-button-shadow: rgba(102, 126, 234, 0.4);
+
+    --chat-upload-button-bg: var(--secondary);
+    --chat-upload-button-border: var(--border);
+    --chat-upload-button-text: var(--muted-foreground);
+    --chat-upload-button-hover-bg: var(--accent);
+    --chat-upload-button-hover-border: #667eea;
+    --chat-upload-button-hover-text: #667eea;
+
+    --chat-file-chip-bg-gradient: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    --chat-file-chip-border: rgba(102, 126, 234, 0.4);
+    --chat-file-chip-text: var(--foreground);
+    --chat-file-chip-size-text: var(--muted-foreground);
+    --chat-file-chip-remove: #ef4444;
+
+    --chat-file-message-bg: var(--secondary);
+    --chat-file-message-border: var(--border);
+    --chat-file-message-name: var(--foreground);
+    --chat-file-message-meta: var(--muted-foreground);
+    --chat-file-download-bg: #667eea;
+    --chat-file-download-text: white;
+    --chat-file-download-hover-bg: #5568d3;
+
+    --chat-typing-indicator-bg: var(--secondary);
+    --chat-typing-dot: var(--muted-foreground);
+
+    --chat-badge-bg: rgba(102, 126, 234, 0.2);
+    --chat-badge-text: #667eea;
+
+    --chat-code-block-bg: #1f2937;
+    --chat-code-block-text: #f9fafb;
   }
 }
 
@@ -124,19 +190,23 @@
   }
 }
 
-/* Loader Keyframes */
-@keyframes typing {
-  0%,
-100% {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateY(-2px);
-    opacity: 1;
-  }
+/* Custom Keyframes from provided HTML */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+/* Existing Loader Keyframes */
 @keyframes loading-dots {
   0%,
 100% {

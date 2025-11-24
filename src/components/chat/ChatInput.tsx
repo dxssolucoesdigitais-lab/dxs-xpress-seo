@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Send, Loader2, Paperclip, BarChart3 } from 'lucide-react';
+import { Send, Loader2, Paperclip, BarChart3, X } from 'lucide-react';
 import { Project } from '@/types/database.types';
 import { useSession } from '@/contexts/SessionContext';
 import { useTranslation } from 'react-i18next';
@@ -15,14 +15,45 @@ interface ChatInputProps {
   onOptimisticMessageRemove: (id: string) => void;
 }
 
+const getFileIcon = (fileName: string) => {
+  const ext = fileName.split('.').pop()?.toLowerCase();
+  const icons: { [key: string]: string } = {
+    pdf: '📄',
+    doc: '📝',
+    docx: '📝',
+    txt: '📃',
+    jpg: '🖼️',
+    jpeg: '🖼️',
+    png: '🖼️',
+    gif: '🖼️',
+    xlsx: '📊',
+    csv: '📊',
+  };
+  return icons[ext || ''] || '📎';
+};
+
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+
+interface UploadedFile extends FileMetadata {
+  fileObject: File;
+}
+
 const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOptimisticMessageAdd, onOptimisticMessageRemove }) => {
   const { t } = useTranslation();
   const { user } = useSession();
   const [prompt, setPrompt] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const gscFileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleFileSelect = () => {
     fileInputRef.current?.click();
@@ -61,7 +92,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
         fileName: file.name,
         fileUrl: publicUrlData.publicUrl,
         fileType: file.type,
-        fileSize: file.size,
+        fileSize: formatFileSize(file.size), // Format size here
       };
     } catch (error: any) {
       showError('toasts.fileUpload.failed', { message: error.message });
@@ -73,17 +104,23 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   };
 
   const handleGenericFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) {
       showError('toasts.fileUpload.noFileSelected');
       return;
     }
     if (fileInputRef.current) fileInputRef.current.value = '';
 
-    const fileMetadata = await uploadFileToStorage(file);
-    if (fileMetadata) {
-      showSuccess('toasts.fileUpload.success');
-      await handleSendMessage(undefined, fileMetadata);
+    for (const file of files) {
+      if (file.size > 10 * 1024 * 1024) { // Max 10MB
+        showError(`File "${file.name}" is too large. Max: 10MB`);
+        continue;
+      }
+      const fileMetadata = await uploadFileToStorage(file);
+      if (fileMetadata) {
+        setUploadedFiles(prev => [...prev, { ...fileMetadata, fileObject: file }]);
+        showSuccess('toasts.fileUpload.success');
+      }
     }
   };
 
@@ -148,25 +185,35 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
     }
   };
 
-  const handleSendMessage = async (e?: React.FormEvent | React.KeyboardEvent, fileMetadata?: FileMetadata) => {
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSendMessage = async (e?: React.FormEvent | React.KeyboardEvent) => {
     e?.preventDefault();
 
     const messageContent = prompt.trim();
-    if ((!messageContent && !fileMetadata) || isDisabled || !user || isSendingMessage) return;
+    const hasFiles = uploadedFiles.length > 0;
+
+    if ((!messageContent && !hasFiles) || isDisabled || !user || isSendingMessage) return;
 
     setIsSendingMessage(true);
     setPrompt('');
+    
+    // Clear files after sending
+    const filesToSend = [...uploadedFiles];
+    setUploadedFiles([]);
 
     const tempMessageId = `optimistic-${Date.now()}`;
     onOptimisticMessageAdd({
       id: tempMessageId,
       author: 'user',
       createdAt: new Date().toISOString(),
-      content: messageContent || (fileMetadata ? t('chatInput.fileAttached', { fileName: fileMetadata.fileName }) : ''),
-      rawContent: messageContent || (fileMetadata ? JSON.stringify({ type: 'file_attachment', data: fileMetadata }) : ''),
+      content: messageContent || (hasFiles ? t('chatInput.fileAttached', { fileName: filesToSend.map(f => f.fileName).join(', ') }) : ''),
+      rawContent: messageContent || (hasFiles ? JSON.stringify({ type: 'file_attachment', data: filesToSend }) : ''),
       metadata: {
         current_step: project.current_step || 0,
-        file: fileMetadata,
+        files: filesToSend, // Pass all file metadata
       },
     });
 
@@ -175,7 +222,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
         body: {
           projectId: project.id,
           userMessage: messageContent,
-          fileMetadata: fileMetadata,
+          fileMetadata: filesToSend, // Pass all file metadata
         },
       });
 
@@ -191,7 +238,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
         }
         return;
       } else {
-        console.log('Successfully triggered workflow with user message and/or file:', messageContent, fileMetadata);
+        console.log('Successfully triggered workflow with user message and/or file:', messageContent, filesToSend);
       }
     } catch (error: any) {
       showError('toasts.chat.sendMessageFailed', { message: error.message || t('toasts.genericError') });
@@ -199,6 +246,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
       onOptimisticMessageRemove(tempMessageId);
     } finally {
       setIsSendingMessage(false);
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'; // Reset textarea height
+      }
     }
   };
 
@@ -210,61 +260,82 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
 
   const inputDisabled = isDisabled || !user || isSendingMessage || isUploadingFile;
 
+  // Auto-resize textarea
+  React.useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 150) + 'px';
+    }
+  }, [prompt]);
+
   return (
-    <>
-      <div className="p-4 bg-background border-t border-border flex justify-center">
-        <form onSubmit={handleSendMessage} className="relative max-w-4xl w-full">
-          <textarea
-            className="w-full bg-transparent border border-border rounded-2xl p-4 pl-28 pr-14 text-foreground placeholder:text-muted-foreground max-h-40 overflow-y-auto resize-none focus:ring-2 focus:ring-cyan-400 focus:outline-none disabled:opacity-50" // Removido glass-effect
-            placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={inputDisabled}
-          ></textarea>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleGenericFileChange}
-            className="hidden"
-            disabled={inputDisabled}
-          />
-          <input
-            type="file"
-            ref={gscFileInputRef}
-            onChange={handleGSCFileChange}
-            className="hidden"
-            disabled={inputDisabled}
-            accept=".csv,.json"
-          />
-          <button
-            type="button"
-            onClick={handleFileSelect}
-            className="absolute left-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full text-muted-foreground hover:bg-accent disabled:opacity-50"
-            disabled={inputDisabled}
-            title={t('chatInput.attachFile')}
-          >
-            {isUploadingFile && !gscFileInputRef.current?.files?.[0] ? <Loader2 size={20} className="animate-spin" /> : <Paperclip size={20} />}
-          </button>
-          <button
-            type="button"
-            onClick={handleGSCFileSelect}
-            className="absolute left-16 bottom-4 h-10 w-10 flex items-center justify-center rounded-full text-muted-foreground hover:bg-accent disabled:opacity-50"
-            disabled={inputDisabled || !project.id}
-            title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
-          >
-            {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={20} className="animate-spin" /> : <BarChart3 size={20} />}
-          </button>
-          <button
-            type="submit"
-            className="absolute right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-cyan-500 text-black disabled:bg-gray-600"
-            disabled={inputDisabled || (!prompt.trim() && !isUploadingFile)}
-          >
-            {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
-          </button>
-        </form>
+    <div className="p-5 bg-[var(--chat-input-bg)] border-t border-[var(--chat-input-border)] shadow-md">
+      <div className="flex flex-col md:flex-row gap-3 items-end">
+        <div className="flex flex-col gap-2 flex-1 w-full">
+          {uploadedFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {uploadedFiles.map((file, index) => (
+                <div key={index} className="flex items-center gap-2 px-3 py-1 bg-[var(--chat-file-chip-bg-gradient)] border border-[var(--chat-file-chip-border)] rounded-lg text-sm text-[var(--chat-file-chip-text)]">
+                  <span className="text-base">{getFileIcon(file.fileName)}</span>
+                  <span className="font-medium max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">{file.fileName}</span>
+                  <span className="text-xs text-[var(--chat-file-chip-size-text)]">{file.fileSize}</span>
+                  <X className="w-4 h-4 text-[var(--chat-file-chip-remove)] cursor-pointer hover:scale-110 transition-transform" onClick={() => removeFile(index)} />
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="flex gap-2 items-center w-full">
+            <label htmlFor="fileInput" className="px-3 py-2 bg-[var(--chat-upload-button-bg)] border border-[var(--chat-upload-button-border)] rounded-lg cursor-pointer transition-all hover:bg-[var(--chat-upload-button-hover-bg)] hover:border-[var(--chat-upload-button-hover-border)] hover:text-[var(--chat-upload-button-hover-text)] flex items-center gap-2 text-sm text-[var(--chat-upload-button-text)] font-medium">
+              {isUploadingFile && !gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <Paperclip size={16} />}
+              {t('chatInput.attachFile')}
+            </label>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleGenericFileChange}
+              className="hidden"
+              disabled={inputDisabled}
+              multiple
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.csv"
+              id="fileInput"
+            />
+            <label htmlFor="gscFileInput" className="px-3 py-2 bg-[var(--chat-upload-button-bg)] border border-[var(--chat-upload-button-border)] rounded-lg cursor-pointer transition-all hover:bg-[var(--chat-upload-button-hover-bg)] hover:border-[var(--chat-upload-button-hover-border)] hover:text-[var(--chat-upload-button-hover-text)] flex items-center gap-2 text-sm text-[var(--chat-upload-button-text)] font-medium"
+              title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
+            >
+              {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <BarChart3 size={16} />}
+              {t('chatInput.gscAnalysis')}
+            </label>
+            <input
+              type="file"
+              ref={gscFileInputRef}
+              onChange={handleGSCFileChange}
+              className="hidden"
+              disabled={inputDisabled || !project.id}
+              accept=".csv,.json"
+              id="gscFileInput"
+            />
+            <textarea
+              ref={textareaRef}
+              className="flex-1 p-3 border-2 border-[var(--chat-input-border)] rounded-xl text-base text-foreground placeholder:text-muted-foreground resize-none min-h-[50px] max-h-[150px] focus:outline-none focus:border-[var(--chat-input-focus-border)] focus:shadow-[0_0_0_3px_var(--chat-input-focus-shadow)] bg-transparent"
+              placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={inputDisabled}
+              rows={1}
+            ></textarea>
+          </div>
+        </div>
+        <button
+          type="submit"
+          onClick={handleSendMessage}
+          className="px-6 py-3 bg-[var(--chat-send-button-gradient)] text-[var(--chat-send-button-text)] rounded-xl text-base font-semibold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[var(--chat-send-button-shadow)] disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px]"
+          disabled={inputDisabled || (!prompt.trim() && uploadedFiles.length === 0)}
+        >
+          {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <span className="flex items-center justify-center gap-1">Enviar <Send size={16} /></span>}
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 
