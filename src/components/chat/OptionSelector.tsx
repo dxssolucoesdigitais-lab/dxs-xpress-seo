@@ -15,8 +15,8 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
       <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0"> {/* Alterado para bg-secondary */}
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border max-w-xl">
-        <div className="text-lg max-w-none text-card-foreground mb-4">
+      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border max-w-md">
+        <div className="text-base max-w-none text-card-foreground mb-4">
           <p>{t('optionSelector.prompt')}</p>
         </div>
         <div className="space-y-3">
@@ -34,13 +34,13 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
                 {option.number}
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-lg text-foreground">{option.content}</p>
-                {option.charCount && <p className="text-base text-muted-foreground">{option.charCount} caracteres</p>}
+                <p className="font-semibold text-base text-foreground">{option.content}</p>
+                {option.charCount && <p className="text-sm text-muted-foreground">{option.charCount} caracteres</p>}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-4 text-center text-base text-muted-foreground">
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           {t('optionSelector.typeToSelect')}
         </div>
       </div>

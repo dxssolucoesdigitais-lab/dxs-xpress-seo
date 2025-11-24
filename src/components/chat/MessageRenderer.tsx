@@ -45,10 +45,10 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
     return (
       <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
-        <div className="p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all max-w-xl">
+        <div className="p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all max-w-md">
           {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
           {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
-            <p className={cn("text-lg", { 'mt-3': fileAttachment })}>{message.content}</p>
+            <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p>
           )}
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
@@ -83,12 +83,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-xl">
+        <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-md">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
             <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
           </div>
-          <div className={cn("text-lg text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+          <div className={cn("text-base text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
             {structuredContent.messages.map((msgItem: any, index: number) => {
               if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
                 return <p key={index}>{msgItem.data}</p>;
@@ -107,12 +107,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-xl">
+      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all max-w-md">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className={cn("text-lg text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
+        <div className={cn("text-base text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}>
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>
