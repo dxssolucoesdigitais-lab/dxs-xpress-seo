@@ -11,12 +11,12 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="max-w-2xl mx-auto flex items-start gap-4">
+    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Adicionado max-w-2xl mx-auto para centralizar e limitar largura */}
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border">
-        <div className="prose prose-invert text-base max-w-none text-muted-foreground mb-4">
+      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border"> {/* Alterado para bg-card */}
+        <div className="prose prose-invert text-lg max-w-none text-card-foreground mb-4"> {/* Ajustado para text-lg e text-card-foreground */}
           <p>{t('optionSelector.prompt')}</p>
         </div>
         <div className="space-y-3">
@@ -34,13 +34,13 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
                 {option.number}
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-base text-foreground">{option.content}</p>
-                {option.charCount && <p className="text-sm text-muted-foreground">{option.charCount} caracteres</p>}
+                <p className="font-semibold text-lg text-foreground">{option.content}</p> {/* Ajustado para text-lg */}
+                {option.charCount && <p className="text-base text-muted-foreground">{option.charCount} caracteres</p>} {/* Ajustado para text-base */}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-4 text-center text-sm text-muted-foreground">
+        <div className="mt-4 text-center text-base text-muted-foreground"> {/* Ajustado para text-base */}
           {t('optionSelector.typeToSelect')}
         </div>
       </div>

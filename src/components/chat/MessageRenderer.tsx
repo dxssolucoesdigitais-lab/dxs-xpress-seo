@@ -22,7 +22,7 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         href={file.fileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 text-base font-medium hover:underline truncate" {/* Ajustado para text-base */}
+        className="flex-1 text-base font-medium hover:underline truncate"
       >
         {file.fileName}
       </a>
@@ -44,11 +44,11 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
     const isGSCAnalysisRequest = message.metadata?.gscAnalysis === true;
 
     return (
-      <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
+      <div className="max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse"> {/* Adicionado max-w-2xl mx-auto para centralizar e limitar largura */}
         <div className="flex-1 p-4 rounded-2xl rounded-br-none bg-gradient-to-br from-purple-600 to-blue-600 text-white overflow-hidden break-all">
           {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
           {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
-            <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p> {/* Ajustado para text-base */}
+            <p className={cn("text-lg", { 'mt-3': fileAttachment })}>{message.content}</p> {/* Ajustado para text-lg */}
           )}
         </div>
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0"><User size={24} /></div>
@@ -83,12 +83,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
         <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
           <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border overflow-hidden break-all">
+        <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all"> {/* Alterado para bg-card */}
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
             <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
           </div>
-          <div className={cn("prose prose-invert text-base text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-base */}
+          <div className={cn("prose prose-invert text-lg text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-lg e text-card-foreground */}
             {structuredContent.messages.map((msgItem: any, index: number) => {
               if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
                 return <p key={index}>{msgItem.data}</p>;
@@ -107,12 +107,12 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border overflow-hidden break-all">
+      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border overflow-hidden break-all"> {/* Alterado para bg-card */}
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
           <span className="text-xs text-muted-foreground">{new Date(message.createdAt).toLocaleTimeString()}</span>
         </div>
-        <div className={cn("prose prose-invert text-base text-muted-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-base */}
+        <div className={cn("prose prose-invert text-lg text-card-foreground space-y-4", "whitespace-pre-wrap", "break-all")}> {/* Ajustado para text-lg e text-card-foreground */}
           {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
         </div>
       </div>

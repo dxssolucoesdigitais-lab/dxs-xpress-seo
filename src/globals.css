@@ -43,17 +43,17 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --background: 240 10% 3.9%; /* Very dark, main chat background */
+    --foreground: 0 0% 98%; /* White */
+    --card: 240 3.7% 15.9%; /* AI message bubble background (lighter gray) */
+    --card-foreground: 0 0% 98%; /* White text on AI bubble */
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 240 5% 10%; /* Slightly lighter dark gray, for badges etc. */
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 75%; /* Lighter muted text for better contrast */
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -94,13 +94,13 @@
   }
 
   .dark body {
-    @apply bg-background; /* Usar a cor de fundo do Tailwind */
-    background-image: none; /* Remover o gradiente complexo */
-    position: static; /* Resetar a posição */
+    @apply bg-background;
+    background-image: none;
+    position: static;
   }
 
   .dark body::before {
-    content: none; /* Remover o efeito de ruído */
+    content: none;
   }
 }
 
@@ -113,41 +113,6 @@
     animation: pulse-glow 2.5s infinite ease-in-out;
   }
 }
-
-/* Removendo estilos antigos do TypingIndicator */
-/*
-@keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-  50% { transform: translateY(-15px) rotate(5deg); opacity: 0.8; }
-  100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-}
-
-.ai-thinking::before {
-  content: "✨";
-  position: absolute;
-  left: -10px;
-  top: -10px;
-  font-size: 1.5rem;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes typing-dots {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-5px); }
-}
-
-.typing-dots span {
-  animation: typing-dots 1.4s infinite ease-in-out;
-}
-
-.typing-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-*/
 
 @keyframes pulse-glow {
   0%, 100% {
@@ -260,7 +225,6 @@
   0%,
 100% {
     transform: scaleY(1);
-    opacity: 0.5;
   }
   50% {
     transform: scaleY(0.6);

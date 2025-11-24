@@ -15,34 +15,32 @@ const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress }) => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for ProgressFlow */}
+    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Adicionado max-w-2xl mx-auto para centralizar e limitar largura */}
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="flex-1 p-5 rounded-2xl rounded-tl-none glass-effect border border-white/10">
-        <div className="space-y-3">
-          <p className="text-sm font-bold text-white mb-2">{t('progressFlow.title')}</p>
-          {progress.completed.map((step, index) => (
-            <div key={index} className="flex items-center gap-2 text-green-400">
-              <CheckCircle2 size={16} />
-              <span className="text-sm">{step}</span>
-            </div>
-          ))}
-          <div className="flex items-center gap-2 text-cyan-400 animate-pulse">
-            <Loader size={16} className="animate-spin" />
-            <span className="text-sm font-semibold">{progress.in_progress} {t('progressFlow.inProgress')}</span>
+      <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-card border border-border"> {/* Alterado para bg-card */}
+        <p className="text-lg font-bold text-card-foreground mb-2">{t('progressFlow.title')}</p> {/* Ajustado para text-lg e text-card-foreground */}
+        {progress.completed.map((step, index) => (
+          <div key={index} className="flex items-center gap-2 text-green-400">
+            <CheckCircle2 size={18} /> {/* Aumentado o tamanho do ícone */}
+            <span className="text-lg">{step}</span> {/* Ajustado para text-lg */}
           </div>
+        ))}
+        <div className="flex items-center gap-2 text-cyan-400 animate-pulse">
+          <Loader size={18} className="animate-spin" /> {/* Aumentado o tamanho do ícone */}
+          <span className="text-lg font-semibold">{progress.in_progress} {t('progressFlow.inProgress')}</span> {/* Ajustado para text-lg */}
         </div>
         {progress.upcoming && progress.upcoming.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <p className="text-xs text-gray-400 flex items-center gap-2">
-              <FileText size={14} />
+          <div className="mt-4 pt-4 border-t border-border"> {/* Alterado para border-border */}
+            <p className="text-base text-muted-foreground flex items-center gap-2"> {/* Ajustado para text-base */}
+              <FileText size={16} /> {/* Aumentado o tamanho do ícone */}
               <span>{t('progressFlow.nextSteps')} {progress.upcoming.join(', ')}...</span>
             </p>
           </div>
         )}
       </div>
-      <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
+      <div className="w-10 h-10 flex-shrink-0 invisible"></div>
     </div>
   );
 };
