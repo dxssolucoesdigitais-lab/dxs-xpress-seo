@@ -19,7 +19,7 @@ const ProgressFlow: React.FC<ProgressFlowProps> = ({ progress }) => {
       <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-2xl flex-shrink-0"> {/* Alterado para bg-secondary */}
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
-      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border max-w-[calc(100%-6rem)]">
+      <div className="p-5 rounded-2xl rounded-tl-none bg-card border border-border max-w-xl">
         <p className="text-lg font-bold text-card-foreground mb-2">{t('progressFlow.title')}</p>
         {progress.completed.map((step, index) => (
           <div key={index} className="flex items-center gap-2 text-green-400">
