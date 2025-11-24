@@ -11,12 +11,12 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="max-w-2xl mx-auto flex items-start gap-4"> {/* Centered block for OptionSelector */}
+    <div className="max-w-2xl mx-auto flex items-start gap-4">
       <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0">
         <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
       </div>
       <div className="flex-1 p-5 rounded-2xl rounded-tl-none bg-secondary border border-border">
-        <div className="prose prose-invert text-base max-w-none text-muted-foreground mb-4"> {/* Ajustado para text-base */}
+        <div className="prose prose-invert text-base max-w-none text-muted-foreground mb-4">
           <p>{t('optionSelector.prompt')}</p>
         </div>
         <div className="space-y-3">
@@ -29,22 +29,22 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
               )}
             >
               <div className={cn(
-                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold text-base" {/* Ajustado para text-base */}
+                "flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-secondary border border-border text-cyan-400 font-bold text-base"
               )}>
                 {option.number}
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-base text-foreground">{option.content}</p> {/* Ajustado para text-base */}
-                {option.charCount && <p className="text-sm text-muted-foreground">{option.charCount} caracteres</p>} {/* Ajustado para text-sm */}
+                <p className="font-semibold text-base text-foreground">{option.content}</p>
+                {option.charCount && <p className="text-sm text-muted-foreground">{option.charCount} caracteres</p>}
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-4 text-center text-sm text-muted-foreground"> {/* Ajustado para text-sm */}
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           {t('optionSelector.typeToSelect')}
         </div>
       </div>
-      <div className="w-10 h-10 flex-shrink-0 invisible"></div> {/* Invisible placeholder for symmetry */}
+      <div className="w-10 h-10 flex-shrink-0 invisible"></div>
     </div>
   );
 };
