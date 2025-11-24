@@ -114,6 +114,8 @@
   }
 }
 
+/* Removendo estilos antigos do TypingIndicator */
+/*
 @keyframes float {
   0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
   50% { transform: translateY(-15px) rotate(5deg); opacity: 0.8; }
@@ -145,6 +147,7 @@
 .typing-dots span:nth-child(3) {
   animation-delay: 0.4s;
 }
+*/
 
 @keyframes pulse-glow {
   0%, 100% {

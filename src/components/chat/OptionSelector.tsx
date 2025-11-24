@@ -24,7 +24,8 @@ const OptionSelector: React.FC<OptionSelectorProps> = ({ options }) => {
             <div 
               key={option.number}
               className={cn(
-                "flex items-center gap-3 p-3 rounded-lg border border-border transition-all"
+                "flex items-center gap-3 p-3 rounded-lg border border-border transition-all cursor-pointer", // Adicionado cursor-pointer
+                "hover:bg-accent hover:text-accent-foreground" // Efeito de hover
               )}
             >
               <div className={cn(
