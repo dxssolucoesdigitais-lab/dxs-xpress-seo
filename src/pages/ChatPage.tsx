@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
-import Confetti from 'react-react-confetti'; // Corrigido o import
+import Confetti from 'react-confetti'; // Corrigido o import
 import { useWindowSize } from '@uidotdev/usehooks';
 import { StructuredChatContent, ChatMessage } from '@/types/chat.types';
 import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt';
