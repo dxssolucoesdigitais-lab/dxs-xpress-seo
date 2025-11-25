@@ -69,7 +69,7 @@ const UsersTable = () => {
         <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Select value={planFilter} onValueChange={setPlanFilter}>
-            <SelectTrigger className="w-full sm:w-[180px] bg-transparent border-border">
+            <SelectTrigger className="w-full sm:w-[180px] bg-transparent border-border text-foreground"> {/* Adicionado text-foreground aqui */}
               <SelectValue placeholder={t('admin.dashboard.filterByPlan')} />
             </SelectTrigger>
             <SelectContent>
