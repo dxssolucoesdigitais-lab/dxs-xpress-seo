@@ -58,10 +58,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick, onToggl
           <button
             onClick={onBuyCreditsClick}
             className={cn(
-              "hidden sm:flex items-center gap-2 text-sm font-semibold bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full border border-border transition-colors",
+              "hidden sm:flex items-center gap-2 text-sm font-semibold bg-secondary px-3 py-1.5 rounded-full border border-border transition-colors",
               user.credits_remaining <= 0
                 ? "text-red-400 border-red-500/50 hover:bg-destructive/10"
-                : "hover:bg-accent"
+                : "text-foreground hover:bg-accent" // Alterado para text-foreground
             )}
           >
             <CreditCard className={cn("h-4 w-4", user.credits_remaining <= 0 ? "text-red-400" : "text-cyan-400")} />
@@ -104,9 +104,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onBuyCreditsClick, onToggl
               </DropdownMenuItem>
             )}
             <DropdownMenuItem onSelect={() => navigate('/profile')} className="cursor-pointer">
-              <UserIcon className="mr-2 h-4 w-4" />
-              <span>{t('header.profile')}</span>
-            </DropdownMenuItem>
+                <UserIcon className="mr-2 h-4 w-4" />
+                <span>{t('header.profile')}</span>
+              </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border" />
             <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />

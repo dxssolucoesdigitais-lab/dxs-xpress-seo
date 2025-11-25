@@ -22,9 +22,9 @@ const planVariants: { [key: string]: "default" | "secondary" | "outline" | "dest
 };
 
 const planStyles: { [key: string]: string } = {
-    basic: 'bg-green-500/20 border-green-500 text-green-300',
-    standard: 'bg-blue-500/20 border-blue-500 text-blue-300',
-    premium: 'bg-purple-500/20 border-purple-500 text-purple-300',
+    basic: 'bg-green-500/20 border-green-500 text-green-200',    
+    standard: 'bg-blue-500/20 border-blue-500 text-blue-200',  
+    premium: 'bg-purple-500/20 border-purple-500 text-purple-200',
 }
 
 const UsersTable = () => {
