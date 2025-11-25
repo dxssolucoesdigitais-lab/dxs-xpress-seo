@@ -20,3 +20,4 @@ i18n
   });
 
 export default i18n;
+// Pequena atualização para registrar uma alteração no Git.
