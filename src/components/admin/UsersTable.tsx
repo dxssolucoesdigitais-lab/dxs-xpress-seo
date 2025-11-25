@@ -22,6 +22,7 @@ const planVariants: { [key: string]: "default" | "secondary" | "outline" | "dest
 };
 
 const planStyles: { [key: string]: string } = {
+    free: 'bg-gray-500/20 border-gray-500 text-gray-200',    
     basic: 'bg-green-500/20 border-green-500 text-green-200',    
     standard: 'bg-blue-500/20 border-blue-500 text-blue-200',  
     premium: 'bg-purple-500/20 border-purple-500 text-purple-200',
@@ -69,7 +70,7 @@ const UsersTable = () => {
         <CardTitle>{t('admin.dashboard.allUsers')}</CardTitle>
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Select value={planFilter} onValueChange={setPlanFilter}>
-            <SelectTrigger className="w-full sm:w-[180px] bg-transparent border-border text-foreground"> {/* Adicionado text-foreground aqui */}
+            <SelectTrigger className="w-full sm:w-[180px] bg-transparent border-border text-foreground">
               <SelectValue placeholder={t('admin.dashboard.filterByPlan')} />
             </SelectTrigger>
             <SelectContent>
