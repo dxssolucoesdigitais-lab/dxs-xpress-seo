@@ -38,7 +38,9 @@
       "statusUpdateFailed": "Error al actualizar el estado del proyecto.",
       "triggerFailed": "Error al iniciar el flujo de trabajo del proyecto.",
       "resumeNoCredits": "Créditos insuficientes para reanudar el proyecto. Por favor, actualiza tu plan.",
-      "noCreditsToStart": "Créditos insuficientes para iniciar el proyecto. Por favor, actualiza tu plan."
+      "noCreditsToStart": "Créditos insuficientes para iniciar el proyecto. Por favor, actualiza tu plan.",
+      "renameSuccess": "¡Proyecto renombrado con éxito!",
+      "renameFailed": "Error al renombrar el proyecto. Inténtalo de nuevo."
     },
     "chat": {
       "responseSaved": "¡Tu selección ha sido guardada!",
@@ -219,9 +221,11 @@
   "emptyChat": {
     "greeting": "¡Hola, {{userName}}!",
     "guest": "Invitado",
-    "subtitle": "¿Listo para optimizar tu SEO? ¡Haz clic en el botón de abajo para iniciar una nueva conversación!",
+    "subtitle": "¿Listo para optimizar tu SEO? ¡Dale un nombre a tu proyecto y comienza una nueva conversación!",
     "startButton": "¡Iniciar una nueva conversación!",
-    "initialPrompt": "Hola, XpressSEO! Me gustaría iniciar un nuevo análisis de producto."
+    "projectNameLabel": "Nombre del Proyecto",
+    "projectNamePlaceholder": "ej., SEO para mi nueva tienda de zapatos",
+    "defaultProjectName": "Nueva Conversación"
   },
   "optionSelector": {
     "prompt": "Por favor, selecciona una de las opciones a continuación para continuar:",
@@ -535,7 +539,7 @@
       "En caso de reestructuración corporativa, venta, fusión u otra transferencia de activos, garantizando que la entidad receptora acepte respetar la privacidad de tus datos de acuerdo con una política equivalente a la nuestra."
     ],
     "externalLinksTitle": "Enlaces a otros sitios web y redes sociales",
-    "externalLinksP1": "Nuestra plataforma puede incluir enlaces a sitios web externos de socios, anunciantes y proveedores. Al hacer clic en estos enlaces, serás dirigido fuera de nuestro sitio web, entrando en dominios que siguen sus propias políticas de privacidad, de las cuales no somos responsable.",
+    "externalLinksP1": "Nuestra plataforma puede incluir enlaces a sitios web externos que creemos que pueden ser de tu interés. Al hacer clic en estos enlaces, serás dirigido fuera de nuestro sitio web, entrando en dominios que siguen sus propias políticas de privacidad, de las cuales no somos responsable.",
     "externalLinksP2": "Recomendamos leer atentamente estas políticas antes de proporcionar cualquier dato personal. Del mismo modo, no asumimos responsabilidad por las prácticas de privacidad de terceros como Facebook, Apple, Google, y Microsoft. Te aconsejamos que te informes sobre las políticas de privacidad de estas entidades al utilizar sus servicios o aplicaciones.",
     "dataSubjectRightsTitle": "Derechos de los Titulares de los Datos",
     "dataSubjectRightsIntro": "Tienes varios derechos en relación con tus datos personales, incluyendo:",

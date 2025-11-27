@@ -71,9 +71,11 @@ export const useProjects = () => {
 
     try {
       // Chama a Edge Function start-workflow-from-chat para criar o projeto e deduzir o crédito.
-      // Esta função não aciona mais o passo inicial do workflow no n8n.
       const { data: newProject, error } = await supabase.functions.invoke<Project>('start-workflow-from-chat', {
-        body: { prompt: newProjectData.product_link }, // Usando product_link como o prompt inicial para o nome do projeto
+        body: { 
+          projectName: newProjectData.project_name, // Passa o nome do projeto diretamente
+          productLink: newProjectData.product_link // Mantém o productLink para compatibilidade ou uso futuro
+        },
       });
 
       if (error) {
@@ -98,6 +100,29 @@ export const useProjects = () => {
     }
   };
 
+  const updateProjectName = async (projectId: string, newName: string) => {
+    if (!session?.user) {
+      showError('toasts.plans.loginRequired');
+      return false;
+    }
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .update({ project_name: newName, updated_at: new Date().toISOString() })
+        .eq('id', projectId)
+        .eq('user_id', session.user.id); // Garante que o usuário só pode atualizar seus próprios projetos
+
+      if (error) throw error;
+      showSuccess('toasts.projects.renameSuccess');
+      // A atualização do estado 'projects' será tratada pelo Realtime
+      return true;
+    } catch (error: any) {
+      showError('toasts.projects.renameFailed');
+      console.error('Error renaming project:', error.message);
+      return false;
+    }
+  };
+
   const deleteProject = async (projectId: string) => {
     try {
       const { error } = await supabase
@@ -113,5 +138,5 @@ export const useProjects = () => {
     }
   };
 
-  return { projects, loading, createProject, deleteProject, refetchProjects: fetchProjects };
+  return { projects, loading, createProject, updateProjectName, deleteProject, refetchProjects: fetchProjects };
 };

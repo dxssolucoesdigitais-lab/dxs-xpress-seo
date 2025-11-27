@@ -28,10 +28,10 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
     }
 
-    // The 'prompt' here is just used for the initial project name, not to trigger a workflow yet.
-    const { prompt } = await req.json();
-    if (!prompt) {
-      return new Response(JSON.stringify({ error: 'Prompt is required for project name' }), {
+    // Agora recebemos projectName e productLink explicitamente
+    const { projectName, productLink } = await req.json();
+    if (!projectName) {
+      return new Response(JSON.stringify({ error: 'Project name is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -54,14 +54,13 @@ serve(async (req) => {
       });
     }
 
-    // Create a new project with a simpler name
-    const projectName = `Análise de ${prompt.substring(0, 40)}...`;
+    // Create a new project with the provided name
     const { data: newProject, error: createError } = await supabaseAdmin
       .from('projects')
       .insert({
         user_id: user.id,
-        project_name: projectName,
-        product_link: prompt, // Using prompt as product_link for initial analysis
+        project_name: projectName, // Usa o nome do projeto fornecido
+        product_link: productLink || '', // Usa o link do produto fornecido ou vazio
         target_country: 'Brazil', // Default
         target_audience: 'General', // Default
       })
@@ -78,10 +77,6 @@ serve(async (req) => {
       });
       if (decrementError) throw decrementError;
     }
-
-    // IMPORTANT: We no longer trigger 'trigger-step' here.
-    // The frontend will navigate to the new project and the user's first message
-    // will then call 'trigger-step'.
 
     return new Response(JSON.stringify(newProject), {
       status: 200,

@@ -39,7 +39,9 @@
       "statusUpdateFailed": "Erro ao atualizar status do projeto.",
       "triggerFailed": "Erro ao iniciar o fluxo de trabalho do projeto.",
       "resumeNoCredits": "Sem créditos para retomar o projeto. Por favor, faça upgrade do seu plano.",
-      "noCreditsToStart": "Sem créditos para iniciar o projeto. Por favor, faça upgrade do seu plano."
+      "noCreditsToStart": "Sem créditos para iniciar o projeto. Por favor, faça upgrade do seu plano.",
+      "renameSuccess": "Projeto renomeado com sucesso!",
+      "renameFailed": "Erro ao renomear projeto. Por favor, tente novamente."
     },
     "chat": {
       "responseSaved": "Sua seleção foi salva!",
@@ -220,9 +222,11 @@
   "emptyChat": {
     "greeting": "Olá, {{userName}}!",
     "guest": "Visitante",
-    "subtitle": "Pronto para otimizar seu SEO? Clique no botão abaixo para iniciar uma nova conversa!",
+    "subtitle": "Pronto para otimizar seu SEO? Dê um nome ao seu projeto e inicie uma nova conversa!",
     "startButton": "Iniciar uma nova conversa!",
-    "initialPrompt": "Olá, XpressSEO! Gostaria de iniciar uma nova análise de produto."
+    "projectNameLabel": "Nome do Projeto",
+    "projectNamePlaceholder": "Ex: SEO para minha nova loja de sapatos",
+    "defaultProjectName": "Nova Conversa"
   },
   "optionSelector": {
     "prompt": "Por favor, selecione uma das opções abaixo para continuar:",
@@ -483,7 +487,7 @@
     },
     "section6": {
       "title": "6. Explorando Links Externos",
-      "p1": "Nosso site pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos controle sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas."
+      "p1": "Nosso site pode incluir links para sites externos que achamos que podem ser do seu interesse. Note que não temos control sobre esses sites externos e, portanto, não somos responsáveis pelo seu conteúdo ou políticas."
     },
     "section7": {
       "title": "7. Mudanças e Atualizações",

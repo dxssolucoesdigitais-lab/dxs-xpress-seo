@@ -38,7 +38,9 @@
       "statusUpdateFailed": "Error updating project status.",
       "triggerFailed": "Error triggering project workflow.",
       "resumeNoCredits": "Insufficient credits to resume project. Please upgrade your plan.",
-      "noCreditsToStart": "Insufficient credits to start project. Please upgrade your plan."
+      "noCreditsToStart": "Insufficient credits to start project. Please upgrade your plan.",
+      "renameSuccess": "Project renamed successfully!",
+      "renameFailed": "Error renaming project. Please try again."
     },
     "chat": {
       "responseSaved": "Your selection has been saved!",
@@ -219,9 +221,11 @@
   "emptyChat": {
     "greeting": "Hello, {{userName}}!",
     "guest": "Guest",
-    "subtitle": "Ready to optimize your SEO? Click the button below to start a new conversation!",
+    "subtitle": "Ready to optimize your SEO? Give your project a name and start a new conversation!",
     "startButton": "Start a new conversation!",
-    "initialPrompt": "Hello, XpressSEO! I'd like to start a new product analysis."
+    "projectNameLabel": "Project Name",
+    "projectNamePlaceholder": "e.g., SEO for my new shoe store",
+    "defaultProjectName": "New Conversation"
   },
   "optionSelector": {
     "prompt": "Please select one of the options below to continue:",
@@ -487,7 +491,7 @@
     "section7": {
       "title": "7. Changes and Updates",
       "p1": "Evolution is part of how we operate, which means that these Terms of Use may undergo updates to better reflect changes in our services or legislation. Whenever this happens, you will find the latest version available here. If the changes are significant, we will do our best to notify you through the contact methods you have provided us.",
-      "p2": "Continuing to access the website after these changes indicates that you agree to the new terms. If, for any reason, you do not agree with the updates, we ask that you do not continue using our website and services."
+    "p2": "Continuing to access the website after these changes indicates that you agree to the new terms. If, for any reason, you do not agree with the updates, we ask that you do not continue using our website and services."
     },
     "contactTitle": "Questions or Comments?",
     "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>."
@@ -535,7 +539,7 @@
       "In case of corporate restructuring, sale, merger, or other asset transfer, ensuring that the receiving entity agrees to respect the privacy of your data in accordance with a policy equivalent to ours."
     ],
     "externalLinksTitle": "Links to other websites and social media",
-    "externalLinksP1": "Our platform may include links to external websites of partners, advertisers, and suppliers. Clicking on these links means you will be directed outside our website, entering domains that follow their own privacy policies, for which we are not responsible.",
+    "externalLinksP1": "Our platform may include links to external sites that we think may be of interest to you. Clicking on these links means you will be directed outside our website, entering domains that follow their own privacy policies, for which we are not responsible.",
     "externalLinksP2": "We recommend carefully reading these policies before providing any personal data. Likewise, we do not assume responsibility for the privacy practices of third parties such as Facebook, Apple, Google, and Microsoft. We advise you to inform yourself about the privacy policies of these entities when using their services or applications.",
     "dataSubjectRightsTitle": "Data Subject Rights",
     "dataSubjectRightsIntro": "You have several rights regarding your personal data, including:",

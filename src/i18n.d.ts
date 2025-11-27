@@ -46,6 +46,8 @@ declare module 'react-i18next' {
             triggerFailed: string;
             resumeNoCredits: string;
             noCreditsToStart: string;
+            renameSuccess: string; // Nova chave
+            renameFailed: string; // Nova chave
           };
           chat: {
             responseSaved: string;
@@ -166,7 +168,9 @@ declare module 'react-i18next' {
           guest: string;
           subtitle: string;
           startButton: string;
-          initialPrompt: string;
+          projectNameLabel: string; // Nova chave
+          projectNamePlaceholder: string; // Nova chave
+          defaultProjectName: string; // Nova chave
         };
         optionSelector: {
           prompt: string;
@@ -451,6 +455,14 @@ declare module 'react-i18next' {
             emailInvalid: string;
             passwordMin: string;
           };
+        };
+        renameDialog: { // Nova seção para o diálogo de renomear
+          title: string;
+          description: string;
+          newNameLabel: string;
+          cancel: string;
+          save: string;
+          rename: string; // Para o item do menu
         };
       };
     };

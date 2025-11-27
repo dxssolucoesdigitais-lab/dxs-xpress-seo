@@ -6,30 +6,31 @@ import { useSession } from '@/contexts/SessionContext';
 import { showError } from '@/utils/toast';
 import { Project } from '@/types/database.types';
 import { ChatMessage } from '@/types/chat.types';
-import { useProjects } from '@/hooks/useProjects'; // Import useProjects
+import { useProjects } from '@/hooks/useProjects';
+import { Input } from '../ui/input'; // Importar o componente Input
+import { Label } from '../ui/label'; // Importar o componente Label
 
 interface EmptyChatPromptProps {
   onNewProjectCreated: (projectId: string) => void;
-  // onOptimisticMessageAdd e onOptimisticMessageRemove não são mais necessários aqui
-  // pois o prompt inicial não é enviado deste componente.
 }
 
 const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }) => {
   const { t } = useTranslation();
   const { user } = useSession();
-  const { createProject } = useProjects(); // Use o hook createProject
+  const { createProject } = useProjects();
   const [isLoading, setIsLoading] = useState(false);
+  const [projectNameInput, setProjectNameInput] = useState(''); // Novo estado para o nome do projeto
 
   const handleStartNewConversation = async () => {
     if (!user || isLoading) return;
 
-    setIsLoading(true);
-    const initialPromptForProjectName = t('emptyChat.initialPrompt'); // Isso agora é apenas para o nome do projeto
+    const finalProjectName = projectNameInput.trim() || t('emptyChat.defaultProjectName'); // Usa o input ou um nome padrão
 
+    setIsLoading(true);
     try {
       const newProject = await createProject({
-        project_name: `Análise de ${initialPromptForProjectName.substring(0, 40)}...`,
-        product_link: initialPromptForProjectName, // Use isso como um placeholder para o link inicial do produto
+        project_name: finalProjectName, // Usa o nome do projeto do input
+        product_link: '', // Pode ser vazio ou um placeholder, já que o nome é customizado
         target_country: 'Brazil', // Default
         target_audience: 'General', // Default
       });
@@ -38,7 +39,6 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }
         onNewProjectCreated(newProject.id);
       }
     } catch (error: any) {
-      // O tratamento de erros já está em useProjects.createProject
       console.error('Error starting new conversation:', error.message);
     } finally {
       setIsLoading(false);
@@ -52,6 +52,22 @@ const EmptyChatPrompt: React.FC<EmptyChatPromptProps> = ({ onNewProjectCreated }
       </div>
       <h1 className="text-4xl font-bold text-foreground">{t('emptyChat.greeting', { userName: user?.full_name || t('emptyChat.guest') })}</h1>
       <p className="mt-2 text-lg text-muted-foreground mb-8">{t('emptyChat.subtitle')}</p>
+      
+      <div className="w-full max-w-md space-y-4 mb-6">
+        <div className="space-y-2">
+          <Label htmlFor="projectNameInput" className="text-lg">{t('emptyChat.projectNameLabel')}</Label>
+          <Input
+            id="projectNameInput"
+            type="text"
+            placeholder={t('emptyChat.projectNamePlaceholder')}
+            value={projectNameInput}
+            onChange={(e) => setProjectNameInput(e.target.value)}
+            className="bg-transparent border-border text-center text-lg py-6"
+            disabled={isLoading}
+          />
+        </div>
+      </div>
+
       <Button 
         size="lg" 
         onClick={handleStartNewConversation} 

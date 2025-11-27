@@ -62,7 +62,7 @@ export interface Database {
         }
         Insert: {
           user_id: string
-          project_name: string
+          project_name: string // Agora é fornecido diretamente
           product_link: string
           target_country: string
           target_audience: string

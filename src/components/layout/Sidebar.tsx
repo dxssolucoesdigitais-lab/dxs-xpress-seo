@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import RenameProjectDialog from '../projects/RenameProjectDialog'; // Importar o novo componente
 
 const mainNavigation = [
   { name: 'Profile', href: '/profile', icon: User, admin: false },
@@ -40,6 +41,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
   const { user } = useSession();
   const { projects, loading, deleteProject } = useProjects();
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [projectToRename, setProjectToRename] = useState<Project | null>(null);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
   const availableNav = mainNavigation.filter(item => !item.admin || (item.admin && user?.role === 'admin'));
 
@@ -48,6 +51,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
       deleteProject(projectToDelete.id);
       setProjectToDelete(null);
     }
+  };
+
+  const handleRenameClick = (project: Project) => {
+    setProjectToRename(project);
+    setIsRenameDialogOpen(true);
   };
 
   return (
@@ -118,11 +126,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="bg-popover border-border text-popover-foreground">
-                          <DropdownMenuItem onSelect={(e) => { e.preventDefault(); alert('Função de renomear em breve!'); }}>
-                            Renomear
+                          <DropdownMenuItem onSelect={(e) => { e.preventDefault(); handleRenameClick(project); }}>
+                            {t('renameDialog.rename')}
                           </DropdownMenuItem>
                           <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setProjectToDelete(project); }} className="text-red-500 focus:bg-red-500/10 focus:text-red-500">
-                            Excluir
+                            {t('deleteDialog.confirm')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -177,6 +185,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <RenameProjectDialog
+        project={projectToRename}
+        isOpen={isRenameDialogOpen}
+        onOpenChange={setIsRenameDialogOpen}
+      />
     </>
   );
 };
