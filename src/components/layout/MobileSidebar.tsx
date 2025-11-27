@@ -105,7 +105,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onOpenChange, onF
                   >
                     <Link to={`/chat/${project.id}`} onClick={() => onOpenChange(false)} className="flex items-center flex-1 min-w-0">
                       <MessageSquare className="mr-3 h-5 w-5 flex-shrink-0" />
-                      <span className="truncate">{project.project_name || 'Nova Conversa'}</span>
+                      <span className="truncate">{project.project_name || t('emptyChat.defaultProjectName')}</span>
                     </Link>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

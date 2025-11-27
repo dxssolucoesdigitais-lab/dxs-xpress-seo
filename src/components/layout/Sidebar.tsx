@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onFeedbackClick, isExpanded, toggleSi
                   >
                     <Link to={`/chat/${project.id}`} className={cn("flex items-center flex-1 min-w-0", !isExpanded && "justify-center")}>
                       <MessageSquare className={cn("h-5 w-5 flex-shrink-0", isExpanded ? "mr-3" : "")} />
-                      {isExpanded && <span className="truncate">{project.project_name || 'Nova Conversa'}</span>}
+                      {isExpanded && <span className="truncate">{project.project_name || t('emptyChat.defaultProjectName')}</span>}
                     </Link>
                     {isExpanded && (
                       <DropdownMenu>
