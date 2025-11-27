@@ -574,5 +574,13 @@
       "emailInvalid": "Please enter a valid email address.",
       "passwordMin": "Password must be at least 6 characters."
     }
+  },
+  "renameDialog": {
+    "title": "Rename Project",
+    "description": "Enter a new name for your project.",
+    "newNameLabel": "New Project Name",
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "rename": "Rename"
   }
 }

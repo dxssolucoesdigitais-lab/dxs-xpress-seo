@@ -574,5 +574,13 @@
       "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida.",
       "passwordMin": "La contraseña debe tener al menos 6 caracteres."
     }
+  },
+  "renameDialog": {
+    "title": "Renombrar Proyecto",
+    "description": "Introduce un nuevo nombre para tu proyecto.",
+    "newNameLabel": "Nuevo Nombre del Proyecto",
+    "cancel": "Cancelar",
+    "save": "Guardar Cambios",
+    "rename": "Renombrar"
   }
 }
