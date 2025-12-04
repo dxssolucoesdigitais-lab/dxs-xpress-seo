@@ -105,7 +105,7 @@ serve(async (req) => {
       supabase_url: supabaseUrl,
       supabase_key: serviceRoleKey,
       openrouter_key: openrouterApiKey,
-      serpi_api_key: Deno.env.get('SERPI_API_KEY'),
+      // serpi_api_key: Deno.env.get('SERPI_API_KEY'), // REMOVIDO
     };
 
     fetch(windmillGSCAnalysisWebhookUrl, {

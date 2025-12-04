@@ -15,7 +15,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const windmillToken = Deno.env.get('WINDMILL_TOKEN')!
-    const windmillAdminNotificationWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_ADMIN_NOTIFICATION')! // Nova variável
+    const windmillAdminNotificationWebhookUrl = Deno.env.get('WINDMILL_WEBHOOK_URL_ADMIN_NOTIFICATION')!
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')!
 
     if (!supabaseUrl || !serviceRoleKey || !windmillToken || !windmillAdminNotificationWebhookUrl || !openrouterApiKey) {
@@ -44,7 +44,7 @@ serve(async (req) => {
       supabase_url: supabaseUrl,
       supabase_key: serviceRoleKey,
       openrouter_key: openrouterApiKey,
-      serpi_api_key: Deno.env.get('SERPI_API_KEY'),
+      // serpi_api_key: Deno.env.get('SERPI_API_KEY'), // REMOVIDO
     };
 
     fetch(windmillAdminNotificationWebhookUrl, {

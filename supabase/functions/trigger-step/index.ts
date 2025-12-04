@@ -23,7 +23,7 @@ serve(async (req) => {
     const windmillBaseUrl = Deno.env.get('WINDMILL_BASE_URL')
     const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_PATH')
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
-    const serpiApiKey = Deno.env.get('SERPI_API_KEY')
+    // const serpiApiKey = Deno.env.get('SERPI_API_KEY') // REMOVIDO
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
@@ -32,7 +32,7 @@ serve(async (req) => {
     console.log('trigger-step: WINDMILL_BASE_URL present:', !!windmillBaseUrl);
     console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey, 'Value (first 5 chars):', openrouterApiKey ? openrouterApiKey.substring(0, 5) : 'N/A');
-    console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey, 'Value (first 5 chars):', serpiApiKey ? serpiApiKey.substring(0, 5) : 'N/A');
+    // console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey, 'Value (first 5 chars):', serpiApiKey ? serpiApiKey.substring(0, 5) : 'N/A'); // REMOVIDO
 
     const missingEnvVars = [];
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
@@ -41,7 +41,7 @@ serve(async (req) => {
     if (!windmillBaseUrl) missingEnvVars.push('WINDMILL_BASE_URL');
     if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_PATH');
     if (!openrouterApiKey || openrouterApiKey.trim() === '') missingEnvVars.push('OPENROUTER_API_KEY');
-    if (!serpiApiKey || serpiApiKey.trim() === '') missingEnvVars.push('SERPI_API_KEY');
+    // if (!serpiApiKey || serpiApiKey.trim() === '') missingEnvVars.push('SERPI_API_KEY'); // REMOVIDO
 
     if (missingEnvVars.length > 0) {
       const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
@@ -193,7 +193,7 @@ serve(async (req) => {
         supabase_url: supabaseUrl,
         supabase_key: serviceRoleKey,
         openrouter_key: openrouterApiKey,
-        serpi_api_key: serpiApiKey,
+        // serpi_api_key: serpiApiKey, // REMOVIDO
         acao: acao
       };
       console.log('trigger-step: Windmill arguments being sent:', JSON.stringify(windmillArgs, null, 2));
