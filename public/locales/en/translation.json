@@ -357,7 +357,7 @@
     "generationErrorPrefix": "Generation error:"
   },
   "subscriptionAlert": {
-    "title": "Your Subscription Is Exiring!",
+    "title": "Your Subscription Is Expiring!",
     "expiresInDays": "Your subscription expires in {{count}} days.",
     "expiresInOneDay": "Your subscription expires in 1 day.",
     "expired": "Your subscription has expired!",
@@ -497,7 +497,7 @@
     "p2": "Continuing to access the website after these changes indicates that you agree to the new terms. If, for any reason, you do not agree with the updates, we ask that you do not continue using our website and services."
     },
     "contactTitle": "Questions or Comments?",
-    "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>."
+    "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>."
   },
   "privacyPage": {
     "backLink": "Back to Home Page",
