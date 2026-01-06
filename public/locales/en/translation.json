@@ -19,7 +19,8 @@
       "generateReplyError": "Error generating automatic reply.",
       "replySuccess": "Reply sent and feedback updated!",
       "replyError": "Error sending reply. Please try again.",
-      "fetchError": "Error fetching feedbacks."
+      "fetchError": "Error fetching feedbacks.",
+      "updateStatusError": "Error updating feedback status."
     },
     "admin": {
       "fetchUsersFailed": "Error fetching users.",
@@ -80,7 +81,7 @@
       "loginRequired": "Please log in to upload files."
     },
     "genericError": "An unexpected error occurred. Please try again."
-    },
+  },
   "pricingDialog": {
     "title": "Choose the Perfect Plan for You",
     "description": "Start with 3 free credits and upgrade to scale your business.",
