@@ -13,8 +13,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
   return (
     <div 
       className={cn(
-        "flex items-center justify-between p-5 text-foreground border-b border-border", // Removido gradiente e sombra
-        "max-w-3xl mx-auto w-full" // Centraliza o header
+        "flex items-center justify-between p-5 text-foreground border-b border-border bg-background/80 backdrop-blur-lg", // Removido gradiente e sombra
+        "w-full" // Centraliza o header
       )}
     >
       <h1 className="text-xl font-semibold">🤖 {t('chatHeader.assistantName')}</h1>

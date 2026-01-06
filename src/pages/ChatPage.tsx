@@ -181,7 +181,9 @@ const ChatPage: React.FC = () => {
       
       {currentProjectId && project ? (
         <>
-          <ChatHeader project={project} />
+          <div className="max-w-3xl mx-auto w-full"> {/* Container para o header */}
+            <ChatHeader project={project} />
+          </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-8 max-w-3xl mx-auto w-full"> {/* Aplicado max-w-3xl mx-auto w-full */}
             <MessageList 
               messages={displayedMessages} 
@@ -190,9 +192,13 @@ const ChatPage: React.FC = () => {
               projectId={currentProjectId} 
             />
           </div>
-          {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
+          {lastAiMessageIsError && (
+            <div className="max-w-3xl mx-auto w-full"> {/* Container para o erro */}
+              <ErrorDisplay message={errorMessage} />
+            </div>
+          )}
           {showNewConversationButton ? (
-            <div className="p-4 bg-background border-t border-border flex justify-center">
+            <div className="p-4 bg-background border-t border-border flex justify-center max-w-3xl mx-auto w-full">
               <Button
                 size="lg"
                 onClick={handleStartNewConversationFromExisting}
@@ -203,7 +209,7 @@ const ChatPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <div className="p-4 bg-background border-t border-border"> {/* Container para o ChatInput */}
+            <div className="p-4 bg-background border-t border-border max-w-3xl mx-auto w-full"> {/* Container para o ChatInput */}
               <ChatInput 
                 project={project} 
                 isDisabled={isChatInputDisabled} 
