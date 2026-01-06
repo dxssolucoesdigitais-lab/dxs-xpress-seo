@@ -8,7 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
+import { Loader2, ArrowLeft, ArrowRight } from "lucide-react";
 import { useSession } from '@/contexts/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
 import { showError, showSuccess } from '@/utils/toast';
@@ -16,29 +16,11 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import CurrencySelectionDialog from './CurrencySelectionDialog';
 import useEmblaCarousel from 'embla-carousel-react';
+import { PricingTier, GSCService } from '@/types/app.types'; // Importar do novo arquivo de tipos
 
 interface PricingDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-}
-
-interface PricingTier {
-  planId: string;
-  name: string;
-  price: string;
-  credits: number;
-  features: string[];
-  popular: boolean;
-}
-
-interface GSCService {
-  serviceId: string;
-  title: string;
-  description: string;
-  price: string;
-  perAnalysis: string;
-  features: string[];
-  buyNow: string;
 }
 
 const PricingDialog: React.FC<PricingDialogProps> = ({ isOpen, onOpenChange }) => {

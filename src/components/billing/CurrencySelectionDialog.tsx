@@ -9,11 +9,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { CreditCard, Banknote, Loader2 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { PricingTier, GSCService } from '@/types/app.types'; // Importar do novo arquivo de tipos
 
 interface CurrencySelectionDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  selectedPlan: string;
+  selectedPlan: string; // This is the planId or serviceId, e.g., "basic" or "gsc_analysis"
   onCurrencySelected: (currency: 'BRL' | 'USD' | 'EUR') => void;
   isLoading?: boolean;
 }
@@ -27,8 +28,20 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Get the plan name for display in the description
-  const planName = t(`pricingDialog.tiers.${selectedPlan}.name`, { defaultValue: selectedPlan });
+  // Get the full tiers array and GSC service as objects
+  const pricingTiers: PricingTier[] = t('pricingDialog.tiers', { returnObjects: true });
+  const gscService: GSCService = t('pricingDialog.gscService', { returnObjects: true });
+
+  // Find the plan name based on selectedPlan (which is planId or serviceId)
+  let displayName = selectedPlan; // Default to selectedPlan if not found
+  if (selectedPlan === gscService.serviceId) {
+    displayName = gscService.title;
+  } else {
+    const foundTier = pricingTiers.find(tier => tier.planId === selectedPlan);
+    if (foundTier) {
+      displayName = foundTier.name;
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -38,7 +51,7 @@ const CurrencySelectionDialog: React.FC<CurrencySelectionDialogProps> = ({
             {t('currencyDialog.title')}
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
-            {t('currencyDialog.description', { planName })}
+            {t('currencyDialog.description', { planName: displayName })}
           </DialogDescription>
         </DialogHeader>
         
