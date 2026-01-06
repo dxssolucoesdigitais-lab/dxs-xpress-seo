@@ -269,71 +269,70 @@ const ChatInput: React.FC<ChatInputProps> = ({ project, isDisabled = false, onOp
   }, [prompt]);
 
   return (
-    <div className="p-5 bg-background border-t border-border shadow-md">
-      <div className="flex flex-col md:flex-row gap-3 items-end">
-        <div className="flex flex-col gap-2 flex-1 w-full">
-          {uploadedFiles.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-2">
-              {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-2 px-3 py-1 bg-blue-900/20 border border-blue-500/40 rounded-lg text-sm text-foreground">
-                  <span className="text-base">{getFileIcon(file.fileName)}</span>
-                  <span className="font-medium max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">{file.fileName}</span>
-                  <span className="text-xs text-muted-foreground">{file.fileSize}</span>
-                  <X className="w-4 h-4 text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={() => removeFile(index)} />
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="flex gap-2 items-center w-full">
-            <label htmlFor="fileInput" className="px-3 py-2 bg-secondary border border-border rounded-lg cursor-pointer transition-all hover:bg-accent hover:border-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm text-muted-foreground font-medium">
-              {isUploadingFile && !gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <Paperclip size={16} />}
-              {t('chatInput.attachFile')}
-            </label>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleGenericFileChange}
-              className="hidden"
-              disabled={inputDisabled}
-              multiple
-              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.csv"
-              id="fileInput"
-            />
-            <label htmlFor="gscFileInput" className="px-3 py-2 bg-secondary border border-border rounded-lg cursor-pointer transition-all hover:bg-accent hover:border-blue-500 hover:text-blue-400 flex items-center gap-2 text-sm text-muted-foreground font-medium"
-              title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
-            >
-              {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={16} className="animate-spin" /> : <BarChart3 size={16} />}
-              {t('chatInput.gscAnalysis')}
-            </label>
-            <input
-              type="file"
-              ref={gscFileInputRef}
-              onChange={handleGSCFileChange}
-              className="hidden"
-              disabled={inputDisabled || !project.id}
-              accept=".csv,.json"
-              id="gscFileInput"
-            />
-            <textarea
-              ref={textareaRef}
-              className="flex-1 p-3 border-2 border-border rounded-xl text-base text-foreground placeholder:text-muted-foreground resize-none min-h-[50px] max-h-[150px] focus:outline-none focus:border-blue-500 focus:shadow-[0_0_0_3px_rgba(102,126,234,0.15)] bg-transparent"
-              placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={inputDisabled}
-              rows={1}
-            ></textarea>
+    <div className="max-w-3xl mx-auto w-full"> {/* Centraliza o input */}
+      <div className="flex flex-col gap-2 w-full">
+        {uploadedFiles.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-2">
+            {uploadedFiles.map((file, index) => (
+              <div key={index} className="flex items-center gap-2 px-3 py-1 bg-blue-900/20 border border-blue-500/40 rounded-lg text-sm text-foreground">
+                <span className="text-base">{getFileIcon(file.fileName)}</span>
+                <span className="font-medium max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap">{file.fileName}</span>
+                <span className="text-xs text-muted-foreground">{file.fileSize}</span>
+                <X className="w-4 h-4 text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={() => removeFile(index)} />
+              </div>
+            ))}
           </div>
+        )}
+        <div className="relative flex items-end w-full p-2 bg-secondary border border-border rounded-3xl shadow-sm"> {/* Formato de cápsula */}
+          <label htmlFor="fileInput" className="p-2 cursor-pointer transition-colors hover:bg-accent rounded-full text-muted-foreground hover:text-foreground">
+            {isUploadingFile && !gscFileInputRef.current?.files?.[0] ? <Loader2 size={20} className="animate-spin" /> : <Paperclip size={20} />}
+            <span className="sr-only">{t('chatInput.attachFile')}</span>
+          </label>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleGenericFileChange}
+            className="hidden"
+            disabled={inputDisabled}
+            multiple
+            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.csv"
+            id="fileInput"
+          />
+          <label htmlFor="gscFileInput" className="p-2 cursor-pointer transition-colors hover:bg-accent rounded-full text-muted-foreground hover:text-foreground"
+            title={project.id ? t('chatInput.gscAnalysis') : t('chatInput.gscNoProjectTooltip')}
+          >
+            {isUploadingFile && gscFileInputRef.current?.files?.[0] ? <Loader2 size={20} className="animate-spin" /> : <BarChart3 size={20} />}
+            <span className="sr-only">{t('chatInput.gscAnalysis')}</span>
+          </label>
+          <input
+            type="file"
+            ref={gscFileInputRef}
+            onChange={handleGSCFileChange}
+            className="hidden"
+            disabled={inputDisabled || !project.id}
+            accept=".csv,.json"
+            id="gscFileInput"
+          />
+          <textarea
+            ref={textareaRef}
+            className="flex-1 p-2 text-base text-foreground placeholder:text-muted-foreground resize-none min-h-[24px] max-h-[150px] focus:outline-none bg-transparent border-none"
+            placeholder={inputDisabled ? t('chatInput.disabledPlaceholder') : t('chatInput.placeholder')}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={inputDisabled}
+            rows={1}
+          ></textarea>
+          <button
+            type="submit"
+            onClick={handleSendMessage}
+            className="p-2 ml-2 bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={inputDisabled || (!prompt.trim() && uploadedFiles.length === 0)}
+          >
+            {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
+            <span className="sr-only">Send Message</span>
+          </button>
         </div>
-        <button
-          type="submit"
-          onClick={handleSendMessage}
-          className="px-6 py-3 bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-xl text-base font-semibold cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-600/40 disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px]"
-          disabled={inputDisabled || (!prompt.trim() && uploadedFiles.length === 0)}
-        >
-          {isSendingMessage ? <Loader2 size={20} className="animate-spin" /> : <span className="flex items-center justify-center gap-1">Enviar <Send size={16} /></span>}
-        </button>
       </div>
     </div>
   );

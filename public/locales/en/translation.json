@@ -57,7 +57,8 @@
       "gscAnalysisTriggerFailed": "Error triggering GSC analysis. Please try again.",
       "fetchMessagesFailed": "Error fetching chat messages.",
       "sendMessageFailed": "Error sending message.",
-      "you": "You"
+      "you": "You",
+      "copy": "Copy"
     },
     "clipboard": {
       "notAvailable": "Your browser does not support the clipboard API.",
@@ -460,7 +461,8 @@
     "backLink": "Back to Home Page",
     "title": "XpressSEO Terms of Use and Service",
     "intro1": "Welcome to the XpressSEO website. Before exploring everything we have to offer, it is important that you understand and agree to some basic rules that govern the use of our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, and any other digital service we offer, such as stores and e-commerce platforms.",
-    "intro2": "By using our website and services, you automatically agree to follow the rules we establish here. If you do not agree with something, please consider not using our services. It is very important to us that you feel safe and informed at all times.",
+    "intro2": "By using our website and services, you automatically agree to follow the rules we establish here. If we make significant changes, we will post the updates here in the website. Continuing to use the website after these changes means that you accept the new terms."
+    },
     "section1": {
       "title": "1. Accepting the Terms",
       "p1": "By browsing and using the XpressSEO website, you automatically agree to our rules and conditions. We are always looking to improve, so these terms may change from time to time. If we make significant changes, we will post the updates here in the website. Continuing to use the website after these changes means that you accept the new terms."

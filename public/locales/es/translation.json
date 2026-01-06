@@ -57,7 +57,8 @@
       "gscAnalysisTriggerFailed": "Error al activar el análisis GSC. Inténtalo de nuevo.",
       "fetchMessagesFailed": "Error al buscar mensajes del chat.",
       "sendMessageFailed": "Error al enviar mensaje.",
-      "you": "Tú"
+      "you": "Tú",
+      "copy": "Copiar"
     },
     "clipboard": {
       "notAvailable": "Tu navegador no es compatible con la API del portapapeles.",

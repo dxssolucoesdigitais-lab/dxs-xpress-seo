@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 import { showSuccess } from '@/utils/toast';
 import { useSession } from '@/contexts/SessionContext';
-import Confetti from 'react-confetti'; // Corrigido o import
+import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { StructuredChatContent, ChatMessage } from '@/types/chat.types';
 import EmptyChatPrompt from '@/components/chat/EmptyChatPrompt';
@@ -182,12 +182,14 @@ const ChatPage: React.FC = () => {
       {currentProjectId && project ? (
         <>
           <ChatHeader project={project} />
-          <MessageList 
-            messages={displayedMessages} 
-            isAiTyping={isAiTyping} 
-            currentStep={project.current_step} 
-            projectId={currentProjectId} 
-          />
+          <div className="flex-1 overflow-y-auto p-4 space-y-8 max-w-3xl mx-auto w-full"> {/* Aplicado max-w-3xl mx-auto w-full */}
+            <MessageList 
+              messages={displayedMessages} 
+              isAiTyping={isAiTyping} 
+              currentStep={project.current_step} 
+              projectId={currentProjectId} 
+            />
+          </div>
           {lastAiMessageIsError && <ErrorDisplay message={errorMessage} />}
           {showNewConversationButton ? (
             <div className="p-4 bg-background border-t border-border flex justify-center">
@@ -201,12 +203,14 @@ const ChatPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <ChatInput 
-              project={project} 
-              isDisabled={isChatInputDisabled} 
-              onOptimisticMessageAdd={addOptimisticMessage}
-              onOptimisticMessageRemove={removeOptimisticMessage}
-            />
+            <div className="p-4 bg-background border-t border-border"> {/* Container para o ChatInput */}
+              <ChatInput 
+                project={project} 
+                isDisabled={isChatInputDisabled} 
+                onOptimisticMessageAdd={addOptimisticMessage}
+                onOptimisticMessageRemove={removeOptimisticMessage}
+              />
+            </div>
           )}
         </>
       ) : (

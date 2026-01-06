@@ -65,6 +65,7 @@ declare module 'react-i18next' {
             fetchMessagesFailed: string;
             sendMessageFailed: string;
             you: string; // Adicionado
+            copy: string; // Nova chave
           };
           clipboard: {
             notAvailable: string;

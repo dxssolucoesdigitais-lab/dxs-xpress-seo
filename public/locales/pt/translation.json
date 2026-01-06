@@ -58,7 +58,8 @@
       "gscAnalysisTriggerFailed": "Erro ao acionar a análise GSC. Tente novamente.",
       "fetchMessagesFailed": "Erro ao buscar mensagens do chat.",
       "sendMessageFailed": "Erro ao enviar mensagem.",
-      "you": "Você"
+      "you": "Você",
+      "copy": "Copiar"
     },
     "clipboard": {
       "notAvailable": "Seu navegador não suporta a API de área de transferência.",

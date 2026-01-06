@@ -1,12 +1,14 @@
 import React from 'react';
 import { ChatMessage, StructuredChatContent, LlmOption, WorkflowProgress } from '@/types/chat.types';
-import { User as UserIcon, FileText, Download, BarChart3 } from 'lucide-react';
+import { User as UserIcon, FileText, Download, BarChart3, Copy } from 'lucide-react'; // Adicionado Copy
 import OptionSelector from './OptionSelector';
 import ProgressFlow from './ProgressFlow';
 import TypingIndicator from './TypingIndicator';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { FileMetadata } from '@/types/database.types';
+import { Button } from '../ui/button'; // Importar Button
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'; // Importar o hook
 
 const getFileIcon = (fileName: string) => {
   const ext = fileName.split('.').pop()?.toLowerCase();
@@ -27,6 +29,7 @@ const getFileIcon = (fileName: string) => {
 
 const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | undefined }> = ({ message, projectId }) => {
   const { t } = useTranslation();
+  const { copyToClipboard } = useCopyToClipboard(); // Usar o hook
 
   const renderFileAttachment = (file: FileMetadata, isGSCAnalysis: boolean = false) => (
     <div className={cn(
@@ -62,19 +65,16 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
     const isGSCAnalysisRequest = message.metadata?.gscAnalysis === true;
 
     return (
-      <div className="message user animate-fadeIn max-w-2xl mx-auto flex items-start gap-4 flex-row-reverse">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm text-white bg-gradient-to-br from-purple-600 to-blue-600 flex-shrink-0">VC</div>
-        <div className="flex-1">
-          <div className="flex items-center justify-end gap-3 mb-2">
-            <span className="font-semibold text-sm text-foreground">{t('chat.you')}</span>
-            <span className="text-xs text-muted-foreground">{time}</span>
-          </div>
-          <div className="p-4 rounded-2xl rounded-br-none bg-secondary border border-border text-foreground text-base leading-relaxed max-w-md ml-auto">
-            {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
-            {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
-              <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p>
-            )}
-          </div>
+      <div className="message user animate-fadeIn flex flex-col items-end text-right mb-8"> {/* Ajustado para Gemini-style */}
+        <div className="flex items-center gap-2 mb-2">
+          <span className="font-bold text-sm text-foreground">{t('chat.you')}</span>
+          <div className="w-6 h-6 rounded-full flex items-center justify-center font-semibold text-sm text-white bg-gradient-to-br from-purple-600 to-blue-600 flex-shrink-0"><UserIcon size={16} /></div> {/* Ícone menor */}
+        </div>
+        <div className="text-foreground text-base leading-relaxed max-w-full md:max-w-2xl"> {/* Removido balão, ajustado max-width */}
+          {fileAttachment && renderFileAttachment(fileAttachment, isGSCAnalysisRequest)}
+          {message.content && typeof message.content === 'string' && message.content.trim() !== '' && (
+            <p className={cn("text-base", { 'mt-3': fileAttachment })}>{message.content}</p>
+          )}
         </div>
       </div>
     );
@@ -103,56 +103,79 @@ const MessageRenderer: React.FC<{ message: ChatMessage; projectId: string | unde
 
   // Handle the 'structured_response' type from Windmill
   if (structuredContent?.type === 'structured_response' && Array.isArray(structuredContent.messages)) {
+    const contentToRender = structuredContent.messages.map((msgItem: any, index: number) => {
+      if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
+        return <p key={index}>{msgItem.data}</p>;
+      }
+      return null;
+    });
+
+    const rawTextContent = structuredContent.messages
+      .filter((msgItem: any) => msgItem.type === 'text' && typeof msgItem.data === 'string')
+      .map((msgItem: any) => msgItem.data)
+      .join('\n\n');
+
     return (
-      <div className="message ai animate-fadeIn max-w-2xl mx-auto flex items-start gap-4">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
-          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
-            <span className="text-xs text-muted-foreground">{time}</span>
-            {message.metadata?.current_step && (
-              <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
-                {t('chatHeader.step')} {message.metadata.current_step}
-              </span>
-            )}
+      <div className="message ai animate-fadeIn flex flex-col items-start mb-8"> {/* Ajustado para Gemini-style */}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
+            <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
           </div>
-          <div className="p-4 rounded-2xl rounded-tl-none bg-card border border-border text-foreground text-base leading-relaxed max-w-md">
-            <div className="space-y-4">
-              {structuredContent.messages.map((msgItem: any, index: number) => {
-                if (msgItem.type === 'text' && typeof msgItem.data === 'string') {
-                  return <p key={index}>{msgItem.data}</p>;
-                }
-                return null;
-              })}
-            </div>
-          </div>
+          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+          <span className="text-xs text-muted-foreground">{time}</span>
+          {message.metadata?.current_step && (
+            <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
+              {t('chatHeader.step')} {message.metadata.current_step}
+            </span>
+          )}
         </div>
+        <div className="prose dark:prose-invert max-w-full md:max-w-2xl text-foreground text-base leading-relaxed"> {/* Removido balão, ajustado max-width */}
+          {contentToRender}
+        </div>
+        {rawTextContent && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => copyToClipboard(rawTextContent)} 
+            className="mt-2 text-muted-foreground hover:text-foreground"
+          >
+            <Copy className="h-4 w-4 mr-2" /> {t('chat.copy')}
+          </Button>
+        )}
       </div>
     );
   }
 
   // Default rendering for plain text or unparsed content
+  const rawTextContent = typeof message.content === 'string' ? message.content : '';
+
   return (
-    <div className="message ai animate-fadeIn max-w-2xl mx-auto flex items-start gap-4">
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
-        <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
-      </div>
-      <div className="flex-1">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
-          <span className="text-xs text-muted-foreground">{time}</span>
-          {project?.current_step && (
-            <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
-              {t('chatHeader.step')} {project.current_step}
-            </span>
-          )}
+    <div className="message ai animate-fadeIn flex flex-col items-start mb-8"> {/* Ajustado para Gemini-style */}
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-2xl flex-shrink-0">
+          <img src="/logo.svg" alt="XpressSEO Assistant Logo" className="w-full h-full object-contain p-1" />
         </div>
-        <div className="p-4 rounded-2xl rounded-tl-none bg-card border border-border text-foreground text-base leading-relaxed max-w-md">
-          {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
-        </div>
+        <span className="font-bold text-foreground">{t('chatHeader.assistantName')}</span>
+        <span className="text-xs text-muted-foreground">{time}</span>
+        {project?.current_step && (
+          <span className="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs font-semibold">
+            {t('chatHeader.step')} {project.current_step}
+          </span>
+        )}
       </div>
+      <div className="prose dark:prose-invert max-w-full md:max-w-2xl text-foreground text-base leading-relaxed"> {/* Removido balão, ajustado max-width */}
+        {message.content ? <p>{message.content}</p> : <p>{t('chat.analyzingNextStep')}</p>}
+      </div>
+      {rawTextContent && (
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => copyToClipboard(rawTextContent)} 
+          className="mt-2 text-muted-foreground hover:text-foreground"
+        >
+          <Copy className="h-4 w-4 mr-2" /> {t('chat.copy')}
+        </Button>
+      )}
     </div>
   );
 };
@@ -176,7 +199,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isAiTyping, current
   }, [messages, isAiTyping]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-background"> {/* Alterado para bg-background */}
+    <div className="flex-1 overflow-y-auto p-4 space-y-8"> {/* Ajustado padding e espaçamento */}
       {messages.map((message) => (
         <MessageRenderer key={message.id} message={message} projectId={projectId} />
       ))}

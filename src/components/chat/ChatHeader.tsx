@@ -13,13 +13,13 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ project }) => {
   return (
     <div 
       className={cn(
-        "flex items-center justify-between p-5 text-white shadow-md",
-        "bg-gradient-to-br from-[#667eea] to-[#764ba2]" // Aplicando o gradiente diretamente
+        "flex items-center justify-between p-5 text-foreground border-b border-border", // Removido gradiente e sombra
+        "max-w-3xl mx-auto w-full" // Centraliza o header
       )}
     >
       <h1 className="text-xl font-semibold">🤖 {t('chatHeader.assistantName')}</h1>
       <div className="flex items-center gap-4 text-sm opacity-90">
-        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div> {/* Corrigido para green-400 */}
+        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
         <span>Online</span>
       </div>
     </div>
