@@ -461,7 +461,7 @@
   "termsPage": {
     "backLink": "Back to Home Page",
     "title": "XpressSEO Terms of Use and Service",
-    "intro1": "Welcome to the XpressSEO website. Before exploring everything we have to offer, it is important that you understand and agree to some basic rules that govern the use of our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, and any other digital service we offer, such as stores and e-commerce platforms.",
+    "intro1": "Welcome to the XpressSEO website. Before exploring everything we have to offer, it is important that you understand and agree to some basic rules that govern the use of our website www.xpressseo.com, and any other digital service we offer, such as stores and e-commerce platforms.",
     "intro2": "By using our website and services, you automatically agree to follow the rules we establish here. If we make significant changes, we will post the updates here in the website. Continuing to use the website after these changes means that you accept the new terms."
     },
     "section1": {
@@ -497,12 +497,12 @@
     "p2": "Continuing to access the website after these changes indicates that you agree to the new terms. If, for any reason, you do not agree with the updates, we ask that you do not continue using our website and services."
     },
     "contactTitle": "Questions or Comments?",
-    "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>."
+    "contactEmail": "If you have questions about these terms, do not hesitate to contact us via email suporte.xpressseo@gmail.com."
   },
   "privacyPage": {
     "backLink": "Back to Home Page",
     "title": "XpressSEO Privacy Policy",
-    "intro1": "Welcome to XpressSEO, registered under CNPJ 40.080.986/0001-71, with headquarters at Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Our commitment is to the integrity and security of the personal data of our users and clients. This Privacy Policy applies to all digital interactions carried out on our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, associated services, mobile applications, and other digital platforms under our control.",
+    "intro1": "Welcome to XpressSEO, registered under CNPJ 40.080.986/0001-71, with headquarters at Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Our commitment is to the integrity and security of the personal data of our users and clients. This Privacy Policy applies to all digital interactions carried out on our website www.xpressseo.com, associated services, mobile applications, and other digital platforms under our control.",
     "intro2": "By accessing and using our platforms, you acknowledge and agree to the practices described in this policy. We treat the protection of your personal data with the utmost seriousness and commit to processing it responsibly, transparently, and securely.",
     "definitionsTitle": "Definitions",
     "definitionsList": [
@@ -516,7 +516,7 @@
     "dataCollectionList1": "<strong>Information Provided by You:</strong> This includes, but is not limited to, first name, last name, email address, physical address, payment information, and any other information you choose to provide when creating an account, making a purchase, or interacting with our customer service.",
     "dataCollectionList2": "<strong>Automatically Collected Information:</strong> When you visit our website, we automatically collect information about your device and your interaction with our website. This may include data such as your IP address, browser type, device details, time zone, pages visited, products viewed, websites or search terms that directed you to our website, and information about how you interact with our website.",
     "cookiesTitle": "Use of Cookies and Tracking Technologies",
-    "cookiesIntro": "XpressSEO uses cookies, which are small text files stored on your device, and other tracking technologies to improve the user experience on our website <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, understand how our services are used, and optimize our marketing strategies.",
+    "cookiesIntro": "XpressSEO uses cookies, which are small text files stored on your device, and other tracking technologies to improve the user experience on our website www.xpressseo.com, understand how our services are used, and optimize our marketing strategies.",
     "cookiesTypesTitle": "Types of Cookies Used:",
     "cookiesTypesList": [
       "<strong>Essential Cookies:</strong> Essential for the website to function, allowing you to browse and use its features. Without these cookies, services such as shopping cart and payment processing cannot be provided.",
@@ -552,13 +552,13 @@
       "The right to data portability;",
       "The right to withdraw your consent at any time, when processing is based on consent."
     ],
-    "dataSubjectRightsContact": "To exercise these rights, please contact us at <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSubjectRightsContact": "To exercise these rights, please contact us at suporte.xpressseo@gmail.com.",
     "dataSecurityTitle": "Data Security",
     "dataSecurityP1": "We implement technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. However, it is important to note that no system is completely secure. We commit to notifying you and any applicable authority of any security breaches in accordance with current legislation.",
     "policyChangesTitle": "Changes to the Privacy Policy",
     "policyChangesP1": "Our Privacy Policy may be updated periodically. The most current version will always be published on our website, indicating the date of the last revision. We encourage you to regularly review our policy to always be informed about how we are protecting your data.",
     "contactTitle": "Contact",
-    "contactEmail": "If you have questions or concerns about our Privacy Policy or data practices, please do not hesitate to contact us at <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. We are committed to resolving any issues related to the privacy of our users and clients."
+    "contactEmail": "If you have questions or concerns about our Privacy Policy or data practices, please do not hesitate to contact us at suporte.xpressseo@gmail.com. We are committed to resolving any issues related to the privacy of our users and clients."
   },
   "signUpForm": {
     "title": "Create your account",

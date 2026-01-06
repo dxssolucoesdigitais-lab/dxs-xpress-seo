@@ -460,7 +460,7 @@
   "termsPage": {
     "backLink": "Volver a la Página de Inicio",
     "title": "Términos de Uso y Servicio de XpressSEO",
-    "intro1": "Bienvenido al sitio web de XpressSEO. Antes de explorar todo lo que tenemos para ofrecer, es importante que comprendas y aceptes algunas reglas básicas que rigen el uso de nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, y cualquier otro servicio digital que ofrecemos, como tiendas y plataformas de comercio electrónico.",
+    "intro1": "Bienvenido al sitio web de XpressSEO. Antes de explorar todo lo que tenemos para ofrecer, es importante que comprendas y aceptes algunas reglas básicas que rigen el uso de nuestro sitio web www.xpressseo.com, y cualquier otro servicio digital que ofrecemos, como tiendas y plataformas de comercio electrónico.",
     "intro2": "Al usar nuestro sitio web y servicios, aceptas automáticamente seguir las reglas que establecemos aquí. Si no estás de acuerdo con algo, por favor, considera no usar nuestros servicios. Es muy importante para nosotros que te sientas seguro e informado en todo momento.",
     "section1": {
       "title": "1. Aceptación de los Términos",
@@ -495,12 +495,12 @@
       "p2": "Continuar accediendo al sitio web después de estos cambios indica que aceptas los nuevos términos. Si, por cualquier motivo, no estás de acuerdo con las actualizaciones, te pedimos que no continúes utilizando nuestro sitio web y servicios."
     },
     "contactTitle": "¿Preguntas o Comentarios?",
-    "contactEmail": "Si tienes preguntas sobre estos términos, no dudes en contactarnos por correo electrónico <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>."
+    "contactEmail": "Si tienes preguntas sobre estos términos, no dudes en contactarnos por correo electrónico dxs.automa@gmail.com."
   },
   "privacyPage": {
     "backLink": "Volver a la Página de Inicio",
     "title": "Política de Privacidad de XpressSEO",
-    "intro1": "Bienvenido a XpressSEO, inscrita en el CNPJ 40.080.986/0001-71, con sede en Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Nuestro compromiso es con la integridad y la seguridad de los datos personales de nuestros usuarios y clientes. Esta Política de Privacidad se aplica a todas las interacciones digitales realizadas en nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, servicios asociados, aplicaciones móviles y otras plataformas digitales bajo nuestro control.",
+    "intro1": "Bienvenido a XpressSEO, inscrita en el CNPJ 40.080.986/0001-71, con sede en Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Nuestro compromiso es con la integridad y la seguridad de los datos personales de nuestros usuarios y clientes. Esta Política de Privacidad se aplica a todas las interacciones digitales realizadas en nuestro sitio web www.xpressseo.com, servicios asociados, aplicaciones móviles y otras plataformas digitales bajo nuestro control.",
     "intro2": "Al acceder y utilizar nuestras plataformas, reconoces y aceptas las prácticas descritas en esta política. Tratamos la protección de tus datos personales con la máxima seriedad y nos comprometemos a procesarlos de forma responsable, transparente y segura.",
     "definitionsTitle": "Definiciones",
     "definitionsList": [
@@ -514,7 +514,7 @@
     "dataCollectionList1": "<strong>Información Proporcionada por Ti:</strong> Esto incluye, entre otros, nombre, apellido, dirección de correo electrónico, dirección física, información de pago y cualquier otra información que elijas proporcionar al crear una cuenta, realizar una compra o interactuar con nuestros servicios de atención al cliente.",
     "dataCollectionList2": "<strong>Información Recopilada Automáticamente:</strong> Cuando visitas nuestro sitio web, recopilamos automáticamente información sobre tu dispositivo y tu interacción con nuestro sitio web. Esto puede incluir datos como tu IP address, tipo de navegador, detalles del dispositivo, zona horaria, páginas visitadas, productos visualizados, sitios web o términos de búsqueda que te dirigieron a nuestro sitio web, e información sobre cómo interactúas con el sitio web.",
     "cookiesTitle": "Uso de Cookies y Tecnologías de Rastreo",
-    "cookiesIntro": "XpressSEO utiliza cookies, que son pequeños archivos de texto almacenados en tu dispositivo, y otras tecnologías de rastreo para mejorar la experiencia del usuario en nuestro sitio web <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, comprender cómo se utilizan nuestros servicios y otimizar nuestras estratégias de marketing.",
+    "cookiesIntro": "XpressSEO utiliza cookies, que son pequeños archivos de texto almacenados en tu dispositivo, y otras tecnologías de rastreo para mejorar la experiencia del usuario en nuestro sitio web www.xpressseo.com, comprender cómo se utilizan nuestros servicios y otimizar nuestras estratégias de marketing.",
     "cookiesTypesTitle": "Tipos de Cookies Utilizadas:",
     "cookiesTypesList": [
       "<strong>Cookies Esenciales:</strong> Esenciales para el funcionamiento del sitio web, permitiéndote navegar y usar sus funcionalidades. Sin estas cookies, servicios como el carrito de compras y el procesamiento de pagos no pueden ser proporcionados.",
@@ -550,13 +550,13 @@
       "El derecho a la portabilidade de datos;",
       "El derecho a retirar tu consentimiento a cualquier momento, cuando el procesamiento se base en el consentimiento."
     ],
-    "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSubjectRightsContact": "Para exercer esses direitos, contáctanos a través de suporte.xpressseo@gmail.com.",
     "dataSecurityTitle": "Seguridad de los Datos",
     "dataSecurityP1": "Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, alteración, divulgação o destruição. Sin embargo, es importante tener em conta que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Cambios en la Política de Privacidad",
     "policyChangesP1": "Nuestra Política de Privacidad puede actualizarse periódicamente. La versión más actual siempre se publicará en nuestro sitio web, indicando la fecha de la última revisión. Te animamos a revisar regularmente nuestra política para estar siempre informado sobre cómo estamos protegiendo tus datos.",
     "contactTitle": "Contacto",
-    "contactEmail": "Si tienes preguntas o inquietudes sobre nuestra Política de Privacidad o prácticas de datos, no dudes en contactarnos en <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos a resolver cualquier problema relacionado con la privacidad de nuestros usuarios y clientes."
+    "contactEmail": "Si tienes preguntas o inquietudes sobre nuestra Política de Privacidad o data practices, no dudes en contactarnos en suporte.xpressseo@gmail.com. Estamos comprometidos a resolver cualquier problema relacionado con la privacidad de nuestros usuarios y clientes."
   },
   "signUpForm": {
     "title": "Crea tu cuenta",

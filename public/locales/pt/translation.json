@@ -461,7 +461,7 @@
   "termsPage": {
     "backLink": "Voltar para a Página Inicial",
     "title": "Termos de Uso e Serviço da XpressSEO",
-    "intro1": "Seja Bem-Vindo ao site da XpressSEO. Antes de explorar tudo o que temos a oferecer, é importante que você entenda e concorde com algumas regras básicas que regem o uso do nosso site <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, e qualquer outro serviço digital que nós oferecemos, como lojas e plataformas de e-commerce.",
+    "intro1": "Seja Bem-Vindo ao site da XpressSEO. Antes de explorar tudo o que temos a oferecer, é importante que você entenda e concorde com algumas regras básicas que regem o uso do nosso site www.xpressseo.com, e qualquer outro serviço digital que nós oferecemos, como lojas e plataformas de e-commerce.",
     "intro2": "Ao usar nosso site e serviços, você automaticamente concorda em seguir as regras que estabelecemos aqui. Caso não concorde com algo, por favor, considere não usar nossos serviços. É muito importante para nós que você se sinta seguro e informado a todo momento.",
     "section1": {
       "title": "1. Aceitando os Termos",
@@ -474,12 +474,12 @@
     "section3": {
       "title": "3. Sua Privacidade",
       "p1": "Na XpressSEO, a privacidade é um valor essencial. Ao interagir com nosso site, você aceita nossa Política de Privacidade, que detalha nossa abordagem responsável e conforme às leis para o manejo dos seus dados pessoais. Nosso compromisso é com a transparência e a segurança: explicamos como coletamos, usamos e protegemos suas informações, garantindo sua privacidade e oferecendo controle sobre seus dados.",
-      "p2": "Adotamos práticas de segurança para proteger suas informações contra acesso não autorizado e compartilhamento indevido, assegurando que qualquer cooperação com terceiros ocorra apenas com base na sua aprovação ou exigências legais claras, reafirmando nosso comprometimento com a sua confiança e segurança digital."
+      "p2": "Adotamos práticas de segurança para proteger suas informações contra acesso não autorizado e compartilhamento indevido, assegurando que qualquer cooperação com terceiros ocorra apenas com base na sua aprovação ou exigências legais claras, reafirmando seu comprometimento com a sua confiança e segurança digital."
     },
     "section4": {
       "title": "4. Direitos de Conteúdo",
       "p1": "O conteúdo disponível no site da XpressSEO, incluindo, mas não se limitando a, textos, imagens, ilustrações, designs, ícones, fotografias, programas de computador, videoclipes e áudios, constitui propriedade intelectual protegida tanto pela legislação nacional quanto por tratados internacionais sobre direitos autorais e propriedade industrial. Essa propriedade engloba não apenas materiais diretamente produzidos e publicados por nós, mas também conteúdos que são utilizados sob licença ou permissão de terceiros, garantindo que todos os direitos sejam respeitados conforme as normativas vigentes.",
-      "p2": "Ao acessar nosso site, você recebe uma licença limitada, não exclusiva e revogável para visualizar e usar o conteúdo para fins pessoais e não comerciais. Isso implica que qualquer reprodução, distribuição, transmissão ou modificação do conteúdo, sem a devida autorização escrita da XpressSEO, é estritamente proibida. Tal restrição visa proteger os direitos de propriedade intelectual associados aos materiais disponibilizados, assegurando que sua utilização não infrinja os direitos dos criadores ou detentores desses direitos, além de promover um ambiente de respeito e valorização da criatividade e inovação."
+      "p2": "Ao acessar nosso site, você recebe uma licença limitada, não exclusiva e revocável para visualizar e usar o conteúdo para fins pessoais e não comerciais. Isso implica que qualquer reprodução, distribuição, transmissão ou modificação do conteúdo, sem a devida autorização escrita da XpressSEO, é estritamente proibida. Tal restrição visa proteger os direitos de propriedade intelectual associados aos materiais disponibilizados, assegurando que sua utilização não infrinja os direitos dos criadores ou detentores desses direitos, além de promover um ambiente de respeito e valorização da criatividade e inovação."
     },
     "section5": {
       "title": "5. Cookies e Mais",
@@ -496,12 +496,12 @@
       "p2": "Continuar a acessar o site após essas mudanças indica que você concorda com os novos termos. Se, por qualquer motivo, você não concordar com as atualizações, pedimos que não continue utilizando nosso site e serviços."
     },
     "contactTitle": "Dúvidas ou Comentários?",
-    "contactEmail": "Se tiver dúvidas sobre estes termos, não hesite em nos contatar através do e-mail <a href=\"mailto:dxs.automa@gmail.com\" class=\"text-cyan-400 hover:underline\">dxs.automa@gmail.com</a>."
+    "contactEmail": "Se tiver dúvidas sobre estes termos, não hesite em nos contatar através do e-mail dxs.automa@gmail.com."
   },
   "privacyPage": {
     "backLink": "Voltar para a Página Inicial",
     "title": "Política de Privacidade da XpressSEO",
-    "intro1": "Bem-vindo à XpressSEO, inscrita no CNPJ 40.080.986/0001-71, com sede na Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Nosso compromisso é com a integridade e a segurança dos dados pessoais dos nossos usuários e clientes. Esta Política de Privacidade aplica-se a todas as interações digitais realizadas em nosso site <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, serviços associados, aplicativos móveis e outras plataformas digitais sob nosso controle.",
+    "intro1": "Bem-vindo à XpressSEO, inscrita no CNPJ 40.080.986/0001-71, com sede na Rua Monsenhor Kimura, 445, Vila Cleópatra, Maringá-PR, 87010-450. Nosso compromisso é com a integridade e a segurança dos dados pessoais dos nossos usuários e clientes. Esta Política de Privacidade aplica-se a todas as interações digitais realizadas em nosso site www.xpressseo.com, serviços associados, aplicativos móveis e outras plataformas digitais sob nosso controle.",
     "intro2": "Ao acessar e utilizar nossas plataformas, você reconhece e concorda com as práticas descritas nesta política. Nós tratamos a proteção de seus dados pessoais com a máxima seriedade e nos comprometemos a processá-los de forma responsável, transparente e segura.",
     "definitionsTitle": "Definições",
     "definitionsList": [
@@ -515,7 +515,7 @@
     "dataCollectionList1": "<strong>Informações Fornecidas por Você:</strong> Isso inclui, mas não se limita a, nome, sobrenome, endereço de e-mail, endereço físico, informações de pagamento e quaisquer outras informações que você optar por fornecer ao criar uma conta, fazer uma compra ou interagir com nossos serviços de atendimento ao cliente.",
     "dataCollectionList2": "<strong>Informações Coletadas Automaticamente:</strong> Quando você visita nosso site, coletamos automaticamente informações sobre seu dispositivo e sua interação com nosso site. Isso pode incluir dados como seu endereço IP, tipo de navegador, detalhes do dispositivo, fuso horário, páginas visitadas, produtos visualizados, sites ou termos de busca que o direcionaram ao nosso site, e informações sobre como você interage com o site.",
     "cookiesTitle": "Uso de Cookies e Tecnologias de Rastreamento",
-    "cookiesIntro": "A XpressSEO utiliza cookies, que são pequenos arquivos de texto armazenados no seu dispositivo, e outras tecnologias de rastreamento para melhorar a experiência do usuário em nosso site <a href=\"https://www.xpressseo.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-cyan-400 hover:underline\">www.xpressseo.com</a>, entender como nossos serviços são utilizados e otimizar nossas estratégias de marketing.",
+    "cookiesIntro": "A XpressSEO utiliza cookies, que são pequenos arquivos de texto armazenados no seu dispositivo, e outras tecnologias de rastreamento para melhorar a experiência do usuário em nosso site www.xpressseo.com, entender como nossos serviços são utilizados e otimizar nossas estratégias de marketing.",
     "cookiesTypesTitle": "Tipos de Cookies Utilizados:",
     "cookiesTypesList": [
       "<strong>Cookies Essenciais:</strong> Essenciais para o funcionamento do site, permitindo que você navegue e use suas funcionalidades. Sem esses cookies, serviços como carrinho de compras e processamento de pagamento não podem ser fornecidos.",
@@ -551,13 +551,13 @@
       "O direito à portabilidade de dados;",
       "O direito de retirar seu consentimento a qualquer momento, quando o processamento for baseado em consentimento."
     ],
-    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>.",
+    "dataSubjectRightsContact": "Para exercer esses direitos, entre em contato conosco através de suporte.xpressseo@gmail.com.",
     "dataSecurityTitle": "Segurança dos Dados",
     "dataSecurityP1": "Implementamos medidas de segurança técnica e organizacional para proteger seus dados pessoais contra acesso não autorizado, alteração, divulgação ou destruição. No entanto, é importante notar que nenhum sistema é completamente seguro. Nos comprometemos a notificar você e qualquer autoridade aplicável de quaisquer brechas de segurança de acordo com a legislação vigente.",
     "policyChangesTitle": "Alterações na Política de Privacidade",
     "policyChangesP1": "Nossa Política de Privacidade pode ser atualizada periodicamente. A versão mais atual será sempre publicada em nosso site, indicando a data da última revisão. Encorajamos você a revisar regularmente nossa política para estar sempre informado sobre como estamos protegendo seus dados.",
     "contactTitle": "Contato",
-    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em <a href=\"mailto:suporte.xpressseo@gmail.com\" class=\"text-cyan-400 hover:underline\">suporte.xpressseo@gmail.com</a>. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
+    "contactEmail": "Se tiver dúvidas ou preocupações sobre nossa Política de Privacidade ou práticas de dados, por favor, não hesite em nos contatar em suporte.xpressseo@gmail.com. Estamos comprometidos em resolver quaisquer questões relacionadas à privacidade de nossos usuários e clientes."
   },
   "signUpForm": {
     "title": "Crie sua conta",

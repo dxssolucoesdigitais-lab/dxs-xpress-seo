@@ -26,7 +26,7 @@ declare module 'react-i18next' {
             replySuccess: string;
             replyError: string;
             fetchError: string;
-            updateStatusError: string;
+            updateStatusError: string; // Adicionado
           };
           admin: {
             fetchUsersFailed: string;
