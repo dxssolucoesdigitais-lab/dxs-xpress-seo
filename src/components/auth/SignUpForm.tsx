@@ -49,7 +49,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBackToSignIn }) => {
       });
 
       if (error) {
-        showError(error.message); // Supabase errors are usually descriptive enough
+        // Tratamento de erros específicos
+        if (error.message.includes('Email rate limit exceeded')) {
+          showError('toasts.emailRateLimitExceeded');
+        } else if (error.message.includes('Error sending confirmation email')) {
+          // Este erro é de infraestrutura, mas podemos dar uma dica ao usuário
+          showError('toasts.genericError', { message: t('toasts.plans.checkoutFailed') + ' (Infraestrutura de E-mail)' });
+        } else {
+          showError(error.message); // Erros Supabase genéricos
+        }
         throw error;
       }
 
@@ -59,7 +67,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onBackToSignIn }) => {
       }
     } catch (error: any) {
       console.error('Error during sign up:', error.message);
-      // Error toast already shown by showError
+      // O toast de erro já foi exibido no bloco try/catch
     } finally {
       setIsSubmitting(false);
     }

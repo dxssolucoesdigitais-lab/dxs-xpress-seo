@@ -80,7 +80,8 @@
       "noFileSelected": "No file selected.",
       "loginRequired": "Please log in to upload files."
     },
-    "genericError": "An unexpected error occurred. Please try again."
+    "genericError": "An unexpected error occurred. Please try again.",
+    "emailRateLimitExceeded": "Sign up attempt limit exceeded. Please wait 60 seconds and try again."
   },
   "pricingDialog": {
     "title": "Choose the Perfect Plan for You",
@@ -452,7 +453,7 @@
           },
           {
             "q": "Does XpressSEO work for other languages?",
-            "a": "Yes. Our AI is capable of generating and optimizing content for different countries and languages. The translation feature is available in our plans to help expand your store internationally with precision."
+            "a": "Yes. Our AI is capable of generating and optimizing content for different countries and languages. The translation feature is available in our plans to help expand your store internationally with cultural precision."
           }
         ]
       }

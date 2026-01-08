@@ -37,7 +37,7 @@
       "paused": "Projeto pausado com sucesso.",
       "resumed": "Projeto retomado com sucesso.",
       "statusUpdateFailed": "Erro ao atualizar status do projeto.",
-      "triggerFailed": "Erro ao iniciar o fluxo de trabalho do projeto.",
+      "triggerFailed": "Erro ao acionar o fluxo de trabalho do projeto.",
       "resumeNoCredits": "Sem créditos para retomar o projeto. Por favor, faça upgrade do seu plano.",
       "noCreditsToStart": "Sem créditos para iniciar o projeto. Por favor, faça upgrade do seu plano.",
       "renameSuccess": "Projeto renomeado com sucesso!",
@@ -80,7 +80,8 @@
       "noFileSelected": "Nenhum arquivo selecionado.",
       "loginRequired": "Por favor, faça login para enviar arquivos."
     },
-    "genericError": "Ocorreu um erro inesperado. Por favor, tente novamente."
+    "genericError": "Ocorreu um erro inesperado. Por favor, tente novamente.",
+    "emailRateLimitExceeded": "Limite de tentativas de cadastro excedido. Por favor, aguarde 60 segundos e tente novamente."
     },
   "pricingDialog": {
     "title": "Escolha o Plano Perfeito para Você",

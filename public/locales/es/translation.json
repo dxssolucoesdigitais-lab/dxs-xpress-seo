@@ -79,8 +79,9 @@
       "noFileSelected": "No se seleccionó ningún archivo.",
       "loginRequired": "Por favor, inicia sesión para subir archivos."
     },
-    "genericError": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
-    },
+    "genericError": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+    "emailRateLimitExceeded": "Límite de intentos de registro excedido. Por favor, espera 60 segundos e inténtalo de nuevo."
+  },
   "pricingDialog": {
     "title": "Elige el Plan Perfecto para Ti",
     "description": "Empieza con 3 créditos gratis y actualiza para escalar tu negocio.",
