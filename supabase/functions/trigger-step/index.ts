@@ -23,7 +23,11 @@ serve(async (req) => {
     const windmillBaseUrl = Deno.env.get('WINDMILL_BASE_URL')
     const windmillMasterScriptPath = Deno.env.get('WINDMILL_MASTER_SCRIPT_PATH')
     const openrouterApiKey = Deno.env.get('OPENROUTER_API_KEY')
-    // const serpiApiKey = Deno.env.get('SERPI_API_KEY') // REMOVIDO
+    
+    // --- NEW GOOGLE API KEYS ---
+    const googleApiKey = Deno.env.get('GOOGLE_API_KEY')
+    const googleSearchEngineId = Deno.env.get('GOOGLE_SEARCH_ENGINE_ID')
+    // ---------------------------
 
     console.log('trigger-step: Environment variables loaded.');
     console.log('trigger-step: SUPABASE_URL present:', !!supabaseUrl);
@@ -32,7 +36,8 @@ serve(async (req) => {
     console.log('trigger-step: WINDMILL_BASE_URL present:', !!windmillBaseUrl);
     console.log('trigger-step: WINDMILL_MASTER_SCRIPT_PATH present:', !!windmillMasterScriptPath);
     console.log('trigger-step: OPENROUTER_API_KEY present:', !!openrouterApiKey, 'Value (first 5 chars):', openrouterApiKey ? openrouterApiKey.substring(0, 5) : 'N/A');
-    // console.log('trigger-step: SERPI_API_KEY present:', !!serpiApiKey, 'Value (first 5 chars):', serpiApiKey ? serpiApiKey.substring(0, 5) : 'N/A'); // REMOVIDO
+    console.log('trigger-step: GOOGLE_API_KEY present:', !!googleApiKey, 'Value (first 5 chars):', googleApiKey ? googleApiKey.substring(0, 5) : 'N/A');
+    console.log('trigger-step: GOOGLE_SEARCH_ENGINE_ID present:', !!googleSearchEngineId, 'Value (first 5 chars):', googleSearchEngineId ? googleSearchEngineId.substring(0, 5) : 'N/A');
 
     const missingEnvVars = [];
     if (!supabaseUrl) missingEnvVars.push('SUPABASE_URL');
@@ -41,8 +46,7 @@ serve(async (req) => {
     if (!windmillBaseUrl) missingEnvVars.push('WINDMILL_BASE_URL');
     if (!windmillMasterScriptPath) missingEnvVars.push('WINDMILL_MASTER_SCRIPT_PATH');
     if (!openrouterApiKey || openrouterApiKey.trim() === '') missingEnvVars.push('OPENROUTER_API_KEY');
-    // if (!serpiApiKey || serpiApiKey.trim() === '') missingEnvVars.push('SERPI_API_KEY'); // REMOVIDO
-
+    
     if (missingEnvVars.length > 0) {
       const errorMessage = `Missing critical environment variables: ${missingEnvVars.join(', ')}.`;
       console.error(`trigger-step: ${errorMessage}`);
@@ -54,7 +58,7 @@ serve(async (req) => {
     console.log('trigger-step: All critical environment variables are present.');
     
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    const { projectId, userMessage, userId: userIdFromBody } = await req.json();
+    const { projectId, userMessage, userId: userIdFromBody, fileMetadata } = await req.json();
 
     console.log('trigger-step: Request body parsed. projectId:', projectId, 'userMessage:', userMessage, 'userIdFromBody:', userIdFromBody);
 
@@ -167,7 +171,10 @@ serve(async (req) => {
           user_id: user.id,
           author: 'user',
           content: userMessage,
-          metadata: { current_step: project?.current_step || 0 },
+          metadata: { 
+            current_step: project?.current_step || 0,
+            files: fileMetadata // Include file metadata in the chat message
+          },
         });
 
       if (insertMessageError) {
@@ -186,20 +193,29 @@ serve(async (req) => {
         userMessage: userMessage,
         projectId: projectId,
         userId: user.id,
-        planType: user.plan_type,
+        userPlan: user.plan_type, // Renamed from planType to userPlan to match new script interface
         userRole: user.role,
+        creditsRemaining: user.credits_remaining, // Added creditsRemaining
         currentStep: project?.current_step || 0,
         projectData: project,
         supabase_url: supabaseUrl,
         supabase_key: serviceRoleKey,
         openrouter_key: openrouterApiKey,
-        // serpi_api_key: serpiApiKey, // REMOVIDO
-        acao: acao
+        
+        // --- NEW GOOGLE ARGS ---
+        googleApiKey: googleApiKey,
+        googleCx: googleSearchEngineId,
+        // -----------------------
+        
+        // --- FILE METADATA (Passed from frontend) ---
+        fileMetadata: fileMetadata, 
+        // --------------------------------------------
+        
+        acao: acao // Keeping acao for potential future use in Windmill
       };
       console.log('trigger-step: Windmill arguments being sent:', JSON.stringify(windmillArgs, null, 2));
 
       // Invoke Windmill and do NOT wait for its result.
-      // The Windmill script is responsible for inserting AI messages into Supabase.
       fetch(windmillExecutionUrl, {
         method: 'POST',
         headers: {
@@ -215,7 +231,6 @@ serve(async (req) => {
 
     } catch (windmillError: any) {
       console.error('trigger-step: Error during Windmill invocation (unexpected):', windmillError);
-      // If there's an error *invoking* Windmill, we should still report it.
       return new Response(JSON.stringify({ error: `Failed to invoke Windmill: ${windmillError.message}` }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -225,8 +240,6 @@ serve(async (req) => {
     console.log('trigger-step: End of main try block, returning success response.');
 
     // --- Respond Immediately to the Client ---
-    // Return 200 OK, indicating that the Edge Function successfully processed the request
-    // and triggered the Windmill workflow. AI responses will come via Realtime.
     return new Response(JSON.stringify({ message: `Workflow triggered successfully. AI responses will appear shortly.` }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
